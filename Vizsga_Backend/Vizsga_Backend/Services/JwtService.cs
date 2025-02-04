@@ -20,14 +20,13 @@ namespace VizsgaBackend.Services
         }
 
         // Token generálása
-        public string GenerateToken(string userId, string email, int role)
+        public string GenerateToken(string userId, string email)
         {
             // Claims: a felhasználó adatai, amiket a tokenben tárolunk
             var claims = new[]
             {
             new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, role.ToString())
+            new Claim(ClaimTypes.Email, email)
         };
 
             // Titkos kulcs
@@ -39,7 +38,7 @@ namespace VizsgaBackend.Services
                 issuer: _issuer,
                 audience: _audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),  // Lejárati idő
+                expires: DateTime.Now,  // Lejárati idő
                 signingCredentials: creds
             );
 

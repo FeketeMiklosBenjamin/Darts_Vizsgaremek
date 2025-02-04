@@ -14,6 +14,16 @@ builder.Services.AddSingleton<UserFriendlyStatService>();
 builder.Services.AddSingleton<UserTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
 
+// Add session support
+builder.Services.AddDistributedMemoryCache(); // Session cache
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session lejárat
+    options.Cookie.HttpOnly = true; // Biztonságos cookie
+    options.Cookie.IsEssential = true; // Cookie szükséges
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
@@ -77,6 +87,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

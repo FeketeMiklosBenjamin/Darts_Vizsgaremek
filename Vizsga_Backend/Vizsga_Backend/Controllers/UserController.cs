@@ -33,6 +33,7 @@ namespace VizsgaBackend.Controllers
 
         // GET: api/<ProductController>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             try
@@ -49,6 +50,7 @@ namespace VizsgaBackend.Controllers
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(string id)
         {
             try
@@ -71,6 +73,12 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
+                var authorizationHeader = Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized(new { message = "Már be van jelentkezve, nem regisztrálhat új fiókot." });
+                }
+
                 if (registerUser == null)
                 {
                     return BadRequest(new {message = "Nem adott meg adatokat a regisztráláshoz" });
@@ -167,6 +175,12 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
+                var authorizationHeader = Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized(new { message = "Már be van jelentkezve." });
+                }
+
                 if (loginRequest == null)
                 {
                     return BadRequest(new { message = "A bejelentkezéshez szükséges adatok nem érvényesek." });
@@ -191,7 +205,9 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "Hibás email cím vagy jelszó." });
                 }
 
-                var tokenString = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
+                var tokenString = _jwtService.GenerateToken(user.Id, user.EmailAddress);
+
+                HttpContext.Session.SetString("UserRole", user.Role.ToString());
 
                 // Sikeres bejelentkezés esetén válasz
                 return Ok(new { message = "Sikeres bejelentkezés.", userId = user.Id, token = tokenString });
@@ -205,10 +221,20 @@ namespace VizsgaBackend.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Put(string id, [FromBody] User updatedUser)
         {
             try
             {
+                var userRole = HttpContext.Session.GetString("UserRole");
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (userId != id && userRole != "2")
+                {
+                    return Unauthorized(new { message = "Nincs jogosultságod a modosításhoz." });
+                }
+
                 if (updatedUser == null)
                 {
                     return BadRequest(new { message = "A kéréssel valami nincs rendben. Ellenőrizd az adatokat." });
@@ -288,7 +314,7 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
-                var userRole = User.FindFirstValue(ClaimTypes.Role);
+                var userRole = HttpContext.Session.GetString("UserRole");
 
                 if (userRole != "2")
                 {
