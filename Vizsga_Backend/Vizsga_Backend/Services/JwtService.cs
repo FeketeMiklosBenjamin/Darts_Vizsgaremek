@@ -20,29 +20,26 @@ namespace VizsgaBackend.Services
         }
 
         // Token generálása
-        public string GenerateToken(string userId, string email)
+        public string GenerateToken(string userId, string email, string sessionId)
         {
-            // Claims: a felhasználó adatai, amiket a tokenben tárolunk
             var claims = new[]
             {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Email, email)
-        };
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Email, email),
+                new Claim("sid", sessionId) // session id hozzáadása a tokenhez
+            };
 
-            // Titkos kulcs
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // JWT token létrehozása
             var token = new JwtSecurityToken(
                 issuer: _issuer,
                 audience: _audience,
                 claims: claims,
-                expires: DateTime.Now,  // Lejárati idő
+                expires: DateTime.UtcNow.AddMinutes(15), // 15 perces érvényesség
                 signingCredentials: creds
             );
 
-            // Token string visszaadása
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Vizsga_Backend.Services;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -22,13 +23,16 @@ namespace VizsgaBackend.Controllers
         private readonly UserFriendlyStatService _userFriendlyStatService;
         private readonly UserTournamentStatService _userTournamentStatService;
         private readonly JwtService _jwtService;
+        private readonly SessionStore _sessionStore;
 
-        public UserController(UserService service, UserFriendlyStatService userFriendlyStatService, UserTournamentStatService userTournamentStatService, JwtService jwtService)
+        public UserController(UserService service, UserFriendlyStatService userFriendlyStatService, UserTournamentStatService userTournamentStatService, JwtService jwtService, SessionStore sessionStore)
         {
             _service = service;
             _userFriendlyStatService = userFriendlyStatService;
             _userTournamentStatService = userTournamentStatService;
             _jwtService = jwtService;
+            _sessionStore = sessionStore;
+
         }
 
         // GET: api/<ProductController>
@@ -205,9 +209,12 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "Hibás email cím vagy jelszó." });
                 }
 
-                var tokenString = _jwtService.GenerateToken(user.Id, user.EmailAddress);
+                var sessionId = Guid.NewGuid().ToString();
 
-                HttpContext.Session.SetString("UserRole", user.Role.ToString());
+                // Elmentjük a session-t a Redis (vagy egyéb cache) rendszerbe
+                await _sessionStore.SetSessionAsync(sessionId, user.Id, user.Role);
+
+                var tokenString = _jwtService.GenerateToken(user.Id, user.EmailAddress, sessionId);
 
                 // Sikeres bejelentkezés esetén válasz
                 return Ok(new { message = "Sikeres bejelentkezés.", userId = user.Id, token = tokenString });

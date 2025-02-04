@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Vizsga_Backend.Middlewares;
+using Vizsga_Backend.Services;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -13,33 +15,35 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UserFriendlyStatService>();
 builder.Services.AddSingleton<UserTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<SessionStore>();
 
-// Add session support
+// Add session support using cookies
 builder.Services.AddDistributedMemoryCache(); // Session cache
-
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session lejárat
-    options.Cookie.HttpOnly = true; // Biztonságos cookie
-    options.Cookie.IsEssential = true; // Cookie szükséges
+    options.Cookie.HttpOnly = true; // Cookie csak HTTP kérésnél elérhetõ
+    options.Cookie.IsEssential = true; // A cookie szükséges az alapvetõ mûködéshez
+    options.IdleTimeout = TimeSpan.FromMinutes(15); // Session élettartama
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
-    };
-});
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
+        };
+    });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 
 // Swagger konfigurálása JWT támogatással
@@ -71,10 +75,7 @@ builder.Services.AddSwaggerGen(options =>
             });
 });
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -88,7 +89,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Add session middleware
 app.UseSession();
+
+app.UseMiddleware<ActivityMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

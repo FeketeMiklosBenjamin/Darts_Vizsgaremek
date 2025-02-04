@@ -166,3 +166,12 @@ Z:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\refint\Vizsg
 Z:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\Vizsga_Backend.pdb
 Z:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\Vizsga_Backend.genruntimeconfig.cache
 Z:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\ref\Vizsga_Backend.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\StackExchange.Redis.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
