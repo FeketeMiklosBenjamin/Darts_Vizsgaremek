@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="DartsMobilApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DartsMobilApp"
+    xmlns:pages="clr-namespace:DartsMobilApp.Pages"
+    Shell.FlyoutBehavior="Disabled"
+    Title="DartsMobilApp">
+    <ShellContent
+Title="Login"
+ContentTemplate="{DataTemplate pages:LoginPage}"
+Route="LoginPage" />
+    
+    <TabBar>
+        <ShellContent
+    Title="Home"
+    ContentTemplate="{DataTemplate pages:MainPage}"
+    Route="MainPage" />
+        <ShellContent
+    Title="Competitions"
+    ContentTemplate="{DataTemplate pages:CompetitionsPage}"
+    Route="CompetitionsPage"/>
+        <ShellContent
+    Title="Counter"
+    ContentTemplate="{DataTemplate pages:CounterPage}"
+    Route="CounterPage"/>
+    </TabBar>
+    
+</Shell>

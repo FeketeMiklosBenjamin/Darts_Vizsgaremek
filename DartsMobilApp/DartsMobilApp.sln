@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DartsMobilApp", "DartsMobilApp\DartsMobilApp.csproj", "{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{327ED23E-67DC-4A8D-A545-412C8BA1A9BF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F32E4DF-A4F2-4FC1-884F-63AE5499444E}
+	EndGlobalSection
+EndGlobal

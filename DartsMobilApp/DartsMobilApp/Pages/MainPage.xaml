@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DartsMobilApp.Pages.MainPage"
+             Title="MainPage">
+    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*">
+        <Label Text="Fő oldal" FontAttributes="Bold" FontSize="Large"/>
+        <Button Text="Versenyek" WidthRequest="150" HeightRequest="150" Grid.Row="1"  ImageSource="Images/tr_icon.png" />
+        <Button  WidthRequest="150" HeightRequest="150" Grid.Row="1" Grid.Column="1"  Command="{Binding GoToCounterCommand}">
+            <Button.ContentLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Image Source="your-image.png" HeightRequest="20" WidthRequest="20" Margin="0,0,10,0"/>
+                    <Label Text="Click Me" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+                </StackLayout>
+            </Button.ContentLayout>
+        </Button>
+    </Grid>
+</ContentPage>
