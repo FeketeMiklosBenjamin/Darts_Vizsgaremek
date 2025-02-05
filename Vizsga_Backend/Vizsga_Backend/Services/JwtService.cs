@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace VizsgaBackend.Services
@@ -42,29 +43,14 @@ namespace VizsgaBackend.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-        // Refresh token generálása (visszaad egy hosszú élettartamú token-t)
-        public string GenerateRefreshToken(string userId)
+        public string GenerateRefreshToken()
         {
-            // A refresh token egy egyedi, véletlenszerű string, nem tárolunk róla adatokat.
-            var refreshToken = GenerateRandomString(64); // 64 karakter hosszú
-
-            // Itt nem szükséges JWT-t generálni, mert nem tárolunk benne adatokat, hanem egy egyedi azonosítót
-            return refreshToken;
-        }
-
-        // Véletlenszerű string generálása (pl. 64 karakter hosszú)
-        private string GenerateRandomString(int length)
-        {
-            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            var randomString = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                randomString.Append(validChars[_random.Next(validChars.Length)]);
+                rng.GetBytes(randomNumber);
             }
-
-            return randomString.ToString();
+            return Convert.ToBase64String(randomNumber);
         }
     }
 

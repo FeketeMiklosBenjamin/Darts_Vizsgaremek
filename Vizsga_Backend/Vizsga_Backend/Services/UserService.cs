@@ -87,8 +87,7 @@ namespace VizsgaBackend.Services
         // Refresh token validálása
         public async Task<User?> ValidateRefreshTokenAsync(string refreshToken)
         {
-            var filter = Builders<User>.Filter.Eq(u => u.RefreshToken, refreshToken)
-                        & Builders<User>.Filter.Gt(u => u.RefreshTokenExpiry, DateTime.UtcNow); // Ellenőrizzük, hogy nem járt-e le
+            var filter = Builders<User>.Filter.Eq(u => u.RefreshToken, refreshToken) & Builders<User>.Filter.Gt(u => u.RefreshTokenExpiry, DateTime.UtcNow);
 
             return await _usersCollection.Find(filter).FirstOrDefaultAsync();
         }

@@ -125,13 +125,13 @@ namespace VizsgaBackend.Controllers
                 // Ha minden validálás sikeres, hozzáadjuk az új felhasználót az adatbázishoz
                 registerUser.RegisterDate = DateTime.UtcNow;
 
-                registerUser.LastLoginDate = DateTime.UtcNow;
-
                 var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
 
-                registerUser.RefreshToken = _jwtService.GenerateRefreshToken(registerUser.Id);
-                
+                var refreshTokenGen = _jwtService.GenerateRefreshToken();
+
                 await _service.CreateAsync(registerUser);
+
+                await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
                 var userFriendlyStat = new UserFriendlyStat
                 {
                     UserId = registerUser.Id,
@@ -169,7 +169,12 @@ namespace VizsgaBackend.Controllers
                 await _userTournamentStatService.CreateAsync(userTournamentStat);
 
                 // Válasz küldése a sikeres regisztrációról, az új entitással
-                return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, registerUser);
+                return CreatedAtAction(nameof(GetById),new { id = registerUser.Id}, new { 
+                    message = "Sikeres regisztráció.", 
+                    userId = registerUser.Id,
+                    accessToken = accessTokenGen,
+                    refreshToken = refreshTokenGen
+                });
             }
             catch (Exception)
             {
@@ -216,7 +221,7 @@ namespace VizsgaBackend.Controllers
 
                 var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
 
-                var refreshTokenGen = _jwtService.GenerateRefreshToken(user.Id);
+                var refreshTokenGen = _jwtService.GenerateRefreshToken();
 
                 await _service.SaveRefreshTokenAsync(user.Id, refreshTokenGen);
 
@@ -236,15 +241,15 @@ namespace VizsgaBackend.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
+        [Authorize]
+        public async Task<IActionResult> Logout()
         {
             try
             {
-                // Ellenőrizzük, hogy a refresh token érvényes
-                var user = await _service.ValidateRefreshTokenAsync(request.RefreshToken);
+                var user = await _service.GetByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
                 if (user == null)
                 {
-                    return Unauthorized(new { message = "Érvénytelen vagy lejárt refresh token." });
+                    return BadRequest(new { message = "A felhasználó nincs bejelentkezve." });
                 }
 
                 // Töröljük a refresh tokent az adatbázisból

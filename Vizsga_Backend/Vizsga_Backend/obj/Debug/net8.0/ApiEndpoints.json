@@ -2,11 +2,16 @@
   {
     "ContainingType": "Vizsga_Backend.Controllers.TokenController",
     "Method": "RefreshToken",
-    "RelativePath": "api/token/refresh-token",
+    "RelativePath": "api/token/refresh-token/{userId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
       {
         "Name": "request",
         "Type": "Vizsga_Backend.Models.RefreshTokenRequest",
@@ -138,13 +143,7 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Vizsga_Backend.Models.RefreshTokenRequest",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

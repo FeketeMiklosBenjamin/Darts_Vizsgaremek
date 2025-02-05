@@ -22,8 +22,8 @@ namespace Vizsga_Backend.Controllers
             _userService = userService;
         }
 
-        [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        [HttpPost("refresh-token/{userId}")]
+        public async Task<IActionResult> RefreshToken(string userId, [FromBody] RefreshTokenRequest request)
         {
             try
             {
