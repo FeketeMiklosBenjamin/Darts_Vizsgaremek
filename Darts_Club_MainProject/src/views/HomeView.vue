@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Background from '@/components/Background.vue';
-import Introduction from '@/components/Introduction.vue';
-import Navbar from '@/components/Navbar.vue';
+import Background from '@/components/standard_comp/Background.vue';
+import Introduction from '@/components/standard_comp/Introduction.vue';
+import Navbar from '@/components/standard_comp/Navbar.vue';
 
 </script>
 

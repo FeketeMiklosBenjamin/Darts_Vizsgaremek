@@ -16,8 +16,8 @@ const controlls = computed(()=>{
 </script>
 
 <template>
-    <div class="z-1">
-        <div class="w-50 m-auto my-5 px-0 bg-secondary text-white text-center border border-dark rounded bg-opacity-50">
+    <div class="z-1 position-rel">
+        <div class="w-50 m-auto my-5 px-0 glass-card-intro text-center transform tops">
             <div class="row">
                 <p class="display-6 mt-2">Üdvözöljük weboldalunkon!</p>
             </div>
