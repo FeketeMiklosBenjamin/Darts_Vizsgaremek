@@ -7,6 +7,12 @@
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.CounterGrid">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.counterGrid"/>
         </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.RecommendedFirstCheckout">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.recommendedFirstCheckout"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.RecommendedSecondCheckout">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.recommendedSecondCheckout"/>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.Points">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.points"/>
         </member>
