@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui" 
              x:Class="DartsMobilApp.Pages.CounterPage"
              Title="CounterPage">
-
+    <ContentPage.Behaviors>
+        <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
+        <tool:StatusBarBehavior StatusBarColor="Black"/>
+    </ContentPage.Behaviors>
     <Grid RowDefinitions="*,2*,*,4*">
         <HorizontalStackLayout Grid.Row="1"  VerticalOptions="Center">
-            <Label x:Name="player1_points_Lbl" Text="501" FontSize="Large" FontAttributes="Bold" Margin="5,5,5,5" WidthRequest="200"/>
-            <Label x:Name="player2_points_Lbl" Text="501" FontSize="Large" FontAttributes="Bold" WidthRequest="200" />
+            <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="5,5,5,5" WidthRequest="200"/>
+            <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold" WidthRequest="200" Margin="5,5,5,5"/>
         </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="2" Margin="10,10,10,10">
-            <Label Text="Pontszám" FontSize="Micro"/>
-            <Entry x:Name="Points_ENT" WidthRequest="200" Placeholder="Kérem a dobott értéket!" FontSize="Medium" PlaceholderColor="Red"/>
-            <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}"/>
-        </HorizontalStackLayout>
-        <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*" Grid.Row="3">
-            <Button Text="1" WidthRequest="100" Grid.Row="0"/>
-            <Button Text="2" WidthRequest="100" Grid.Row="0" Grid.Column="1"/>
-            <Button Text="3" WidthRequest="100" Grid.Row="0" Grid.Column="2"/>
-            <Button Text="4" WidthRequest="100" Grid.Row="1"/>
-            <Button Text="5" WidthRequest="100" Grid.Row="1" Grid.Column="1"/>
-            <Button Text="6" WidthRequest="100" Grid.Row="1" Grid.Column="2"/>
-            <Button Text="7" WidthRequest="100" Grid.Row="2"/>
-            <Button Text="8" WidthRequest="100" Grid.Row="2" Grid.Column="1"/>
-            <Button Text="9" WidthRequest="100" Grid.Row="2" Grid.Column="2"/>
-            <Button Text="" WidthRequest="100" Grid.Row="3"/>
-            <Button Text="0" WidthRequest="100" Grid.Row="3" Grid.Column="1"/>
+        <Border Grid.Row="2" Margin="10,10,10,10" BackgroundColor="White" StrokeThickness="3">
+            <HorizontalStackLayout>
+                <Entry Text="{Binding Points}" Keyboard="Numeric" TextColor="Black"  WidthRequest="225" Placeholder="Kérem a dobott értéket!" FontSize="Medium" PlaceholderColor="Red" VerticalOptions="Center"/>
+                <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}" Margin="10,5,10,5" CommandParameter="{Binding Points}" Command="{Binding SendPointsCommand}"/>
+            </HorizontalStackLayout>
+        </Border>
+        <Grid x:Name="counterGrid" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*"  Grid.Row="3">
+            <Button Text="1" WidthRequest="80" HeightRequest="80" Grid.Row="0"  CommandParameter="1" Command="{Binding AddPointsCommand}"/>
+            <Button Text="2" WidthRequest="80" HeightRequest="80" Grid.Row="0" Grid.Column="1"  CommandParameter="2" Command="{Binding AddPointsCommand}"/>
+            <Button Text="3" WidthRequest="80" HeightRequest="80" Grid.Row="0" Grid.Column="2"  CommandParameter="3" Command="{Binding AddPointsCommand}"/>
+            <Button Text="4" WidthRequest="80" HeightRequest="80" Grid.Row="1"  CommandParameter="4" Command="{Binding AddPointsCommand}"/>
+            <Button Text="5" WidthRequest="80" HeightRequest="80" Grid.Column="1" Grid.Row="1"  CommandParameter="5" Command="{Binding AddPointsCommand}"/>
+            <Button Text="6" WidthRequest="80" HeightRequest="80" Grid.Row="1" Grid.Column="2"  CommandParameter="6" Command="{Binding AddPointsCommand}"/>
+            <Button Text="7" WidthRequest="80" HeightRequest="80" Grid.Row="2"  CommandParameter="7" Command="{Binding AddPointsCommand}"/>
+            <Button Text="8" WidthRequest="80" HeightRequest="80" Grid.Row="2" Grid.Column="1" CommandParameter="8" Command="{Binding AddPointsCommand}"/>
+            <Button Text="9" WidthRequest="80" HeightRequest="80" Grid.Row="2" Grid.Column="2" CommandParameter="9" Command="{Binding AddPointsCommand}"/>
+            <Button Text="" WidthRequest="80" HeightRequest="80"  Grid.Row="3"/>
+            <Button Text="0" WidthRequest="80" HeightRequest="80" Grid.Row="3" Grid.Column="1"  CommandParameter="0" Command="{Binding AddPointsCommand}"/>
+            <Button Text="" WidthRequest="80" HeightRequest="80"  Grid.Row="3" Grid.Column="2"/>
         </Grid>
     </Grid>
 </ContentPage>

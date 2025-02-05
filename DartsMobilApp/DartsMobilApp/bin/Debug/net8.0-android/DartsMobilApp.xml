@@ -4,6 +4,36 @@
         <name>DartsMobilApp</name>
     </assembly>
     <members>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.CounterGrid">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.counterGrid"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.Points">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.points"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.PointsFirstPlayer">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.pointsFirstPlayer"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.PointsSecondPlayer">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.pointsSecondPlayer"/>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.CounterViewModel.appearingCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CounterViewModel.AppearingCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.AppearingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.Appearing"/>.</summary>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.CounterViewModel.addPointsCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CounterViewModel.AddPointsCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.AddPointsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.AddPoints(System.String)"/>.</summary>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.CounterViewModel.sendPointsCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CounterViewModel.SendPointsCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.SendPointsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.SendPoints(System.String)"/>.</summary>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.UserDatas">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.LoginViewModel.userDatas"/>
         </member>

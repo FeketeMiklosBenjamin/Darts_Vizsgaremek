@@ -37771,11 +37771,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gemes.norbert\\Desktop\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
+      "projectUniqueName": "C:\\Users\\gemes.norbert\\Desktop\\VizsgaRemek\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
       "projectName": "DartsMobilApp",
-      "projectPath": "C:\\Users\\gemes.norbert\\Desktop\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
+      "projectPath": "C:\\Users\\gemes.norbert\\Desktop\\VizsgaRemek\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
       "packagesPath": "C:\\Users\\gemes.norbert\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gemes.norbert\\Desktop\\DartsMobilApp\\DartsMobilApp\\obj\\",
+      "outputPath": "C:\\Users\\gemes.norbert\\Desktop\\VizsgaRemek\\DartsMobilApp\\DartsMobilApp\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [

@@ -6,13 +6,6 @@
     <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*">
         <Label Text="Fő oldal" FontAttributes="Bold" FontSize="Large"/>
         <Button Text="Versenyek" WidthRequest="150" HeightRequest="150" Grid.Row="1"  ImageSource="Images/tr_icon.png" />
-        <Button  WidthRequest="150" HeightRequest="150" Grid.Row="1" Grid.Column="1"  Command="{Binding GoToCounterCommand}">
-            <Button.ContentLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                    <Image Source="your-image.png" HeightRequest="20" WidthRequest="20" Margin="0,0,10,0"/>
-                    <Label Text="Click Me" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
-                </StackLayout>
-            </Button.ContentLayout>
-        </Button>
+        <Button Text="Barátságos meccs"  WidthRequest="150" HeightRequest="150" Grid.Row="1" Grid.Column="1"  Command="{Binding GoToCounterCommand}"/>
     </Grid>
 </ContentPage>
