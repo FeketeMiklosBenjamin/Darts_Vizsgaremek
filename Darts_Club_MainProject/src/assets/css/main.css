@@ -1,0 +1,12 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.min.css';
+
+.background-img {
+    max-height: 90vh;
+    width: 210vh;
+}
+
+.title {
+    font-family: serif;
+    cursor: context-menu;
+}
