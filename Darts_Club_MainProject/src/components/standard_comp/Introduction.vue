@@ -1,18 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 
-const controlls = computed(()=>{
-  return [
-        {
-            title: 'Regisztráció',
-            to: '/registration',
-        },
-        {
-            title: 'Bejelentkezés',
-            to: '/sign-in',
-        },
-    ]   
-});
 </script>
 
 <template>
@@ -34,12 +21,12 @@ const controlls = computed(()=>{
             </div>
             <div class="row mb-2 mx-0">
                 <div class="col-2 offset-4">
-                    <router-link :to="controlls[0].to">
-                        <button class="btn btn-info">Regisztráció</button>
+                    <router-link :to="`/registration`">
+                        <button class="btn btn-info opacity-75">Regisztráció</button>
                     </router-link>
                 </div>
                 <div class="col-2">
-                    <router-link :to="controlls[1].to">
+                    <router-link :to="`/sign-in`">
                         <button class="btn btn-dark">Bejelentkezés</button>
                     </router-link>
                 </div>

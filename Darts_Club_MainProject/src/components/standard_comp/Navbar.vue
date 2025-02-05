@@ -9,7 +9,9 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2"> 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Bejelentkezés</a>
+                            <router-link :to="`/sign-in`" class="no-underline">
+                                <a class="nav-link" href="#">Bejelentkezés</a>
+                            </router-link>
                         </li> 
                         <li class="nav-item bg-white ms-1 m-auto rounded-circle px-1 border border-warning">
                             <i class="bi bi-person"></i>

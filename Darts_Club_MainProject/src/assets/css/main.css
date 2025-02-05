@@ -1,6 +1,10 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
+.no-underline {
+    text-decoration: none;
+}
+
 .background-img {
     max-height: 92.25vh;
     width: 210vh;
