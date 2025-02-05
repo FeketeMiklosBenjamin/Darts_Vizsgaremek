@@ -10,8 +10,8 @@ namespace VizsgaBackend.Services
         private readonly string _secretKey;
         private readonly string _issuer;
         private readonly string _audience;
+        private readonly Random _random = new Random();
 
-        // Konstruktor, ahol beolvassuk a konfigurációt (pl. titkos kulcs, issuer, audience)
         public JwtService(IConfiguration configuration)
         {
             _secretKey = configuration.GetValue<string>("Jwt:SecretKey")!;
@@ -19,14 +19,14 @@ namespace VizsgaBackend.Services
             _audience = configuration.GetValue<string>("Jwt:Audience")!;
         }
 
-        // Token generálása
-        public string GenerateToken(string userId, string email, string sessionId)
+        // Access token generálása
+        public string GenerateToken(string userId, string email, int role)
         {
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Email, email),
-                new Claim("sid", sessionId) // session id hozzáadása a tokenhez
+                new Claim(ClaimTypes.Role, role.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
@@ -42,5 +42,30 @@ namespace VizsgaBackend.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        // Refresh token generálása (visszaad egy hosszú élettartamú token-t)
+        public string GenerateRefreshToken(string userId)
+        {
+            // A refresh token egy egyedi, véletlenszerű string, nem tárolunk róla adatokat.
+            var refreshToken = GenerateRandomString(64); // 64 karakter hosszú
+
+            // Itt nem szükséges JWT-t generálni, mert nem tárolunk benne adatokat, hanem egy egyedi azonosítót
+            return refreshToken;
+        }
+
+        // Véletlenszerű string generálása (pl. 64 karakter hosszú)
+        private string GenerateRandomString(int length)
+        {
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            var randomString = new StringBuilder();
+
+            for (int i = 0; i < length; i++)
+            {
+                randomString.Append(validChars[_random.Next(validChars.Length)]);
+            }
+
+            return randomString.ToString();
+        }
     }
+
 }

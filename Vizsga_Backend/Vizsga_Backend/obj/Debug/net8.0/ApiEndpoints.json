@@ -1,12 +1,18 @@
 [
   {
-    "ContainingType": "Vizsga_Backend.Controllers.SessionController",
-    "Method": "Ping",
-    "RelativePath": "api/session/ping",
+    "ContainingType": "Vizsga_Backend.Controllers.TokenController",
+    "Method": "RefreshToken",
+    "RelativePath": "api/token/refresh-token",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Vizsga_Backend.Models.RefreshTokenRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -120,6 +126,22 @@
       {
         "Name": "loginRequest",
         "Type": "VizsgaBackend.Models.Login",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VizsgaBackend.Controllers.UserController",
+    "Method": "Logout",
+    "RelativePath": "api/users/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Vizsga_Backend.Models.RefreshTokenRequest",
         "IsRequired": true
       }
     ],

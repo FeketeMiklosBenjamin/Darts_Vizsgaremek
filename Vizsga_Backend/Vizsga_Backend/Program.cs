@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Vizsga_Backend.Middlewares;
-using Vizsga_Backend.Services;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -15,16 +13,6 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UserFriendlyStatService>();
 builder.Services.AddSingleton<UserTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
-builder.Services.AddSingleton<SessionStore>();
-
-// Add session support using cookies
-builder.Services.AddDistributedMemoryCache(); // Session cache
-builder.Services.AddSession(options =>
-{
-    options.Cookie.HttpOnly = true; // Cookie csak HTTP kérésnél elérhetõ
-    options.Cookie.IsEssential = true; // A cookie szükséges az alapvetõ mûködéshez
-    options.IdleTimeout = TimeSpan.FromMinutes(15); // Session élettartama
-});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -88,11 +76,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Add session middleware
-app.UseSession();
-
-app.UseMiddleware<ActivityMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

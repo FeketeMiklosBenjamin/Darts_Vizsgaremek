@@ -21,6 +21,7 @@ namespace VizsgaBackend.Services
         {
             return await _usersCollection.Find(_ => true).ToListAsync();
         }
+
         public async Task<User?> GetByIdAsync(string id)
         {
             return await _usersCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
@@ -72,5 +73,35 @@ namespace VizsgaBackend.Services
         {
             await _usersCollection.DeleteOneAsync(x => x.Id == id);
         }
+
+        // Refresh token mentése
+        public async Task SaveRefreshTokenAsync(string userId, string refreshToken)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(u => u.RefreshToken, refreshToken)
+                                               .Set(u => u.RefreshTokenExpiry, DateTime.UtcNow.AddMonths(1)); // Példa: 1 hónap érvényesség
+
+            await _usersCollection.UpdateOneAsync(filter, update);
+        }
+
+        // Refresh token validálása
+        public async Task<User?> ValidateRefreshTokenAsync(string refreshToken)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.RefreshToken, refreshToken)
+                        & Builders<User>.Filter.Gt(u => u.RefreshTokenExpiry, DateTime.UtcNow); // Ellenőrizzük, hogy nem járt-e le
+
+            return await _usersCollection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteRefreshTokenAsync(string userId)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Unset(u => u.RefreshToken)
+                                               .Unset(u => u.RefreshTokenExpiry);
+
+            await _usersCollection.UpdateOneAsync(filter, update);
+        }
+
     }
+
 }

@@ -15,7 +15,7 @@ namespace VizsgaBackend.Models
         [BsonElement("password")]
         public string Password { get; set; } = string.Empty;
 
-        [BsonElement("email_address")] 
+        [BsonElement("email_address")]
         public string EmailAddress { get; set; } = string.Empty;
 
         [BsonElement("role")]
@@ -24,5 +24,19 @@ namespace VizsgaBackend.Models
         [BsonElement("register_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime RegisterDate { get; set; }
+
+        // Új mező a refresh token tárolásához
+        [BsonElement("refresh_token")]
+        public string RefreshToken { get; set; } = string.Empty;
+
+        // Esetleg a refresh token lejárati dátuma (ha szükséges)
+        [BsonElement("refresh_token_expiry")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime? RefreshTokenExpiry { get; set; }
+
+        [BsonElement("last_login_date")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime? LastLoginDate { get; set; }
     }
+
 }

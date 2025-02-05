@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Vizsga_Backend.Services;
+using Vizsga_Backend.Models;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -23,15 +23,13 @@ namespace VizsgaBackend.Controllers
         private readonly UserFriendlyStatService _userFriendlyStatService;
         private readonly UserTournamentStatService _userTournamentStatService;
         private readonly JwtService _jwtService;
-        private readonly SessionStore _sessionStore;
 
-        public UserController(UserService service, UserFriendlyStatService userFriendlyStatService, UserTournamentStatService userTournamentStatService, JwtService jwtService, SessionStore sessionStore)
+        public UserController(UserService service, UserFriendlyStatService userFriendlyStatService, UserTournamentStatService userTournamentStatService, JwtService jwtService)
         {
             _service = service;
             _userFriendlyStatService = userFriendlyStatService;
             _userTournamentStatService = userTournamentStatService;
             _jwtService = jwtService;
-            _sessionStore = sessionStore;
 
         }
 
@@ -126,6 +124,13 @@ namespace VizsgaBackend.Controllers
 
                 // Ha minden validálás sikeres, hozzáadjuk az új felhasználót az adatbázishoz
                 registerUser.RegisterDate = DateTime.UtcNow;
+
+                registerUser.LastLoginDate = DateTime.UtcNow;
+
+                var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
+
+                registerUser.RefreshToken = _jwtService.GenerateRefreshToken(registerUser.Id);
+                
                 await _service.CreateAsync(registerUser);
                 var userFriendlyStat = new UserFriendlyStat
                 {
@@ -209,21 +214,51 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "Hibás email cím vagy jelszó." });
                 }
 
-                var sessionId = Guid.NewGuid().ToString();
+                var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
 
-                // Elmentjük a session-t a Redis (vagy egyéb cache) rendszerbe
-                await _sessionStore.SetSessionAsync(sessionId, user.Id, user.Role);
+                var refreshTokenGen = _jwtService.GenerateRefreshToken(user.Id);
 
-                var tokenString = _jwtService.GenerateToken(user.Id, user.EmailAddress, sessionId);
+                await _service.SaveRefreshTokenAsync(user.Id, refreshTokenGen);
 
-                // Sikeres bejelentkezés esetén válasz
-                return Ok(new { message = "Sikeres bejelentkezés.", userId = user.Id, token = tokenString });
+                // Válasz a sikeres bejelentkezés után
+                return Ok(new
+                {
+                    message = "Sikeres bejelentkezés.",
+                    userId = user.Id,
+                    accessToken = accessTokenGen,
+                    refreshToken = refreshTokenGen
+                });
             }
             catch (Exception)
             {
                 return StatusCode(500, new { message = "A bejelentkezés során hiba történt." });
             }
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
+        {
+            try
+            {
+                // Ellenőrizzük, hogy a refresh token érvényes
+                var user = await _service.ValidateRefreshTokenAsync(request.RefreshToken);
+                if (user == null)
+                {
+                    return Unauthorized(new { message = "Érvénytelen vagy lejárt refresh token." });
+                }
+
+                // Töröljük a refresh tokent az adatbázisból
+                await _service.DeleteRefreshTokenAsync(user.Id);
+
+                // Visszajelzés a sikeres kijelentkezésről
+                return Ok(new { message = "Sikeres kijelentkezés." });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A kijelentkezés során hiba történt." });
+            }
+        }
+
 
 
         // PUT api/<ProductController>/5
@@ -233,7 +268,7 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
-                var userRole = HttpContext.Session.GetString("UserRole");
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
