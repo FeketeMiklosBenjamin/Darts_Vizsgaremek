@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Vizsga_Backend.Models;
+using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -36,6 +36,7 @@ namespace Vizsga_Backend.Controllers
 
                 // Generáljunk egy új access token-t
                 var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
+                await _userService.RefreshLastLoginDate(user.Id);
 
                 return Ok(new { accessToken = accessTokenGen });
             }

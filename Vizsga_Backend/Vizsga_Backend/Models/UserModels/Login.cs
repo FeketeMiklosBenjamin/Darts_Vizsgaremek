@@ -1,4 +1,4 @@
-﻿namespace VizsgaBackend.Models
+﻿namespace Vizsga_Backend.Models.UserModels
 {
     public class Login
     {

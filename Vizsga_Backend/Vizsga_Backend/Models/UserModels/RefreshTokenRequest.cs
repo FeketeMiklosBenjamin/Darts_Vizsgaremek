@@ -1,4 +1,4 @@
-﻿namespace Vizsga_Backend.Models
+﻿namespace Vizsga_Backend.Models.UserModels
 {
     public class RefreshTokenRequest
     {

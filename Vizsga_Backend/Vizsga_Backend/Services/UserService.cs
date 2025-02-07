@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using StackExchange.Redis;
 using System.Text.RegularExpressions;
+using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services
@@ -21,6 +24,32 @@ namespace VizsgaBackend.Services
         {
             return await _usersCollection.Find(_ => true).ToListAsync();
         }
+
+        //public async Task<List<User>> GetUsersWithTournaments()
+        //{
+        //    var pipeline = new[]
+        //    {
+        //        new BsonDocument("$lookup", new BsonDocument
+        //        {
+        //            { "from", "users_tournament_stats" },
+        //            { "localField", "_id" },
+        //            { "foreignField", "userId" },
+        //            { "as", "UserTournamentStat" }
+        //        }),
+        //        new BsonDocument("$unwind", new BsonDocument
+        //        {
+        //            { "path", "$UserTournamentStat" },
+        //            { "preserveNullAndEmptyArrays", true } // Ha nincs adat, marad null
+        //        })
+        //    };
+
+        //    var result = await _usersCollection.AggregateAsync<BsonDocument>(pipeline);
+        //    var users = result.ToList().Select(doc => BsonSerializer.Deserialize<User>(doc)).ToList();
+
+        //    return users;
+        //}
+
+
 
         public async Task<User?> GetByIdAsync(string id)
         {
@@ -79,7 +108,16 @@ namespace VizsgaBackend.Services
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
             var update = Builders<User>.Update.Set(u => u.RefreshToken, refreshToken)
-                                               .Set(u => u.RefreshTokenExpiry, DateTime.UtcNow.AddMonths(1)); // Példa: 1 hónap érvényesség
+                                               .Set(u => u.RefreshTokenExpiry, DateTime.UtcNow.AddMonths(1))
+                                               .Set(u => u.LastLoginDate, DateTime.UtcNow);
+
+            await _usersCollection.UpdateOneAsync(filter, update);
+        }
+
+        public async Task RefreshLastLoginDate(string userId)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(u => u.LastLoginDate, DateTime.UtcNow);
 
             await _usersCollection.UpdateOneAsync(filter, update);
         }

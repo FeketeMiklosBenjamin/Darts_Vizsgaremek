@@ -14,7 +14,7 @@
       },
       {
         "Name": "request",
-        "Type": "Vizsga_Backend.Models.RefreshTokenRequest",
+        "Type": "Vizsga_Backend.Models.UserModels.RefreshTokenRequest",
         "IsRequired": true
       }
     ],
@@ -60,8 +60,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedUser",
-        "Type": "VizsgaBackend.Models.User",
+        "Name": "modifyUser",
+        "Type": "Vizsga_Backend.Models.UserModels.ModifyUser",
         "IsRequired": true
       }
     ],
@@ -130,7 +130,7 @@
     "Parameters": [
       {
         "Name": "loginRequest",
-        "Type": "VizsgaBackend.Models.Login",
+        "Type": "Vizsga_Backend.Models.UserModels.Login",
         "IsRequired": true
       }
     ],
@@ -156,7 +156,7 @@
     "Parameters": [
       {
         "Name": "registerUser",
-        "Type": "VizsgaBackend.Models.User",
+        "Type": "Vizsga_Backend.Models.UserModels.User",
         "IsRequired": true
       }
     ],

@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using VizsgaBackend.Models;
 
-namespace VizsgaBackend.Models
+namespace Vizsga_Backend.Models.UserModels
 {
     public class User
     {
@@ -36,7 +37,7 @@ namespace VizsgaBackend.Models
 
         [BsonElement("last_login_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime? LastLoginDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
     }
 
 }

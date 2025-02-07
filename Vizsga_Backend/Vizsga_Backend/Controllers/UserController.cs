@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Vizsga_Backend.Models;
+using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -33,7 +34,7 @@ namespace VizsgaBackend.Controllers
 
         }
 
-        // GET: api/<ProductController>
+        // Befejezve
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
@@ -41,16 +42,27 @@ namespace VizsgaBackend.Controllers
             try
             {
                 var users = await _service.GetAsync();
-                return Ok(users);
+
+                var result = users.Select(user => new
+                {
+                    message = "Sikeres lekérés",
+                    user.Id,
+                    user.Username,
+                    user.EmailAddress,
+                    register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                }).ToList();
+
+                return Ok(result);
             }
             catch (Exception)
             {
                 return StatusCode(500, new { message = "A lekérés során hiba történt." });
-                throw;
             }
         }
 
-        // GET api/<ProductController>/5
+
+        // Folyamatban
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetById(string id)
@@ -60,7 +72,17 @@ namespace VizsgaBackend.Controllers
                 var user = await _service.GetByIdAsync(id);
                 if (user == null)
                     return NotFound(new {message = $"A felhasználó az ID-vel ({id}) nem található." });
-                return Ok(user);
+
+                var result = new
+                {
+                    message = "Sikeres lekérés",
+                    user.Id,
+                    user.Username,
+                    user.EmailAddress,
+                    register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                };
+                return Ok(result);
             }
             catch (Exception)
             {
@@ -69,7 +91,7 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // POST api/<ProductController>
+        // Befejezve
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User registerUser)
         {
@@ -87,12 +109,12 @@ namespace VizsgaBackend.Controllers
                 }
 
                 // Validáljuk a kötelező mezőket
-                if (string.IsNullOrEmpty(registerUser.Username))
+                if (string.IsNullOrWhiteSpace(registerUser.Username))
                 {
                     return BadRequest(new {message = "Az felhasználónév nem lehet üres." });
                 }
 
-                if (string.IsNullOrEmpty(registerUser.EmailAddress))
+                if (string.IsNullOrWhiteSpace(registerUser.EmailAddress))
                 {
                     return BadRequest(new {message = "Az email cím nem lehet üres." });
                 }
@@ -102,15 +124,15 @@ namespace VizsgaBackend.Controllers
                     return BadRequest(new {message = "Az email cím nem megfelelő." });
                 }
 
-                if (string.IsNullOrEmpty(registerUser.Password) || registerUser.Password.Length < 8)
+                if (string.IsNullOrWhiteSpace(registerUser.Password) || registerUser.Password.Length < 8)
                 {
                     return BadRequest(new {message = "A jelszónak legalább 8 karakter hosszúnak kell lennie." });
                 }
 
-                if (registerUser.Role != 1 && registerUser.Role != 2)
-                {
-                    return BadRequest(new {message = "Az role csak 1 és 2 lehet." });
-                }
+                //if (registerUser.Role != 1)
+                //{
+                //    return BadRequest(new {message = "Az role csak 1-es (user) lehet." });
+                //}
 
                 // Ellenőrizzük, hogy az email cím már létezik-e az adatbázisban
                 var existingUser = await _service.IsEmailTakenAsync(registerUser.EmailAddress, null);
@@ -123,6 +145,7 @@ namespace VizsgaBackend.Controllers
                 registerUser.Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
 
                 // Ha minden validálás sikeres, hozzáadjuk az új felhasználót az adatbázishoz
+                registerUser.Role = 1;
                 registerUser.RegisterDate = DateTime.UtcNow;
 
                 var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
@@ -171,7 +194,8 @@ namespace VizsgaBackend.Controllers
                 // Válasz küldése a sikeres regisztrációról, az új entitással
                 return CreatedAtAction(nameof(GetById),new { id = registerUser.Id}, new { 
                     message = "Sikeres regisztráció.", 
-                    userId = registerUser.Id,
+                    id = registerUser.Id,
+                    username = registerUser.Username,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -184,6 +208,7 @@ namespace VizsgaBackend.Controllers
         }
 
         // Bejelentkezés
+        // Befejezve
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login loginRequest)
         {
@@ -228,8 +253,9 @@ namespace VizsgaBackend.Controllers
                 // Válasz a sikeres bejelentkezés után
                 return Ok(new
                 {
-                    message = "Sikeres bejelentkezés.",
-                    userId = user.Id,
+                    message = "Sikeres regisztráció.",
+                    id = user.Id,
+                    username = user.Username,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -240,6 +266,7 @@ namespace VizsgaBackend.Controllers
             }
         }
 
+        // Befejezve
         [HttpPost("logout")]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -266,46 +293,53 @@ namespace VizsgaBackend.Controllers
 
 
 
-        // PUT api/<ProductController>/5
+        // Befejezve
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(string id, [FromBody] User updatedUser)
+        public async Task<IActionResult> Put(string id, [FromBody] ModifyUser modifyUser)
         {
             try
             {
-                var userRole = User.FindFirstValue(ClaimTypes.Role);
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (userId != id && userRole != "2")
+                if (userId != id)
                 {
                     return Unauthorized(new { message = "Nincs jogosultságod a modosításhoz." });
                 }
 
-                if (updatedUser == null)
+                if (modifyUser == null)
                 {
                     return BadRequest(new { message = "A kéréssel valami nincs rendben. Ellenőrizd az adatokat." });
                 }
 
-                var modifyUser = await _service.GetByIdAsync(id);
-                if (modifyUser == null)
+                var updatedUser = await _service.GetByIdAsync(id);
+                if (updatedUser == null)
                 {
                     return NotFound(new { message = $"A felhasználó az ID-vel ({id}) nem található." });
                 }
+
+                // Ellenőrizzük a jelszót
+                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(modifyUser.Password, updatedUser.Password);
+                if (!isPasswordValid)
+                {
+                    return Unauthorized(new { message = "Hibás mostani jelszó." });
+                }
+
                 var filter = Builders<User>.Filter.Eq(u => u.Id, id);
                 var updateDefinitionBuilder = Builders<User>.Update;
                 var updates = new List<UpdateDefinition<User>>();
 
-                if (!string.IsNullOrEmpty(updatedUser.Username))
+                if (!string.IsNullOrWhiteSpace(modifyUser.Username))
                 {
-                    updates.Add(updateDefinitionBuilder.Set(u => u.Username, updatedUser.Username));
+                    updates.Add(updateDefinitionBuilder.Set(u => u.Username, modifyUser.Username));
                 }
 
-                if (!string.IsNullOrEmpty(updatedUser.Password))
+                if (!string.IsNullOrWhiteSpace(modifyUser.NewPassword))
                 {
-                    if (updatedUser.Password.Length > 8)
+                    if (modifyUser.NewPassword.Length > 8)
                     {
-                        updates.Add(updateDefinitionBuilder.Set(u => u.Password, updatedUser.Password));
+                        updates.Add(updateDefinitionBuilder.Set(u => u.Password, modifyUser.Password = BCrypt.Net.BCrypt.HashPassword(modifyUser.Password)));
                     }
                     else
                     {
@@ -313,21 +347,20 @@ namespace VizsgaBackend.Controllers
                     }
                 }
 
-                if (updatedUser.Role == 1 || updatedUser.Role == 2)
-                {
-                    updates.Add(updateDefinitionBuilder.Set(u => u.Role, updatedUser.Role));
-                }
+                //if (modifyUser.Role == 1 || modifyUser.Role == 2)
+                //{
+                //    updates.Add(updateDefinitionBuilder.Set(u => u.Role, updatedUser.Role));
+                //}
 
-                if (await _service.IsEmailTakenAsync(updatedUser.EmailAddress, id))
+                if (!string.IsNullOrWhiteSpace(modifyUser.EmailAddress))
                 {
-                    return BadRequest(new { message = "Az email cím már foglalt." });
-                }
-
-                if (!string.IsNullOrEmpty(updatedUser.EmailAddress))
-                {
-                    if (_service.IsValidEmail(updatedUser.EmailAddress))
+                    if (_service.IsValidEmail(modifyUser.EmailAddress))
                     {
-                        updates.Add(updateDefinitionBuilder.Set(u => u.EmailAddress, updatedUser.EmailAddress));
+                        if (await _service.IsEmailTakenAsync(modifyUser.EmailAddress, id))
+                        {
+                            updates.Add(updateDefinitionBuilder.Set(u => u.EmailAddress, modifyUser.EmailAddress));
+                        }
+                        return BadRequest(new { message = "Az email cím már foglalt." });
                     }
                     else
                     {
@@ -354,14 +387,14 @@ namespace VizsgaBackend.Controllers
         }
 
 
-        // DELETE api/<ProductController>/5
+        // Befejezve
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             try
             {
-                var userRole = HttpContext.Session.GetString("UserRole");
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
 
                 if (userRole != "2")
                 {
