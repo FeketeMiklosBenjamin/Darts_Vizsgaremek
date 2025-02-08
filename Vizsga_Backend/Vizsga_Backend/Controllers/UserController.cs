@@ -253,7 +253,7 @@ namespace VizsgaBackend.Controllers
                 // Válasz a sikeres bejelentkezés után
                 return Ok(new
                 {
-                    message = "Sikeres regisztráció.",
+                    message = "Sikeres bejelentkezés.",
                     id = user.Id,
                     username = user.Username,
                     accessToken = accessTokenGen,
@@ -356,7 +356,7 @@ namespace VizsgaBackend.Controllers
                 {
                     if (_service.IsValidEmail(modifyUser.EmailAddress))
                     {
-                        if (await _service.IsEmailTakenAsync(modifyUser.EmailAddress, id))
+                        if (!await _service.IsEmailTakenAsync(modifyUser.EmailAddress, id))
                         {
                             updates.Add(updateDefinitionBuilder.Set(u => u.EmailAddress, modifyUser.EmailAddress));
                         }
