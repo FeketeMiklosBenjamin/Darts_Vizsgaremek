@@ -1,4 +1,28 @@
 <script setup lang="ts">
+import type LoginModel from '@/models/LoginModel';
+import { useUserStore } from '@/stores/UserStore';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const { login, status } = useUserStore();
+const router = useRouter();
+const processing = ref<boolean>(false);
+
+const loginform = ref<LoginModel>({
+    emailAddress: '',
+    password: ''
+});
+
+function onLogin(){
+    processing.value = true;
+    login(loginform.value)
+        .then(() => {
+            router.push('/main-page')},
+        )
+        .catch((err) => {
+            processing.value = false;
+        })
+}
 
 </script>
 
@@ -13,21 +37,23 @@
 
             <div class="row">
                 <div class="col-12 col-md-12 mx-auto">
-                    <form>
+                    <form @submit.prevent="onLogin">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" placeholder="E-mail">
+                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="loginform.emailAddress">
                             <label for="email">E-mail</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Jelszó">
+                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="loginform.password">
                             <label for="password">Jelszó</label>
                         </div>
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-warning w-100 py-2">Bejelentkezés</button>
+                            <button type="submit" class="btn btn-warning w-100 py-2">Bejelentkezés
+                                <span v-if="processing" class="spinner-border spinner-border-sm"></span>
+                            </button>
                         </div>
-
                     </form>
+                    <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}</div>
                 </div>
             </div>
         </div>

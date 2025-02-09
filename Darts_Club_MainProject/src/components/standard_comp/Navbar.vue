@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import { useUserStore } from '@/stores/UserStore';
+import { storeToRefs } from 'pinia';
+import { onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
+
+const {status, user} = storeToRefs(useUserStore());
+const { getOneUser, logout } = useUserStore();
+const router = useRouter();
+
+
+onBeforeMount(() => {
+    if (status.value._id) {
+        getOneUser(status.value._id)
+    } else {
+        console.log("Nincs még bejelentkezve!");
+    }
+});
+
+function onLogout() {
+    logout()
+        .then(() => {
+                status.value._id = '';
+                sessionStorage.removeItem('user')
+                router.push('/')}
+            )
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
+</script>
+
+
 <template>
     <div class="shadow-lg">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2">
@@ -9,16 +43,40 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2"> 
                         <li class="nav-item">
-                            <router-link :to="`/sign-in`" class="no-underline">
-                                <a class="nav-link" href="#">Bejelentkezés</a>
-                            </router-link>
+                            <div v-if="status._id">
+                                <a class="nav-link">{{ user.username }}</a>
+                            </div>
+                            <div v-else>
+                                <router-link :to="`/sign-in`" class="no-underline">
+                                    <a class="nav-link" href="#">Bejelentkezés</a>
+                                </router-link>
+                            </div>
                         </li> 
-                        <li class="nav-item bg-white ms-1 m-auto rounded-circle px-1 border border-warning">
-                            <i class="bi bi-person"></i>
-                        </li>                
-                        <li class="nav-item text-secondary my-auto ms-4">
-                            <i class="bi bi-gear-fill"></i>
-                        </li>                                         
+                        <div v-if="status._id" class="ms-1 m-auto px-1">
+                            <li class="nav-item bg-secondary rounded-circle px-1 border border-danger text-white">
+                                <i class="bi bi-person"></i>
+                            </li>                
+                        </div>
+                        <div v-else class="ms-1 m-auto px-1">
+                            <li class="nav-item bg-white rounded-circle px-1 border border-warning">
+                                <i class="bi bi-person"></i>
+                            </li>                
+                        </div>
+                        <div v-if="status._id" class="my-auto ms-3">
+                            <li class="nav-item text-secondary my-auto">
+                                <i class="bi bi-gear-fill"></i>
+                            </li>                            
+                        </div>
+                        <div v-else class="my-auto ms-3">
+                            <li class="nav-item text-white my-auto">
+                                <i class="bi bi-gear-fill"></i>
+                            </li>                                         
+                        </div>
+                        <div v-if="status._id" class="my-auto ms-4">
+                            <li class="nav-item my-auto">
+                                <a href="#" @click="onLogout" class="text-secondary"><i class="bi bi-box-arrow-right"></i></a>
+                            </li>                            
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -26,9 +84,5 @@
     </div>
 </template>
 
-<script setup lang="ts">
-</script>
 
-<style  scoped>
-    
-</style>
+<style  scoped></style>

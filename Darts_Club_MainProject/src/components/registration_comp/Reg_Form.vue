@@ -1,4 +1,25 @@
 <script setup lang="ts">
+import type RegisterModel from '@/models/RegisterModel';
+import { useUserStore } from '@/stores/UserStore';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const { register } = useUserStore();
+const router = useRouter();
+
+const registerform = ref<RegisterModel>({
+    username: '',
+    emailAddress: '',
+    password: '',
+});
+
+function onRegister() {
+    if (registerform.value.password === registerform.value.secondPassword) {
+        register(registerform.value)
+        .then(() => {router.push('/main-page')})
+    }
+}
+
 
 </script>
 
@@ -13,24 +34,24 @@
 
             <div class="row">
                 <div class="col-12 col-md-12 mx-auto">
-                    <form>
+                    <form @submit.prevent="onRegister">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="Név">
+                            <input type="text" class="form-control" id="name" placeholder="Név" v-model="registerform.username">
                             <label for="name">Név</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" placeholder="E-mail">
+                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="registerform.emailAddress">
                             <label for="email">E-mail</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Jelszó">
+                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="registerform.password">
                             <label for="password">Jelszó</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="confirm_password" placeholder="Jelszó újra">
+                            <input type="password" class="form-control" id="confirm_password" placeholder="Jelszó újra" v-model="registerform.secondPassword">
                             <label for="confirm_password">Jelszó újra</label>
                         </div>
 
