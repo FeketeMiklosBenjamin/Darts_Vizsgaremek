@@ -196,6 +196,7 @@ namespace VizsgaBackend.Controllers
                     message = "Sikeres regisztráció.", 
                     id = registerUser.Id,
                     username = registerUser.Username,
+                    emailAddress = registerUser.EmailAddress,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -256,6 +257,7 @@ namespace VizsgaBackend.Controllers
                     message = "Sikeres bejelentkezés.",
                     id = user.Id,
                     username = user.Username,
+                    emailAddress = user.EmailAddress,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
