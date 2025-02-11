@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DartsMobilApp.Database;
+using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
+using DartsMobilApp.Service;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using System;
@@ -15,26 +16,57 @@ namespace DartsMobilApp.ViewModel
     public partial class LoginViewModel : ObservableObject
     {
 
+        private  AuthService _authService = new AuthService();
+        //[ObservableProperty]
+        //public List<L> userDatas;
         [ObservableProperty]
-        public List<UserLoginData> userDatas;
-        
-        
+        public string email;
+
+        [ObservableProperty]
+        public string password;
+
         [RelayCommand]
-        private  void Apperaring()
+        private void Apperaring()
         {
-            userDatas = Task.Run(() => LoginDatabase.GetAllItemsAsync()).Result;
         }
+
+
+
+
 
         [RelayCommand]
 
         private async void GoToHomePage()
         {
-            MainThread.BeginInvokeOnMainThread(async () => 
+            var email = Email;
+            var password = Password;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                await Shell.Current.GoToAsync($"//{nameof(MainPage)}", true);
-            });
+                await Application.Current.MainPage.DisplayAlert("Error", "Please enter both username and password", "OK");
+                return;
+            }
+
+            var loginResponse = await _authService.LoginAsync(email, password);
+
+            if (loginResponse.IsSuccess)
+            {
+                // Handle successful login (e.g., navigate to the main page)
+                await Application.Current.MainPage.DisplayAlert("Success", "Login successful", "OK");
+            }
+            else
+            {
+                // Handle failed login
+                await Application.Current.MainPage.DisplayAlert("Error", loginResponse.Message, "OK");
+            }
+            //MainThread.BeginInvokeOnMainThread(async () =>
+            //        {
+            //            await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+            //       });
+
+
         }
 
-            
+
     }
 }

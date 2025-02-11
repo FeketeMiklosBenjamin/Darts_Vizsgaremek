@@ -10,11 +10,11 @@
     </ContentPage.Behaviors>
     <ScrollView>
         <Grid RowDefinitions="*, *,2*,*,*,6*">
-            <HorizontalStackLayout Grid.Row="2"  VerticalOptions="Center">
+            <HorizontalStackLayout Grid.Row="2"  VerticalOptions="Center" Padding="10">
                 <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="5,5,5,5" WidthRequest="200"/>
                 <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold" WidthRequest="200" Margin="5,5,5,5"/>
             </HorizontalStackLayout>
-            <HorizontalStackLayout Grid.Row="3"  BackgroundColor="LightGray">
+            <HorizontalStackLayout Grid.Row="3"  BackgroundColor="LightGray" Padding="5">
                     <Label Text="{Binding RecommendedFirstCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150"/>
                     <Label Text="{Binding RecommendedSecondCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150"/>
             </HorizontalStackLayout>
