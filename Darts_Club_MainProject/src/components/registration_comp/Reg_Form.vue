@@ -4,8 +4,10 @@ import { useUserStore } from '@/stores/UserStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const { register } = useUserStore();
+const { register, status } = useUserStore();
 const router = useRouter();
+const processing = ref<boolean>(false);
+
 
 const registerform = ref<RegisterModel>({
     username: '',
@@ -14,10 +16,14 @@ const registerform = ref<RegisterModel>({
 });
 
 function onRegister() {
+    processing.value = true;
     if (registerform.value.password === registerform.value.secondPassword) {
         register(registerform.value)
-        .then(() => {router.push('/main-page')})
+            .then(() => {router.push('/main-page')})
+            .catch((err) => {processing.value = false;})
     }
+    //TODO
+
 }
 
 
@@ -56,10 +62,12 @@ function onRegister() {
                         </div>
 
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-info w-100 py-2">Regisztráció</button>
+                            <button type="submit" class="btn btn-info w-100 py-2">Regisztráció
+                                <span v-if="processing" class="spinner-border spinner-border-sm"></span>
+                            </button>
                         </div>
-
                     </form>
+                    <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}</div>
                 </div>
             </div>
         </div>

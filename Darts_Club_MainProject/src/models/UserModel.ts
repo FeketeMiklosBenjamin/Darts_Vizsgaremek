@@ -6,7 +6,6 @@ export default interface UserModel {
     role?: number,
     registerDate?: string,
     refreshToken?: string,
-    refreshTokenExpiry?: string,
     lastLoginDate?: string,
     accessToken?: string
 }

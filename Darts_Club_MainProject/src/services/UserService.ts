@@ -7,19 +7,6 @@ import type UserModel from "@/models/UserModel";
 const token = sessionStorage.getItem('accessToken');
 
 export default {
-    getUser(id: string) {
-        return axios.get(`${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }) 
-        .then((res) => {
-            return res;
-        })
-        .catch((err) => {
-            return Promise.reject(err.response);
-        })
-    },
     registerUser(data: RegisterModel) {
         return axios.post('/register', data)
             .then((res) => {

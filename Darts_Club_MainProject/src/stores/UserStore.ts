@@ -13,32 +13,21 @@ export const useUserStore = defineStore('userStore', {
         user: <UserModel> {}
     }),
     actions: {
-        getOneUser(id: string) {
-            return UserService.getUser(id)
+        register(data: RegisterModel) {
+            return UserService.registerUser(data) 
                 .then((res) => {
-                    this.user = {  
+                    sessionStorage.setItem('accessToken', res.data.accessToken);
+                    this.user = {
                         id: res.data.id,
                         username: res.data.username,
                         password: '',
                         emailAddress: res.data.emailAddress,
                         role: 1,
-                        registerDate: res.data.register_date,
+                        registerDate: '',
                         refreshToken: '',
-                        refreshTokenExpiry: '',
-                        lastLoginDate: res.data.last_login_date
+                        accessToken: res.data.accessToken
                     };
-                    sessionStorage.setItem('user', JSON.stringify(this.user));
-                    return res.data;
-                })
-                .catch((err) => {
-                    this.user = defaultUser;
-                    return Promise.reject()
-                })
-        },
-        register(data: RegisterModel) {
-            return UserService.registerUser(data) 
-                .then((res) => {
-                    this.user =  { ...res.data.data},
+                    sessionStorage.setItem('user', JSON.stringify(this.user));                   
                     this.status._id = res.data.id;
                 })
                 .catch((err) => {
@@ -50,7 +39,18 @@ export const useUserStore = defineStore('userStore', {
         login(data: LoginModel) {
             return UserService.loginUser(data)
                 .then((res) => {
-                    sessionStorage.setItem('accessToken', res.data.accessToken)
+                    sessionStorage.setItem('accessToken', res.data.accessToken);
+                    this.user = {
+                        id: res.data.id,
+                        username: res.data.username,
+                        password: '',
+                        emailAddress: res.data.emailAddress,
+                        role: 1,
+                        registerDate: '',
+                        refreshToken: '',
+                        accessToken: res.data.accessToken
+                    };
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
                     this.status._id = res.data.id;
                 })
                 .catch((err) => {

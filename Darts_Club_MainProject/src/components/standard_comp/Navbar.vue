@@ -5,27 +5,18 @@ import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 
 const {status, user} = storeToRefs(useUserStore());
-const { getOneUser, logout } = useUserStore();
+const { logout } = useUserStore();
 const router = useRouter();
-
-
-onBeforeMount(() => {
-    if (status.value._id) {
-        getOneUser(status.value._id)
-    } else {
-        console.log("Nincs még bejelentkezve!");
-    }
-});
 
 function onLogout() {
     logout()
         .then(() => {
                 status.value._id = '';
-                sessionStorage.removeItem('user')
                 router.push('/')}
             )
         .catch((err) => {
-            console.log(err);
+            status.value._id = '';
+                router.push('/');
         })
 }
 
