@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pDMTiG3Jr3s=",
+  "dgSpecHash": "+ZM9ga4gxpg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\gemes.norbert\\Desktop\\VR2 másolata\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
+  "projectFilePath": "C:\\Users\\gemes.norbert\\Desktop\\Darts_Vizsgaremek\\DartsMobilApp\\DartsMobilApp\\DartsMobilApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gemes.norbert\\.nuget\\packages\\communitytoolkit.maui\\9.1.1\\communitytoolkit.maui.9.1.1.nupkg.sha512",
     "C:\\Users\\gemes.norbert\\.nuget\\packages\\communitytoolkit.maui.core\\9.1.1\\communitytoolkit.maui.core.9.1.1.nupkg.sha512",

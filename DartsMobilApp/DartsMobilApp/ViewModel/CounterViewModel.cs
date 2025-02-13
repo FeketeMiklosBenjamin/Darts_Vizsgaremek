@@ -19,7 +19,7 @@ namespace DartsMobilApp.ViewModel
 
 
         [ObservableProperty]
-        public int needToWin;
+        public int needToWin = 2;
 
         [ObservableProperty]
         public int firstPlayerWonLeg;
@@ -247,8 +247,7 @@ namespace DartsMobilApp.ViewModel
                 if (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint) < 0)
                 {
                     Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                    PointsSecondPlayer = PointsSecondPlayer;
-                    isFirstPlayer = true;
+                    thrownPoint = "0";
                 }
                 PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint)).ToString();
                 RecommendedSecondCheckout = Set_description(PointsSecondPlayer);
@@ -259,11 +258,10 @@ namespace DartsMobilApp.ViewModel
             }
             else if(PlayerNum == 1)
             {
-                if (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) < 0)
+                if (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint) < 0)
                 {
                     Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
                     thrownPoint = "0";
-                    isFirstPlayer = false;
                 }
                 PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
                 RecommendedFirstCheckout = Set_description(PointsFirstPlayer);
@@ -286,25 +284,33 @@ namespace DartsMobilApp.ViewModel
             {
                 if (!isFirstPlayer && !IsWinner())
                 {
+                    
                     SetPlayersPoints(point, 2);
                 }
                 else if(isFirstPlayer && !IsWinner())
                 {
+                    if (int.Parse(PointsFirstPlayer) - int.Parse(point) < 0)
+                    {
+                        Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
+                        point = "0";
+                        isFirstPlayer = false;
+                    }
+                    
                     SetPlayersPoints(point, 1);
                 }
-                else if (!isFirstPlayer && IsWinner())
+                if (!isFirstPlayer && IsWinner())
                 {
-                    SetDefaultValues(PointsSecondPlayer, point, 2);
+                    SetDefaultValues(point);
                 }
-                else if (isFirstPlayer && IsWinner())
+                else
                 {
-                    SetDefaultValues(PointsFirstPlayer, point, 1);
+                    SetDefaultValues(point);
                 }
             }
 
         }
 
-        private async void SetDefaultValues(string playerPoint, string point, int PlayerNumber)
+        private async void SetDefaultValues( string point)
         {
            
             
@@ -315,13 +321,13 @@ namespace DartsMobilApp.ViewModel
                     PointsFirstPlayer = "501";
                     RecommendedFirstCheckout = "";
                     RecommendedSecondCheckout = "";
-                    if (isFirstPlayer)
+                    if (!isFirstPlayer)
                     {
-                        FirstPlayerWonLeg++;
+                        SecondPlayerWonLeg++;
                     }
                     else
                     {
-                        SecondPlayerWonLeg++;
+                        FirstPlayerWonLeg++;
                     }
                     if (allPlayedLegs % 2 != 0)
                     {
@@ -331,16 +337,16 @@ namespace DartsMobilApp.ViewModel
                     {
                         isFirstPlayer = false;
                     }
-                    if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
-                    {
-                        isWinnerTheMatch = true;
-                        await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
-                        Thread.Sleep(10000);
+                //if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
+                //{
+                //    isWinnerTheMatch = true;
+                //    await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
+                //    Thread.Sleep(10000);
 
-                        FirstPlayerWonLeg = 0;
-                        SecondPlayerWonLeg = 0;
-                    }
-                }
+                //    FirstPlayerWonLeg = 0;
+                //    SecondPlayerWonLeg = 0;
+                //}
+            }
         }
 
         bool isWinnerTheMatch = false;
@@ -364,19 +370,11 @@ namespace DartsMobilApp.ViewModel
         }
         private bool IsWinner()
         {
-            if (PointsFirstPlayer == "0" )
+            if (PointsFirstPlayer == "0" || PointsSecondPlayer == "0")
             {
-                
-                Application.Current.MainPage.DisplayAlert("Meccs vége!", "Az első játékos nyerte a mérkőzést!", "OK");
-                isFirstPlayer = true;
                 return true;
             }
-            if (PointsSecondPlayer == "0")
-            {
-                Application.Current.MainPage.DisplayAlert("Meccs vége!", "A második játékos nyerte a mérkőzést!", "OK");
-                isFirstPlayer = false;
-                return true;
-            }
+            
             return false;
         }
 
