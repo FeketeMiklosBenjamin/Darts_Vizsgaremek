@@ -28,7 +28,7 @@ namespace DartsMobilApp.Service
             var jsonContent = JsonSerializer.Serialize(loginModel);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var apiUrl = "http://10.0.2.2:5181/api/users/login";
+            var apiUrl = "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/login";
 
             try
             {
@@ -43,12 +43,12 @@ namespace DartsMobilApp.Service
                 }
                 else
                 {
-                    return new LoginResponse { IsSuccess = false, Message = "Login failed" };
+                    return new LoginResponse {  message = "Login failed" };
                 }
             }
             catch (Exception ex)
             {
-                return new LoginResponse { IsSuccess = false, Message = $"An error occurred: {ex.Message} " };
+                return new LoginResponse {  message = $"An error occurred: {ex.Message} " };
             }
         }
     }

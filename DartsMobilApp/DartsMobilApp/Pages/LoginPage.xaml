@@ -12,7 +12,7 @@
         <Grid RowDefinitions="*,*,*,*,*">
             <Label Text="Bejelentkezés" FontSize="Large" FontAttributes="Bold" Grid.Row="0" Margin="10,10,10,10"/>
             <Border Grid.Row="1" HeightRequest="40" WidthRequest="150" Margin="20,50,20,20">
-                <Entry x:Name="email_ENT" WidthRequest="150" HeightRequest="40" Text="{Binding Email}"/>
+                <Entry x:Name="email_ENT" WidthRequest="150" HeightRequest="40" Text="{Binding EmailAddress}"/>
             </Border>
             <Border Grid.Row="2" HeightRequest="40" WidthRequest="150" Margin="20,10,20,30">
                 <Entry x:Name="password_ENT" WidthRequest="150" HeightRequest="40" IsPassword="True" Text="{Binding Password}"/>

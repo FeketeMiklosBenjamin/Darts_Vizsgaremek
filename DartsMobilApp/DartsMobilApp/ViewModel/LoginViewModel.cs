@@ -20,7 +20,7 @@ namespace DartsMobilApp.ViewModel
         //[ObservableProperty]
         //public List<L> userDatas;
         [ObservableProperty]
-        public string email;
+        public string emailAddress;
 
         [ObservableProperty]
         public string password;
@@ -38,31 +38,33 @@ namespace DartsMobilApp.ViewModel
 
         private async void GoToHomePage()
         {
-            var email = Email;
+            var email = EmailAddress;
             var password = Password;
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Please enter both username and password", "OK");
-                return;
+                
             }
 
             var loginResponse = await _authService.LoginAsync(email, password);
 
-            if (loginResponse.IsSuccess)
+            if (loginResponse.message == "Sikeres bejelentkezés.")
             {
                 // Handle successful login (e.g., navigate to the main page)
                 await Application.Current.MainPage.DisplayAlert("Success", "Login successful", "OK");
+                Thread.Sleep(1000);
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                });
             }
             else
             {
                 // Handle failed login
-                await Application.Current.MainPage.DisplayAlert("Error", loginResponse.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", loginResponse.message, "OK");
             }
-            //MainThread.BeginInvokeOnMainThread(async () =>
-            //        {
-            //            await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
-            //       });
+
 
 
         }

@@ -17,22 +17,41 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public string recommendedSecondCheckout;
 
+
+        [ObservableProperty]
+        public int needToWin;
+
+        [ObservableProperty]
+        public int firstPlayerWonLeg;
+
+        [ObservableProperty]
+        public int secondPlayerWonLeg;
+
+        public int allPlayedLegs
+        {
+            get
+            {
+                return secondPlayerWonLeg + firstPlayerWonLeg;
+            }
+        }
+
         [ObservableProperty]
         public string points;
 
         [ObservableProperty]
 
-        public string pointsFirstPlayer = "501"; 
+        public string pointsFirstPlayer; 
 
         [ObservableProperty]
 
-        public string pointsSecondPlayer = "501";
+        public string pointsSecondPlayer;
 
 
         [RelayCommand]
         private void Appearing()
         {
             PointsFirstPlayer = PointsSecondPlayer = "501";
+            SecondPlayerWonLeg = FirstPlayerWonLeg = 0;
         }
 
         [RelayCommand]
@@ -220,6 +239,41 @@ namespace DartsMobilApp.ViewModel
 
         bool isFirstPlayer = true;
 
+
+        private void SetPlayersPoints(string thrownPoint, int PlayerNum)
+        {
+            if (PlayerNum == 2)
+            {
+                if (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint) < 0)
+                {
+                    Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
+                    PointsSecondPlayer = PointsSecondPlayer;
+                    isFirstPlayer = true;
+                }
+                PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint)).ToString();
+                RecommendedSecondCheckout = Set_description(PointsSecondPlayer);
+                Points = "";
+                isFirstPlayer = true;
+
+                
+            }
+            else if(PlayerNum == 1)
+            {
+                if (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) < 0)
+                {
+                    Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
+                    thrownPoint = "0";
+                    isFirstPlayer = false;
+                }
+                PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
+                RecommendedFirstCheckout = Set_description(PointsFirstPlayer);
+                Points = "";
+                isFirstPlayer = false;
+
+                
+            }
+        }
+
         [RelayCommand]
 
         private async void SendPoints(string point) 
@@ -230,53 +284,63 @@ namespace DartsMobilApp.ViewModel
             }
             else
             {
-                if (!isFirstPlayer)
+                if (!isFirstPlayer && !IsWinner())
                 {
-                    if (int.Parse(PointsSecondPlayer) - int.Parse(point) < 0)
-                    {
-                        Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                        isFirstPlayer = true;
-                    }
-                    else
-                    {
-                        PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(point)).ToString();
-                        RecommendedSecondCheckout = Set_description(PointsSecondPlayer);
-                        Points = "";
-                        isFirstPlayer = true;
-                        if (IsWinner())
-                        {
-                            PointsSecondPlayer = "501";
-                            PointsFirstPlayer = "501";
-                            RecommendedFirstCheckout = "";
-                            RecommendedSecondCheckout = "";
-                        }
-                    }
+                    SetPlayersPoints(point, 2);
                 }
-                else
+                else if(isFirstPlayer && !IsWinner())
                 {
-
-                    if (int.Parse(PointsFirstPlayer) - int.Parse(point) < 0)
-                    {
-                        Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                        isFirstPlayer = false;
-                    }
-                    else
-                    {
-                        PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(point)).ToString();
-                        RecommendedFirstCheckout = Set_description(PointsFirstPlayer);
-                        Points = "";
-                        isFirstPlayer = false;
-                        if (IsWinner())
-                        {
-                            PointsFirstPlayer = "501";
-                            PointsSecondPlayer = "501";
-                            RecommendedFirstCheckout = "";
-                            RecommendedSecondCheckout = "";
-                        }
-                    }
+                    SetPlayersPoints(point, 1);
+                }
+                else if (!isFirstPlayer && IsWinner())
+                {
+                    SetDefaultValues(PointsSecondPlayer, point, 2);
+                }
+                else if (isFirstPlayer && IsWinner())
+                {
+                    SetDefaultValues(PointsFirstPlayer, point, 1);
                 }
             }
 
+        }
+
+        private async void SetDefaultValues(string playerPoint, string point, int PlayerNumber)
+        {
+           
+            
+                
+                if (IsWinner())
+                {
+                    PointsSecondPlayer = "501";
+                    PointsFirstPlayer = "501";
+                    RecommendedFirstCheckout = "";
+                    RecommendedSecondCheckout = "";
+                    if (isFirstPlayer)
+                    {
+                        FirstPlayerWonLeg++;
+                    }
+                    else
+                    {
+                        SecondPlayerWonLeg++;
+                    }
+                    if (allPlayedLegs % 2 != 0)
+                    {
+                        isFirstPlayer = true;
+                    }
+                    else
+                    {
+                        isFirstPlayer = false;
+                    }
+                    if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
+                    {
+                        isWinnerTheMatch = true;
+                        await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
+                        Thread.Sleep(10000);
+
+                        FirstPlayerWonLeg = 0;
+                        SecondPlayerWonLeg = 0;
+                    }
+                }
         }
 
         bool isWinnerTheMatch = false;
