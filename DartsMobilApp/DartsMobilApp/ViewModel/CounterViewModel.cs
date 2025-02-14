@@ -24,6 +24,11 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public int firstPlayerWonLeg;
 
+        public List<string> firstPlayerPoints { get; set; }
+
+        public List<string> secondPlayerPoints { get; set; }
+
+
         [ObservableProperty]
         public int secondPlayerWonLeg;
 
@@ -258,7 +263,7 @@ namespace DartsMobilApp.ViewModel
             }
             else if(PlayerNum == 1)
             {
-                if (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint) < 0)
+                if (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) < 0)
                 {
                     Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
                     thrownPoint = "0";
@@ -280,6 +285,7 @@ namespace DartsMobilApp.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("HIBA!", $"Nem lehetséges {point} pontot dobni!", "OK");
             }
+           
             else
             {
                 if (!isFirstPlayer && !IsWinner())
@@ -289,14 +295,9 @@ namespace DartsMobilApp.ViewModel
                 }
                 else if(isFirstPlayer && !IsWinner())
                 {
-                    if (int.Parse(PointsFirstPlayer) - int.Parse(point) < 0)
-                    {
-                        Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                        point = "0";
-                        isFirstPlayer = false;
-                    }
-                    
+                   
                     SetPlayersPoints(point, 1);
+
                 }
                 if (!isFirstPlayer && IsWinner())
                 {
@@ -321,9 +322,10 @@ namespace DartsMobilApp.ViewModel
                     PointsFirstPlayer = "501";
                     RecommendedFirstCheckout = "";
                     RecommendedSecondCheckout = "";
-                    if (!isFirstPlayer)
+                    if (isFirstPlayer)
                     {
                         SecondPlayerWonLeg++;
+                        
                     }
                     else
                     {
@@ -331,21 +333,20 @@ namespace DartsMobilApp.ViewModel
                     }
                     if (allPlayedLegs % 2 != 0)
                     {
-                        isFirstPlayer = true;
+                        isFirstPlayer = false;
                     }
                     else
                     {
-                        isFirstPlayer = false;
+                        isFirstPlayer = true;
                     }
-                //if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
-                //{
-                //    isWinnerTheMatch = true;
-                //    await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
-                //    Thread.Sleep(10000);
-
-                //    FirstPlayerWonLeg = 0;
-                //    SecondPlayerWonLeg = 0;
-                //}
+                if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
+                {
+                    isWinnerTheMatch = true;
+                    await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
+                    Thread.Sleep(1000);
+                    FirstPlayerWonLeg = 0;
+                    SecondPlayerWonLeg = 0;
+                }
             }
         }
 

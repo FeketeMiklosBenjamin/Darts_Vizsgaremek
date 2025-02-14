@@ -53,7 +53,6 @@ namespace DartsMobilApp.ViewModel
             {
                 // Handle successful login (e.g., navigate to the main page)
                 await Application.Current.MainPage.DisplayAlert("Success", "Login successful", "OK");
-                Thread.Sleep(1000);
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
