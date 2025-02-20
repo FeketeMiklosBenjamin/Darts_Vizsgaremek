@@ -7,14 +7,14 @@ using VizsgaBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MongoDB
+// MongoDB és egyéb szolgáltatások regisztrálása
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UserFriendlyStatService>();
 builder.Services.AddSingleton<UserTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
 
-//Authentication
+// Authentication konfigurálása
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 
-// Swagger konfigurálása JWT támogatással
+// Swagger konfigurálása
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -49,19 +49,19 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
             {
+                Reference = new OpenApiReference
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[] { }
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
-            });
+            },
+            new string[] { }
+        }
+    });
 });
 
 builder.Services.AddCors(options =>
@@ -69,7 +69,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://localhost:5173", "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app") // A Koyeb URL hozzáadása
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -80,21 +80,25 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// A környezeti változóból történõ portok beállítása
+var httpPort = Environment.GetEnvironmentVariable("ASPNETCORE_HTTP_PORT") ?? "8080";
+var httpsPort = Environment.GetEnvironmentVariable("ASPNETCORE_HTTPS_PORT") ?? "8081";
 
-// Use CORS
-app.UseCors("AllowSpecificOrigins");
+app.UseSwagger();
+app.UseSwaggerUI();
 
+// HTTPS átirányítás
 app.UseHttpsRedirection();
 
+// CORS beállítása
+app.UseCors("AllowSpecificOrigins");
+
+// Autentikáció és autorizáció middleware-ek
 app.UseAuthentication();
 app.UseAuthorization();
 
+// A vezérlõk térképezése
 app.MapControllers();
 
-app.Run();
+// A dinamikus port beállítása
+app.Run(); // HTTP port használata
