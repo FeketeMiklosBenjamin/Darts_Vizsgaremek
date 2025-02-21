@@ -4,27 +4,27 @@ using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services
 {
-    public class UserTournamentStatService
+    public class UsersTournamentStatService
     {
-        private readonly IMongoCollection<UserTournamentStat> _usersTournamentStatCollection;
+        private readonly IMongoCollection<UsersTournamentStat> _usersTournamentStatCollection;
 
-        public UserTournamentStatService(IOptions<MongoDBSettings> mongoDBSettings)
+        public UsersTournamentStatService(IOptions<MongoDBSettings> mongoDBSettings)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-            _usersTournamentStatCollection = database.GetCollection<UserTournamentStat>(mongoDBSettings.Value.UsersTournamentStatsCollectionName);
+            _usersTournamentStatCollection = database.GetCollection<UsersTournamentStat>(mongoDBSettings.Value.UsersTournamentStatsCollectionName);
         }
-        public async Task<UserTournamentStat> GetByUserIdAsync(string userId)
+        public async Task<UsersTournamentStat> GetByUserIdAsync(string userId)
         {
             return await _usersTournamentStatCollection.Find(stat => stat.UserId == userId).FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(UserTournamentStat stat)
+        public async Task CreateAsync(UsersTournamentStat stat)
         {
             await _usersTournamentStatCollection.InsertOneAsync(stat);
         }
 
-        public async Task<UpdateResult> UpdateOneAsync(FilterDefinition<UserTournamentStat> filter, UpdateDefinition<UserTournamentStat> update)
+        public async Task<UpdateResult> UpdateOneAsync(FilterDefinition<UsersTournamentStat> filter, UpdateDefinition<UsersTournamentStat> update)
         {
             return await _usersTournamentStatCollection.UpdateOneAsync(filter, update);
         }
@@ -34,10 +34,10 @@ namespace VizsgaBackend.Services
             await _usersTournamentStatCollection.DeleteOneAsync(stat => stat.UserId == userId);
         }
 
-        public async Task<UserTournamentStat> GetUpdatedValuesAsync(FilterDefinition<UserTournamentStat> filter, UpdateDefinition<UserTournamentStat> updateDefinition)
+        public async Task<UsersTournamentStat> GetUpdatedValuesAsync(FilterDefinition<UsersTournamentStat> filter, UpdateDefinition<UsersTournamentStat> updateDefinition)
         {
             return await _usersTournamentStatCollection.FindOneAndUpdateAsync(filter, updateDefinition,
-                new FindOneAndUpdateOptions<UserTournamentStat>
+                new FindOneAndUpdateOptions<UsersTournamentStat>
                 {
                     ReturnDocument = ReturnDocument.After
                 }

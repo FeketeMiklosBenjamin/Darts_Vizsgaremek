@@ -5,27 +5,27 @@ using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services
 {
-    public class UserFriendlyStatService
+    public class UsersFriendlyStatService
     {
-        private readonly IMongoCollection<UserFriendlyStat> _usersFriendlyStatCollection;
+        private readonly IMongoCollection<UsersFriendlyStat> _usersFriendlyStatCollection;
 
-        public UserFriendlyStatService(IOptions<MongoDBSettings> mongoDBSettings)
+        public UsersFriendlyStatService(IOptions<MongoDBSettings> mongoDBSettings)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-            _usersFriendlyStatCollection = database.GetCollection<UserFriendlyStat>(mongoDBSettings.Value.UsersFriendlyStatsCollectionName);
+            _usersFriendlyStatCollection = database.GetCollection<UsersFriendlyStat>(mongoDBSettings.Value.UsersFriendlyStatsCollectionName);
         }
-        public async Task<UserFriendlyStat> GetByUserIdAsync(string userId)
+        public async Task<UsersFriendlyStat> GetByUserIdAsync(string userId)
         {
             return await _usersFriendlyStatCollection.Find(stat => stat.UserId == userId).FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(UserFriendlyStat stat)
+        public async Task CreateAsync(UsersFriendlyStat stat)
         {
             await _usersFriendlyStatCollection.InsertOneAsync(stat);
         }
 
-        public async Task<UpdateResult> UpdateOneAsync(FilterDefinition<UserFriendlyStat> filter, UpdateDefinition<UserFriendlyStat> update)
+        public async Task<UpdateResult> UpdateOneAsync(FilterDefinition<UsersFriendlyStat> filter, UpdateDefinition<UsersFriendlyStat> update)
         {
             return await _usersFriendlyStatCollection.UpdateOneAsync(filter, update);
         }

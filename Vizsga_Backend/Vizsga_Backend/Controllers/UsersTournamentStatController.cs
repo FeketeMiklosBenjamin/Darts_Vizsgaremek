@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
@@ -8,13 +7,13 @@ using VizsgaBackend.Services;
 
 namespace VizsgaBackend.Controllers
 {
-    [Route("api/users/friendlystat/")]
+    [Route("api/users/tournamentstat")]
     [ApiController]
-    public class UserFriendlyStatController : ControllerBase
+    public class UsersTournamentStatController : ControllerBase
     {
-        private readonly UserFriendlyStatService _service;
+        private readonly UsersTournamentStatService _service;
 
-        public UserFriendlyStatController(UserFriendlyStatService service)
+        public UsersTournamentStatController(UsersTournamentStatService service)
         {
             _service = service;
         }
@@ -40,7 +39,7 @@ namespace VizsgaBackend.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{userId}")]
-        public async Task<IActionResult> Put(string userId, [FromBody] UserFriendlyStat updatedUserStat)
+        public async Task<IActionResult> Put(string userId, [FromBody] UsersTournamentStat updatedUserStat)
         {
             try
             {
@@ -49,15 +48,15 @@ namespace VizsgaBackend.Controllers
                     return BadRequest(new { message = "A kéréssel valami nincs rendben. Ellenőrizd az adatokat." });
                 }
 
-                UserFriendlyStat modifiedUser = await _service.GetByUserIdAsync(userId);
+                var modifiedUser = await _service.GetByUserIdAsync(userId);
                 if (modifiedUser == null)
                 {
                     return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
                 }
 
-                var filter = Builders<UserFriendlyStat>.Filter.Eq(u => u.UserId, userId);
-                var updateDefinitionBuilder = Builders<UserFriendlyStat>.Update;
-                var updates = new List<UpdateDefinition<UserFriendlyStat>>();
+                var filter = Builders<UsersTournamentStat>.Filter.Eq(u => u.UserId, userId); // Szűrés ID alapján
+                var updateDefinitionBuilder = Builders<UsersTournamentStat>.Update;
+                var updates = new List<UpdateDefinition<UsersTournamentStat>>();
 
                 if (int.TryParse(updatedUserStat.Matches.ToString(), out int matches) && matches >= 0)
                 {
@@ -89,6 +88,16 @@ namespace VizsgaBackend.Controllers
                     updates.Add(updateDefinitionBuilder.Set(u => u.LegsWon, legsWon));
                     modifiedUser.LegsWon = legsWon;
                 }
+                if (int.TryParse(updatedUserStat.TournamentsWon.ToString(), out int tournamentWon) && tournamentWon >= 0)
+                {
+                    updates.Add(updateDefinitionBuilder.Set(u => u.TournamentsWon, tournamentWon));
+                    modifiedUser.TournamentsWon = tournamentWon;
+                }
+                if (int.TryParse(updatedUserStat.DartsPoints.ToString(), out int dartsPoints) && dartsPoints >= 0)
+                {
+                    updates.Add(updateDefinitionBuilder.Set(u => u.DartsPoints, dartsPoints));
+                    modifiedUser.DartsPoints = dartsPoints;
+                }
                 if (double.TryParse(updatedUserStat.Averages.ToString(), out double avarages) && avarages >= 0 && avarages <= 180)
                 {
                     updates.Add(updateDefinitionBuilder.Set(u => u.Averages, avarages));
@@ -119,9 +128,11 @@ namespace VizsgaBackend.Controllers
                 {
                     return BadRequest(new { message = "Nincs frissíthető adat a kérelemben." });
                 }
-                else {
+                else
+                {
                     var updateDefinition = updateDefinitionBuilder.Combine(updates);
-                    if (!IsValidStat(modifiedUser.Matches, modifiedUser.MatchesWon) || !IsValidStat(modifiedUser.Sets, modifiedUser.SetsWon) || !IsValidStat(modifiedUser.Legs, modifiedUser.LegsWon)) {
+                    if (!IsValidStat(modifiedUser.Matches, modifiedUser.MatchesWon) || !IsValidStat(modifiedUser.Sets, modifiedUser.SetsWon) || !IsValidStat(modifiedUser.Legs, modifiedUser.LegsWon) || !IsValidStat(modifiedUser.Matches, modifiedUser.TournamentsWon))
+                    {
                         return BadRequest(new { message = "A frissítés után logikai ellentmondás lépett fel az adatok között." });
                     }
                     else

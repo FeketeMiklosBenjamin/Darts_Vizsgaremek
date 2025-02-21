@@ -19,6 +19,9 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonElement("email_address")]
         public string EmailAddress { get; set; } = string.Empty;
 
+        [BsonElement("profile_picture")]
+        public string ProfilePicture { get; set; } = string.Empty;
+
         [BsonElement("role")]
         public int Role { get; set; }
 

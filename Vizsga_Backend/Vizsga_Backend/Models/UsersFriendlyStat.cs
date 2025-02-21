@@ -3,13 +3,13 @@ using MongoDB.Bson;
 
 namespace VizsgaBackend.Models
 {
-    public class UserTournamentStat
+    public class UsersFriendlyStat
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = string.Empty;
 
-        [BsonElement("userId")]
+        [BsonElement("user_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; } = string.Empty;
 
@@ -31,13 +31,6 @@ namespace VizsgaBackend.Models
         [BsonElement("legs_won")]
         public int? LegsWon { get; set; }
 
-        [BsonElement("tournaments_won")]
-        public int? TournamentsWon { get; set; }
-
-        [BsonElement("darts_points")]
-        public int? DartsPoints { get; set; }
-
-        
         [BsonElement("averages")]
         public double? Averages { get; set; }
 

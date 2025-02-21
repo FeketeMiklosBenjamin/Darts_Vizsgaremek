@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +23,18 @@ namespace VizsgaBackend.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _service;
-        private readonly UserFriendlyStatService _userFriendlyStatService;
-        private readonly UserTournamentStatService _userTournamentStatService;
+        private readonly UsersFriendlyStatService _userFriendlyStatService;
+        private readonly UsersTournamentStatService _userTournamentStatService;
         private readonly JwtService _jwtService;
+        private readonly Cloudinary _cloudinary;
 
-        public UserController(UserService service, UserFriendlyStatService userFriendlyStatService, UserTournamentStatService userTournamentStatService, JwtService jwtService)
+        public UserController(UserService service, UsersFriendlyStatService userFriendlyStatService, UsersTournamentStatService userTournamentStatService, JwtService jwtService, Cloudinary cloudinary)
         {
             _service = service;
             _userFriendlyStatService = userFriendlyStatService;
             _userTournamentStatService = userTournamentStatService;
             _jwtService = jwtService;
-
+            _cloudinary = cloudinary;
         }
 
         // Befejezve
@@ -147,6 +150,7 @@ namespace VizsgaBackend.Controllers
                 // Ha minden validálás sikeres, hozzáadjuk az új felhasználót az adatbázishoz
                 registerUser.Role = 1;
                 registerUser.RegisterDate = DateTime.UtcNow;
+                registerUser.ProfilePicture = "https://res.cloudinary.com/dvikunqov/image/upload/v1740128607/darts_profile_pictures/fvlownxvkn4etrkvfutl.jpg";
 
                 var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
 
@@ -155,7 +159,7 @@ namespace VizsgaBackend.Controllers
                 await _service.CreateAsync(registerUser);
 
                 await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
-                var userFriendlyStat = new UserFriendlyStat
+                var userFriendlyStat = new UsersFriendlyStat
                 {
                     UserId = registerUser.Id,
                     Matches = 0,
@@ -170,7 +174,7 @@ namespace VizsgaBackend.Controllers
                     HighestCheckout = 0,
                     NineDarter = 0
                 };
-                var userTournamentStat = new UserTournamentStat
+                var userTournamentStat = new UsersTournamentStat
                 {
                     UserId = registerUser.Id,
                     Matches = 0,
@@ -418,6 +422,36 @@ namespace VizsgaBackend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, new { message = "A törlés során hiba történt." });
+            }
+        }
+
+        [HttpPost("picture/upload")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (file == null || file.Length == 0)
+                    return BadRequest(new { message = "Nem adott meg fájlt!" });
+
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Folder = "darts_profile_pictures"
+                };
+
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                await _service.DeleteProfilePictureAsync(userId!);
+                await _service.SaveProfilePictureAsync(userId!, uploadResult.SecureUrl.ToString());
+
+                return Ok(new { imageUrl = uploadResult.SecureUrl.ToString() });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A feltöltés során hiba történt." });
             }
         }
 

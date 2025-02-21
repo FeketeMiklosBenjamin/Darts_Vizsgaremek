@@ -240,3 +240,5 @@ D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\refint\V
 D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\Vizsga_Backend.pdb
 D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\Vizsga_Backend.genruntimeconfig.cache
 D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\ref\Vizsga_Backend.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\CloudinaryDotNet.dll
+C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Newtonsoft.Json.dll

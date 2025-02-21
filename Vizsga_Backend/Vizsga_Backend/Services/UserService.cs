@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using StackExchange.Redis;
+using System.Net;
 using System.Text.RegularExpressions;
 using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
@@ -12,12 +15,14 @@ namespace VizsgaBackend.Services
     public class UserService
     {
         private readonly IMongoCollection<User> _usersCollection;
+        private readonly Cloudinary _cloudinary;
 
-        public UserService(IOptions<MongoDBSettings> mongoDBSettings)
+        public UserService(IOptions<MongoDBSettings> mongoDBSettings, Cloudinary cloudinary)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
             _usersCollection = database.GetCollection<User>(mongoDBSettings.Value.UsersCollectionName);
+            _cloudinary = cloudinary;
         }
 
         public async Task<List<User>> GetAsync()
@@ -102,6 +107,39 @@ namespace VizsgaBackend.Services
         {
             await _usersCollection.DeleteOneAsync(x => x.Id == id);
         }
+
+        public async Task SaveProfilePictureAsync(string userId, string profilePicture)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(u => u.ProfilePicture, profilePicture);
+
+            await _usersCollection.UpdateOneAsync(filter, update);
+        }
+
+        // Profilkép törlése a Cloudinary-ból
+        public async Task DeleteProfilePictureAsync(string userId)
+        {
+            var user = await _usersCollection.Find(u => u.Id == userId).FirstOrDefaultAsync();
+
+            if (user != null && !string.IsNullOrEmpty(user.ProfilePicture) && user.ProfilePicture != "https://res.cloudinary.com/dvikunqov/image/upload/v1740128607/darts_profile_pictures/fvlownxvkn4etrkvfutl.jpg")
+            {
+                // Kép publicId-ját kinyerjük a profilkép URL-jéből
+                var publicId = ExtractPublicIdFromUrl(user.ProfilePicture);
+
+                var deleteParams = new DeletionParams(publicId);
+                var deletionResult = await _cloudinary.DestroyAsync(deleteParams);
+            }
+        }
+
+        // PublicId kinyerése a Cloudinary URL-ből
+        private string ExtractPublicIdFromUrl(string url)
+        {
+            var regex = new Regex(@"image\/upload\/v\d+\/(.*?)(?=\.)");
+            var match = regex.Match(url);
+
+            return match.Success ? match.Groups[1].Value : string.Empty;
+        }
+
 
         // Refresh token mentése
         public async Task SaveRefreshTokenAsync(string userId, string refreshToken)

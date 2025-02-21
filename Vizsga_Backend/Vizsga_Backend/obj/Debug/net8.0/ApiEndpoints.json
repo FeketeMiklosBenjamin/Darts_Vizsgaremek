@@ -84,7 +84,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VizsgaBackend.Controllers.UserFriendlyStatController",
+    "ContainingType": "VizsgaBackend.Controllers.UsersFriendlyStatController",
     "Method": "GetByUserId",
     "RelativePath": "api/users/friendlystat/{userId}",
     "HttpMethod": "GET",
@@ -100,7 +100,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VizsgaBackend.Controllers.UserFriendlyStatController",
+    "ContainingType": "VizsgaBackend.Controllers.UsersFriendlyStatController",
     "Method": "Put",
     "RelativePath": "api/users/friendlystat/{userId}",
     "HttpMethod": "PUT",
@@ -114,7 +114,7 @@
       },
       {
         "Name": "updatedUserStat",
-        "Type": "VizsgaBackend.Models.UserFriendlyStat",
+        "Type": "VizsgaBackend.Models.UsersFriendlyStat",
         "IsRequired": true
       }
     ],
@@ -148,6 +148,22 @@
   },
   {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
+    "Method": "UploadImage",
+    "RelativePath": "api/users/picture/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VizsgaBackend.Controllers.UserController",
     "Method": "Register",
     "RelativePath": "api/users/register",
     "HttpMethod": "POST",
@@ -163,7 +179,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VizsgaBackend.Controllers.UserTournamentStatController",
+    "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
     "Method": "GetByUserId",
     "RelativePath": "api/users/tournamentstat/{userId}",
     "HttpMethod": "GET",
@@ -179,7 +195,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VizsgaBackend.Controllers.UserTournamentStatController",
+    "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
     "Method": "Put",
     "RelativePath": "api/users/tournamentstat/{userId}",
     "HttpMethod": "PUT",
@@ -193,7 +209,7 @@
       },
       {
         "Name": "updatedUserStat",
-        "Type": "VizsgaBackend.Models.UserTournamentStat",
+        "Type": "VizsgaBackend.Models.UsersTournamentStat",
         "IsRequired": true
       }
     ],

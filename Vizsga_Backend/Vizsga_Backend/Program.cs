@@ -1,7 +1,10 @@
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Vizsga_Backend.Models;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -9,10 +12,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // MongoDB és egyéb szolgáltatások regisztrálása
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<UserFriendlyStatService>();
-builder.Services.AddSingleton<UserTournamentStatService>();
+builder.Services.AddSingleton<UsersFriendlyStatService>();
+builder.Services.AddSingleton<UsersTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
+
+// Cloudinary regisztrálása
+builder.Services.AddSingleton(serviceProvider =>
+{
+    var cloudinarySettings = serviceProvider.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+    var account = new Account(
+        cloudinarySettings.CloudName,
+        cloudinarySettings.ApiKey,
+        cloudinarySettings.ApiSecret
+    );
+    return new Cloudinary(account);
+});
 
 // Authentication konfigurálása
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
