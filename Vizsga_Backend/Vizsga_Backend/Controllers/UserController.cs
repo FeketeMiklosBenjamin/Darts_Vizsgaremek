@@ -52,6 +52,7 @@ namespace VizsgaBackend.Controllers
                     user.Id,
                     user.Username,
                     user.EmailAddress,
+                    profilePictureUrl = user.ProfilePicture,
                     register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
                     last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 }).ToList();
@@ -82,6 +83,7 @@ namespace VizsgaBackend.Controllers
                     user.Id,
                     user.Username,
                     user.EmailAddress,
+                    profilePictureUrl = user.ProfilePicture,
                     register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
                     last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 };
@@ -201,6 +203,7 @@ namespace VizsgaBackend.Controllers
                     id = registerUser.Id,
                     username = registerUser.Username,
                     emailAddress = registerUser.EmailAddress,
+                    profilePictureUrl = registerUser.ProfilePicture,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -262,6 +265,7 @@ namespace VizsgaBackend.Controllers
                     id = user.Id,
                     username = user.Username,
                     emailAddress = user.EmailAddress,
+                    profilePictureUrl = user.ProfilePicture,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -447,7 +451,7 @@ namespace VizsgaBackend.Controllers
                 await _service.DeleteProfilePictureAsync(userId!);
                 await _service.SaveProfilePictureAsync(userId!, uploadResult.SecureUrl.ToString());
 
-                return Ok(new { imageUrl = uploadResult.SecureUrl.ToString() });
+                return Ok(new { profilePictureUrl = uploadResult.SecureUrl.ToString() });
             }
             catch (Exception)
             {
