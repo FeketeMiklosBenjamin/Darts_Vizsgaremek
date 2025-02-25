@@ -30,32 +30,6 @@ namespace VizsgaBackend.Services
             return await _usersCollection.Find(_ => true).ToListAsync();
         }
 
-        //public async Task<List<User>> GetUsersWithTournaments()
-        //{
-        //    var pipeline = new[]
-        //    {
-        //        new BsonDocument("$lookup", new BsonDocument
-        //        {
-        //            { "from", "users_tournament_stats" },
-        //            { "localField", "_id" },
-        //            { "foreignField", "userId" },
-        //            { "as", "UserTournamentStat" }
-        //        }),
-        //        new BsonDocument("$unwind", new BsonDocument
-        //        {
-        //            { "path", "$UserTournamentStat" },
-        //            { "preserveNullAndEmptyArrays", true } // Ha nincs adat, marad null
-        //        })
-        //    };
-
-        //    var result = await _usersCollection.AggregateAsync<BsonDocument>(pipeline);
-        //    var users = result.ToList().Select(doc => BsonSerializer.Deserialize<User>(doc)).ToList();
-
-        //    return users;
-        //}
-
-
-
         public async Task<User?> GetByIdAsync(string id)
         {
             return await _usersCollection.Find(x => x.Id == id).FirstOrDefaultAsync();

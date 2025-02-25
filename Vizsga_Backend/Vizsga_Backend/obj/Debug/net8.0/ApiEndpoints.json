@@ -86,17 +86,11 @@
   {
     "ContainingType": "VizsgaBackend.Controllers.UsersFriendlyStatController",
     "Method": "GetByUserId",
-    "RelativePath": "api/users/friendlystat/{userId}",
+    "RelativePath": "api/users/friendlystat",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -114,7 +108,7 @@
       },
       {
         "Name": "updatedUserStat",
-        "Type": "VizsgaBackend.Models.UsersFriendlyStat",
+        "Type": "Vizsga_Backend.Models.UserStatsModels.UsersFriendlyStat",
         "IsRequired": true
       }
     ],
@@ -180,7 +174,17 @@
   },
   {
     "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
-    "Method": "GetByUserId",
+    "Method": "GetAllTournamentStat",
+    "RelativePath": "api/users/tournamentstat",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
+    "Method": "GetTournamentByUserId",
     "RelativePath": "api/users/tournamentstat/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -209,7 +213,7 @@
       },
       {
         "Name": "updatedUserStat",
-        "Type": "VizsgaBackend.Models.UsersTournamentStat",
+        "Type": "Vizsga_Backend.Models.UserStatsModels.UsersTournamentStat",
         "IsRequired": true
       }
     ],

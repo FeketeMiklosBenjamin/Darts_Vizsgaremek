@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using VizsgaBackend.Models;
+using System.Security.Claims;
+using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,11 +22,17 @@ namespace VizsgaBackend.Controllers
         }
 
         // GET api/<ProductController>/5
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetByUserId(string userId)
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetByUserId()
         {
             try
             {
+                string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId == null)
+                {
+                    return Unauthorized(new { message = "Még nem vagy bejelentkezve!" });
+                }
                 var item = await _service.GetByUserIdAsync(userId);
                 if (item == null)
                     return NotFound(new { message = $"A felhasználó barátságos statisztikái az ID-vel ({userId}) nem található." });
@@ -40,6 +48,7 @@ namespace VizsgaBackend.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{userId}")]
+        [Authorize]
         public async Task<IActionResult> Put(string userId, [FromBody] UsersFriendlyStat updatedUserStat)
         {
             try

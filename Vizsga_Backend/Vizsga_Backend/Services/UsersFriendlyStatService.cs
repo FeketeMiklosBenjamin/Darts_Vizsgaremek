@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
+using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services

@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Vizsga_Backend.Models;
 using Vizsga_Backend.Models.UserModels;
-using VizsgaBackend.Models;
+using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -48,13 +47,12 @@ namespace VizsgaBackend.Controllers
 
                 var result = users.Select(user => new
                 {
-                    message = "Sikeres lekérés",
                     user.Id,
                     user.Username,
                     user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
-                    register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
-                    last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    registerDate = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 }).ToList();
 
                 return Ok(result);
@@ -79,13 +77,12 @@ namespace VizsgaBackend.Controllers
 
                 var result = new
                 {
-                    message = "Sikeres lekérés",
                     user.Id,
                     user.Username,
                     user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
-                    register_date = user.RegisterDate.ToString("yyyy.MM.dd"),
-                    last_login_date = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    registerDate = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 };
                 return Ok(result);
             }

@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson.IO;
+using MongoDB.Bson;
 using MongoDB.Driver;
-using VizsgaBackend.Models;
 using VizsgaBackend.Services;
+using Vizsga_Backend.Models.UserStatsModels;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace VizsgaBackend.Controllers
 {
-    [Route("api/users/tournamentstat")]
+    [Route("api/users/tournamentstat/")]
     [ApiController]
     public class UsersTournamentStatController : ControllerBase
     {
@@ -18,16 +21,78 @@ namespace VizsgaBackend.Controllers
             _service = service;
         }
 
-        // GET api/<ProductController>/5
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetByUserId(string userId)
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllTournamentStat()
         {
             try
             {
-                var item = await _service.GetByUserIdAsync(userId);
-                if (item == null)
-                    return NotFound(new { message = $"A felhasználó barátságos statisztikái az ID-vel ({userId}) nem található." });
-                return Ok(item);
+                var tournamentsWithUsers = await _service.GetTournamentsWithUsersAsync();
+                var result = tournamentsWithUsers.Select(item => new
+                {
+                    item.Id,
+                    item.UserId,
+                    item.Matches,
+                    item.MatchesWon,
+                    item.Sets,
+                    item.SetsWon,
+                    item.Legs,
+                    item.LegsWon,
+                    item.TournamentsWon,
+                    item.DartsPoints,
+                    item.Averages,
+                    item.Max180s,
+                    item.CheckoutPercentage,
+                    item.HighestCheckout,
+                    item.NineDarter,
+                    item.User!.Username,
+                    profilePictureUrl = item.User.ProfilePicture,
+                    registerDate = item.User.RegisterDate.ToString("yyyy.MM.dd"),
+                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(item.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                }).ToList();
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A lekérés során hiba történt." });
+            }
+        }
+
+
+
+        // GET api/<ProductController>/5
+        [HttpGet("{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetTournamentByUserId(string userId)
+        {
+            try
+            {
+                var tournamentWithUser = await _service.GetTournamentWithUserByUserIdAsync(userId);
+                if (tournamentWithUser == null)
+                    return NotFound(new { message = $"A felhasználó verseny statisztikái az ID-vel ({userId}) nem található." });
+
+                return Ok(new
+                {
+                    tournamentWithUser.Id,
+                    tournamentWithUser.UserId,
+                    tournamentWithUser.Matches,
+                    tournamentWithUser.MatchesWon,
+                    tournamentWithUser.Sets,
+                    tournamentWithUser.SetsWon,
+                    tournamentWithUser.Legs,
+                    tournamentWithUser.LegsWon,
+                    tournamentWithUser.TournamentsWon,
+                    tournamentWithUser.DartsPoints,
+                    tournamentWithUser.Averages,
+                    tournamentWithUser.Max180s,
+                    tournamentWithUser.CheckoutPercentage,
+                    tournamentWithUser.HighestCheckout,
+                    tournamentWithUser.NineDarter,
+                    tournamentWithUser.User!.Username,
+                    profilePictureUrl = tournamentWithUser.User.ProfilePicture,
+                    registerDate = tournamentWithUser.User.RegisterDate.ToString("yyyy.MM.dd"),
+                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(tournamentWithUser.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                });
             }
             catch (Exception)
             {
@@ -39,6 +104,7 @@ namespace VizsgaBackend.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{userId}")]
+        [Authorize]
         public async Task<IActionResult> Put(string userId, [FromBody] UsersTournamentStat updatedUserStat)
         {
             try
@@ -48,7 +114,7 @@ namespace VizsgaBackend.Controllers
                     return BadRequest(new { message = "A kéréssel valami nincs rendben. Ellenőrizd az adatokat." });
                 }
 
-                var modifiedUser = await _service.GetByUserIdAsync(userId);
+                var modifiedUser = await _service.GetTournamentByUserIdAsync(userId);
                 if (modifiedUser == null)
                 {
                     return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });

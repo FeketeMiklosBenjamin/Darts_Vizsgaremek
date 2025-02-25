@@ -1,9 +1,9 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace VizsgaBackend.Models
+namespace Vizsga_Backend.Models.UserStatsModels
 {
-    public class UsersFriendlyStat
+    public class UsersTournamentStat
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -30,6 +30,12 @@ namespace VizsgaBackend.Models
 
         [BsonElement("legs_won")]
         public int? LegsWon { get; set; }
+
+        [BsonElement("tournaments_won")]
+        public int? TournamentsWon { get; set; }
+
+        [BsonElement("darts_points")]
+        public int? DartsPoints { get; set; }
 
         [BsonElement("averages")]
         public double? Averages { get; set; }
