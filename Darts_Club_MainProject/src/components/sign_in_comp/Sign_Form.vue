@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import type LoginModel from '@/models/LoginModel';
 import { useUserStore } from '@/stores/UserStore';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { login, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
+
+
+onMounted(() => {
+    status.message = '';
+});
 
 const loginform = ref<LoginModel>({
     emailAddress: '',
@@ -17,8 +22,8 @@ function onLogin(){
     processing.value = true;
     login(loginform.value)
         .then(() => {
-            router.push('/main-page')},
-        )
+            router.push('/main-page');
+        })
         .catch((err) => {
             processing.value = false;
         })

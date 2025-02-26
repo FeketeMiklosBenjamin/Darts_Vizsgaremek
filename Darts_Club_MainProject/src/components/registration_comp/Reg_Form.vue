@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import type RegisterModel from '@/models/RegisterModel';
 import { useUserStore } from '@/stores/UserStore';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { register, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
 
+onMounted(() => {
+    status.message = '';
+});
 
 const registerform = ref<RegisterModel>({
     username: '',
@@ -15,15 +18,25 @@ const registerform = ref<RegisterModel>({
     password: '',
 });
 
-function onRegister() {
+async function onRegister() {
+    status.message = '';
     processing.value = true;
-    if (registerform.value.password === registerform.value.secondPassword) {
-        register(registerform.value)
-            .then(() => {router.push('/main-page')})
-            .catch((err) => {processing.value = false;})
-    }
-    //TODO
 
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    if (registerform.value.password !== registerform.value.secondPassword) {
+        status.message = "A két jelszó nem egyezik meg!";
+        processing.value = false;
+        return;
+    }
+
+    register(registerform.value)
+        .then(() => {
+            router.push('/main-page');
+        })
+        .catch((err) => {
+            processing.value = false;
+        });
 }
 
 
@@ -31,9 +44,9 @@ function onRegister() {
 
 <template>
     <div class="position-rel">
-        <div class="container z-1 transform align-items-center glass-card width p-2 px-3">
+        <div class="container z-1 transform align-items-center glass-card opacity width p-2 px-3">
             <div class="row">
-                <div class="col-12  mb-2">
+                <div class="col-12 mb-2">
                     <h1 class="text-center display-4 text-light">Regisztráció</h1>
                 </div>
             </div>

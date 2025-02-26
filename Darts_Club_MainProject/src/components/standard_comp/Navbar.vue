@@ -44,12 +44,12 @@ function onLogout() {
                             </div>
                         </li> 
                         <div v-if="status._id" class="ms-1 m-auto px-1">
-                            <li class="nav-item bg-secondary rounded-circle px-1 border border-danger text-white">
+                            <li class="nav-item bg-secondary rounded-circle px-1 border border-3 border-danger text-white">
                                 <i class="bi bi-person"></i>
                             </li>                
                         </div>
                         <div v-else class="ms-1 m-auto px-1">
-                            <li class="nav-item bg-white rounded-circle px-1 border border-warning">
+                            <li class="nav-item bg-white rounded-circle px-1 border border-3 border-info">
                                 <i class="bi bi-person"></i>
                             </li>                
                         </div>
