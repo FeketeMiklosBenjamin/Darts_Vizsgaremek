@@ -1,0 +1,69 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.min.css';
+
+.no-underline {
+    text-decoration: none;
+}
+
+.background-img {
+    max-height: 92.25vh;
+    width: 210vh;
+}
+body{
+    overflow: hidden;
+    height: 100vw;
+}
+.position-rel {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+  
+}
+
+.transform {
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tops {
+    top: 30%;
+}
+
+.glass-card {
+    background: rgba(40, 38, 38, 0.09);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.7px);
+    -webkit-backdrop-filter: blur(8.7px);
+    border: 1px solid rgba(40, 38, 38, 1);
+}
+
+.opacity {
+    background: rgba(40, 38, 38, 0.50);
+}
+
+.glass-card-intro {
+    background: rgba(40, 38, 38, 0.336);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(40, 38, 38, 1);
+}
+
+.width {
+    width: 350px;
+}
+
+.img {
+    height: 100vh;
+    width: 210vh;
+}
+
+.title {
+    font-family: serif;
+    cursor: context-menu;
+}
