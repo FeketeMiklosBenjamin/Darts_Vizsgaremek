@@ -85,7 +85,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app") // A Koyeb URL hozzáadása
+            policy.WithOrigins("http://localhost:5173", "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app", "https://darts-vizs-git-2befca-fekete-miklos-benjamins-projects-f837f28f.vercel.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

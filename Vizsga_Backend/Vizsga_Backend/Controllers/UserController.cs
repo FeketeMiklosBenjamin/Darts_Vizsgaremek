@@ -113,7 +113,7 @@ namespace VizsgaBackend.Controllers
                 // Validáljuk a kötelező mezőket
                 if (string.IsNullOrWhiteSpace(registerUser.Username))
                 {
-                    return BadRequest(new {message = "Az felhasználónév nem lehet üres." });
+                    return BadRequest(new {message = "A felhasználónév nem lehet üres." });
                 }
 
                 if (string.IsNullOrWhiteSpace(registerUser.EmailAddress))
