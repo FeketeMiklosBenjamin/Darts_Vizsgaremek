@@ -25,9 +25,20 @@ namespace VizsgaBackend.Services
             _cloudinary = cloudinary;
         }
 
+
+
+        // GET végpontokhoz:
+
+
+
         public async Task<List<User>> GetAsync()
         {
-            return await _usersCollection.Find(_ => true).ToListAsync();
+            return await _usersCollection.Find(x => x.Role == 1).ToListAsync();
+        }
+
+        public async Task<List<User>> GetNotStrictBannedAsync()
+        {
+            return await _usersCollection.Find(x => x.StrictBan == false && x.Role == 1).ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(string id)
@@ -35,9 +46,41 @@ namespace VizsgaBackend.Services
             return await _usersCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
+        //Nem biztos, hogy kell
+        public async Task<User?> GetByIdNotStrictBannedAsync(string id)
+        {
+            return await _usersCollection.Find(x => x.Id == id && x.StrictBan == false).FirstOrDefaultAsync();
+        }
+
+
+
+        // Alap végpontokhoz vagy ellenőrzésekhez:
+
+
+
         public async Task CreateAsync(User user)
         {
             await _usersCollection.InsertOneAsync(user);
+        }
+
+        public async Task SetUserBan(string userId, bool strictBan, DateTime? bannedUntil)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            UpdateDefinition<User> update;
+            if (bannedUntil != null)
+            {
+                update = Builders<User>.Update.Set(u => u.StrictBan, strictBan)
+                    .Set(u => u.BannedUntil, bannedUntil)
+                    .Unset(u => u.RefreshToken)
+                    .Unset(u => u.RefreshTokenExpiry);
+            }
+            else
+            {
+                update = Builders<User>.Update.Set(u => u.StrictBan, strictBan)
+                    .Set(u => u.BannedUntil, bannedUntil);
+            }
+
+            await _usersCollection.UpdateOneAsync(filter, update);
         }
 
         public async Task<bool> IsEmailTakenAsync(string email, string? userId)
@@ -82,6 +125,12 @@ namespace VizsgaBackend.Services
             await _usersCollection.DeleteOneAsync(x => x.Id == id);
         }
 
+
+
+        // Kép feltöltésekhez:
+
+
+
         public async Task SaveProfilePictureAsync(string userId, string profilePicture)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
@@ -113,6 +162,11 @@ namespace VizsgaBackend.Services
 
             return match.Success ? match.Groups[1].Value : string.Empty;
         }
+
+
+
+        // Token kezeléshez:
+
 
 
         // Refresh token mentése

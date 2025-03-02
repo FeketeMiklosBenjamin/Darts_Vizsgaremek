@@ -37,7 +37,7 @@ namespace VizsgaBackend.Controllers
         }
 
         // Befejezve
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize]
         public async Task<IActionResult> Get()
         {
@@ -51,7 +51,33 @@ namespace VizsgaBackend.Controllers
                     user.Username,
                     user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
-                    registerDate = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
+                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                }).ToList();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A lekérés során hiba történt." });
+            }
+        }
+
+        [HttpGet("leaderboard")]
+        [Authorize]
+        public async Task<IActionResult> GetLeaderboard()
+        {
+            try
+            {
+                var users = await _service.GetNotStrictBannedAsync();
+
+                var result = users.Select(user => new
+                {
+                    user.Id,
+                    user.Username,
+                    user.EmailAddress,
+                    profilePictureUrl = user.ProfilePicture,
+                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
                     lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 }).ToList();
 
@@ -81,7 +107,7 @@ namespace VizsgaBackend.Controllers
                     user.Username,
                     user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
-                    registerDate = user.RegisterDate.ToString("yyyy.MM.dd"),
+                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
                     lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 };
                 return Ok(result);
@@ -89,6 +115,82 @@ namespace VizsgaBackend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, new { message = "A lekérés során hiba történt." });
+                throw;
+            }
+        }
+
+        [HttpPost("register/admin")]
+        [Authorize]
+        public async Task<IActionResult> RegisterAdmin([FromBody] User registerUser)
+        {
+            try
+            {
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+                if (int.TryParse(userRole, out int role) && role != 2)
+                {
+                    return Unauthorized(new { message = "Nincs jogosultságod admin regisztrációhoz." });
+                }
+
+                if (registerUser == null)
+                {
+                    return BadRequest(new { message = "Nem adott meg adatokat a regisztráláshoz" });
+                }
+
+                // Validáljuk a kötelező mezőket
+                if (string.IsNullOrWhiteSpace(registerUser.Username))
+                {
+                    return BadRequest(new { message = "A felhasználónév nem lehet üres." });
+                }
+
+                if (string.IsNullOrWhiteSpace(registerUser.EmailAddress))
+                {
+                    return BadRequest(new { message = "Az email cím nem lehet üres." });
+                }
+
+                if (!_service.IsValidEmail(registerUser.EmailAddress))
+                {
+                    return BadRequest(new { message = "Az email cím nem megfelelő." });
+                }
+
+                if (string.IsNullOrWhiteSpace(registerUser.Password) || registerUser.Password.Length < 8)
+                {
+                    return BadRequest(new { message = "A jelszónak legalább 8 karakter hosszúnak kell lennie." });
+                }
+
+                var existingUser = await _service.IsEmailTakenAsync(registerUser.EmailAddress, null);
+                if (existingUser)
+                {
+                    return Conflict(new { message = "Ez az email cím már regisztrálva van." });
+                }
+
+                // Jelszó titkosítása
+                registerUser.Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
+
+                // Ha minden validálás sikeres, hozzáadjuk az új admint az adatbázishoz
+                registerUser.Role = 2;
+                registerUser.RegisterDate = DateTime.UtcNow;
+                registerUser.ProfilePicture = "https://res.cloudinary.com/dvikunqov/image/upload/v1740128607/darts_profile_pictures/fvlownxvkn4etrkvfutl.jpg";
+                registerUser.StrictBan = false;
+                registerUser.BannedUntil = null;
+
+                var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
+
+                var refreshTokenGen = _jwtService.GenerateRefreshToken();
+
+                await _service.CreateAsync(registerUser);
+
+                await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
+
+                // Válasz küldése a sikeres regisztrációról, az új entitással
+                return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, new
+                {
+                    message = $"Sikeres regisztráció! Felhasználónév: {registerUser.Username}, E-mail cím: {registerUser.EmailAddress}"
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A létrehozás során hiba történt." });
                 throw;
             }
         }
@@ -131,11 +233,6 @@ namespace VizsgaBackend.Controllers
                     return BadRequest(new {message = "A jelszónak legalább 8 karakter hosszúnak kell lennie." });
                 }
 
-                //if (registerUser.Role != 1)
-                //{
-                //    return BadRequest(new {message = "Az role csak 1-es (user) lehet." });
-                //}
-
                 // Ellenőrizzük, hogy az email cím már létezik-e az adatbázisban
                 var existingUser = await _service.IsEmailTakenAsync(registerUser.EmailAddress, null);
                 if (existingUser)
@@ -150,6 +247,8 @@ namespace VizsgaBackend.Controllers
                 registerUser.Role = 1;
                 registerUser.RegisterDate = DateTime.UtcNow;
                 registerUser.ProfilePicture = "https://res.cloudinary.com/dvikunqov/image/upload/v1740128607/darts_profile_pictures/fvlownxvkn4etrkvfutl.jpg";
+                registerUser.StrictBan = false;
+                registerUser.BannedUntil = null;
 
                 var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
 
@@ -201,6 +300,7 @@ namespace VizsgaBackend.Controllers
                     username = registerUser.Username,
                     emailAddress = registerUser.EmailAddress,
                     profilePictureUrl = registerUser.ProfilePicture,
+                    role = registerUser.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -212,7 +312,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // Bejelentkezés
         // Befejezve
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login loginRequest)
@@ -249,6 +348,20 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "Hibás email cím vagy jelszó." });
                 }
 
+                //Ellenőrizzük, hogy nincs-e bannolva
+                if (user.BannedUntil != null)
+                {
+                    if (user.BannedUntil > DateTime.UtcNow)
+                    {
+                        string userBannedUntilDate = TimeZoneInfo.ConvertTimeFromUtc(user.BannedUntil.Value, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm");
+                        return Unauthorized(new { message = $"A profilja tiltva van van eddig: {userBannedUntilDate}" });
+                    }
+                    else
+                    {
+                        await _service.SetUserBan(user.Id, false, null);
+                    }
+                }
+
                 var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
 
                 var refreshTokenGen = _jwtService.GenerateRefreshToken();
@@ -263,6 +376,7 @@ namespace VizsgaBackend.Controllers
                     username = user.Username,
                     emailAddress = user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
+                    role = user.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
                 });
@@ -354,11 +468,6 @@ namespace VizsgaBackend.Controllers
                     }
                 }
 
-                //if (modifyUser.Role == 1 || modifyUser.Role == 2)
-                //{
-                //    updates.Add(updateDefinitionBuilder.Set(u => u.Role, updatedUser.Role));
-                //}
-
                 if (!string.IsNullOrWhiteSpace(modifyUser.EmailAddress))
                 {
                     if (_service.IsValidEmail(modifyUser.EmailAddress))
@@ -394,37 +503,50 @@ namespace VizsgaBackend.Controllers
         }
 
 
-        // Befejezve
-        [HttpDelete("{id}")]
+        [HttpPut("ban/{userId}")]
         [Authorize]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> BanUser(string userId, [FromBody] BanRequest request)
         {
             try
             {
                 var userRole = User.FindFirstValue(ClaimTypes.Role);
 
-                if (userRole != "2")
+                if (int.TryParse(userRole, out int role) && role != 2)
                 {
-                    return Unauthorized(new { message = "Nincs jogosultságod a törléshez." });
+                    return Unauthorized(new { message = "Nincs jogosultságod a kitiltáshoz." });
+                }
+                if (request.BanDuration < 0)
+                {
+                    return BadRequest(new { message = "A kitiltási időnek pozitív számnak kell lennie!" });
                 }
 
-                var existing = await _service.GetByIdAsync(id);
-
-                if (existing == null)
+                var user = await _service.GetByIdAsync(userId);
+                if (user == null)
                 {
-                    return NotFound(new { message = $"A felhasználó az ID-val ({id}) nem található." });
+                    return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
                 }
 
-                await _service.DeleteAsync(id);
-                await _userFriendlyStatService.DeleteAsync(id);
+                if (request.BanDuration == 0)
+                {
+                    await _service.SetUserBan(user.Id, false, null);
+                    return Ok(new { message = $"A(z) {user.EmailAddress} e-mail címmel rendelkező felhasználó tiltása fel lett oldva." });
+                }
 
-                return NoContent();
+                var bannedUntilDate = DateTime.UtcNow.AddDays(request.BanDuration);
+
+                await _service.SetUserBan(user.Id, request.BanDuration >= 30, bannedUntilDate);
+
+                string userBannedUntilDateString = TimeZoneInfo.ConvertTimeFromUtc(bannedUntilDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm");
+
+                return Ok(new { message = $"A(z) {user.EmailAddress} e-mail címmel rendelkező felhasználó tiltva lett eddig: {userBannedUntilDateString}" });
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = "A törlés során hiba történt." });
+                return StatusCode(500, new { message = "A kitiltás során hiba történt." });
+                throw;
             }
         }
+
 
         [HttpPost("picture/upload")]
         [Authorize]

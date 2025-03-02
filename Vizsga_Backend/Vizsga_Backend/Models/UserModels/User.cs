@@ -41,6 +41,13 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonElement("last_login_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime LastLoginDate { get; set; }
+
+        [BsonElement("strict_ban")]
+        public bool StrictBan { get; set; }
+
+        [BsonElement("banned_until")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime? BannedUntil { get; set; }
     }
 
 }
