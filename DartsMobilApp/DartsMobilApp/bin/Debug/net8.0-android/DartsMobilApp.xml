@@ -4,6 +4,9 @@
         <name>DartsMobilApp</name>
     </assembly>
     <members>
+        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.SortedTournaments">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CompetitionsViewModel.sortedTournaments"/>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.Tournaments">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CompetitionsViewModel.tournaments"/>
         </member>

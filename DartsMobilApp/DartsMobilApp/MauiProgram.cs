@@ -26,6 +26,8 @@ namespace DartsMobilApp
             builder.Services.AddSingleton<CompetitionsViewModel>();
             builder.Services.AddSingleton<CounterPage>();
             builder.Services.AddSingleton<CounterViewModel>();
+            builder.Services.AddSingleton<StatisticPage>();
+            builder.Services.AddSingleton<StatisticViewModel>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

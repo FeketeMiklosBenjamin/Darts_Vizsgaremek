@@ -13,12 +13,12 @@
         <tools:StatusBarBehavior StatusBarColor="Transparent"/>
     </ContentPage.Behaviors>
 
-    <Grid RowDefinitions="*,5*,*" >
-        <Label Text="Versenyeink" FontSize="20" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Tournaments}">
+    <Grid RowDefinitions="*,5*,*" Margin="20" >
+        <Label Text="Versenyeink" FontSize="40" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Tournaments}" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border BackgroundColor="Black" WidthRequest="300" HeightRequest="100" Margin="0,0,0,20">
+                    <Border BackgroundColor="#99000000" WidthRequest="300" HeightRequest="100" Margin="0,0,0,20">
                             <VerticalStackLayout Margin="0,0,3,0" VerticalOptions="Center" HorizontalOptions="Center">
                                 <Label Text="{Binding Name}" HorizontalOptions="Center" Margin="0,0,0,20" FontAttributes="Bold" FontSize="18"/>
                             <HorizontalStackLayout Spacing="100" Margin="0,0,0,10">
@@ -28,14 +28,14 @@
                                 </VerticalStackLayout>
                                 <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" />
                             </HorizontalStackLayout>
-                                
-                            </VerticalStackLayout>
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <HorizontalStackLayout>
-            
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="20">
+            <Button Text="↩" BackgroundColor="Green"  HeightRequest="35"/>
+            <Button Text="↪" BackgroundColor="Green"  HeightRequest="35"/>
         </HorizontalStackLayout>
     </Grid>
 </ContentPage>

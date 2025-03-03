@@ -18,6 +18,10 @@ Route="LoginPage" />
     ContentTemplate="{DataTemplate pages:MainPage}"
     Route="MainPage" />
         <ShellContent
+Title="Statistic"
+ContentTemplate="{DataTemplate pages:StatisticPage}"
+Route="StatisticPage" />
+        <ShellContent
     Title="Competitions"
     ContentTemplate="{DataTemplate pages:CompetitionsPage}"
     Route="CompetitionsPage"/>

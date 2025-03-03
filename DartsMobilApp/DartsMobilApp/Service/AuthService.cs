@@ -39,6 +39,8 @@ namespace DartsMobilApp.Service
                     var responseString = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonSerializer.Deserialize<LoginResponse>(responseString);
 
+                    SecureStorage.SetAsync("Token", loginResponse.accessToken );
+                    SecureStorage.SetAsync("Email", loginResponse.emailAddress );
                     return loginResponse;
                 }
                 else
