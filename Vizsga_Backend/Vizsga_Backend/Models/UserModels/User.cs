@@ -29,14 +29,14 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime RegisterDate { get; set; }
 
-        // Új mező a refresh token tárolásához
-        [BsonElement("refresh_token")]
-        public string RefreshToken { get; set; } = string.Empty;
+        // Több refresh tokent tároló lista
+        [BsonElement("refresh_tokens")]
+        public List<string> RefreshTokens { get; set; } = new List<string>();
 
-        // Esetleg a refresh token lejárati dátuma (ha szükséges)
-        [BsonElement("refresh_token_expiry")]
+        // A refresh tokenek lejárati dátumainak listája
+        [BsonElement("refresh_token_expiries")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime? RefreshTokenExpiry { get; set; }
+        public List<DateTime?> RefreshTokenExpiries { get; set; } = new List<DateTime?>();
 
         [BsonElement("last_login_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
@@ -49,5 +49,4 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime? BannedUntil { get; set; }
     }
-
 }

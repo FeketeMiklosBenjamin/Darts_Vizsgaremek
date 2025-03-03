@@ -71,8 +71,8 @@ namespace VizsgaBackend.Services
             {
                 update = Builders<User>.Update.Set(u => u.StrictBan, strictBan)
                     .Set(u => u.BannedUntil, bannedUntil)
-                    .Unset(u => u.RefreshToken)
-                    .Unset(u => u.RefreshTokenExpiry);
+                    .Unset(u => u.RefreshTokens)
+                    .Unset(u => u.RefreshTokenExpiries);
             }
             else
             {
@@ -173,8 +173,8 @@ namespace VizsgaBackend.Services
         public async Task SaveRefreshTokenAsync(string userId, string refreshToken)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
-            var update = Builders<User>.Update.Set(u => u.RefreshToken, refreshToken)
-                                               .Set(u => u.RefreshTokenExpiry, DateTime.UtcNow.AddMonths(1))
+            var update = Builders<User>.Update.Push(u => u.RefreshTokens, refreshToken)
+                                               .Push(u => u.RefreshTokenExpiries, DateTime.UtcNow.AddMonths(1))
                                                .Set(u => u.LastLoginDate, DateTime.UtcNow);
 
             await _usersCollection.UpdateOneAsync(filter, update);
@@ -191,16 +191,25 @@ namespace VizsgaBackend.Services
         // Refresh token validálása
         public async Task<User?> ValidateRefreshTokenAsync(string refreshToken)
         {
-            var filter = Builders<User>.Filter.Eq(u => u.RefreshToken, refreshToken) & Builders<User>.Filter.Gt(u => u.RefreshTokenExpiry, DateTime.UtcNow);
+            var filter = Builders<User>.Filter.AnyEq(u => u.RefreshTokens, refreshToken);
+            var user = await _usersCollection.Find(filter).FirstOrDefaultAsync();
 
-            return await _usersCollection.Find(filter).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                int index = user.RefreshTokens.IndexOf(refreshToken);
+                if (index != -1 && user.RefreshTokenExpiries.Count > index && user.RefreshTokenExpiries[index] > DateTime.UtcNow)
+                {
+                    return user;
+                }
+            }
+            return null;
         }
 
         public async Task DeleteRefreshTokenAsync(string userId)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
-            var update = Builders<User>.Update.Unset(u => u.RefreshToken)
-                                               .Unset(u => u.RefreshTokenExpiry);
+            var update = Builders<User>.Update.Unset(u => u.RefreshTokens)
+                                               .Unset(u => u.RefreshTokenExpiries);
 
             await _usersCollection.UpdateOneAsync(filter, update);
         }
