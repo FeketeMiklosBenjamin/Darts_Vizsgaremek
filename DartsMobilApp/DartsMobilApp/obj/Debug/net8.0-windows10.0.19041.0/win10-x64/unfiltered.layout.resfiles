@@ -1,3 +1,6 @@
+OpenSans-Regular.ttf
+OpenSans-Semibold.ttf
+ally_pally.scale-100.jpg
 appicon.ico
 appiconLargeTile.scale-100.png
 appiconLargeTile.scale-125.png
@@ -44,6 +47,8 @@ appiconWideTile.scale-125.png
 appiconWideTile.scale-150.png
 appiconWideTile.scale-200.png
 appiconWideTile.scale-400.png
+backspace_icon.scale-100.png
+cancel_round_icon.scale-100.png
 dotnet_bot.scale-100.png
 dotnet_bot.scale-125.png
 dotnet_bot.scale-150.png
@@ -141,4 +146,9 @@ tr_iconWideTile.scale-125.png
 tr_iconWideTile.scale-150.png
 tr_iconWideTile.scale-200.png
 tr_iconWideTile.scale-400.png
+splashSplashScreen.scale-100.png
+splashSplashScreen.scale-125.png
+splashSplashScreen.scale-150.png
+splashSplashScreen.scale-200.png
+splashSplashScreen.scale-400.png
 AboutAssets.txt

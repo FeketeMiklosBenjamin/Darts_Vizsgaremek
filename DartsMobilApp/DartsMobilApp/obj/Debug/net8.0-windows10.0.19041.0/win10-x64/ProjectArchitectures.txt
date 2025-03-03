@@ -1,1 +1,1 @@
-C:\Users\gemes.norbert\Desktop\VR2\DartsMobilApp\DartsMobilApp\DartsMobilApp.csproj;x64
+C:\Users\gemes.norbert\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\DartsMobilApp.csproj;x64
