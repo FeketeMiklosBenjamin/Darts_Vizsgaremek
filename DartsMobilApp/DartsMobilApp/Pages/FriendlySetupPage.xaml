@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             x:Class="DartsMobilApp.Pages.FriendlySetupPage"
+             Title="FriendlySetupPage"
+             BackgroundColor="White"
+             >
+
+    <Grid RowDefinitions="*,0.5*,.5*,*,*,*">
+        <Label Text="Barátságos meccs" TextColor="White" FontSize="36" Margin="10"/>
+        <Label Text="Játékbeállítások" Grid.Row="1" TextColor="White" FontSize="20" HorizontalOptions="Center"/>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="7">
+            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" >
+                <Button Text="Sets" WidthRequest="60" HeightRequest="40" BackgroundColor="White" TextColor="Black"/>
+            </Border>
+            <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50">
+                <Button Text="Legs" WidthRequest="60" HeightRequest="40" BackgroundColor="White" TextColor="Black"/>
+            </Border>
+            <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
+                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center"/>
+            </Border>
+            <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0">
+                <Button Text="First to" WidthRequest="60" HeightRequest="40" BackgroundColor="White" TextColor="Black"/>
+            </Border>
+            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50">
+                <Button Text="Best of" WidthRequest="60" HeightRequest="40" BackgroundColor="White" TextColor="Black"/>
+            </Border>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="3" HeightRequest="50" HorizontalOptions="Center" >
+            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" BackgroundColor="LightGrey">
+                <Button Text="301" WidthRequest="70" HeightRequest="50" Background="LightGrey" TextColor="Black" FontSize="20"/>
+            </Border>
+            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey">
+                <Button Text="501" WidthRequest="70" HeightRequest="50" Background="LightGrey" TextColor="Black" FontSize="20"/>
+            </Border>
+            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey">
+                <Button Text="701" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="20"/>
+            </Border>
+            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="LightGrey">
+                <Button Text="Egyéni" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="14"/>
+            </Border>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">
+            <Label Text="Kiszállózási százalék:" TextColor="Black" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
+            <Switch x:Name="ToggleSwitch" IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Green" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start"/>
+        </HorizontalStackLayout>
+        <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="5" Text="Meccs Létrehozása"/>
+    </Grid>
+</ContentPage>

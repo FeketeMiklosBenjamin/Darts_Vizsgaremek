@@ -22,6 +22,10 @@ Title="Statistic"
 ContentTemplate="{DataTemplate pages:StatisticPage}"
 Route="StatisticPage" />
         <ShellContent
+Title="Friendly Setup"
+ContentTemplate="{DataTemplate pages:FriendlySetupPage}"
+Route="FriendlySetupPage" />
+        <ShellContent
     Title="Competitions"
     ContentTemplate="{DataTemplate pages:CompetitionsPage}"
     Route="CompetitionsPage"/>
