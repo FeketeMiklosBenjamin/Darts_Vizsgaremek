@@ -33,11 +33,6 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonElement("refresh_tokens")]
         public List<string> RefreshTokens { get; set; } = new List<string>();
 
-        // A refresh tokenek lejárati dátumainak listája
-        [BsonElement("refresh_token_expiries")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public List<DateTime?> RefreshTokenExpiries { get; set; } = new List<DateTime?>();
-
         [BsonElement("last_login_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime LastLoginDate { get; set; }

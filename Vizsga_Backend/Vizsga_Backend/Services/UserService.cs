@@ -71,8 +71,7 @@ namespace VizsgaBackend.Services
             {
                 update = Builders<User>.Update.Set(u => u.StrictBan, strictBan)
                     .Set(u => u.BannedUntil, bannedUntil)
-                    .Unset(u => u.RefreshTokens)
-                    .Unset(u => u.RefreshTokenExpiries);
+                    .Unset(u => u.RefreshTokens);
             }
             else
             {
@@ -174,7 +173,6 @@ namespace VizsgaBackend.Services
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
             var update = Builders<User>.Update.Push(u => u.RefreshTokens, refreshToken)
-                                               .Push(u => u.RefreshTokenExpiries, DateTime.UtcNow.AddMonths(1))
                                                .Set(u => u.LastLoginDate, DateTime.UtcNow);
 
             await _usersCollection.UpdateOneAsync(filter, update);
@@ -193,23 +191,13 @@ namespace VizsgaBackend.Services
         {
             var filter = Builders<User>.Filter.AnyEq(u => u.RefreshTokens, refreshToken);
             var user = await _usersCollection.Find(filter).FirstOrDefaultAsync();
-
-            if (user != null)
-            {
-                int index = user.RefreshTokens.IndexOf(refreshToken);
-                if (index != -1 && user.RefreshTokenExpiries.Count > index && user.RefreshTokenExpiries[index] > DateTime.UtcNow)
-                {
-                    return user;
-                }
-            }
-            return null;
+            return user;
         }
 
-        public async Task DeleteRefreshTokenAsync(string userId)
+        public async Task DeleteRefreshTokenAsync(string userId, string refreshToken)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
-            var update = Builders<User>.Update.Unset(u => u.RefreshTokens)
-                                               .Unset(u => u.RefreshTokenExpiries);
+            var update = Builders<User>.Update.Pull(u => u.RefreshTokens, refreshToken);
 
             await _usersCollection.UpdateOneAsync(filter, update);
         }

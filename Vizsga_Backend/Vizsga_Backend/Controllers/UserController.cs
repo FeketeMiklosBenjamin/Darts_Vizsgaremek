@@ -174,13 +174,7 @@ namespace VizsgaBackend.Controllers
                 registerUser.StrictBan = false;
                 registerUser.BannedUntil = null;
 
-                var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
-
-                var refreshTokenGen = _jwtService.GenerateRefreshToken();
-
                 await _service.CreateAsync(registerUser);
-
-                await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
 
                 // Válasz küldése a sikeres regisztrációról, az új entitással
                 return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, new
@@ -390,18 +384,23 @@ namespace VizsgaBackend.Controllers
         // Befejezve
         [HttpPost("logout")]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
         {
             try
             {
-                var user = await _service.GetByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-                if (user == null)
+                var userById = await _service.GetByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+                if (userById == null)
                 {
-                    return BadRequest(new { message = "A felhasználó nincs bejelentkezve." });
+                    return Unauthorized(new { message = "A felhasználó nincs bejelentkezve." });
+                }
+                var userByToken = await _service.ValidateRefreshTokenAsync(request.RefreshToken);
+                if (userById != userByToken)
+                {
+                    return BadRequest(new { message = "Rossz refresh token." });
                 }
 
                 // Töröljük a refresh tokent az adatbázisból
-                await _service.DeleteRefreshTokenAsync(user.Id);
+                await _service.DeleteRefreshTokenAsync(userById.Id, request.RefreshToken);
 
                 // Visszajelzés a sikeres kijelentkezésről
                 return Ok(new { message = "Sikeres kijelentkezés." });

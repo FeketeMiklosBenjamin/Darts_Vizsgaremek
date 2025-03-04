@@ -27,11 +27,14 @@ namespace Vizsga_Backend.Controllers
         {
             try
             {
-                // Ellenőrizzük, hogy a refresh token érvényes-e
                 var user = await _userService.ValidateRefreshTokenAsync(request.RefreshToken);
                 if (user == null)
                 {
-                    return Unauthorized(new { message = "Érvénytelen refresh token." });
+                    return Unauthorized(new { message = "Érvénytelen id vagy refresh token." });
+                }
+                if (user.Id != userId)
+                {
+                    return Unauthorized(new { message = "Érvénytelen id vagy refresh token." });
                 }
 
                 // Generáljunk egy új access token-t
@@ -46,5 +49,4 @@ namespace Vizsga_Backend.Controllers
             }
         }
     }
-
 }
