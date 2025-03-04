@@ -394,7 +394,7 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "A felhasználó nincs bejelentkezve." });
                 }
                 var userByToken = await _service.ValidateRefreshTokenAsync(request.RefreshToken);
-                if (userById != userByToken)
+                if (userByToken == null || (userById.Id != userByToken.Id))
                 {
                     return BadRequest(new { message = "Rossz refresh token." });
                 }

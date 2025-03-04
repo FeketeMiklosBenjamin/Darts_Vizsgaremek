@@ -7,5 +7,6 @@
         public string UsersCollectionName { get; set; } = null!;
         public string UsersTournamentStatsCollectionName { get; set; } = null!;
         public string UsersFriendlyStatsCollectionName { get; set; } = null!;
+        public string MessagesCollectionName { get; set; } = null!;
     }
 }

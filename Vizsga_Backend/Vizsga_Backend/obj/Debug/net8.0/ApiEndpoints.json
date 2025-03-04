@@ -152,7 +152,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Vizsga_Backend.Models.UserModels.RefreshTokenRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
