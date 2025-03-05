@@ -4,11 +4,23 @@
         <name>DartsMobilApp</name>
     </assembly>
     <members>
+        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.Tournaments">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CompetitionsViewModel.tournaments"/>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.SortedTournaments">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CompetitionsViewModel.sortedTournaments"/>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.Tournaments">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.CompetitionsViewModel.tournaments"/>
+        <member name="F:DartsMobilApp.ViewModel.CompetitionsViewModel.appearingCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CompetitionsViewModel.AppearingCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.AppearingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.Appearing"/>.</summary>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.CompetitionsViewModel.filterTournamentsCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CompetitionsViewModel.FilterTournamentsCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.FilterTournamentsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.FilterTournaments(System.String)"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.CounterGrid">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.counterGrid"/>

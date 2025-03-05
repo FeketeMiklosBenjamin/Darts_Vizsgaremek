@@ -6,7 +6,7 @@
              Shell.TabBarBackgroundColor="Transparent"
              Shell.NavBarIsVisible="False"
              Title="StatisticPage"
-             BackgroundImageSource="darts_table.jpg">
+                 BackgroundImageSource="darts_table.jpg">
     <ContentPage.Behaviors>
         <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
         <tool:StatusBarBehavior StatusBarColor="Transparent"/>
@@ -21,12 +21,19 @@
             <Setter Property="TextColor" Value="White"/>
         </Style>
     </ContentPage.Resources>
-    <Grid RowDefinitions="*,*,*,*,*,*" Margin="50">
-        <Label Text="{Binding PlayerStatistic.matches, StringFormat='Lejátszott meccsek száma: {0} db'}" Grid.Row="0"/>
-        <Label Text="{Binding PlayerStatistic.matchesWon, StringFormat='Megnyert meccsek: {0} db'}" Grid.Row="1"/>
-        <Label Text="{Binding PlayerStatistic.averages, StringFormat='Átlagod: {0}'}" Grid.Row="2"/>
-        <Label Text="{Binding PlayerStatistic.max180s, StringFormat='180-ak száma: {0} db'}" Grid.Row="3"/>
-        <Label Text="{Binding PlayerStatistic.checkoutPercentage, StringFormat='Kiszállózási százalék: {0} %'}" Grid.Row="4"/>
-        <Label Text="{Binding PlayerStatistic.highestCheckout, StringFormat='Legmagasabb kiszálló: {0}'}" Grid.Row="5"/>
+    <Grid RowDefinitions="*" Margin="50">
+
+
+        <Border Stroke="Transparent" BackgroundColor="#38000000" Grid.Row="0" Margin="0,30,0,0">
+            <VerticalStackLayout Spacing="100">
+                <Label Text="{Binding PlayerStatistic.matches, StringFormat='Lejátszott meccsek száma: {0} db'}" Grid.Row="0"/>
+                <Label Text="{Binding PlayerStatistic.matchesWon, StringFormat='Megnyert meccsek: {0} db'}" Grid.Row="1"/>
+                <Label Text="{Binding PlayerStatistic.averages, StringFormat='Átlagod: {0}'}" Grid.Row="2"/>
+                <Label Text="{Binding PlayerStatistic.max180s, StringFormat='180-ak száma: {0} db'}" Grid.Row="3"/>
+                <Label Text="{Binding PlayerStatistic.checkoutPercentage, StringFormat='Kiszállózási százalék: {0} %'}" Grid.Row="4"/>
+                <Label Text="{Binding PlayerStatistic.highestCheckout, StringFormat='Legmagasabb kiszálló: {0}'}" Grid.Row="5"/>
+            </VerticalStackLayout>
+        </Border>
+        
     </Grid>
 </ContentPage>

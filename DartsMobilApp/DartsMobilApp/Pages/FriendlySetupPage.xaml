@@ -18,23 +18,23 @@
                 <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="LightGrey" Command="{Binding RecolorButtonCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
             </Border>
             <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
-                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" />
+                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric"/>
             </Border>
             <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50" BackgroundColor="LightGrey">
-                <Button Text="First to" WidthRequest="60" HeightRequest="40" BackgroundColor="LightGrey" TextColor="Black" x:Name="FirstToBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference FirstToBtn}}"/>
+                <Button Text="First to" WidthRequest="60" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" x:Name="FirstToBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference FirstToBtn}}"/>
             </Border>
             <Border Stroke="Black" StrokeThickness="2" HeightRequest="50" BackgroundColor="LightGrey" StrokeShape="RoundRectangle 0,50,0,50">
-                <Button Text="Best of" WidthRequest="60" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" x:Name="BestOfBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference BestOfBtn}}"/>
+                <Button Text="Best of" WidthRequest="60" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" x:Name="BestOfBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference BestOfBtn}}" />
             </Border>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="3" HeightRequest="50" HorizontalOptions="Center" >
             <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" BackgroundColor="LightGrey">
                 <Button Text="301" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="20" x:Name="threezerooneBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference threezerooneBtn}}"/>
             </Border>
-            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey">
+            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey" HeightRequest="50">
                 <Button Text="501" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="20" x:Name="fivezerooneBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference fivezerooneBtn}}"/>
             </Border>
-            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey">
+            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey" HeightRequest="50">
                 <Button Text="701" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="20" x:Name="sevenzerooneBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference sevenzerooneBtn}}"/>
             </Border>
             <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="LightGrey">
@@ -42,7 +42,7 @@
             </Border>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">
-            <Label Text="Kiszállózási százalék:" TextColor="Black" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
+            <Label Text="Kiszállózási százalék:" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
             <Switch x:Name="ToggleSwitch" IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Green" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
         </HorizontalStackLayout>
         <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="5" Text="Meccs Létrehozása"/>

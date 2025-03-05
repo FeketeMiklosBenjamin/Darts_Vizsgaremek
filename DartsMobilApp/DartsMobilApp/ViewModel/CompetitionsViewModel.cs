@@ -13,8 +13,7 @@ namespace DartsMobilApp.ViewModel
 
     public partial class CompetitionsViewModel : ObservableObject
     {
-        [ObservableProperty]
-        public List<TournamentModel> sortedTournaments;
+        
 
         [ObservableProperty]
         public ObservableCollection<TournamentModel> tournaments = new ObservableCollection<TournamentModel>
@@ -30,18 +29,60 @@ namespace DartsMobilApp.ViewModel
             new TournamentModel{Name= "Kisalföld Darts Liga", Level = "Kezdő/Amatőr", Time = new DateTime(2025, 6, 1)},
         };
 
+        [ObservableProperty]
+        public List<TournamentModel> sortedTournaments;
 
-        //[RelayCommand]
-        //private void FilterTournaments(int number)
-        //{
-        //    sortedTournaments = tournaments.Take(4).ToList();
-        //    if (number == 1)
-        //    {
-        //        sortedTournaments.Clear();
-        //        sortedTournaments = tournaments.Take(4).ToList();
-                
-        //    }
-        //}
+        public List<TournamentModel> TakedTournaments { get; set; } = new List<TournamentModel>();
+
+
+        [RelayCommand]
+
+        private void Appearing()
+        {
+            SortedTournaments = tournaments.Take(4).ToList();
+        }
+
+
+        private List<TournamentModel> DeleteTakedItem()
+        {
+            foreach (var com in SortedTournaments)
+            {
+                TakedTournaments.Remove(com);
+            }
+            return TakedTournaments;
+        }
+        private List<TournamentModel> FillTakedTList()
+        {
+            foreach (var co in sortedTournaments)
+            {
+                TakedTournaments.Add(co);
+            }
+            return TakedTournaments;
+        }
+        [RelayCommand]
+        private void FilterTournaments(string number)
+        {
+            if (number == "1")
+            {
+                if (Tournaments.Count > 4 && TakedTournaments.Count != Tournaments.Count)
+                {
+                    SortedTournaments.Clear();
+                    SortedTournaments = Tournaments.Take(new Range(TakedTournaments.Count, TakedTournaments.Count +4)).ToList();
+                    FillTakedTList();
+                }
+            }
+            else
+            {
+                DeleteTakedItem();
+                if (TakedTournaments.Count != 0)
+                {
+                    SortedTournaments.Clear();
+                    
+                    SortedTournaments = TakedTournaments.Take(new Range(TakedTournaments.Count - 4, TakedTournaments.Count)).ToList();
+                   
+                }
+            }
+        }
 
     }
 }
