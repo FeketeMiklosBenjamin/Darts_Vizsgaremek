@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "Vizsga_Backend.Controllers.MessageController",
+    "Method": "SendAdminMessage",
+    "RelativePath": "api/messages/send/admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "message",
+        "Type": "Vizsga_Backend.Models.MessageSendAdmin",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MessageController",
+    "Method": "SendUserMessage",
+    "RelativePath": "api/messages/send/user",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "message",
+        "Type": "Vizsga_Backend.Models.Message",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Vizsga_Backend.Controllers.TokenController",
     "Method": "RefreshToken",
     "RelativePath": "api/token/refresh-token/{userId}",

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Vizsga_Backend.Models;
+using Vizsga_Backend.Services;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UsersFriendlyStatService>();
 builder.Services.AddSingleton<UsersTournamentStatService>();
 builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<MessageService>();
 
 // Cloudinary regisztrálása
 builder.Services.AddSingleton(serviceProvider =>

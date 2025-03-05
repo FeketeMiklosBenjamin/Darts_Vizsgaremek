@@ -11,11 +11,11 @@ namespace Vizsga_Backend.Models
 
         [BsonElement("from_id")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string FromId { get; set; } = string.Empty;
+        public string? FromId { get; set; } = string.Empty;
 
         [BsonElement("to_id")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ToId { get; set; } = string.Empty;
+        public string? ToId { get; set; } = string.Empty;
 
         [BsonElement("title")]
         public string Title { get; set; } = string.Empty;
