@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace Vizsga_Backend.Models
+namespace Vizsga_Backend.Models.MessageModels
 {
     public class Message
     {

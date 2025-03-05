@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Vizsga_Backend.Models;
+using Vizsga_Backend.Models.MessageModels;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Models.UserStatsModels;
 using Vizsga_Backend.Services;
@@ -32,11 +32,48 @@ namespace Vizsga_Backend.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
 
+                if (userId == null)
+                {
+                    return Unauthorized(new { message = "Nincs bejelentkezve!" });
+                }
+
+                if (userRole == "1")
+                {
+                    var messages = await _service.GetUserMessages(userId);
+
+                    var result = messages.Select(m => new
+                    {
+                        m.Id,
+                        m.Title,
+                        m.Text,
+                        sendDate = TimeZoneInfo.ConvertTimeFromUtc(m.SendDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    });
+                    return Ok(result);
+                }
+
+                if (userRole == "2")
+                {
+                    var messages = await _service.GetAdminMessages();
+
+                    var result = messages.Select(m => new
+                    {
+                        m.Id,
+                        m.Title,
+                        m.Text,
+                        sendDate = TimeZoneInfo.ConvertTimeFromUtc(m.SendDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        username = m.User!.Username,
+                        emailAddress = m.User.EmailAddress
+                    });
+                    return Ok(result);
+                }
+                return Unauthorized(new {message = "A lekérés során hiba történt."});
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = "Az lekérés során hiba történt." });
+                return StatusCode(500, new { message = "A lekérés során hiba történt." });
                 throw;
             }
         }
@@ -154,6 +191,45 @@ namespace Vizsga_Backend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, new { message = "Az elküldés során hiba történt." });
+                throw;
+            }
+        }
+
+        [HttpDelete("{messageId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteMessage(string messageId)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+                if (userId == null)
+                {
+                    return Unauthorized(new { message = "Nincs bejelentkezve!" });
+                }
+
+                var message = new Message();
+
+                if (userRole == "1")
+                {
+                    message = await _service.GetMessageAsync(userId, messageId);
+                }
+                else if (userRole == "2")
+                {
+                    message = await _service.GetMessageAsync(null, messageId);
+                }
+
+                if (message == null)
+                {
+                    return NotFound(new { message = $"Az üzenet az ID-vel ({messageId}) nem található vagy nincs jogod az üzenet törléséhez." });
+                }
+                await _service.DeleteAsync(messageId);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "Az törlés során hiba történt." });
                 throw;
             }
         }

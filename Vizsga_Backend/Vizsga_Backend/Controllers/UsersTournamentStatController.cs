@@ -47,7 +47,7 @@ namespace VizsgaBackend.Controllers
                     item.NineDarter,
                     item.User!.Username,
                     profilePictureUrl = item.User.ProfilePicture,
-                    registerDate = item.User.RegisterDate.ToString("yyyy.MM.dd"),
+                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(item.User.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
                     lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(item.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 }).ToList();
                 return Ok(result);
@@ -90,7 +90,7 @@ namespace VizsgaBackend.Controllers
                     tournamentWithUser.NineDarter,
                     tournamentWithUser.User!.Username,
                     profilePictureUrl = tournamentWithUser.User.ProfilePicture,
-                    registerDate = tournamentWithUser.User.RegisterDate.ToString("yyyy.MM.dd"),
+                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(tournamentWithUser.User.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
                     lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(tournamentWithUser.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
                 });
             }

@@ -30,10 +30,5 @@ namespace VizsgaBackend.Services
         {
             return await _usersFriendlyStatCollection.UpdateOneAsync(filter, update);
         }
-
-        public async Task DeleteAsync(string userId)
-        {
-            await _usersFriendlyStatCollection.DeleteOneAsync(stat => stat.UserId == userId);
-        }
     }
 }

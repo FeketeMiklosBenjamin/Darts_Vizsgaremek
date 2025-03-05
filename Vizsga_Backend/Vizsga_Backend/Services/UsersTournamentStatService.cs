@@ -37,8 +37,6 @@ namespace VizsgaBackend.Services
             return result;
         }
 
-
-
         public async Task<UsersTournamentStatWithUser?> GetTournamentWithUserByUserIdAsync(string userId)
         {
             if (!ObjectId.TryParse(userId, out var objectId))
@@ -76,21 +74,6 @@ namespace VizsgaBackend.Services
         public async Task<UpdateResult> UpdateOneAsync(FilterDefinition<UsersTournamentStat> filter, UpdateDefinition<UsersTournamentStat> update)
         {
             return await _usersTournamentStatCollection.UpdateOneAsync(filter, update);
-        }
-
-        public async Task DeleteAsync(string userId)
-        {
-            await _usersTournamentStatCollection.DeleteOneAsync(stat => stat.UserId == userId);
-        }
-
-        public async Task<UsersTournamentStat> GetUpdatedValuesAsync(FilterDefinition<UsersTournamentStat> filter, UpdateDefinition<UsersTournamentStat> updateDefinition)
-        {
-            return await _usersTournamentStatCollection.FindOneAndUpdateAsync(filter, updateDefinition,
-                new FindOneAndUpdateOptions<UsersTournamentStat>
-                {
-                    ReturnDocument = ReturnDocument.After
-                }
-            );
         }
     }
 }

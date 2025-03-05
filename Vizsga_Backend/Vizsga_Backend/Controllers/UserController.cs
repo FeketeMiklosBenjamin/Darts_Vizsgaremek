@@ -36,7 +36,6 @@ namespace VizsgaBackend.Controllers
             _cloudinary = cloudinary;
         }
 
-        // Befejezve
         [HttpGet("all")]
         [Authorize]
         public async Task<IActionResult> Get()
@@ -89,8 +88,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-
-        // Folyamatban
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetById(string id)
@@ -189,7 +186,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // Befejezve
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User registerUser)
         {
@@ -306,7 +302,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // Befejezve
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login loginRequest)
         {
@@ -381,7 +376,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // Befejezve
         [HttpPost("logout")]
         [Authorize]
         public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
@@ -412,8 +406,6 @@ namespace VizsgaBackend.Controllers
         }
 
 
-
-        // Befejezve
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> Put(string id, [FromBody] ModifyUser modifyUser)

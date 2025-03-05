@@ -119,11 +119,6 @@ namespace VizsgaBackend.Services
             return await _usersCollection.UpdateOneAsync(filter, update);
         }
 
-        public async Task DeleteAsync(string id)
-        {
-            await _usersCollection.DeleteOneAsync(x => x.Id == id);
-        }
-
 
 
         // Kép feltöltésekhez:

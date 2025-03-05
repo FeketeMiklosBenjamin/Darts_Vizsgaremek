@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "Vizsga_Backend.Controllers.MessageController",
+    "Method": "GetMessagesAsync",
+    "RelativePath": "api/messages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MessageController",
+    "Method": "DeleteMessage",
+    "RelativePath": "api/messages/{messageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "messageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MessageController",
     "Method": "SendAdminMessage",
     "RelativePath": "api/messages/send/admin",
     "HttpMethod": "POST",
@@ -9,7 +35,7 @@
     "Parameters": [
       {
         "Name": "message",
-        "Type": "Vizsga_Backend.Models.MessageSendAdmin",
+        "Type": "Vizsga_Backend.Models.MessageModels.MessageSendAdmin",
         "IsRequired": true
       }
     ],
@@ -25,7 +51,7 @@
     "Parameters": [
       {
         "Name": "message",
-        "Type": "Vizsga_Backend.Models.Message",
+        "Type": "Vizsga_Backend.Models.MessageModels.Message",
         "IsRequired": true
       }
     ],

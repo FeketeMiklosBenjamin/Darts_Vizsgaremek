@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Vizsga_Backend.Models
+namespace Vizsga_Backend.Models.MessageModels
 {
     public class MessageSendAdmin
     {
