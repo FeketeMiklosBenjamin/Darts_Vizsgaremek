@@ -5,14 +5,27 @@
     text-decoration: none;
 }
 
+.not-found {
+    text-align: center;
+    margin: 20px 0 0 0;
+    border: 2px solid black;
+}
+
 .background-img {
     max-height: 92.25vh;
     width: 210vh;
 }
+
+.stick {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 body{
     overflow: hidden;
-    height: 100vw;
 }
+
 .position-rel {
     height: 100vh;
     width: 100vw;
@@ -23,7 +36,7 @@ body{
 .transform {
     margin: 0;
     position: absolute;
-    top: 40%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -67,3 +80,124 @@ body{
     font-family: serif;
     cursor: context-menu;
 }
+
+.profileImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+}
+
+.background_color {
+    height: 1550px;
+    width: 100%;
+    background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
+}
+
+.box-competition {
+    width: 85%;
+    height: 250px;
+    border: 2px solid aqua;
+    border-radius: 30px;
+    background-color: #070602;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+
+.box-image {
+    margin-top: 25px;
+    margin-left: 50px;
+    height: 200px; 
+}
+
+.box-title {
+    font-size: 40px;
+    margin-bottom: 10px; 
+}
+
+.box-description {
+    font-size: 18px;
+}
+
+.box-leaderboard {
+    width: 85%;
+    height: 250px;
+    border: 2px solid red;
+    border-radius: 30px;
+    background-color: #3C2247;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 50px;
+}
+
+.boxnd-image {
+    height: 200px; 
+}
+
+.text-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding-left: 100px;
+}
+
+.boxnd-title {
+    font-size: 40px;
+    margin-bottom: 10px; 
+    margin-left: 150px;
+}
+
+.boxnd-description {
+    font-size: 18px;
+}
+
+.box-search {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #0D4E2A;
+    border-radius: 30px;
+    background-color: #5ABFC7;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+
+
+.box-statistic {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #E2AD00;
+    border-radius: 30px;
+    background-color: #F4F4F4;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.box-statistic-image {
+    height: 200px; 
+    margin-left: -200px;
+}
+
+.box-feedback {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #7F5D96;
+    border-radius: 30px;
+    background-color: #FDD49D;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+

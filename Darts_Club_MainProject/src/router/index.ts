@@ -3,6 +3,13 @@ import HomeView from '../views/HomeView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
+import { useUserStore } from '@/stores/UserStore'
+import NotFound from '@/views/NotFound.vue'
+import CompetitionView from '@/views/CompetitionView.vue'
+import LeaderBoardView from '@/views/LeaderBoardView.vue'
+import SearchProfileView from '@/views/SearchProfileView.vue'
+import StatisticView from '@/views/StatisticView.vue'
+import FeedBackView from '@/views/FeedBackView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,20 +17,66 @@ const router = createRouter({
     {
       path: '/',
       component: HomeView,
+      meta: { requiresGuest: true}
     },
     { 
       path: '/registration', 
-      component: RegistrationView
+      component: RegistrationView,
+      meta: { requiresGuest: true}
     },
     { 
       path: '/sign-in', 
-      component: LoginView
+      component: LoginView,
+      meta: { requiresGuest: true}
     },
     { 
       path: '/main-page', 
-      component: MainView
+      component: MainView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/competition', 
+      component: CompetitionView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/leaderboard', 
+      component: LeaderBoardView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/search-profile', 
+      component: SearchProfileView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/statistic', 
+      component: StatisticView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/feedback', 
+      component: FeedBackView,
+      meta: { requiresAuth: true}
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: NotFound
     }
   ],
 })
+
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+
+  if (to.matched.some(record => record.meta.requiresGuest) && userStore.status.isLoggedIn === true) {
+    return next('/main-page');
+  } 
+  if (to.matched.some(record => record.meta.requiresAuth) && !userStore.status.isLoggedIn) {
+    return next('/sign-in');
+  }
+  return next();
+});
 
 export default router
