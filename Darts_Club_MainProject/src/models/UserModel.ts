@@ -7,5 +7,6 @@ export default interface UserModel {
     registerDate?: string,
     refreshToken?: string,
     lastLoginDate?: string,
-    accessToken?: string
+    accessToken?: string,
+    profilePictureUrl?: string
 }

@@ -44,12 +44,12 @@ function onLogin(){
                 <div class="col-12 col-md-12 mx-auto">
                     <form @submit.prevent="onLogin">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="loginform.emailAddress">
+                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="loginform.emailAddress" autocomplete="off">
                             <label for="email">E-mail</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="loginform.password">
+                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="loginform.password" autocomplete="off">
                             <label for="password">Jelszó</label>
                         </div>
                         <div class="mb-3">

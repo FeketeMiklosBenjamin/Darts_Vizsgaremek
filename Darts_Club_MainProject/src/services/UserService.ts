@@ -1,10 +1,7 @@
 import type RegisterModel from "@/models/RegisterModel";
 import axios from './BackendService'
 import type LoginModel from "@/models/LoginModel";
-import type UserModel from "@/models/UserModel";
 
-
-const token = sessionStorage.getItem('accessToken');
 
 export default {
     registerUser(data: RegisterModel) {
@@ -17,7 +14,7 @@ export default {
             })
     },
     loginUser(data: LoginModel) {
-        return axios.post('/login', data) 
+        return axios.post('/login', data)
             .then((res) => {
                 return res;
             })
@@ -25,17 +22,37 @@ export default {
                 return Promise.reject(err.response)
             })
     },
-    logoutUser(token: string){
-        return axios.post('/logout','',{
+    logoutUser(accesstoken: string, refresh: string) {
+        return axios.post('/logout', {
+            refreshToken: refresh
+        }, {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
             }
         })
-        .then((res)=>{
-            return res.data
+            .then((res) => {
+                return res.data
+            })
+            .catch(() => {
+                return Promise.reject()
+            })
+    },
+    uploadImage(image: File, accesstoken: string) {
+        const formData = new FormData();
+        formData.append('file', image);
+
+        return axios.post('/picture/upload', formData, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'multipart/form-data', 
+            },
         })
-        .catch(()=>{
-            return Promise.reject()
-        })
+            .then((res) => {
+                return res.data;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            });
     }
 }
