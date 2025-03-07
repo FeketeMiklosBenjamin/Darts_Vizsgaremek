@@ -27,5 +27,12 @@ namespace DartsMobilApp.ViewModel
                 BTN.BackgroundColor = defaultColor;            
         }
 
+
+        [RelayCommand]
+
+        private async void Navigate()
+        {
+
+        }
     }
 }

@@ -81,6 +81,11 @@ namespace DartsMobilApp.ViewModel
                     SortedTournaments = TakedTournaments.Take(new Range(TakedTournaments.Count - 4, TakedTournaments.Count)).ToList();
                    
                 }
+                else
+                {
+                    SortedTournaments = Tournaments.Take(4).ToList();
+                    FillTakedTList();
+                }
             }
         }
 

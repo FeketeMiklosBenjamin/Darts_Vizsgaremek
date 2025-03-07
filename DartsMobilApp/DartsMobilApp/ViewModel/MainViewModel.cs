@@ -21,5 +21,17 @@ namespace DartsMobilApp.ViewModel
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}", true);
             });
         }
+
+        [RelayCommand]
+
+        private async void GoToCompetitionPage()
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"//{nameof(CompetitionsPage)}", true);
+            });
+        }
+
+
     }
 }

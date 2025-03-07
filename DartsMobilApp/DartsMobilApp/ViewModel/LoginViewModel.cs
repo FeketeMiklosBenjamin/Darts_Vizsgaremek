@@ -28,6 +28,7 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void Apperaring()
         {
+            
         }
 
 
