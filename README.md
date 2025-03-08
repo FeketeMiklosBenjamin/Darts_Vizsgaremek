@@ -13,4 +13,4 @@ https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/swagger/index.html
 https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api
 
 ## Frontend Link
-https://darts-vizs-git-2befca-fekete-miklos-benjamins-projects-f837f28f.vercel.app
+https://darts-vizsgaremek.vercel.app
