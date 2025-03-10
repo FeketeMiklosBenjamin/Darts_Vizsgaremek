@@ -21,7 +21,6 @@ namespace VizsgaBackend.Controllers
             _service = service;
         }
 
-        // GET api/<ProductController>/5
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetByUserId()
@@ -45,8 +44,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-
-        // PUT api/<ProductController>/5
         [HttpPut("{userId}")]
         [Authorize]
         public async Task<IActionResult> Put(string userId, [FromBody] UsersFriendlyStat updatedUserStat)

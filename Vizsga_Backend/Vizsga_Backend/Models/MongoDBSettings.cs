@@ -8,5 +8,8 @@
         public string UsersTournamentStatsCollectionName { get; set; } = null!;
         public string UsersFriendlyStatsCollectionName { get; set; } = null!;
         public string MessagesCollectionName { get; set; } = null!;
+        public string MatchHeadersCollectionName { get; set; } = null!;
+        public string AnnouncedTournamentsCollectionName { get; set; } = null!;
+        public string PlayersTournamentsCollectionName { get; set; } = null!;
     }
 }

@@ -59,8 +59,6 @@ namespace VizsgaBackend.Controllers
         }
 
 
-
-        // GET api/<ProductController>/5
         [HttpGet("{userId}")]
         [Authorize]
         public async Task<IActionResult> GetTournamentByUserId(string userId)
@@ -101,8 +99,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-
-        // PUT api/<ProductController>/5
         [HttpPut("{userId}")]
         [Authorize]
         public async Task<IActionResult> Put(string userId, [FromBody] UsersTournamentStat updatedUserStat)

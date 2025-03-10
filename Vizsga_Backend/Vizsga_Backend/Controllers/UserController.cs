@@ -240,13 +240,8 @@ namespace VizsgaBackend.Controllers
                 registerUser.StrictBan = false;
                 registerUser.BannedUntil = null;
 
-                var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
-
-                var refreshTokenGen = _jwtService.GenerateRefreshToken();
-
                 await _service.CreateAsync(registerUser);
 
-                await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
                 var userFriendlyStat = new UsersFriendlyStat
                 {
                     UserId = registerUser.Id,
@@ -283,6 +278,12 @@ namespace VizsgaBackend.Controllers
                 await _userFriendlyStatService.CreateAsync(userFriendlyStat);
                 await _userTournamentStatService.CreateAsync(userTournamentStat);
 
+                var accessTokenGen = _jwtService.GenerateToken(registerUser.Id, registerUser.EmailAddress, registerUser.Role);
+
+                var refreshTokenGen = _jwtService.GenerateRefreshToken();
+
+                await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
+
                 // Válasz küldése a sikeres regisztrációról, az új entitással
                 return CreatedAtAction(nameof(GetById),new { id = registerUser.Id}, new { 
                     message = "Sikeres regisztráció.", 
@@ -290,6 +291,7 @@ namespace VizsgaBackend.Controllers
                     username = registerUser.Username,
                     emailAddress = registerUser.EmailAddress,
                     profilePictureUrl = registerUser.ProfilePicture,
+                    dartsPoints = 0,
                     role = registerUser.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
@@ -351,6 +353,14 @@ namespace VizsgaBackend.Controllers
                     }
                 }
 
+
+                var userTournamentStats = await _userTournamentStatService.GetTournamentByUserIdAsync(user.Id);
+
+                if (userTournamentStats == null && user.Role != 2)
+                {
+                    return NotFound(new {message = "A felhasználó statisztikája nem található!"});
+                }
+
                 var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
 
                 var refreshTokenGen = _jwtService.GenerateRefreshToken();
@@ -365,6 +375,7 @@ namespace VizsgaBackend.Controllers
                     username = user.Username,
                     emailAddress = user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
+                    dartsPoints = userTournamentStats != null ? userTournamentStats.DartsPoints : null,
                     role = user.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
@@ -406,18 +417,18 @@ namespace VizsgaBackend.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Put(string id, [FromBody] ModifyUser modifyUser)
+        public async Task<IActionResult> Put([FromBody] ModifyUser modifyUser)
         {
             try
             {
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (userId != id)
+                if (userId == null)
                 {
-                    return Unauthorized(new { message = "Nincs jogosultságod a modosításhoz." });
+                    return Unauthorized(new { message = "Nincs bejelentkezve!" });
                 }
 
                 if (modifyUser == null)
@@ -425,10 +436,10 @@ namespace VizsgaBackend.Controllers
                     return BadRequest(new { message = "A kéréssel valami nincs rendben. Ellenőrizd az adatokat." });
                 }
 
-                var updatedUser = await _service.GetByIdAsync(id);
+                var updatedUser = await _service.GetByIdAsync(userId);
                 if (updatedUser == null)
                 {
-                    return NotFound(new { message = $"A felhasználó az ID-vel ({id}) nem található." });
+                    return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
                 }
 
                 // Ellenőrizzük a jelszót
@@ -438,7 +449,7 @@ namespace VizsgaBackend.Controllers
                     return Unauthorized(new { message = "Hibás mostani jelszó." });
                 }
 
-                var filter = Builders<User>.Filter.Eq(u => u.Id, id);
+                var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
                 var updateDefinitionBuilder = Builders<User>.Update;
                 var updates = new List<UpdateDefinition<User>>();
 
@@ -463,7 +474,7 @@ namespace VizsgaBackend.Controllers
                 {
                     if (_service.IsValidEmail(modifyUser.EmailAddress))
                     {
-                        if (!await _service.IsEmailTakenAsync(modifyUser.EmailAddress, id))
+                        if (!await _service.IsEmailTakenAsync(modifyUser.EmailAddress, userId))
                         {
                             updates.Add(updateDefinitionBuilder.Set(u => u.EmailAddress, modifyUser.EmailAddress));
                         }
@@ -484,7 +495,7 @@ namespace VizsgaBackend.Controllers
 
                 await _service.UpdateOneAsync(filter, updateDefinition);
 
-                return Ok(new { message = $"A felhasználó az ID-vel ({id}) sikeresen frissítve." });
+                return Ok(new { message = $"A felhasználó az ID-vel ({userId}) sikeresen frissítve." });
             }
             catch (Exception)
             {
@@ -546,6 +557,11 @@ namespace VizsgaBackend.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (userId == null)
+                {
+                    return Unauthorized(new { message = "Nincs bejelentkezve!" });
+                }
 
                 if (file == null || file.Length == 0)
                     return BadRequest(new { message = "Nem adott meg fájlt!" });

@@ -1,5 +1,68 @@
 [
   {
+    "ContainingType": "Vizsga_Backend.Controllers.AnnouncedTournamentController",
+    "Method": "GetAllAnnouncedTournament",
+    "RelativePath": "api/announced_tournaments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.AnnouncedTournamentController",
+    "Method": "CreateAnnouncedTournament",
+    "RelativePath": "api/announced_tournaments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datas",
+        "Type": "Vizsga_Backend.Models.TournamentModels.TournamentCreate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.AnnouncedTournamentController",
+    "Method": "UploadBackgroundImage",
+    "RelativePath": "api/announced_tournaments/background/upload{matchHeaderId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchHeaderId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.AnnouncedTournamentController",
+    "Method": "RegisterForAnnouncedTournament",
+    "RelativePath": "api/announced_tournaments/register/{tournamentId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tournamentId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Vizsga_Backend.Controllers.MessageController",
     "Method": "GetMessagesAsync",
     "RelativePath": "api/messages",
@@ -80,6 +143,22 @@
   },
   {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
+    "Method": "Put",
+    "RelativePath": "api/users",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "modifyUser",
+        "Type": "Vizsga_Backend.Models.UserModels.ModifyUser",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VizsgaBackend.Controllers.UserController",
     "Method": "GetById",
     "RelativePath": "api/users/{id}",
     "HttpMethod": "GET",
@@ -89,27 +168,6 @@
       {
         "Name": "id",
         "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VizsgaBackend.Controllers.UserController",
-    "Method": "Put",
-    "RelativePath": "api/users/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "modifyUser",
-        "Type": "Vizsga_Backend.Models.UserModels.ModifyUser",
         "IsRequired": true
       }
     ],
