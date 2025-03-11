@@ -28,7 +28,7 @@
   {
     "ContainingType": "Vizsga_Backend.Controllers.AnnouncedTournamentController",
     "Method": "UploadBackgroundImage",
-    "RelativePath": "api/announced_tournaments/background/upload{matchHeaderId}",
+    "RelativePath": "api/announced_tournaments/background/upload/{matchHeaderId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,

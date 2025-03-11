@@ -16,5 +16,8 @@ namespace Vizsga_Backend.Models.TournamentModels
         [BsonElement("announced_tournament_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string AnnoucedTournamentId { get; set; } = string.Empty;
+
+        [BsonElement("joined_number")]
+        public int JoinedNumber { get; set; }
     }
 }

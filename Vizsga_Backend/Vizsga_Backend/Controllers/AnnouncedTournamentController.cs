@@ -7,6 +7,7 @@ using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.TournamentModels;
 using Vizsga_Backend.Services;
 using VizsgaBackend.Services;
+using Vizsga_Backend.Models.UserModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -200,7 +201,7 @@ namespace Vizsga_Backend.Controllers
         }
 
 
-        [HttpPut("background/upload{matchHeaderId}")]
+        [HttpPut("background/upload/{matchHeaderId}")]
         [Authorize]
         public async Task<IActionResult> UploadBackgroundImage(string matchHeaderId, IFormFile file)
         {
@@ -279,7 +280,9 @@ namespace Vizsga_Backend.Controllers
                     return BadRequest(new { message = "A versenyre a jelentkezés már befejeződött!" });
                 }
 
-                if (tournament.MaxPlayerJoin <= await _service.JoinedPlayerToTournamentCount(tournamentId))
+                int JoinedPlayers = await _service.JoinedPlayerToTournamentCount(tournamentId);
+
+                if (tournament.MaxPlayerJoin <= JoinedPlayers)
                 {
                     return Conflict(new { message = "A verseny férőhelye betelt!" });
                 }
@@ -297,7 +300,8 @@ namespace Vizsga_Backend.Controllers
                 var newConnection = new PlayerTournament
                 {
                     AnnoucedTournamentId = tournamentId,
-                    UserId = userId
+                    UserId = userId,
+                    JoinedNumber = JoinedPlayers + 1
                 };
 
                 await _service.CreateRegisterAsync(newConnection);
@@ -312,6 +316,54 @@ namespace Vizsga_Backend.Controllers
             }
         }
 
+        [HttpDelete("draw/{tournamentId}")]
+        [Authorize]
+        public async Task<IActionResult> TournamentDraw(string tournamentId)
+        {
+            try
+            {
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+                if (userRole != "2")
+                {
+                    return Unauthorized(new {message = "Csak admin tud verseny mérkőzéseket sorsolni!"});
+                }
+
+                var tournament = await _service.GetAnnouncedTournamentById(tournamentId);
+
+                if (tournament == null)
+                {
+                    return NotFound(new { message = $"A verseny az ID-vel ({tournamentId}) nem található." });
+                }
+
+                Random random = new Random();
+
+                List<string> playerIds = await _service.GetJoinedPlayerIds(tournamentId);
+
+                int playerOneIndex = 0;
+                int playerTwoIndex = 0;
+
+                Match newMatch;
+
+                if (tournament.MaxPlayerJoin == playerIds.Count())
+                {
+                    newMatch = new Match
+                    {
+                        HeaderId = tournament.HeaderId,
+                        Status = "Pedding",
+
+                    };
+                    playerOneIndex = random.Next(0, playerIds.Count());
+                    playerTwoIndex = random.Next(0, playerIds.Count());
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

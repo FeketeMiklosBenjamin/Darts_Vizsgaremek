@@ -21,6 +21,7 @@ builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<MessageService>();
 builder.Services.AddSingleton<AnnouncedTournamentService>();
 builder.Services.AddSingleton<MatchHeaderService>();
+builder.Services.AddSingleton<MatchService>();
 
 // Cloudinary regisztrálása
 builder.Services.AddSingleton(serviceProvider =>

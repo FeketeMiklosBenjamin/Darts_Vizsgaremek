@@ -1,10 +1,7 @@
-﻿using CloudinaryDotNet.Actions;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Text.RegularExpressions;
 using Vizsga_Backend.Models.TournamentModels;
-using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
@@ -89,6 +86,13 @@ namespace Vizsga_Backend.Services
             var filter = Builders<PlayerTournament>.Filter.Eq(pt => pt.AnnoucedTournamentId, announcedTournamentId);
             var count = await _playerTournamentCollection.CountDocumentsAsync(filter);
             return (int)count;
+        }
+
+        public async Task<List<string>> GetJoinedPlayerIds(string announcedTournamentId)
+        {
+            var players = await _playerTournamentCollection.FindAsync(x => x.AnnoucedTournamentId == announcedTournamentId);
+            List<string> playerIds = players.ToList().Select(x => x.UserId).ToList();
+            return playerIds;
         }
 
 
