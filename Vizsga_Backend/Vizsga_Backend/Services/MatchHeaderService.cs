@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
 using Vizsga_Backend.Models.MatchModels;
-using Vizsga_Backend.Models.TournamentModels;
-using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
@@ -21,6 +19,19 @@ namespace Vizsga_Backend.Services
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
             _matchHeaderCollection = database.GetCollection<MatchHeader>(mongoDBSettings.Value.MatchHeadersCollectionName);
             _cloudinary = cloudinary;
+
+            Task.Run(() => EnsureTtlIndexAsync());
+        }
+
+        private async Task EnsureTtlIndexAsync()
+        {
+            var indexKeys = Builders<MatchHeader>.IndexKeys.Ascending(m => m.DeleteDate);
+            var indexModel = new CreateIndexModel<MatchHeader>(indexKeys, new CreateIndexOptions
+            {
+                ExpireAfter = TimeSpan.FromSeconds(0)
+            });
+
+            await _matchHeaderCollection.Indexes.CreateOneAsync(indexModel);
         }
 
         public async Task<MatchHeader?> GetByIdAsync(string headerId)
@@ -61,6 +72,11 @@ namespace Vizsga_Backend.Services
             var match = regex.Match(url);
 
             return match.Success ? match.Groups[1].Value : string.Empty;
+        }
+
+        public async Task DeleteMatchHeaderAsync(string matchHeaderId)
+        {
+            await _matchHeaderCollection.DeleteOneAsync(x => x.Id == matchHeaderId);
         }
     }
 }

@@ -12,9 +12,12 @@ namespace Vizsga_Backend.Models.MatchModels
         [BsonElement("name")]
         public string Name { get; set; } = string.Empty;
 
-        [BsonElement("created_date")]
+        [BsonElement("level")]
+        public string Level { get; set; } = string.Empty;
+
+        [BsonElement("delete_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [BsonElement("sets_count")]
         public int SetsCount { get; set; }
@@ -38,5 +41,9 @@ namespace Vizsga_Backend.Models.MatchModels
         [BsonElement("tournament_end_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime? TournamentEndDate { get; set; }
+
+        [BsonElement("match_dates")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public List<DateTime> MatchDates { get; set; } = new List<DateTime>();
     }
 }

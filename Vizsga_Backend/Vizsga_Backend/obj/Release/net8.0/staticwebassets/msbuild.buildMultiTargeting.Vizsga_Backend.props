@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Vizsga_Backend.props" />
+</Project>

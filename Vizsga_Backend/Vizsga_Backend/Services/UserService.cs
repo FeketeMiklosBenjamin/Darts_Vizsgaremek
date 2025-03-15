@@ -63,7 +63,7 @@ namespace VizsgaBackend.Services
             await _usersCollection.InsertOneAsync(user);
         }
 
-        public async Task SetUserBan(string userId, bool strictBan, DateTime? bannedUntil)
+        public async Task SetUserBanAsync(string userId, bool strictBan, DateTime? bannedUntil)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
             UpdateDefinition<User> update;
@@ -173,7 +173,7 @@ namespace VizsgaBackend.Services
             await _usersCollection.UpdateOneAsync(filter, update);
         }
 
-        public async Task RefreshLastLoginDate(string userId)
+        public async Task RefreshLastLoginDateAsync(string userId)
         {
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
             var update = Builders<User>.Update.Set(u => u.LastLoginDate, DateTime.UtcNow);

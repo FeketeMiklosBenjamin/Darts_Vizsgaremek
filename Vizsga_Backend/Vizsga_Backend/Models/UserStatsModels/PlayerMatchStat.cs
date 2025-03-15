@@ -9,6 +9,9 @@ namespace Vizsga_Backend.Models.UserStatsModels
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = string.Empty;
 
+        [BsonElement("appeared")]
+        public bool Appeared { get; set; }
+
         [BsonElement("sets_won")]
         public int SetsWon { get; set; }
 

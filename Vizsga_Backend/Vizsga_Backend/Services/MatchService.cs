@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Vizsga_Backend.Models.MatchModels;
-using Vizsga_Backend.Models.TournamentModels;
 using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
@@ -15,6 +14,11 @@ namespace Vizsga_Backend.Services
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
             _matchCollection = database.GetCollection<Match>(mongoDBSettings.Value.MatchesCollectionName);
+        }
+
+        public async Task CreateMatchAsync(Match match)
+        {
+            await _matchCollection.InsertOneAsync(match);
         }
     }
 }

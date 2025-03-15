@@ -22,7 +22,7 @@ namespace Vizsga_Backend.Services
             return await _messagesCollection.Find(x => x.ToId == userId && x.Id == messageId).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Message>> GetUserMessages(string userId)
+        public async Task<List<Message>> GetUserMessagesAsync(string userId)
         {
             var pipeline = new[]
             {
@@ -36,7 +36,7 @@ namespace Vizsga_Backend.Services
             return result;
         }
 
-        public async Task<List<MessageWithUser>> GetAdminMessages()
+        public async Task<List<MessageWithUser>> GetAdminMessagesAsync()
         {
             var pipeline = new[]
             {

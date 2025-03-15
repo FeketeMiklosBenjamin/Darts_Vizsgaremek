@@ -88,6 +88,7 @@ namespace VizsgaBackend.Controllers
             }
         }
 
+        // Nem kell
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetById(string id)
@@ -124,7 +125,7 @@ namespace VizsgaBackend.Controllers
             {
                 var userRole = User.FindFirstValue(ClaimTypes.Role);
 
-                if (int.TryParse(userRole, out int role) && role != 2)
+                if (userRole != "2")
                 {
                     return Unauthorized(new { message = "Nincs jogosultságod admin regisztrációhoz." });
                 }
@@ -349,7 +350,7 @@ namespace VizsgaBackend.Controllers
                     }
                     else
                     {
-                        await _service.SetUserBan(user.Id, false, null);
+                        await _service.SetUserBanAsync(user.Id, false, null);
                     }
                 }
 
@@ -513,7 +514,7 @@ namespace VizsgaBackend.Controllers
             {
                 var userRole = User.FindFirstValue(ClaimTypes.Role);
 
-                if (int.TryParse(userRole, out int role) && role != 2)
+                if (userRole != "2")
                 {
                     return Unauthorized(new { message = "Nincs jogosultságod a kitiltáshoz." });
                 }
@@ -530,13 +531,13 @@ namespace VizsgaBackend.Controllers
 
                 if (request.BanDuration == 0)
                 {
-                    await _service.SetUserBan(user.Id, false, null);
+                    await _service.SetUserBanAsync(user.Id, false, null);
                     return Ok(new { message = $"A(z) {user.EmailAddress} e-mail címmel rendelkező felhasználó tiltása fel lett oldva." });
                 }
 
                 var bannedUntilDate = DateTime.UtcNow.AddDays(request.BanDuration);
 
-                await _service.SetUserBan(user.Id, request.BanDuration >= 30, bannedUntilDate);
+                await _service.SetUserBanAsync(user.Id, request.BanDuration >= 30, bannedUntilDate);
 
                 string userBannedUntilDateString = TimeZoneInfo.ConvertTimeFromUtc(bannedUntilDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm");
 

@@ -19,7 +19,7 @@ namespace Vizsga_Backend.Services
             _playerTournamentCollection = database.GetCollection<PlayerTournament>(mongoDBSettings.Value.PlayersTournamentsCollectionName);
         }
 
-        public async Task<List<TournamentGetAll>> GetAnnouncedTournamentsWithPlayers()
+        public async Task<List<TournamentGetAll>> GetAnnouncedTournamentsWithPlayersAsync()
         {
             var pipeline = new[]
             {
@@ -65,12 +65,12 @@ namespace Vizsga_Backend.Services
             return results;
         }
 
-        public async Task<AnnouncedTournament> GetAnnouncedTournamentById(string tournamentId)
+        public async Task<AnnouncedTournament> GetAnnouncedTournamentByIdAsync(string tournamentId)
         {
             return await _announcedTournamentCollection.Find(x => x.Id == tournamentId).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> DoesPlayerJoinedThisTournament(string announcedTournamentId, string userId)
+        public async Task<bool> DoesPlayerJoinedThisTournamentAsync(string announcedTournamentId, string userId)
         {
             var filter = Builders<PlayerTournament>.Filter.And(
                 Builders<PlayerTournament>.Filter.Eq(pt => pt.AnnoucedTournamentId, announcedTournamentId),
@@ -81,18 +81,17 @@ namespace Vizsga_Backend.Services
             return exists;
         }
 
-        public async Task<int> JoinedPlayerToTournamentCount(string announcedTournamentId)
+        public async Task<int> JoinedPlayerToTournamentCountAsync(string announcedTournamentId)
         {
             var filter = Builders<PlayerTournament>.Filter.Eq(pt => pt.AnnoucedTournamentId, announcedTournamentId);
             var count = await _playerTournamentCollection.CountDocumentsAsync(filter);
             return (int)count;
         }
 
-        public async Task<List<string>> GetJoinedPlayerIds(string announcedTournamentId)
+        public async Task<List<PlayerTournament>> GetJoinedPlayersAsync(string announcedTournamentId)
         {
             var players = await _playerTournamentCollection.FindAsync(x => x.AnnoucedTournamentId == announcedTournamentId);
-            List<string> playerIds = players.ToList().Select(x => x.UserId).ToList();
-            return playerIds;
+            return players.ToList();
         }
 
 
@@ -133,25 +132,46 @@ namespace Vizsga_Backend.Services
                 return "A jelentkezők száma csak 16, 8 és 4 fő lehet!";
             }
 
+            int requiredDatesCount = 2;
+
+            switch (datas.MaxPlayerJoin)
+            {
+                case 16:
+                    requiredDatesCount = 4;
+                    break;
+                case 8:
+                    requiredDatesCount = 3;
+                    break;
+                default:
+                    requiredDatesCount = 2;
+                    break;
+            }
+
+            if (datas.MatchDates.Count() != requiredDatesCount)
+            {
+                return $"A megadott dátumok száma ({datas.MatchDates.Count()}) nem egyenlő a megadott jelentkező számnál elvárt darabszámmal ({requiredDatesCount}) !";
+            }
+
+            datas.MatchDates.Sort();
+
+            DateTime tournamentStartDate = datas.MatchDates[0];
+            DateTime tournamentEndDats = datas.MatchDates[datas.MatchDates.Count() - 1];
+
             if (datas.JoinStartDate == null || datas.JoinEndDate == null)
             {
                 return "A jelentezés kezdeti és lezárási idejét kötelező megadni!";
             }
 
-            if (datas.TournamentStartDate == null || datas.TournamentEndDate == null)
+            if (datas.JoinEndDate <= datas.JoinStartDate || tournamentStartDate <= datas.JoinEndDate)
             {
-                return "A verseny kezdeti és befejezési idejét kötelező megadni!";
+                return "A megadott időpontoknál logikai ellentmondás található!";
             }
 
-            if (datas.JoinStartDate < DateTime.UtcNow || datas.JoinEndDate < DateTime.UtcNow || datas.TournamentStartDate < DateTime.UtcNow || datas.TournamentEndDate < DateTime.UtcNow)
+            if (datas.JoinStartDate < DateTime.UtcNow)
             {
                 return "A megadott időpontok nem lehetnek régebbiek a mostani időnél!";
             }
 
-            if (datas.JoinEndDate <= datas.JoinStartDate || datas.TournamentStartDate <= datas.JoinEndDate || datas.TournamentEndDate <= datas.TournamentStartDate)
-            {
-                return "A megadott időpontoknál logikai ellentmondás található!";
-            }
 
             return "";
         }
@@ -164,6 +184,12 @@ namespace Vizsga_Backend.Services
         public async Task CreateRegisterAsync(PlayerTournament playerTournament)
         {
             await _playerTournamentCollection.InsertOneAsync(playerTournament);
+        }
+        public async Task DeleteAllRegisterAndTournamentAsync(string announcedTournamentId)
+        {
+            var filter = Builders<PlayerTournament>.Filter.Eq(x => x.AnnoucedTournamentId, announcedTournamentId);
+            await _playerTournamentCollection.DeleteManyAsync(filter);
+            await _announcedTournamentCollection.DeleteOneAsync(x => x.Id == announcedTournamentId);
         }
     }
 }

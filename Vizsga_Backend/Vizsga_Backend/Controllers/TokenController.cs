@@ -39,7 +39,7 @@ namespace Vizsga_Backend.Controllers
 
                 // Generáljunk egy új access token-t
                 var accessTokenGen = _jwtService.GenerateToken(user.Id, user.EmailAddress, user.Role);
-                await _userService.RefreshLastLoginDate(user.Id);
+                await _userService.RefreshLastLoginDateAsync(user.Id);
 
                 return Ok(new { accessToken = accessTokenGen });
             }

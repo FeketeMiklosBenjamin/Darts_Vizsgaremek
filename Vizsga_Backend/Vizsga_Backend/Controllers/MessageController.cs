@@ -42,7 +42,7 @@ namespace Vizsga_Backend.Controllers
 
                 if (userRole == "1")
                 {
-                    var messages = await _service.GetUserMessages(userId);
+                    var messages = await _service.GetUserMessagesAsync(userId);
 
                     var result = messages.Select(m => new
                     {
@@ -56,7 +56,7 @@ namespace Vizsga_Backend.Controllers
 
                 if (userRole == "2")
                 {
-                    var messages = await _service.GetAdminMessages();
+                    var messages = await _service.GetAdminMessagesAsync();
 
                     var result = messages.Select(m => new
                     {
