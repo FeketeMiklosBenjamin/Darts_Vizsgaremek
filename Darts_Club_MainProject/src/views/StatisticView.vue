@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Navbar from '@/components/standard_comp/Navbar.vue';
+import Statistic from '@/components/statistic_comp/Statistic.vue';
 
 </script>
 
 <template>
     <Navbar />
-    <h1 class="text-center">Statistic</h1>
+    <Statistic />
 </template>
 
 <style scoped>

@@ -64,13 +64,16 @@ const router = createRouter({
       component: NotFound
     }
   ],
+  scrollBehavior() {
+    return { top: 0, behavior: 'instant' };
+  }
 })
 
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
 
-  if (to.matched.some(record => record.meta.requiresGuest) && userStore.status.isLoggedIn === true) {
+  if (to.matched.some(record => record.meta.requiresGuest) && userStore.status.isLoggedIn) {
     return next('/main-page');
   } 
   if (to.matched.some(record => record.meta.requiresAuth) && !userStore.status.isLoggedIn) {

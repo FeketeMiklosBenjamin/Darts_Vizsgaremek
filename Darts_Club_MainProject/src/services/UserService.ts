@@ -1,29 +1,29 @@
 import type RegisterModel from "@/models/RegisterModel";
-import axios from './BackendService'
+import { User_Endpoint } from './BackendService';
 import type LoginModel from "@/models/LoginModel";
 
 
 export default {
     registerUser(data: RegisterModel) {
-        return axios.post('/register', data)
+        return User_Endpoint.post('/register', data)
             .then((res) => {
-                return res;
+                return res
             })
             .catch((err) => {
                 return Promise.reject(err.response)
             })
     },
     loginUser(data: LoginModel) {
-        return axios.post('/login', data)
+        return User_Endpoint.post('/login', data)
             .then((res) => {
-                return res;
+                return res
             })
             .catch((err) => {
                 return Promise.reject(err.response)
             })
     },
     logoutUser(accesstoken: string, refresh: string) {
-        return axios.post('/logout', {
+        return User_Endpoint.post('/logout', {
             refreshToken: refresh
         }, {
             headers: {
@@ -42,7 +42,7 @@ export default {
         const formData = new FormData();
         formData.append('file', image);
 
-        return axios.post('/picture/upload', formData, {
+        return User_Endpoint.post('/picture/upload', formData, {
             headers: {
                 Authorization: `Bearer ${accesstoken}`,
                 'Content-Type': 'multipart/form-data', 
