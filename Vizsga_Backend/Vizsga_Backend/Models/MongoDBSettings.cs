@@ -12,5 +12,6 @@
         public string AnnouncedTournamentsCollectionName { get; set; } = null!;
         public string PlayersTournamentsCollectionName { get; set; } = null!;
         public string MatchesCollectionName { get; set; } = null!;
+        public string Players_Match_StatsCollectionName { get; set; } = null!;
     }
 }

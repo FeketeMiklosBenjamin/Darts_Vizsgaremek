@@ -12,6 +12,9 @@ namespace Vizsga_Backend.Models.UserStatsModels
         [BsonElement("appeared")]
         public bool Appeared { get; set; }
 
+        [BsonElement("won")]
+        public bool Won { get; set; }
+
         [BsonElement("sets_won")]
         public int SetsWon { get; set; }
 

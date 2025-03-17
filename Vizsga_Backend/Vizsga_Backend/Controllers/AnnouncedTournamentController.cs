@@ -156,7 +156,8 @@ namespace Vizsga_Backend.Controllers
                     BackroundImageUrl = "",
                     TournamentStartDate = datas.MatchDates[0],
                     TournamentEndDate = datas.MatchDates[datas.MatchDates.Count() - 1],
-                    MatchDates = datas.MatchDates
+                    MatchDates = datas.MatchDates,
+                    IsDrawed = false
                 };
 
                 switch (datas.Level)
@@ -411,13 +412,7 @@ namespace Vizsga_Backend.Controllers
 
                 Match newMatch;
 
-                Message successMessage = new Message
-                {
-                    FromId = null,
-                    Title = $"Verseny sorsolása megtörtént - [{matchHeader.Name}]",
-                    Text = $"Kedves Felhasználó!\r\n\r\nA(z) {matchHeader.Name} verseny sorsolása megtörtént\r\n\r\nA sorsolás végeredményét, a mérkőzés időpontját és ellenfelét is megtudja nézni a ... oldalunkon.\r\n\r\nÜdvözlettel,\r\nAdmin",
-                    SendDate = DateTime.UtcNow
-                };
+                Message successMessage;
 
                 do
                 {
@@ -431,15 +426,31 @@ namespace Vizsga_Backend.Controllers
                         PlayerTwoStatId = null
                     };
                     playerOneIndex = random.Next(0, joinedPlayers.Count());
-                    newMatch.PlayerOneId = joinedPlayers[playerOneIndex].Id;
+                    newMatch.PlayerOneId = joinedPlayers[playerOneIndex].UserId;
                     joinedPlayers.RemoveAt(playerOneIndex);
+
+                    successMessage = new Message
+                    {
+                        FromId = null,
+                        Title = $"Verseny sorsolása megtörtént - [{matchHeader.Name}]",
+                        Text = $"Kedves Felhasználó!\r\n\r\nA(z) {matchHeader.Name} verseny sorsolása megtörtént\r\n\r\nA sorsolás végeredményét, a mérkőzés időpontját és ellenfelét is megtudja nézni a ... oldalunkon.\r\n\r\nÜdvözlettel,\r\nAdmin",
+                        SendDate = DateTime.UtcNow
+                    };
 
                     successMessage.ToId = newMatch.PlayerOneId;
                     await _messageService.CreateAsync(successMessage);
 
                     playerTwoIndex = random.Next(0, joinedPlayers.Count());
-                    newMatch.PlayerTwoId = joinedPlayers[playerTwoIndex].Id;
+                    newMatch.PlayerTwoId = joinedPlayers[playerTwoIndex].UserId;
                     joinedPlayers.RemoveAt(playerTwoIndex);
+
+                    successMessage = new Message
+                    {
+                        FromId = null,
+                        Title = $"Verseny sorsolása megtörtént - [{matchHeader.Name}]",
+                        Text = $"Kedves Felhasználó!\r\n\r\nA(z) {matchHeader.Name} verseny sorsolása megtörtént\r\n\r\nA sorsolás végeredményét, a mérkőzés időpontját és ellenfelét is megtudja nézni a ... oldalunkon.\r\n\r\nÜdvözlettel,\r\nAdmin",
+                        SendDate = DateTime.UtcNow
+                    };
 
                     successMessage.ToId = newMatch.PlayerTwoId;
                     await _messageService.CreateAsync(successMessage);
@@ -453,6 +464,8 @@ namespace Vizsga_Backend.Controllers
                 while (joinedPlayers.Count() != 0);
 
                 await _service.DeleteAllRegisterAndTournamentAsync(tournamentId);
+
+                await _matchHeaderService.SetDrawedAsync(matchHeader.Id);
 
                 return NoContent();
 

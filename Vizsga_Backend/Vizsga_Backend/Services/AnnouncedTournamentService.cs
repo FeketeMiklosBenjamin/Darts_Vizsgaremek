@@ -65,7 +65,7 @@ namespace Vizsga_Backend.Services
             return results;
         }
 
-        public async Task<AnnouncedTournament> GetAnnouncedTournamentByIdAsync(string tournamentId)
+        public async Task<AnnouncedTournament?> GetAnnouncedTournamentByIdAsync(string tournamentId)
         {
             return await _announcedTournamentCollection.Find(x => x.Id == tournamentId).FirstOrDefaultAsync();
         }

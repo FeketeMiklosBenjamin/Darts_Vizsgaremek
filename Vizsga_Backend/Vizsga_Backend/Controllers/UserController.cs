@@ -269,6 +269,7 @@ namespace VizsgaBackend.Controllers
                     LegsWon = 0,
                     TournamentsWon = 0,
                     DartsPoints = 0,
+                    Level = "Amateur",
                     Averages = 0,
                     Max180s = 0,
                     CheckoutPercentage = 0,
@@ -286,13 +287,14 @@ namespace VizsgaBackend.Controllers
                 await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
 
                 // Válasz küldése a sikeres regisztrációról, az új entitással
-                return CreatedAtAction(nameof(GetById),new { id = registerUser.Id}, new { 
-                    message = "Sikeres regisztráció.", 
+                return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, new {
+                    message = "Sikeres regisztráció.",
                     id = registerUser.Id,
                     username = registerUser.Username,
                     emailAddress = registerUser.EmailAddress,
                     profilePictureUrl = registerUser.ProfilePicture,
-                    dartsPoints = 0,
+                    dartsPoints = userTournamentStat.DartsPoints,
+                    level = userTournamentStat.Level,
                     role = registerUser.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen
@@ -377,6 +379,7 @@ namespace VizsgaBackend.Controllers
                     emailAddress = user.EmailAddress,
                     profilePictureUrl = user.ProfilePicture,
                     dartsPoints = userTournamentStats != null ? userTournamentStats.DartsPoints : null,
+                    level = userTournamentStats != null ? userTournamentStats.Level : null,
                     role = user.Role,
                     accessToken = accessTokenGen,
                     refreshToken = refreshTokenGen

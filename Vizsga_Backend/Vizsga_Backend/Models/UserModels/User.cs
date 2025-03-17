@@ -29,7 +29,6 @@ namespace Vizsga_Backend.Models.UserModels
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime RegisterDate { get; set; }
 
-        // Több refresh tokent tároló lista
         [BsonElement("refresh_tokens")]
         public List<string> RefreshTokens { get; set; } = new List<string>();
 

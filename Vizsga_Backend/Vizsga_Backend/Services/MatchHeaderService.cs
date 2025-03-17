@@ -1,9 +1,11 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
 using Vizsga_Backend.Models.MatchModels;
+using Vizsga_Backend.Models.TournamentModels;
 using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
@@ -78,5 +80,210 @@ namespace Vizsga_Backend.Services
         {
             await _matchHeaderCollection.DeleteOneAsync(x => x.Id == matchHeaderId);
         }
+
+        public async Task SetDrawedAsync(string matchHeaderId)
+        {
+            var filter = Builders<MatchHeader>.Filter.Eq(u => u.Id, matchHeaderId);
+            var update = Builders<MatchHeader>.Update.Set(u => u.IsDrawed, true);
+
+            await _matchHeaderCollection.UpdateOneAsync(filter, update);
+        }
+
+        public async Task<List<MatchHeader>> GetAllDrawedTournamentAsync()
+        {
+            return await _matchHeaderCollection.Find(x => x.IsDrawed == true).ToListAsync();
+        }
+
+        public async Task<MatchHeaderWithMatches?> GetTournamentWithMatchesAsync(string matchHeaderId)
+        {
+            var pipeline = new[]
+            {
+                new BsonDocument
+                {
+                    { "$match", new BsonDocument { { "_id", new ObjectId(matchHeaderId) } } }
+                },
+
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "matches" },
+                            { "localField", "_id" },
+                            { "foreignField", "header_id" },
+                            { "as", "matches" }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "matches.player_one_id" },
+                            { "foreignField", "_id" },
+                            { "as", "players_one" }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "matches.player_two_id" },
+                            { "foreignField", "_id" },
+                            { "as", "players_two" }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "player_match_stats" },
+                            { "localField", "matches.player_one_id" },
+                            { "foreignField", "player_id" },
+                            { "as", "player_one_stats" }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "player_match_stats" },
+                            { "localField", "matches.player_two_id" },
+                            { "foreignField", "player_id" },
+                            { "as", "player_two_stats" }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$addFields", new BsonDocument
+                        {
+                            { "matches", new BsonDocument
+                                {
+                                    { "$map", new BsonDocument
+                                        {
+                                            { "input", "$matches" },
+                                            { "as", "match" },
+                                            { "in", new BsonDocument
+                                                {
+                                                    { "_id", "$$match._id" },
+                                                    { "status", "$$match.status" },
+                                                    { "start_date", "$$match.start_date" },
+                                                    { "remaining_player", "$$match.remaining_player" },
+                                                    { "row_number", "$$match.row_number" },
+
+                                                    { "player_one", new BsonDocument
+                                                        {
+                                                            { "$first", new BsonDocument
+                                                                {
+                                                                    { "$filter", new BsonDocument
+                                                                        {
+                                                                            { "input", "$players_one" },
+                                                                            { "as", "user" },
+                                                                            { "cond", new BsonDocument
+                                                                                {
+                                                                                    { "$eq", new BsonArray
+                                                                                        { "$$user._id", "$$match.player_one_id" }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+
+                                                    { "player_two", new BsonDocument
+                                                        {
+                                                            { "$first", new BsonDocument
+                                                                {
+                                                                    { "$filter", new BsonDocument
+                                                                        {
+                                                                            { "input", "$players_two" },
+                                                                            { "as", "user" },
+                                                                            { "cond", new BsonDocument
+                                                                                {
+                                                                                    { "$eq", new BsonArray
+                                                                                        { "$$user._id", "$$match.player_two_id" }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+
+                                                    { "player_one_stat", new BsonDocument
+                                                        {
+                                                            { "$first", new BsonDocument
+                                                                {
+                                                                    { "$filter", new BsonDocument
+                                                                        {
+                                                                            { "input", "$player_one_stats" },
+                                                                            { "as", "stat" },
+                                                                            { "cond", new BsonDocument
+                                                                                {
+                                                                                    { "$eq", new BsonArray
+                                                                                        { "$$stat.player_id", "$$match.player_one_id" }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+
+                                                    { "player_two_stat", new BsonDocument
+                                                        {
+                                                            { "$first", new BsonDocument
+                                                                {
+                                                                    { "$filter", new BsonDocument
+                                                                        {
+                                                                            { "input", "$player_two_stats" },
+                                                                            { "as", "stat" },
+                                                                            { "cond", new BsonDocument
+                                                                                {
+                                                                                    { "$eq", new BsonArray
+                                                                                        { "$$stat.player_id", "$$match.player_two_id" }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                new BsonDocument { { "$unset", new BsonArray { "players_one", "players_two", "player_one_stats", "player_two_stats" } } }
+            };
+
+            return await _matchHeaderCollection.Aggregate<MatchHeaderWithMatches>(pipeline).FirstOrDefaultAsync();
+        }
+
+
     }
 }

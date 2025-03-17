@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace Vizsga_Backend.Models.MatchModels
 {
-    public class MatchHeader
+    public class MatchHeaderWithMatches
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -48,5 +48,8 @@ namespace Vizsga_Backend.Models.MatchModels
 
         [BsonElement("is_drawed")]
         public bool IsDrawed { get; set; }
+
+        [BsonElement("matches")]
+        public List<MatchWithPlayers> Matches { get; set; } = new List<MatchWithPlayers>();
     }
 }

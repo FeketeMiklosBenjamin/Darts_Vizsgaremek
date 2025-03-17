@@ -79,6 +79,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Vizsga_Backend.Controllers.MatchController",
+    "Method": "GetMatchById",
+    "RelativePath": "api/matches/{matchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Vizsga_Backend.Controllers.MessageController",
     "Method": "GetMessagesAsync",
     "RelativePath": "api/messages",
@@ -152,6 +168,32 @@
       {
         "Name": "request",
         "Type": "Vizsga_Backend.Models.UserModels.RefreshTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.TournamentController",
+    "Method": "GetAllTournamentHeader",
+    "RelativePath": "api/tournaments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.TournamentController",
+    "Method": "GetTournamentWithMatches",
+    "RelativePath": "api/tournaments/{matchHeaderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchHeaderId",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
