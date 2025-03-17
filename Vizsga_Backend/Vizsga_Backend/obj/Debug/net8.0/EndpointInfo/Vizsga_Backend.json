@@ -110,6 +110,50 @@
         }
       }
     },
+    "/api/announced_tournaments/draw/{tournamentId}": {
+      "delete": {
+        "tags": [
+          "AnnouncedTournament"
+        ],
+        "parameters": [
+          {
+            "name": "tournamentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/matches/{matchId}": {
+      "get": {
+        "tags": [
+          "Match"
+        ],
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/messages": {
       "get": {
         "tags": [
@@ -240,6 +284,40 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tournaments": {
+      "get": {
+        "tags": [
+          "Tournament"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tournaments/{matchHeaderId}": {
+      "get": {
+        "tags": [
+          "Tournament"
+        ],
+        "parameters": [
+          {
+            "name": "matchHeaderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -799,14 +877,12 @@
             "format": "date-time",
             "nullable": true
           },
-          "tournamentStartDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tournamentEndDate": {
-            "type": "string",
-            "format": "date-time",
+          "matchDates": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
             "nullable": true
           }
         },
@@ -983,6 +1059,10 @@
           "dartsPoints": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "level": {
+            "type": "string",
             "nullable": true
           },
           "averages": {

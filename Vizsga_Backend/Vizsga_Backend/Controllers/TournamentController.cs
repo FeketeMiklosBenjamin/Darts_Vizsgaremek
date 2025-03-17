@@ -17,7 +17,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetAllTournamentHeader()
         {
             try
@@ -42,7 +42,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet("{matchHeaderId}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetTournamentWithMatches(string matchHeaderId)
         {
             try

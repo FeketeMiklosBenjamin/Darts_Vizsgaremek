@@ -86,15 +86,22 @@ namespace Vizsga_Backend.Services
                         {
                             { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one", 0 } } } },
                             { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two", 0 } } } },
-                            { "player_one_stat", new BsonDocument { { "$ifNull", new BsonArray { new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat", 0 } } }, BsonNull.Value } } } },
-                            { "player_two_stat", new BsonDocument { { "$ifNull", new BsonArray { new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat", 0 } } }, BsonNull.Value } } } }
+                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat", 0 } } } },
+                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat", 0 } } } }
                         }
                     }
+                },
+
+                new BsonDocument
+                {
+                    { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_stat_id", "player_two_stat_id" } }
                 }
             };
 
             return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).FirstOrDefaultAsync();
         }
+
+
 
 
     }
