@@ -34,8 +34,6 @@ async function onSend() {
     } catch (err) { }
     processing.value = false;
     modalInstance.show();
-    status.resp = '';
-
 }
 
 

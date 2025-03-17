@@ -18,6 +18,7 @@ export const useMessagesStore = defineStore('messagesStore', {
                     this.status.resp = 'Sikeresen elküldte az üzenetet!'
                 })
                 .catch((err) => {
+                    this.status.success = false;
                     this.status.resp = err.data.message;
                     return Promise.reject(err);
                 })

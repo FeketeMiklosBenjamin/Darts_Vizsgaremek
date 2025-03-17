@@ -78,7 +78,8 @@ function SetUser(res: any) {
         role: res.data.role,
         refreshToken: res.data.refreshToken,
         accessToken: res.data.accessToken,
-        profilePictureUrl: res.data.profilePictureUrl
+        profilePictureUrl: res.data.profilePictureUrl,
+        level: res.data.level
     }
 
     return incomingUser;
@@ -91,5 +92,6 @@ const defaultUser: UserModel = {
     role: 0,
     refreshToken: '',
     accessToken: '',
-    profilePictureUrl: ''
+    profilePictureUrl: '',
+    level: ''
 };

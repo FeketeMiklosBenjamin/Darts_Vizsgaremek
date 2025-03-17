@@ -3,7 +3,8 @@ export default interface UserModel {
     username: string,
     emailAddress: string,
     profilePictureUrl: string,
-    role: number
+    role: number,
     accessToken: string,
     refreshToken: string,
+    level: string
 }

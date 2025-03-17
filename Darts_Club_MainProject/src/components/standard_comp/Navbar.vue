@@ -51,7 +51,7 @@ onUnmounted(() => {
                         </router-link>
                     </li>
                     <li class="nav-item rounded-circle border border-3"
-                        :class="status._id ? 'bg-secondary border-danger' : 'bg-white border-info px-1'">
+                        :class="user.level == 'Amateur' ? 'bg-secondary border-success' : 'bg-white border-info px-1' ">
                         <img v-if="status._id" :src="user.profilePictureUrl" class="profileImg border-0 mx-auto d-block" alt="Nincs">
                         <i v-else class="bi bi-person"></i>
                     </li>
