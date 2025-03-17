@@ -5,7 +5,7 @@ using Vizsga_Backend.Services;
 
 namespace Vizsga_Backend.Controllers
 {
-    [Route("api/matches")]
+    [Route("api/matches/")]
     [ApiController]
     public class MatchController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet("{matchId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetMatchById(string matchId)
         {
             try

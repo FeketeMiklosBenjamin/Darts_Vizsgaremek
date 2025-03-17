@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Services;
 
 namespace Vizsga_Backend.Controllers
@@ -17,7 +18,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllTournamentHeader()
         {
             try
@@ -42,7 +43,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet("{matchHeaderId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetTournamentWithMatches(string matchHeaderId)
         {
             try
@@ -86,7 +87,9 @@ namespace Vizsga_Backend.Controllers
                             match.PlayerTwo!.Id,
                             match.PlayerTwo.Username
                         },
-                        match.PlayerOneStat?.Won
+                        match.PlayerOneStat?.Won,
+                        playerOneResult = match.PlayerOneStat?.SetsWon == null ? match.PlayerOneStat?.LegsWon : match.PlayerOneStat?.SetsWon,
+                        playerTwoResult = match.PlayerTwoStat?.SetsWon == null ? match.PlayerTwoStat?.LegsWon : match.PlayerTwoStat?.SetsWon,
                     })
 
                 };

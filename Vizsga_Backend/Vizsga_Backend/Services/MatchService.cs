@@ -101,8 +101,132 @@ namespace Vizsga_Backend.Services
             return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).FirstOrDefaultAsync();
         }
 
+        public async Task<MatchWithPlayers?> GetUserUpcomingMatchAsync(string userId)
+        {
+            var userObjectId = new ObjectId(userId);
 
+            var pipeline = new[]
+            {
+                new BsonDocument
+                {
+                    { "$match", new BsonDocument
+                        {
+                            { "$or", new BsonArray
+                                {
+                                    new BsonDocument { { "player_one_id", userObjectId } },
+                                    new BsonDocument { { "player_two_id", userObjectId } }
+                                }
+                            },
+                            { "start_date", new BsonDocument { { "$gt", DateTime.UtcNow } } },
+                            { "status", new BsonDocument { { "$ne", "Finished" } } }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$sort", new BsonDocument { { "start_date", 1 } } }
+                },
+                new BsonDocument
+                {
+                    { "$limit", 1 }
+                },
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "player_one_id" },
+                            { "foreignField", "_id" },
+                            { "as", "player_one_info" }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "player_two_id" },
+                            { "foreignField", "_id" },
+                            { "as", "player_two_info" }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$addFields", new BsonDocument
+                        {
+                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
+                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } }
+                        }
+                    }
+                }
+            };
+            return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).FirstOrDefaultAsync();
+        }
 
+        public async Task<List<MatchWithPlayers>> GetUserLastMatchesAsync(string userId, int matchesCount)
+        {
+            var userObjectId = new ObjectId(userId);
 
+            var pipeline = new[]
+            {
+                new BsonDocument
+                {
+                    { "$match", new BsonDocument
+                        {
+                            { "$or", new BsonArray
+                                {
+                                    new BsonDocument { { "player_one_id", userObjectId } },
+                                    new BsonDocument { { "player_two_id", userObjectId } }
+                                }
+                            },
+                            { "status", "Finished" }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$sort", new BsonDocument { { "start_date", -1 } } }
+                },
+                new BsonDocument
+                {
+                    { "$limit", matchesCount }
+                },
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "player_one_id" },
+                            { "foreignField", "_id" },
+                            { "as", "player_one_info" }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "users" },
+                            { "localField", "player_two_id" },
+                            { "foreignField", "_id" },
+                            { "as", "player_two_info" }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$addFields", new BsonDocument
+                        {
+                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
+                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } }
+                        }
+                    }
+                }
+            };
+
+            return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).ToListAsync();
+        }
     }
 }

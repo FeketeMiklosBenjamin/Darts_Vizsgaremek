@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Models.UserStatsModels;
+using Vizsga_Backend.Services;
 using VizsgaBackend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,14 +25,16 @@ namespace VizsgaBackend.Controllers
         private readonly UserService _service;
         private readonly UsersFriendlyStatService _userFriendlyStatService;
         private readonly UsersTournamentStatService _userTournamentStatService;
+        private readonly MatchService _matchService;
         private readonly JwtService _jwtService;
         private readonly Cloudinary _cloudinary;
 
-        public UserController(UserService service, UsersFriendlyStatService userFriendlyStatService, UsersTournamentStatService userTournamentStatService, JwtService jwtService, Cloudinary cloudinary)
+        public UserController(UserService service, UsersFriendlyStatService userFriendlyStatService, UsersTournamentStatService userTournamentStatService, MatchService matchService, JwtService jwtService, Cloudinary cloudinary)
         {
             _service = service;
             _userFriendlyStatService = userFriendlyStatService;
             _userTournamentStatService = userTournamentStatService;
+            _matchService = matchService;
             _jwtService = jwtService;
             _cloudinary = cloudinary;
         }
@@ -586,6 +589,70 @@ namespace VizsgaBackend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, new { message = "A feltöltés során hiba történt." });
+            }
+        }
+
+        [HttpGet("{userId}/lastmatches")]
+        //[Authorize]
+        public async Task<IActionResult> GetUserLastMatches(string userId)
+        {
+            try
+            {
+                var user = await _service.GetByIdAsync(userId);
+                if (user == null)
+                    return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
+
+                int previousMatchesCount = 2;
+
+                var matchUpcomming = await _matchService.GetUserUpcomingMatchAsync(userId);
+
+                if (matchUpcomming == null)
+                {
+                    previousMatchesCount = 3;
+                }
+
+                var previousMatches = await _matchService.GetUserLastMatchesAsync(userId, previousMatchesCount);
+
+                if (matchUpcomming != null && previousMatches.Count != 0)
+                {
+                    var result = new
+                    {
+
+                    };
+
+                    return Ok(result);
+                }
+                if (matchUpcomming == null && previousMatches.Count != 0)
+                {
+                    var result = new
+                    {
+
+                    };
+
+                    return Ok(result);
+                }
+                if (matchUpcomming != null && previousMatches.Count == 0)
+                {
+                    var result = new
+                    {
+
+                    };
+
+                    return Ok(result);
+                }
+                else
+                {
+                    var result = new
+                    {
+
+                    };
+
+                    return Ok(result);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A lekérés során hiba történt." });
             }
         }
 

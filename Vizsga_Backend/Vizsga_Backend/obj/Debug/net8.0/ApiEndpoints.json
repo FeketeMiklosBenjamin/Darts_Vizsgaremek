@@ -232,6 +232,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Vizsga_Backend.Controllers.MatchController",
+    "Method": "GetUserLast3Matches",
+    "RelativePath": "api/users/{userId}/last3matches",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
     "Method": "Get",
     "RelativePath": "api/users/all",
