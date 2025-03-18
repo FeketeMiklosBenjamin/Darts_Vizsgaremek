@@ -221,7 +221,7 @@ body{
 }
 
 .statistic-img {
-    margin: 12vh 8vw 2vh 8vw;
+    margin: 10vh 8vw 2vh 8vw;
     width: 309px;
     height: 309px;
 }
@@ -241,7 +241,8 @@ body{
 }
 
 .marginst-btn {
-    margin-left: 11vw;
+    margin: 2vh 11vw;
+    width: 10vw;
 }
 
 .modal-content {
@@ -249,6 +250,38 @@ body{
     font-size: 105%;
 }
 
-.border-yellow {
-    color: yellow;
+
+.statistic-box{
+    margin: 6vh 1vw;
+    width: 60vw;
+    min-height: 55vh;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid black;
+    border-radius: 2vh;
+}
+
+.statistic-line-margin-ver {
+    margin: 0vh 30vw;
+}
+
+.statistic-tline-margin-hor {
+    margin: 5vh 0vw;
+}
+
+.statistic-bline-margin-hor {
+    margin: 50vh 0vw;
+}
+
+.statistic-line-horizontal {
+    width: 0.060vw;
+    height: 55vh;
+    background-color: rgba(0,0,0);
+    position: absolute;
+}
+
+.statistic-line-vertical {
+    width: 60vw;
+    height: 0.06vh;
+    background-color: rgba(0,0,0);
+    position: absolute;
 }
