@@ -17,7 +17,7 @@ namespace Vizsga_Backend.Controllers
         }
 
         [HttpGet("{matchId}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetMatchById(string matchId)
         {
             try

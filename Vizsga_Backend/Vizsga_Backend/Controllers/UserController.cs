@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Models.UserStatsModels;
 using Vizsga_Backend.Services;
@@ -593,7 +595,7 @@ namespace VizsgaBackend.Controllers
         }
 
         [HttpGet("{userId}/lastmatches")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetUserLastMatches(string userId)
         {
             try
@@ -604,51 +606,66 @@ namespace VizsgaBackend.Controllers
 
                 int previousMatchesCount = 2;
 
+                List<MatchToCard> AllMatchesResult = new List<MatchToCard>();
+
+                MatchToCard? matchUpcommingResult = null;
+
                 var matchUpcomming = await _matchService.GetUserUpcomingMatchAsync(userId);
 
                 if (matchUpcomming == null)
                 {
                     previousMatchesCount = 3;
                 }
+                else
+                {
+                    matchUpcommingResult = new MatchToCard
+                    (
+                        matchUpcomming.Id,
+                        matchUpcomming.HeaderId,
+                        matchUpcomming.Status,
+                        TimeZoneInfo.ConvertTimeFromUtc((DateTime)matchUpcomming.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        matchUpcomming.PlayerOne!.Username,
+                        matchUpcomming.PlayerTwo!.Username,
+                        null,
+                        null,
+                        null
+                    );
+
+                    AllMatchesResult.Add(matchUpcommingResult);
+                }
 
                 var previousMatches = await _matchService.GetUserLastMatchesAsync(userId, previousMatchesCount);
 
-                if (matchUpcomming != null && previousMatches.Count != 0)
+                foreach ( var match in previousMatches )
                 {
-                    var result = new
+                    bool userWon = false;
+
+                    if (match.PlayerOne!.Id == userId && match.PlayerOneStat!.Won)
                     {
-
-                    };
-
-                    return Ok(result);
-                }
-                if (matchUpcomming == null && previousMatches.Count != 0)
-                {
-                    var result = new
+                        userWon = true;
+                    }
+                    else if (match.PlayerTwo!.Id == userId && match.PlayerTwoStat!.Won)
                     {
+                        userWon = true;
+                    }
 
-                    };
+                    MatchToCard matchResult = new MatchToCard
+                    (
+                        match.Id,
+                        match.HeaderId,
+                        match.Status,
+                        TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        match.PlayerOne!.Username,
+                        match.PlayerTwo!.Username,
+                        match.PlayerOneStat!.SetsWon ?? match.PlayerOneStat.LegsWon,
+                        match.PlayerTwoStat!.SetsWon ?? match.PlayerTwoStat.LegsWon,
+                        userWon
+                    );
 
-                    return Ok(result);
+                    AllMatchesResult.Add(matchResult);
                 }
-                if (matchUpcomming != null && previousMatches.Count == 0)
-                {
-                    var result = new
-                    {
 
-                    };
-
-                    return Ok(result);
-                }
-                else
-                {
-                    var result = new
-                    {
-
-                    };
-
-                    return Ok(result);
-                }
+                return Ok(new {matches = AllMatchesResult} );
             }
             catch (Exception)
             {

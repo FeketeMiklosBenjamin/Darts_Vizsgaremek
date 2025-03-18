@@ -16,13 +16,13 @@ namespace Vizsga_Backend.Models.UserStatsModels
         public bool Won { get; set; }
 
         [BsonElement("sets_won")]
-        public int SetsWon { get; set; }
+        public int? SetsWon { get; set; }
 
         [BsonElement("legs_won")]
         public int LegsWon { get; set; }
 
         [BsonElement("averages")]
-        public double Averages { get; set; }
+        public double? Averages { get; set; }
 
         [BsonElement("max180s")]
         public int? Max180s { get; set; }
