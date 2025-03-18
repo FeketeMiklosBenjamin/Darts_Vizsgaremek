@@ -14,3 +14,6 @@ https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api
 
 ## Frontend Link
 https://darts-vizsgaremek.vercel.app
+
+## Hexadecimális átlátszóság
+https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
