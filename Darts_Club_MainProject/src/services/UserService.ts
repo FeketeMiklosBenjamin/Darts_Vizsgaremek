@@ -39,7 +39,7 @@ export default {
                 return Promise.reject()
             })
     },
-    modifyUser(data: ModifyModel, accesstoken: string) {
+    modifyUser(data: ModifyModel, accesstoken: string) {      
         return User_Endpoint.put('/', data, { 
             headers: {
                 Authorization: `Bearer ${accesstoken}`,

@@ -18,6 +18,7 @@ const registerform = ref<RegisterModel>({
     username: '',
     emailAddress: '',
     password: '',
+    secondPassword: ''
 });
 
 const handleFileChange = (event: Event) => {

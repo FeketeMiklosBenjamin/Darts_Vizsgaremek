@@ -31,8 +31,13 @@ export const useUserStore = defineStore('userStore', {
         modify(data: ModifyModel, accessToken: string) {
             return UserService.modifyUser(data, accessToken)
                 .then((res) => {
-                    this.user = SetUser(res);
+                    if (data.username != '') {
+                        this.user.username = data.username;
+                    } if (data.emailAddress != '') {
+                        this.user.emailAddress = data.emailAddress;  
+                    } 
                     sessionStorage.setItem('user', JSON.stringify(this.user));
+                    
                 })
                 .catch((err) => {
                     this.status.message = err.data.message;

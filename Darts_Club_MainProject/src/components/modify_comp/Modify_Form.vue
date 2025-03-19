@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 const { uploadimage, modify, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
+let IsModifiedData = true;
 
 const profileImage = ref<File | null>(null);
 
@@ -42,16 +43,31 @@ async function onModify() {
         return;
     }
 
-    try {
-        const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
-        await modify(modifyform.value, accessToken);
-
-        if (profileImage.value) {
-            await uploadimage(profileImage.value, accessToken);
-        }
-    } catch (err) {
-        processing.value = false;
+    if (modifyform.value.emailAddress == '' &&
+        modifyform.value.username == '' &&
+        modifyform.value.newPassword == '') {
+        IsModifiedData = false;
     }
+
+    if (!IsModifiedData && !profileImage.value) {
+        status.message = "Kötelező legalább egy mezőt módosítani!";
+    }
+    
+    const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
+    if (IsModifiedData) {
+        try {
+            await modify(modifyform.value, accessToken);
+
+            router.push('/statistic');
+        } catch (err) { }
+    } 
+    
+    if (profileImage.value) {
+        try {
+            await uploadimage(profileImage.value, accessToken);
+        } catch (error) {}
+    }
+    processing.value = false;
 }
 
 
