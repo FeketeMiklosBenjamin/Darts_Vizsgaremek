@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { status, user } = storeToRefs(useUserStore());
-const { logout } = useUserStore();
+const { logout, refreshTk } = useUserStore();
 const router = useRouter();
+
+const countdownKey = ref(0);
+
+const setAccesTk = async () => {
+    try {
+        await refreshTk();
+        countdownKey.value += 1;
+    } catch (err) {}
+}
 
 const onLogout = async () => {
     try {
@@ -45,7 +55,7 @@ onUnmounted(() => {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2">
-                        <li class="nav-item me-3 mt-2">
+                        <li class="nav-item me-2 mt-2">
                             <router-link :to="status._id ? '/statistic' : '/sign-in'" class="nav-link no-underline">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
@@ -60,13 +70,13 @@ onUnmounted(() => {
                                 class="profileImg border-0 mx-auto d-block" alt="Nincs">
                             <i v-else class="bi bi-person"></i>
                         </li>
-                        <li class="nav-item my-auto ms-3">
-                            <i class="bi bi-gear-fill" :class="status._id ? 'text-secondary' : 'text-white'"></i>
-                        </li>
                         <li v-if="status._id" class="nav-item my-auto ms-4">
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
+                            <VueCountdown v-if="status._id" :key="countdownKey"  :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="setAccesTk">
+                                <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0') }}</span>
+                            </VueCountdown>
                         </li>
                     </ul>
                 </div>

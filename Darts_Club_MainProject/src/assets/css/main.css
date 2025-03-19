@@ -223,13 +223,13 @@ body{
 
 .statistic-img {
     margin: 10vh 8vw 2vh 8vw;
-    width: 309px;
-    height: 309px;
+    width: 19.5vw;
+    height: 40vh;
 }
 
 .statistic-profileImg {
-    width: 300px;
-    height: 300px;
+    width: 19vw;
+    height: 38.75vh;
     border-radius: 100%;
 }
 

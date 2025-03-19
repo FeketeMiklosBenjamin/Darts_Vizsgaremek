@@ -10,7 +10,7 @@ const { status, user } = storeToRefs(useUserStore());
   <div class="background-color-view">
     <div class="row">
       <div class="col-4 mt-5">
-        <div class="bg-secondary rounded-circle border border-5 statistic-img" :class="{
+        <div class="bg-secondary rounded-circle border border-5 statistic-img mx-auto" :class="{
           'border-success': user.level == 'Amateur',
           'border-warning': user.level == 'Advanced',
           'border-danger': user.level == 'Professional'

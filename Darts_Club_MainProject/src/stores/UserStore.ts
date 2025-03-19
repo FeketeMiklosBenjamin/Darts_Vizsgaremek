@@ -83,6 +83,16 @@ export const useUserStore = defineStore('userStore', {
                 .catch((err) => {
                     return Promise.reject(err);
                 });
+        },
+        refreshTk() {
+            return UserService.refreshToken(this.user.id!, this.user.accessToken!, this.user.refreshToken!)
+                .then((res) => {
+                    this.user.accessToken = res.data.accessToken;
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
         }
     }
 })

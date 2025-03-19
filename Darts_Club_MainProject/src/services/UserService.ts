@@ -1,5 +1,5 @@
 import type RegisterModel from "@/models/RegisterModel";
-import { User_Endpoint } from './BackendService';
+import { User_Endpoint, RefreshTk_Endpoint } from './BackendService';
 import type LoginModel from "@/models/LoginModel";
 import type ModifyModel from "@/models/ModifyModel";
 
@@ -69,5 +69,21 @@ export default {
             .catch((err) => {
                 return Promise.reject(err.response);
             });
+    },
+    refreshToken(id:string, accesstoken: string, refresh: string) {
+        return RefreshTk_Endpoint.post(`/${id}`, {
+            refreshToken: refresh
+        }, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
     }
 }
