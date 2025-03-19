@@ -1,4 +1,5 @@
-﻿using DartsMobilApp.SecureStorageItems;
+﻿using DartsMobilApp.Classes;
+using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,5 +28,28 @@ namespace DartsMobilApp.Network
                 }
                 return null;
             }
+        
+        public static async Task<T> Post(string url, StringContent content)
+        {
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Content = content;
+            using var response = await client.SendAsync(request).ConfigureAwait(false);
+            if(response.IsSuccessStatusCode)
+            {
+                string resultStr = await response.Content.ReadAsStringAsync();
+                T result = JsonSerializer.Deserialize<T>(resultStr);
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
+            
+        }
     }
 }

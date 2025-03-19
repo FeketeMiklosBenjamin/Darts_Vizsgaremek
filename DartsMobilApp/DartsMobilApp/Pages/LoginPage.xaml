@@ -21,7 +21,7 @@
                 <CheckBox x:Name="AutomaticLgn_Cbx" Color="White"/>
                 <Label Text="Automatikus bejelentkezés" VerticalTextAlignment="Center"/>
             </HorizontalStackLayout>
-            <Button Grid.Row="4"  Text="Bejelentkezés" WidthRequest="150" HeightRequest="40" Command="{Binding GoToHomePageCommand}"/>
+            <Button Grid.Row="4" BackgroundColor="{x:StaticResource BlueButtons}"  Text="Bejelentkezés" WidthRequest="150" HeightRequest="40" Command="{Binding GoToHomePageCommand}"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

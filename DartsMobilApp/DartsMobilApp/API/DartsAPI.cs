@@ -25,5 +25,18 @@ namespace DartsMobilApp.API
                 throw;
             }
         }
+        public static LoginResponse PostLogin(StringContent loginModel)
+        {
+            try
+            {
+                return HTTPCommunication<LoginResponse>.Post("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/login", loginModel).Result;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

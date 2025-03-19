@@ -44,7 +44,7 @@ namespace DartsMobilApp.ViewModel
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please enter both username and password", "OK");
+                await Application.Current.MainPage.DisplayAlert("Hiba!", "A bejelentkezés nem lehetséges! Az email és a jelszó mező kitöltése kötelező!", "OK");
                 
             }
 
@@ -52,8 +52,7 @@ namespace DartsMobilApp.ViewModel
 
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
-                // Handle successful login (e.g., navigate to the main page)
-                await Application.Current.MainPage.DisplayAlert("Success", "Login successful", "OK");
+                await Application.Current.MainPage.DisplayAlert("Sikeresen Bejelntkezett" , $"{loginResponse.message}", "OK");
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
@@ -61,8 +60,7 @@ namespace DartsMobilApp.ViewModel
             }
             else
             {
-                // Handle failed login
-                await Application.Current.MainPage.DisplayAlert("Error", loginResponse.message, "OK");
+                await Application.Current.MainPage.DisplayAlert("Hiba!", loginResponse.message, "OK");
             }
 
 
