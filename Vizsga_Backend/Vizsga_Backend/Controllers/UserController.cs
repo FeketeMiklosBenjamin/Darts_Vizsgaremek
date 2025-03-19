@@ -471,7 +471,7 @@ namespace VizsgaBackend.Controllers
                 {
                     if (modifyUser.NewPassword.Length > 8)
                     {
-                        updates.Add(updateDefinitionBuilder.Set(u => u.Password, modifyUser.Password = BCrypt.Net.BCrypt.HashPassword(modifyUser.Password)));
+                        updates.Add(updateDefinitionBuilder.Set(u => u.Password, BCrypt.Net.BCrypt.HashPassword(modifyUser.NewPassword)));
                     }
                     else
                     {
@@ -487,7 +487,10 @@ namespace VizsgaBackend.Controllers
                         {
                             updates.Add(updateDefinitionBuilder.Set(u => u.EmailAddress, modifyUser.EmailAddress));
                         }
-                        return BadRequest(new { message = "Az email cím már foglalt." });
+                        else
+                        {
+                            return BadRequest(new { message = "Az email cím már foglalt." });
+                        }
                     }
                     else
                     {
