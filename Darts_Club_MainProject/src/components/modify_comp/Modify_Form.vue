@@ -2,15 +2,21 @@
 import type ModifyModel from '@/models/ModifyModel';
 import type RegisterModel from '@/models/RegisterModel';
 import { useUserStore } from '@/stores/UserStore';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { uploadimage, modify, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
-let IsModifiedData = true;
+let IsModifiedData: boolean = true;
 
 const profileImage = ref<File | null>(null);
+
+const isFormModified = computed(() => 
+    modifyform.value.username || 
+    modifyform.value.emailAddress || 
+    modifyform.value.newPassword
+);
 
 onMounted(() => {
     status.message = '';
@@ -43,29 +49,23 @@ async function onModify() {
         return;
     }
 
-    if (modifyform.value.emailAddress == '' &&
-        modifyform.value.username == '' &&
-        modifyform.value.newPassword == '') {
-        IsModifiedData = false;
-    }
-
-    if (!IsModifiedData && !profileImage.value) {
+    if (!isFormModified.value && !profileImage.value) {
         status.message = "Kötelező legalább egy mezőt módosítani!";
+        processing.value = false;
+        return;
     }
-    
-    const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
-    if (IsModifiedData) {
-        try {
-            await modify(modifyform.value, accessToken);
 
+    const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
+    try {
+        if (isFormModified.value) {
+            await modify(modifyform.value, accessToken);
             router.push('/statistic');
-        } catch (err) { }
-    } 
-    
-    if (profileImage.value) {
-        try {
+        }
+        if (profileImage.value) {
             await uploadimage(profileImage.value, accessToken);
-        } catch (error) {}
+        }
+    } catch (err) {
+        status.message = "Hiba történt a módosítás során!";
     }
     processing.value = false;
 }
@@ -74,9 +74,8 @@ async function onModify() {
 </script>
 
 <template>
-    <div class="background-color-view">
         <div class="position-rel">
-            <div class="container z-1 transform align-items-center glass-card opacity width p-2 px-3">
+            <div class="container z-1 transform align-items-center glass-card opacity width p-2 px-3 mt-4">
                 <div class="row">
                     <div class="col-12 mb-2">
                         <h1 class="text-center display-4 text-light">Módosítás</h1>
@@ -123,7 +122,7 @@ async function onModify() {
                             </div>
 
                             <div class="my-2">
-                                <button type="submit" class="btn btn-success w-100 py-2">Módosít
+                                <button type="submit" class="btn btn-green w-100 py-2">Módosít
                                     <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                                 </button>
                             </div>
@@ -134,7 +133,6 @@ async function onModify() {
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped></style>

@@ -288,4 +288,12 @@ body{
     position: absolute;
 }
 
+.btn-green {
+    background-color: rgba(17, 232, 31, 0.760);
+}
+
+.btn-green:hover {
+    background-color: rgba(17, 232, 31, 0.760);
+}
+
 
