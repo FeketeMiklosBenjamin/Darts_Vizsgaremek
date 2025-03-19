@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DartsMobilApp.Pages;
 using Microsoft.Maui.Platform;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,14 @@ namespace DartsMobilApp.ViewModel
                 BTN.BackgroundColor = defaultColor;            
         }
 
-
         [RelayCommand]
 
         private async void Navigate()
         {
-
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            });
         }
     }
 }

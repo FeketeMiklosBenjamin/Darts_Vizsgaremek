@@ -22,6 +22,7 @@ namespace DartsMobilApp.Classes
         public float checkoutPercentage { get; set; }
         public int highestCheckout { get; set; }
         public int nineDarter { get; set; }
+
     }
 
 }
