@@ -82,26 +82,39 @@ namespace Vizsga_Backend.Services
 
                 new BsonDocument
                 {
-                    { "$addFields", new BsonDocument
+                    { "$lookup", new BsonDocument
                         {
-                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one", 0 } } } },
-                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two", 0 } } } },
-                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat", 0 } } } },
-                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat", 0 } } } }
+                            { "from", "match_headers" },
+                            { "localField", "header_id" },
+                            { "foreignField", "_id" },
+                            { "as", "header" }
                         }
                     }
                 },
 
                 new BsonDocument
                 {
-                    { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_stat_id", "player_two_stat_id" } }
+                    { "$addFields", new BsonDocument
+                        {
+                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one", 0 } } } },
+                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two", 0 } } } },
+                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat", 0 } } } },
+                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat", 0 } } } },
+                            { "header", new BsonDocument { { "$arrayElemAt", new BsonArray { "$header", 0 } } } }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_stat_id", "player_two_stat_id", "header_id" } }
                 }
             };
 
             return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).FirstOrDefaultAsync();
         }
 
-        public async Task<MatchWithPlayers?> GetUserUpcomingMatchAsync(string userId)
+        public async Task<List<MatchWithPlayers>?> GetUserUpcomingMatchesAsync(string userId, int? matchesCount)
         {
             var userObjectId = new ObjectId(userId);
 
@@ -117,7 +130,6 @@ namespace Vizsga_Backend.Services
                                     new BsonDocument { { "player_two_id", userObjectId } }
                                 }
                             },
-                            { "start_date", new BsonDocument { { "$gt", DateTime.UtcNow } } },
                             { "status", new BsonDocument { { "$ne", "Finished" } } }
                         }
                     }
@@ -126,13 +138,19 @@ namespace Vizsga_Backend.Services
                 new BsonDocument
                 {
                     { "$sort", new BsonDocument { { "start_date", 1 } } }
-                },
+                }
+            };
 
-                new BsonDocument
+            if (matchesCount.HasValue)
+            {
+                pipeline.Add(new BsonDocument
                 {
-                    { "$limit", 1 }
-                },
+                    { "$limit", matchesCount.Value }
+                });
+            }
 
+            pipeline.AddRange(new[]
+            {
                 new BsonDocument
                 {
                     { "$lookup", new BsonDocument
@@ -159,25 +177,49 @@ namespace Vizsga_Backend.Services
 
                 new BsonDocument
                 {
-                    { "$project", new BsonDocument
+                    { "$lookup", new BsonDocument
                         {
-                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
-                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } },
-                            { "start_date", 1 },
-                            { "status", 1 },
-                            { "remaining_player", 1 },
-                            { "row_number", 1 }
+                            { "from", "match_headers" },
+                            { "localField", "header_id" },
+                            { "foreignField", "_id" },
+                            { "as", "header" }
                         }
                     }
                 },
 
                 new BsonDocument
                 {
-                    { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_info", "player_two_info" } }
-                }
-            };
+                    { "$addFields", new BsonDocument
+                        {
+                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
+                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } },
+                            { "header", new BsonDocument { { "$arrayElemAt", new BsonArray { "$header", 0 } } } }
+                        }
+                    }
+                },
 
-            return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).FirstOrDefaultAsync();
+                new BsonDocument
+                {
+                    { "$project", new BsonDocument
+                        {
+                            { "player_one", 1 },
+                            { "player_two", 1 },
+                            { "start_date", 1 },
+                            { "status", 1 },
+                            { "remaining_player", 1 },
+                            { "row_number", 1 },
+                            { "header", 1 }
+                        }
+                    }
+                },
+
+                new BsonDocument
+                {
+                    { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_info", "player_two_info", "header_id" } }
+                }
+            });
+
+            return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).ToListAsync();
         }
 
         public async Task<List<MatchWithPlayers>> GetUserLastMatchesAsync(string userId, int matchesCount)
@@ -254,18 +296,30 @@ namespace Vizsga_Backend.Services
                 },
                 new BsonDocument
                 {
-                    { "$addFields", new BsonDocument
+                    { "$lookup", new BsonDocument
                         {
-                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
-                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } },
-                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat_info", 0 } } } },
-                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat_info", 0 } } } }
+                            { "from", "match_headers" },
+                            { "localField", "header_id" },
+                            { "foreignField", "_id" },
+                            { "as", "header" }
                         }
                     }
                 },
                 new BsonDocument
                 {
-                    { "$unset", new BsonArray { "player_one_info", "player_two_info", "player_one_stat_info", "player_two_stat_info" } }
+                    { "$addFields", new BsonDocument
+                        {
+                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
+                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } },
+                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat_info", 0 } } } },
+                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat_info", 0 } } } },
+                            { "header", new BsonDocument { { "$arrayElemAt", new BsonArray { "$header", 0 } } } }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$unset", new BsonArray { "player_one_info", "player_two_info", "player_one_stat_info", "player_two_stat_info", "header_id" } }
                 }
             };
 

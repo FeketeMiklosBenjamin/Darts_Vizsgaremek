@@ -242,7 +242,6 @@ D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\Vizsga_B
 D:\Új\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\ref\Vizsga_Backend.dll
 C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\CloudinaryDotNet.dll
 C:\13A\Vizsga\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Newtonsoft.Json.dll
-D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Vizsga_Backend.staticwebassets.endpoints.json
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\CloudinaryDotNet.dll
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
@@ -254,6 +253,7 @@ D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Newtonsoft.J
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\StackExchange.Redis.dll
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\bin\Debug\net8.0\Vizsga_Backend.staticwebassets.endpoints.json
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\staticwebassets\msbuild.Vizsga_Backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 D:\Darts_Vizsgaremek\Vizsga_Backend\Vizsga_Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

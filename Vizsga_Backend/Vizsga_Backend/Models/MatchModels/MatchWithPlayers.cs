@@ -11,9 +11,8 @@ namespace Vizsga_Backend.Models.MatchModels
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = string.Empty;
 
-        [BsonElement("header_id")]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string HeaderId { get; set; } = string.Empty;
+        [BsonElement("header")]
+        public MatchHeader? Header { get; set; }
 
         [BsonElement("player_one")]
         public User? PlayerOne { get; set; }

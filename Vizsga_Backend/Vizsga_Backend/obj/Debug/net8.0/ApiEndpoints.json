@@ -400,6 +400,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "VizsgaBackend.Controllers.UserController",
+    "Method": "GetUserTournamentMatches",
+    "RelativePath": "api/users/tournament_matches",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
     "Method": "GetAllTournamentStat",
     "RelativePath": "api/users/tournamentstat",

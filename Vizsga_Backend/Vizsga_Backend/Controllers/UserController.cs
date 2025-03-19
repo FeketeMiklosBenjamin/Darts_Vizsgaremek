@@ -610,7 +610,9 @@ namespace VizsgaBackend.Controllers
 
                 MatchToCard? matchUpcommingResult = null;
 
-                var matchUpcomming = await _matchService.GetUserUpcomingMatchAsync(userId);
+                var matchUpcommings = await _matchService.GetUserUpcomingMatchesAsync(userId, 1);
+
+                var matchUpcomming = matchUpcommings == null ? null : matchUpcommings[0];
 
                 if (matchUpcomming == null)
                 {
@@ -621,7 +623,8 @@ namespace VizsgaBackend.Controllers
                     matchUpcommingResult = new MatchToCard
                     (
                         matchUpcomming.Id,
-                        matchUpcomming.HeaderId,
+                        matchUpcomming.Header!.Id,
+                        matchUpcomming.Header.Name,
                         matchUpcomming.Status,
                         TimeZoneInfo.ConvertTimeFromUtc((DateTime)matchUpcomming.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
                         matchUpcomming.PlayerOne!.Username,
@@ -652,7 +655,8 @@ namespace VizsgaBackend.Controllers
                     MatchToCard matchResult = new MatchToCard
                     (
                         match.Id,
-                        match.HeaderId,
+                        match.Header!.Id,
+                        match.Header.Name,
                         match.Status,
                         TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
                         match.PlayerOne!.Username,
@@ -666,6 +670,44 @@ namespace VizsgaBackend.Controllers
                 }
 
                 return Ok(new {matches = AllMatchesResult} );
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "A lekérés során hiba történt." });
+            }
+        }
+
+        [HttpGet("tournament_matches")]
+        [Authorize]
+        public async Task<IActionResult> GetUserTournamentMatches()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (userId == null)
+                {
+                    return Unauthorized(new { message = "Nincs bejelentkezve!" });
+                }
+
+                var matchesUpcomming = await _matchService.GetUserUpcomingMatchesAsync(userId, null);
+
+                if (matchesUpcomming == null)
+                {
+                    return NotFound(new { message = "Nincsen közelgő verseny mérkőzése" });
+                }
+                else
+                {
+                    var result = matchesUpcomming.Select(match => new
+                    {
+                        match.Id,
+                        match.Header!.Name,
+                        match.Header.Level,
+                        startDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        opponentName = match.PlayerOne!.Id != userId ? match.PlayerOne.Username : match.PlayerTwo!.Username,
+                    });
+                    return Ok(result);
+                }
             }
             catch (Exception)
             {
