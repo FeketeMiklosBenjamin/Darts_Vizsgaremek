@@ -10,6 +10,7 @@ import LeaderBoardView from '@/views/LeaderBoardView.vue'
 import SearchProfileView from '@/views/SearchProfileView.vue'
 import StatisticView from '@/views/StatisticView.vue'
 import FeedBackView from '@/views/FeedBackView.vue'
+import Modifyview from '@/views/Modifyview.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
     { 
       path: '/feedback', 
       component: FeedBackView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/modify', 
+      component: Modifyview,
       meta: { requiresAuth: true}
     },
     {

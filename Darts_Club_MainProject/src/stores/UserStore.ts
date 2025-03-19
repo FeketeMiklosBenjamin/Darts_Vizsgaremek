@@ -1,4 +1,5 @@
 import type LoginModel from "@/models/LoginModel"
+import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
 import type UserModel from "@/models/UserModel"
 import UserService from "@/services/UserService"
@@ -21,6 +22,17 @@ export const useUserStore = defineStore('userStore', {
                     sessionStorage.setItem('user', JSON.stringify(this.user));
                     this.status._id = res.data.id;
                     this.status.isLoggedIn = true;
+                })
+                .catch((err) => {
+                    this.status.message = err.data.message;
+                    return Promise.reject(err)
+                })
+        },
+        modify(data: ModifyModel, accessToken: string) {
+            return UserService.modifyUser(data, accessToken)
+                .then((res) => {
+                    this.user = SetUser(res);
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
                 })
                 .catch((err) => {
                     this.status.message = err.data.message;

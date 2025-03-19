@@ -40,7 +40,7 @@ async function onSend() {
 </script>
 
 <template>
-    <div class="background_color-feed">
+    <div class="background-color-view">
         <div class="row">
             <h1 class="display-5 text-center text-white margin-feed">Hibabejelentés</h1>
         </div>

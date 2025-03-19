@@ -1,6 +1,7 @@
 import type RegisterModel from "@/models/RegisterModel";
 import { User_Endpoint } from './BackendService';
 import type LoginModel from "@/models/LoginModel";
+import type ModifyModel from "@/models/ModifyModel";
 
 
 export default {
@@ -37,6 +38,20 @@ export default {
             .catch(() => {
                 return Promise.reject()
             })
+    },
+    modifyUser(data: ModifyModel, accesstoken: string) {
+        return User_Endpoint.put('/', data, { 
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((res) => {
+            return res.data;
+        })
+        .catch((err) => {
+            return Promise.reject(err.response);
+        });
     },
     uploadImage(image: File, accesstoken: string) {
         const formData = new FormData();
