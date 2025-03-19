@@ -14,11 +14,11 @@ namespace DartsMobilApp.ViewModel
 
         [RelayCommand]
 
-        private async void GoToCounter()
+        private async void GoToFriendlySetup()
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}", true);
+                await Shell.Current.GoToAsync($"//{nameof(FriendlySetupPage)}", true);
             });
         }
 

@@ -236,7 +236,8 @@ namespace DartsMobilApp.ViewModel
             {5, "1 D2"},
             {4, "D2"},
             {3, "1 D1"},
-            {2, "D1"}
+            {2, "D1"},
+            {1, "No checkout" }
         };
 
         ObservableCollection<string> impossibleThrows = new ObservableCollection<string>{ "163", "166", "169", "172", "173", "175", "176", "178", "179" };

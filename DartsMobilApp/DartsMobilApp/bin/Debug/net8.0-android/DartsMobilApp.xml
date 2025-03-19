@@ -97,11 +97,11 @@
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePageCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePage"/>.</summary>
         </member>
-        <member name="F:DartsMobilApp.ViewModel.MainViewModel.goToCounterCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.MainViewModel.GoToCounterCommand"/>.</summary>
+        <member name="F:DartsMobilApp.ViewModel.MainViewModel.goToFriendlySetupCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.MainViewModel.GoToFriendlySetupCommand"/>.</summary>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.MainViewModel.GoToCounterCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.MainViewModel.GoToCounter"/>.</summary>
+        <member name="P:DartsMobilApp.ViewModel.MainViewModel.GoToFriendlySetupCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.MainViewModel.GoToFriendlySetup"/>.</summary>
         </member>
         <member name="F:DartsMobilApp.ViewModel.MainViewModel.goToCompetitionPageCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.MainViewModel.GoToCompetitionPageCommand"/>.</summary>
