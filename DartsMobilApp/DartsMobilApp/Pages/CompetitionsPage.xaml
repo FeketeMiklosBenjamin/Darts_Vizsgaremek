@@ -5,7 +5,7 @@
              x:Class="DartsMobilApp.Pages.CompetitionsPage"
              Title="Versenyeink"
              Shell.TabBarBackgroundColor="Transparent"
-             Shell.NavBarIsVisible="False"
+             Shell.NavBarIsVisible="True"   
              BackgroundImageSource="ally_pally.jpg"
              >
   
@@ -21,11 +21,12 @@
                 <DataTemplate>
                     <Border BackgroundColor="#99000000" WidthRequest="300" HeightRequest="100" Margin="0,0,0,20" StrokeShape="RoundRectangle 20,20,20,20">
                             <VerticalStackLayout Margin="0,0,3,0" VerticalOptions="Center" HorizontalOptions="Center">
-                                <Label Text="{Binding Name}" HorizontalOptions="Center" Margin="0,0,0,20" FontAttributes="Bold" FontSize="18"/>
-                            <HorizontalStackLayout Spacing="100" Margin="0,0,0,10">
+                                <Label Text="{Binding ame}" HorizontalOptions="Center" Margin="0,0,0,20" FontAttributes="Bold" FontSize="18"/>
+                            <HorizontalStackLayout Spacing="100" Margin="10,0,0,10">
                                 <VerticalStackLayout>
-                                    <Label Text="{Binding Level}"/>
-                                    <Label Text="{Binding Time, StringFormat='{0:yyyy.MM.dd}'}"/>
+                                    <Label Text="{Binding level, StringFormat='Szint: {0}'}"/>
+                                    <Label Text="{Binding startDate}"/>
+                                    <Label Text="{Binding opponentName, StringFormat='Ellenfél: {0}'}" />
                                 </VerticalStackLayout>
                                 <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"/>
                             </HorizontalStackLayout>

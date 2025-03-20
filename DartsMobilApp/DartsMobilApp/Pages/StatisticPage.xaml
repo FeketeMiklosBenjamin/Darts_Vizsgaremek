@@ -4,7 +4,7 @@
              xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              x:Class="DartsMobilApp.Pages.StatisticPage"
              Shell.TabBarBackgroundColor="Transparent"
-             Shell.NavBarIsVisible="False"
+             Shell.NavBarIsVisible="True"
              Title="StatisticPage"
                  BackgroundImageSource="darts_table.jpg">
     <ContentPage.Behaviors>

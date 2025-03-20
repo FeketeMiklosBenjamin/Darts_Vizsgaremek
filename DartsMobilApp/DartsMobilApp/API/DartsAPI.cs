@@ -38,5 +38,19 @@ namespace DartsMobilApp.API
                 throw;
             }
         }
+
+
+        public static List<MatchModel> GetUserMatches()
+        {
+            try
+            {
+                return HTTPCommunication<List<MatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/tournament_matches")?.Result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

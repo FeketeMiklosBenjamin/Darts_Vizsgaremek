@@ -5,9 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:DartsMobilApp"
     xmlns:pages="clr-namespace:DartsMobilApp.Pages"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="DartsMobilApp">
-    <ShellContent
+    <!--<ShellContent
 Title="Login"
 ContentTemplate="{DataTemplate pages:LoginPage}"
 Route="LoginPage" />
@@ -33,6 +33,48 @@ Route="FriendlySetupPage" />
     Title="Counter"
     ContentTemplate="{DataTemplate pages:CounterPage}"
     Route="CounterPage"/>
-    </TabBar>
+    </TabBar>-->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="150" BackgroundColor="Black">
+                <Label Text="Darts Verseny Levezető" FontSize="25" Margin="5" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+    <FlyoutItem Title="Login" FlyoutItemIsVisible="False">
+        <Tab>
+            <ShellContent Title="Login" ContentTemplate="{DataTemplate pages:LoginPage}" Route="LoginPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Fő oldal">
+        <Tab>
+            <ShellContent Title="Fő oldal" ContentTemplate="{DataTemplate pages:MainPage}" Route="MainPage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Meccs beállítás">
+        <Tab>
+            <ShellContent Title="Meccs beállítás" ContentTemplate="{DataTemplate pages:FriendlySetupPage}" Route="FriendlySetupPage"/>
+        </Tab>
+    </FlyoutItem>
     
+    <FlyoutItem Title="Statisztika">
+        <Tab>
+            <ShellContent Title="Statisztika" ContentTemplate="{DataTemplate pages:StatisticPage}" Route="StatisticPage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Versenyek">
+        <Tab>
+            <ShellContent Title="Versenyek" ContentTemplate="{DataTemplate pages:CompetitionsPage}" Route="CompetitionsPage"/>
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Meccs levezető" FlyoutItemIsVisible="False">
+        <Tab>
+            <ShellContent Title="Meccs levezető" ContentTemplate="{DataTemplate pages:CounterPage}" Route="CounterPage" FlyoutItemIsVisible="False"/>
+        </Tab>
+    </FlyoutItem>
+    
+
+
 </Shell>

@@ -45,3 +45,20 @@
         </Grid>
     </ScrollView>
 </ContentPage>
+
+
+
+<!--using Microsoft.Maui.Essentials;
+
+public class TextToSpeechExample
+{
+    public async Task SpeakText(string text)
+    {
+        // Ellenőrizd, hogy a szöveg nem üres
+        if (!string.IsNullOrEmpty(text))
+        {
+            // A szöveg felolvasása
+            await TextToSpeech.SpeakAsync(text);
+        }
+    }
+}-->
