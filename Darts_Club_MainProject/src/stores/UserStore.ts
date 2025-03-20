@@ -1,4 +1,5 @@
 import type LoginModel from "@/models/LoginModel"
+import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
 import type UserModel from "@/models/UserModel"
 import UserService from "@/services/UserService"
@@ -9,75 +10,71 @@ export const useUserStore = defineStore('userStore', {
         status: {
             message: '',
             _id: JSON.parse(sessionStorage.getItem('user') || '{}')?.id || '',
-            isLoggedIn: !!sessionStorage.getItem('user')
+            isLoggedIn: !!sessionStorage.getItem('user'),
+            timeleft: 900,
+            isMoreThan5Minutes: true
         },
         user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{}
     }),
     actions: {
         register(data: RegisterModel) {
-            return UserService.registerUser(data) 
+            return UserService.registerUser(data)
                 .then((res) => {
-                    this.user = {
-                        id: res.data.id,
-                        username: res.data.username,
-                        password: '',
-                        emailAddress: res.data.emailAddress,
-                        role: res.data.role,
-                        registerDate: '',
-                        refreshToken: res.data.refreshToken,
-                        accessToken: res.data.accessToken,
-                        profilePictureUrl: res.data.profilePictureUrl
-                    };
-                    sessionStorage.setItem('user', JSON.stringify(this.user));                   
-                    this.status._id = res.data.id;
-                    this.status.isLoggedIn = true;
-                })
-                .catch((err) => {
-                    this.user = deleteUser();
-                    this.status.message = err.data.message;
-                    return Promise.reject()
-                })
-        },
-        login(data: LoginModel) {
-            return UserService.loginUser(data)
-                .then((res) => {                  
-                    this.user = {
-                        id: res.data.id,
-                        username: res.data.username,
-                        password: '',
-                        emailAddress: res.data.emailAddress,
-                        role: res.data.role,
-                        registerDate: '',
-                        refreshToken: res.data.refreshToken,
-                        accessToken: res.data.accessToken,
-                        profilePictureUrl: res.data.profilePictureUrl
-                    };
+                    this.user = SetUser(res);
                     sessionStorage.setItem('user', JSON.stringify(this.user));
                     this.status._id = res.data.id;
                     this.status.isLoggedIn = true;
                 })
                 .catch((err) => {
-                    this.user = deleteUser();
                     this.status.message = err.data.message;
-                    return Promise.reject()
+                    return Promise.reject(err)
                 })
         },
-        logout(){
+        modify(data: ModifyModel, accessToken: string) {
+            return UserService.modifyUser(data, accessToken)
+                .then((res) => {
+                    if (data.username != '') {
+                        this.user.username = data.username;
+                    } if (data.emailAddress != '') {
+                        this.user.emailAddress = data.emailAddress;  
+                    } 
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
+                    
+                })
+                .catch((err) => {
+                    this.status.message = err.data.message;
+                    return Promise.reject(err)
+                })
+        },
+        login(data: LoginModel) {
+            return UserService.loginUser(data)
+                .then((res) => {
+                    this.user = SetUser(res);
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
+                    this.status._id = res.data.id;
+                    this.status.isLoggedIn = true;
+                })
+                .catch((err) => {
+                    this.status.message = err.data.message;
+                    return Promise.reject(err)
+                })
+        },
+        logout() {
             return UserService.logoutUser(this.user.accessToken!, this.user.refreshToken!)
-            .then(()=>{                
-                this.user = deleteUser();
-                this.status._id = '';
-                this.status.message = '';
-                this.status.isLoggedIn = false
-                sessionStorage.removeItem('user')
-            })
-            .catch(()=>{
-                this.user = deleteUser();
-                this.status._id = '';
-                this.status.message = '';
-                this.status.isLoggedIn = false;
-                sessionStorage.removeItem('user');
-            })
+                .then(() => {
+                    this.user = defaultUser;
+                    this.status._id = '';
+                    this.status.message = '';
+                    this.status.isLoggedIn = false
+                    sessionStorage.removeItem('user')
+                })
+                .catch(() => {
+                    this.user = defaultUser;
+                    this.status._id = '';
+                    this.status.message = '';
+                    this.status.isLoggedIn = false;
+                    sessionStorage.removeItem('user');
+                })
         },
         uploadimage(image: File, accesstoken: string) {
             return UserService.uploadImage(image, accesstoken)
@@ -88,20 +85,52 @@ export const useUserStore = defineStore('userStore', {
                 .catch((err) => {
                     return Promise.reject(err);
                 });
-        }
+        },
+        refreshTk() {
+            return UserService.refreshToken(this.user.id!, this.user.accessToken!, this.user.refreshToken!)
+                .then((res) => {
+                    this.user.accessToken = res.data.accessToken;
+                    sessionStorage.setItem('user', JSON.stringify(this.user));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
+        },
+        startCountdown() {
+            const interval = setInterval(() => {
+              if (this.status.timeleft > 0) {
+                this.status.timeleft -= 1;
+              } else {
+                clearInterval(interval);
+              }
+              this.status.isMoreThan5Minutes = this.status.timeleft > 300;
+            }, 1000);
+          },
     }
 })
 
-function deleteUser() {
-   const defaultUser = { id: '',
-        username: '',
-        password: '',
-        emailAddress: '',
-        role: 0,
-        registerDate: '',
-        refreshToken: '',
-        refreshTokenExpiry: '',
-        lastLoginDate: ''};
-    
-    return defaultUser;
+function SetUser(res: any) {
+    const incomingUser: UserModel = {
+        id: res.data.id,
+        username: res.data.username,
+        emailAddress: res.data.emailAddress,
+        role: res.data.role,
+        refreshToken: res.data.refreshToken,
+        accessToken: res.data.accessToken,
+        profilePictureUrl: res.data.profilePictureUrl,
+        level: res.data.level
+    }
+
+    return incomingUser;
 }
+
+const defaultUser: UserModel = {
+    id: '',
+    username: '',
+    emailAddress: '',
+    role: 0,
+    refreshToken: '',
+    accessToken: '',
+    profilePictureUrl: '',
+    level: ''
+};

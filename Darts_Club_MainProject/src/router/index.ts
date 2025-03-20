@@ -10,6 +10,7 @@ import LeaderBoardView from '@/views/LeaderBoardView.vue'
 import SearchProfileView from '@/views/SearchProfileView.vue'
 import StatisticView from '@/views/StatisticView.vue'
 import FeedBackView from '@/views/FeedBackView.vue'
+import Modifyview from '@/views/Modifyview.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,18 +60,26 @@ const router = createRouter({
       component: FeedBackView,
       meta: { requiresAuth: true}
     },
+    { 
+      path: '/modify', 
+      component: Modifyview,
+      meta: { requiresAuth: true}
+    },
     {
       path: "/:pathMatch(.*)*",
       component: NotFound
     }
   ],
+  scrollBehavior() {
+    return { top: 0, behavior: 'instant' };
+  }
 })
 
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
 
-  if (to.matched.some(record => record.meta.requiresGuest) && userStore.status.isLoggedIn === true) {
+  if (to.matched.some(record => record.meta.requiresGuest) && userStore.status.isLoggedIn) {
     return next('/main-page');
   } 
   if (to.matched.some(record => record.meta.requiresAuth) && !userStore.status.isLoggedIn) {

@@ -1,6 +1,10 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
+.navbar-nav .nav-link {
+    padding: 0 !important;
+}
+
 .no-underline {
     text-decoration: none;
 }
@@ -14,6 +18,7 @@
 .background-img {
     max-height: 92.25vh;
     width: 210vh;
+    background-attachment: fixed;
 }
 
 .stick {
@@ -71,6 +76,10 @@ body{
     width: 350px;
 }
 
+.width-feedback {
+    width: 250px;
+}
+
 .img {
     height: 100vh;
     width: 210vh;
@@ -90,6 +99,12 @@ body{
 .background_color {
     height: 1550px;
     width: 100%;
+    background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
+}
+
+.background-color-view {
+    height: 100vh;
+    width: 100vw;
     background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
 }
 
@@ -200,4 +215,85 @@ body{
     padding: 20px;
     gap: 300px;
 }
+
+
+.margin-feed {
+    margin-top: 12vh;
+}
+
+.statistic-img {
+    margin: 10vh 8vw 2vh 8vw;
+    width: 19.5vw;
+    height: 40vh;
+}
+
+.statistic-profileImg {
+    width: 19vw;
+    height: 38.75vh;
+    border-radius: 100%;
+}
+
+.margin-statname {
+    margin: 2vh 6vw 2vh 6vw;
+    font-size: 40px;
+    font-style: italic;
+    font-weight: 350;
+    text-shadow: 3px 3px #000000;
+}
+
+.marginst-btn {
+    margin: 2vh 11vw;
+    width: 10vw;
+}
+
+.modal-content {
+    background-color: transparent;
+    font-size: 105%;
+}
+
+
+.statistic-box{
+    margin: 6vh 1vw;
+    width: 60vw;
+    min-height: 55vh;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid black;
+    border-radius: 2vh;
+    position: absolute;
+}
+
+.statistic-line-margin-ver {
+    margin: 0vh 30vw;
+}
+
+.statistic-tline-margin-hor {
+    margin: 5vh 0vw;
+}
+
+.statistic-bline-margin-hor {
+    margin: 45vh 0vw;
+}
+
+.statistic-line-horizontal {
+    width: 0.060vw;
+    height: 55vh;
+    background-color: rgba(0,0,0);
+    position: absolute;
+}
+
+.statistic-line-vertical {
+    width: 60vw;
+    height: 0.06vh;
+    background-color: rgba(0,0,0);
+    position: absolute;
+}
+
+.btn-green {
+    background-color: rgba(17, 232, 31, 0.760);
+}
+
+.btn-green:hover {
+    background-color: rgba(17, 232, 31, 0.760);
+}
+
 
