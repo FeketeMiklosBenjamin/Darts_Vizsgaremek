@@ -41,8 +41,6 @@ async function onModify() {
     status.message = '';
     processing.value = true;
 
-    await new Promise(resolve => setTimeout(resolve, 100));
-
     if (modifyform.value.password !== modifyform.value.secondPassword) {
         status.message = "A két jelszó nem egyezik meg!";
         processing.value = false;
@@ -59,7 +57,6 @@ async function onModify() {
     try {
         if (isFormModified.value) {
             await modify(modifyform.value, accessToken);
-            router.push('/statistic');
         }
         if (profileImage.value) {
             await uploadimage(profileImage.value, accessToken);
@@ -67,6 +64,7 @@ async function onModify() {
     } catch (err) {
         status.message = "Hiba történt a módosítás során!";
     }
+    router.push('/statistic');
     processing.value = false;
 }
 

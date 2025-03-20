@@ -6,7 +6,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { status, user } = storeToRefs(useUserStore());
-const { logout, refreshTk } = useUserStore();
+const { logout, refreshTk, startCountdown } = useUserStore();
 const router = useRouter();
 
 const countdownKey = ref(0);
@@ -74,7 +74,7 @@ onUnmounted(() => {
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
-                            <VueCountdown v-if="status._id" :key="countdownKey"  :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="setAccesTk">
+                            <VueCountdown v-if="status._id" :key="countdownKey"  :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="onLogout">
                                 <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0') }}</span>
                             </VueCountdown>
                         </li>
