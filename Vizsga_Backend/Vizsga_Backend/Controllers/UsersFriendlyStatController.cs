@@ -44,7 +44,7 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        [HttpPut("{userId}")]
+        [HttpPut]
         [Authorize]
         public async Task<IActionResult> Put(string userId, [FromBody] UsersFriendlyStat updatedUserStat)
         {

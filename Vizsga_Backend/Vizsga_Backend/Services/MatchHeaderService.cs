@@ -284,6 +284,34 @@ namespace Vizsga_Backend.Services
             return await _matchHeaderCollection.Aggregate<MatchHeaderWithMatches>(pipeline).FirstOrDefaultAsync();
         }
 
+        public async Task<List<MatchHeader>> GetAllFriendlyMatchAsync()
+        {
+            return await _matchHeaderCollection.Find(x => x.TournamentStartDate == null && x.TournamentEndDate == null && x.DeleteDate != null).ToListAsync();
+        }
 
+        public string ValidateFriendlyMatchDatas(FriendlyGameCreate datas)
+        {
+            if (datas.SetsCount != null && datas.SetsCount <= 0)
+            {
+                return "A set darabszáma nem lehet nulla vagy negatív!";
+            }
+            if (datas.LegsCount < 2)
+            {
+                return "A legek számának minimum 2-nek kell lennie!";
+            }
+            if (datas.StartingPoint != 701 && datas.StartingPoint != 501 && datas.StartingPoint != 301)
+            {
+                return "A kézdő pont csak 301, 501 és 701-es értéket vehet fel!";
+            }
+            return "";
+        }
+
+        public async Task SetDeleteDateToNullAsync(string matchHeaderId)
+        {
+            var filter = Builders<MatchHeader>.Filter.Eq(u => u.Id, matchHeaderId);
+            var update = Builders<MatchHeader>.Update.Set(u => u.DeleteDate, null);
+
+            await _matchHeaderCollection.UpdateOneAsync(filter, update);
+        }
     }
 }

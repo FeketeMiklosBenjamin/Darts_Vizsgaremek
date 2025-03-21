@@ -23,7 +23,12 @@ namespace Vizsga_Backend.Services
             await _matchCollection.InsertOneAsync(match);
         }
 
-        public async Task<MatchWithPlayers?> GetMatchByIdAsync(string matchId)
+        public async Task<Match> GetMatchByIdAsync(string matchId)
+        {
+            return await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
+        }
+
+        public async Task<MatchWithPlayers?> GetMatchWithPlayersByIdAsync(string matchId)
         {
             var pipeline = new[]
             {
@@ -118,35 +123,31 @@ namespace Vizsga_Backend.Services
         {
             var userObjectId = new ObjectId(userId);
 
-            var pipeline = new List<BsonDocument>
+            var matchFilter = new BsonDocument
             {
-                new BsonDocument
-                {
-                    { "$match", new BsonDocument
-                        {
-                            { "$or", new BsonArray
-                                {
-                                    new BsonDocument { { "player_one_id", userObjectId } },
-                                    new BsonDocument { { "player_two_id", userObjectId } }
-                                }
-                            },
-                            { "status", new BsonDocument { { "$ne", "Finished" } } }
-                        }
+                { "$or", new BsonArray
+                    {
+                        new BsonDocument { { "player_one_id", userObjectId } },
+                        new BsonDocument { { "player_two_id", userObjectId } }
                     }
                 },
+                { "status", new BsonDocument { { "$ne", "Finished" } } }
+            };
 
-                new BsonDocument
-                {
-                    { "$sort", new BsonDocument { { "start_date", 1 } } }
-                }
+            if (!matchesCount.HasValue)
+            {
+                matchFilter.Add("start_date", new BsonDocument { { "$gte", DateTime.UtcNow.AddMinutes(-10) } });
+            }
+
+            var pipeline = new List<BsonDocument>
+            {
+                new BsonDocument { { "$match", matchFilter } },
+                new BsonDocument { { "$sort", new BsonDocument { { "start_date", 1 } } } }
             };
 
             if (matchesCount.HasValue)
             {
-                pipeline.Add(new BsonDocument
-                {
-                    { "$limit", matchesCount.Value }
-                });
+                pipeline.Add(new BsonDocument { { "$limit", matchesCount.Value } });
             }
 
             pipeline.AddRange(new[]
@@ -221,6 +222,7 @@ namespace Vizsga_Backend.Services
 
             return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).ToListAsync();
         }
+
 
         public async Task<List<MatchWithPlayers>> GetUserLastMatchesAsync(string userId, int matchesCount)
         {

@@ -39,7 +39,7 @@ namespace Vizsga_Backend.Models.UserStatsModels
         public int? DartsPoints { get; set; }
 
         [BsonElement("level")]
-        public int? Level { get; set; }
+        public string Level { get; set; } = string.Empty;
 
         [BsonElement("averages")]
         public double? Averages { get; set; }

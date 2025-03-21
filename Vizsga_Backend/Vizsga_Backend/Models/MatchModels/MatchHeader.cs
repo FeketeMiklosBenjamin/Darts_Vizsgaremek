@@ -20,7 +20,7 @@ namespace Vizsga_Backend.Models.MatchModels
         public DateTime? DeleteDate { get; set; }
 
         [BsonElement("sets_count")]
-        public int SetsCount { get; set; }
+        public int? SetsCount { get; set; }
 
         [BsonElement("legs_count")]
         public int LegsCount { get; set; }
@@ -32,7 +32,7 @@ namespace Vizsga_Backend.Models.MatchModels
         public string? JoinPassword { get; set; } = string.Empty;
 
         [BsonElement("background_image_url")]
-        public string BackroundImageUrl { get; set; } = string.Empty;
+        public string? BackroundImageUrl { get; set; }
 
         [BsonElement("tournament_start_date")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

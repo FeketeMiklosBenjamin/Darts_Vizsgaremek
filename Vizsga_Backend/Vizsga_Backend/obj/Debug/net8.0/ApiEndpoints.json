@@ -79,6 +79,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Vizsga_Backend.Controllers.FriendlyMatchController",
+    "Method": "GetAllFriendlyMatch",
+    "RelativePath": "api/friendly_matches",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.FriendlyMatchController",
+    "Method": "CreateFriendlyMatch",
+    "RelativePath": "api/friendly_matches",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchdatas",
+        "Type": "Vizsga_Backend.Models.MatchModels.FriendlyGameCreate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.FriendlyMatchController",
+    "Method": "DeleteFriendlyMatch",
+    "RelativePath": "api/friendly_matches/{matchHeaderId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchHeaderId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.FriendlyMatchController",
+    "Method": "StartFriendlyMatch",
+    "RelativePath": "api/friendly_matches/start/{matchHeaderId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchHeaderId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Vizsga_Backend.Controllers.MatchController",
     "Method": "GetMatchById",
     "RelativePath": "api/matches/{matchId}",
@@ -88,6 +146,48 @@
     "Parameters": [
       {
         "Name": "matchId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MatchController",
+    "Method": "ValidateFriendlyMatchPassword",
+    "RelativePath": "api/matches/friendy_match/join/{matchHeaderId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchHeaderId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MatchController",
+    "Method": "ValidateTournamentPassword",
+    "RelativePath": "api/matches/tournament/join/{matchId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "password",
         "Type": "System.String",
         "IsRequired": true
       }
