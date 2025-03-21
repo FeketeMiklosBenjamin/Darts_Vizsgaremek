@@ -22,6 +22,15 @@
         <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.FilterTournamentsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.FilterTournaments(System.String)"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.CompetitionsViewModel.startMatchCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatchCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatchCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatch(DartsMobilApp.Classes.MatchModel)"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.SelectedMatch">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.selectedMatch"/>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.CounterGrid">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.counterGrid"/>
         </member>

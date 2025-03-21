@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DartsMobilApp.API;
 using DartsMobilApp.Classes;
+using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Collections.Generic;
@@ -21,8 +23,6 @@ namespace DartsMobilApp.ViewModel
         public List<MatchModel>? tournaments;
 
         public string? AccessToken = SecStoreItems.AToken;
-
-
 
         [ObservableProperty]
         public List<MatchModel> sortedTournaments;
@@ -79,7 +79,7 @@ namespace DartsMobilApp.ViewModel
         {
             if (number == "1")
             {
-                if (Tournaments.Count > 4 && TakedTournaments.Count != Tournaments.Count)
+                if (Tournaments?.Count > 4 && TakedTournaments.Count != Tournaments.Count)
                 {
                     SortedTournaments.Clear();
                     SortedTournaments = Tournaments.Take(new Range(TakedTournaments.Count, TakedTournaments.Count +4)).ToList();
@@ -102,6 +102,15 @@ namespace DartsMobilApp.ViewModel
                     FillTakedTList();
                 }
             }
+        }
+
+        [RelayCommand]
+        private async Task StartMatch()
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            });
         }
 
     }

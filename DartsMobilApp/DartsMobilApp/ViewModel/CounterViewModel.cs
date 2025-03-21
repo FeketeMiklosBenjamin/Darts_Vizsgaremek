@@ -3,9 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using DartsMobilApp.Classes;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Diagnostics;
 
 namespace DartsMobilApp.ViewModel
 {
+
     public partial class CounterViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -55,6 +59,7 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void Appearing()
         {
+          
             PointsFirstPlayer = PointsSecondPlayer = "501";
             SecondPlayerWonLeg = FirstPlayerWonLeg = 0;
         }
