@@ -3,13 +3,24 @@ import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk, startCountdown } = useUserStore();
 const router = useRouter();
 
 const countdownKey = ref(0);
+const remainingTime = ref(15 * 60 * 1000);
+
+const updateBackgroundCountdown = () => {
+    if (remainingTime.value <= 5 * 60 * 1000) {
+        setAccesTk();
+    }
+};
+
+const keepTimeOnNavigate = () => {
+    localStorage.setItem('Time', String(remainingTime.value));
+};
 
 const setAccesTk = async () => {
     try {
@@ -29,16 +40,36 @@ const onLogout = async () => {
     }
 };
 
+
 const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
     await onLogout();
 };
 
+let countdownInterval: any;
+
 onMounted(() => {
+    const savedTime = localStorage.getItem('Time');
+    if (savedTime) {
+        remainingTime.value = parseInt(savedTime);
+    }
+
+    countdownInterval = setInterval(() => {
+        remainingTime.value -= 1000;
+        updateBackgroundCountdown();
+        if (remainingTime.value <= 0) {
+            clearInterval(countdownInterval);
+        }
+    }, 1000);
     window.addEventListener("beforeunload", handleBeforeUnload);
+    onBeforeRouteLeave((to, from, next) => {
+        keepTimeOnNavigate(); 
+        next();
+    });
 });
 
 onUnmounted(() => {
     window.removeEventListener("beforeunload", handleBeforeUnload);
+    clearInterval(countdownInterval);
 });
 
 </script>
