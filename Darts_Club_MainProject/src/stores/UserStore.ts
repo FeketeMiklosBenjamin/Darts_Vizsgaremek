@@ -10,9 +10,7 @@ export const useUserStore = defineStore('userStore', {
         status: {
             message: '',
             _id: JSON.parse(sessionStorage.getItem('user') || '{}')?.id || '',
-            isLoggedIn: !!sessionStorage.getItem('user'),
-            timeleft: 900,
-            isMoreThan5Minutes: true
+            isLoggedIn: !!sessionStorage.getItem('user')
         },
         user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{}
     }),
@@ -95,17 +93,7 @@ export const useUserStore = defineStore('userStore', {
                 .catch((err) => {
                     return Promise.reject(err);
                 })
-        },
-        startCountdown() {
-            const interval = setInterval(() => {
-              if (this.status.timeleft > 0) {
-                this.status.timeleft -= 1;
-              } else {
-                clearInterval(interval);
-              }
-              this.status.isMoreThan5Minutes = this.status.timeleft > 300;
-            }, 1000);
-          },
+        }
     }
 })
 

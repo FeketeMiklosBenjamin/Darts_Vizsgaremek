@@ -2,32 +2,78 @@
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 
 const { status, user } = storeToRefs(useUserStore());
-const { logout, refreshTk, startCountdown } = useUserStore();
+const { logout, refreshTk } = useUserStore();
 const router = useRouter();
 
-const countdownKey = ref(0);
 const remainingTime = ref(15 * 60 * 1000);
+const hasRefreshed = ref(false);
+let countdownInterval: any;
 
-const updateBackgroundCountdown = () => {
-    if (remainingTime.value <= 5 * 60 * 1000) {
-        setAccesTk();
+
+
+
+onMounted(() => {
+    const savedTime = sessionStorage.getItem('Time');
+    if (savedTime) {
+        remainingTime.value = parseInt(savedTime);
     }
-};
+    
+    if (status.value.isLoggedIn) {
+        startBackgroundTimer();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    onBeforeRouteLeave((to, from, next) => {
+        keepTimeOnNavigate(); 
+        next();
+    });
+});
+
+watch(() => status.value.isLoggedIn, (newVal) => {
+    if (newVal) {
+        startBackgroundTimer();
+    } else {
+        stopBackgroundTimer();
+    }
+});
 
 const keepTimeOnNavigate = () => {
-    localStorage.setItem('Time', String(remainingTime.value));
+    sessionStorage.setItem('Time', String(remainingTime.value));
 };
 
 const setAccesTk = async () => {
     try {
         await refreshTk();
-        countdownKey.value += 1;
+        hasRefreshed.value = false;
+        remainingTime.value = 15 * 60 * 1000;
+        keepTimeOnNavigate();
     } catch (err) {}
 }
+
+const startBackgroundTimer = () => {
+    if (countdownInterval) return;
+    countdownInterval = setInterval(() => {
+        remainingTime.value -= 1000;
+        
+        if (remainingTime.value <= 5 * 60 * 1000 && !hasRefreshed.value) {
+            hasRefreshed.value = true;
+            setAccesTk();
+        }
+        
+        keepTimeOnNavigate();
+    }, 1000);
+}
+
+const stopBackgroundTimer = () => {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+};
+
 
 const onLogout = async () => {
     try {
@@ -40,37 +86,16 @@ const onLogout = async () => {
     }
 };
 
-
 const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
     await onLogout();
 };
 
-let countdownInterval: any;
-
-onMounted(() => {
-    const savedTime = localStorage.getItem('Time');
-    if (savedTime) {
-        remainingTime.value = parseInt(savedTime);
-    }
-
-    countdownInterval = setInterval(() => {
-        remainingTime.value -= 1000;
-        updateBackgroundCountdown();
-        if (remainingTime.value <= 0) {
-            clearInterval(countdownInterval);
-        }
-    }, 1000);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    onBeforeRouteLeave((to, from, next) => {
-        keepTimeOnNavigate(); 
-        next();
-    });
-});
-
 onUnmounted(() => {
     window.removeEventListener("beforeunload", handleBeforeUnload);
+    sessionStorage.removeItem("Time");
     clearInterval(countdownInterval);
 });
+
 
 </script>
 
@@ -105,7 +130,7 @@ onUnmounted(() => {
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
-                            <VueCountdown v-if="status._id" :key="countdownKey"  :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="onLogout">
+                            <VueCountdown v-if="status._id" :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="onLogout">
                                 <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0') }}</span>
                             </VueCountdown>
                         </li>
