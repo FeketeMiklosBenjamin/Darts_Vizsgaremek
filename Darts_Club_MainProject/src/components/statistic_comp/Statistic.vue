@@ -28,17 +28,55 @@ const { status, user } = storeToRefs(useUserStore());
       </div>
       <div class="col-7">
         <div class="statistic-box">
-          <div class="">
-
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
           </div>
-          <div class="statistic-line-vertical statistic-tline-margin-hor">
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
           </div>
-          <div class="statistic-line-horizontal statistic-line-margin-ver">
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
           </div>
-          <div class="statistic-line-vertical statistic-bline-margin-hor text-center">
-            <!-- <div class="display-5 text-secondary">Sets:</div>
-            <div class="display-6 text-white">1535435</div> -->
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
           </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szett:</p>
+            <p class="display-1">5</p>
+          </div>
+          <div class="statistic-section">
+            <p class="display-2 text-secondary">Szettek nyerve:</p>
+            <p class="display-1">1</p>
+          </div>
+          <div class="statistic-line-vertical"></div>
         </div>
       </div>
     </div>

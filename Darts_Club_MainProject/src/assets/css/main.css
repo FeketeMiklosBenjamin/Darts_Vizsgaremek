@@ -251,41 +251,55 @@ body{
     font-size: 105%;
 }
 
-
-.statistic-box{
+.statistic-box {
     margin: 6vh 1vw;
     width: 60vw;
-    min-height: 55vh;
+    min-height: 63vh;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid black;
     border-radius: 2vh;
-    position: absolute;
-}
-
-.statistic-line-margin-ver {
-    margin: 0vh 30vw;
-}
-
-.statistic-tline-margin-hor {
-    margin: 5vh 0vw;
-}
-
-.statistic-bline-margin-hor {
-    margin: 45vh 0vw;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    grid-auto-rows: auto;
+    gap: 10px;
 }
 
 .statistic-line-horizontal {
-    width: 0.060vw;
-    height: 55vh;
-    background-color: rgba(0,0,0);
-    position: absolute;
+    width: 100%;
+    height: 0.06vh;
+    background-color: black;
+    grid-column: span 2;
 }
 
 .statistic-line-vertical {
-    width: 60vw;
-    height: 0.06vh;
-    background-color: rgba(0,0,0);
     position: absolute;
+    left: 50%;
+    top: 0;
+    width: 0.06vw;
+    height: 100%;
+    background-color: black;
+}
+
+.statistic-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.statistic-section > .display-2 {
+    margin-bottom: 0;
+    font-size: 3vh;
+}
+
+.statistic-section > .display-1 {
+    margin-bottom: 0;
+    font-style: italic;
+    font-size: 4vh;
 }
 
 .btn-green {
