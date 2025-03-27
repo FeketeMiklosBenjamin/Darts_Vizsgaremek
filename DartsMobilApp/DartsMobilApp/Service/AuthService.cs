@@ -38,6 +38,9 @@ namespace DartsMobilApp.Service
 
                     SecureStorage.SetAsync("Token", response.accessToken );
                     SecureStorage.SetAsync("Email", response.emailAddress );
+                    SecureStorage.SetAsync("UserName", response.username);
+                    SecureStorage.SetAsync("UserId", response.id);
+                    SecureStorage.SetAsync("RefreshToken", response.refreshToken);
                     return response;
                 }
                 else

@@ -30,6 +30,8 @@ namespace DartsMobilApp
             builder.Services.AddSingleton<StatisticViewModel>();
             builder.Services.AddSingleton<FriendlySetupPage>();
             builder.Services.AddSingleton<FriendlySetupViewModel>();
+            builder.Services.AddSingleton<FriendlyMatchPage>();
+            builder.Services.AddSingleton<FriendlyMatchViewModel>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

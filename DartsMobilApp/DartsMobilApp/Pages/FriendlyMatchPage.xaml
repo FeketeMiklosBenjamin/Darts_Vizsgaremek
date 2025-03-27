@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tools="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             x:Class="DartsMobilApp.Pages.FriendlyMatchPage"
+             Title="FriendlyMatchPage"
+             Shell.TabBarBackgroundColor="Transparent"
+             Shell.NavBarIsVisible="True"   
+             BackgroundImageSource="ally_pally.jpg">
+
+    <ContentPage.Behaviors>
+        <tools:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="*,5*,*" Margin="20" >
+        <Label Text="Versenyeink" FontSize="40" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding SortedFriendlies}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#99000000" Margin="0,0,0,20" WidthRequest="350" HeightRequest="120" StrokeShape="RoundRectangle 20,20,20,20">
+                        <VerticalStackLayout Margin="0,0,3,0" VerticalOptions="Center" HorizontalOptions="Center"  >
+                            <Label Text="Barátságos meccs" HorizontalOptions="Center" Margin="0,0,0,10" FontAttributes="Bold" FontSize="18"/>
+                            <HorizontalStackLayout Spacing="10">
+                                <VerticalStackLayout HorizontalOptions="Start">
+                                    <Label Text="{Binding playerLevel, StringFormat='Ellenfél szintje: {0}'}" HorizontalTextAlignment="Start"/>
+                                    <Label Text="{Binding legsCount, StringFormat='Nyerni szükséges legek: {0}'}"/>
+                                    <Label Text="{Binding name, StringFormat='Ellenfél neve: {0}'}" />
+                                </VerticalStackLayout>
+                                <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="20">
+            <Button Text="↩" BackgroundColor="Green"  />
+            <Button Text="↪" BackgroundColor="Green" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

@@ -74,6 +74,11 @@ Route="FriendlySetupPage" />
             <ShellContent Title="Meccs levezető" ContentTemplate="{DataTemplate pages:CounterPage}" Route="CounterPage" FlyoutItemIsVisible="False"/>
         </Tab>
     </FlyoutItem>
+    <FlyoutItem Title="Barátságos meccsek">
+        <Tab>
+            <ShellContent Title="Barátságos meccek" ContentTemplate="{DataTemplate pages:FriendlyMatchPage}" Route="FriendlyMatchPage"/>
+        </Tab>
+    </FlyoutItem>
     
 
 

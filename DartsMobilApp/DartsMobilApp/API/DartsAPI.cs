@@ -52,5 +52,18 @@ namespace DartsMobilApp.API
                 throw;
             }
         }
+
+
+        public static List<FriendlyMatchModel> GetFriendlyMatches() {
+            try
+            {
+                return HTTPCommunication<List<FriendlyMatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches")?.Result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
