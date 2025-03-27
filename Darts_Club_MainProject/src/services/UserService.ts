@@ -70,6 +70,20 @@ export default {
                 return Promise.reject(err.response);
             });
     },
+    getStat(id: string, accesstoken: string) {
+        return User_Endpoint.get(`/tournamentstat/${id}`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res; //lehetséges, hogy res.data
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
+    },
     refreshToken(id:string, accesstoken: string, refresh: string) {
         return RefreshTk_Endpoint.post(`/${id}`, {
             refreshToken: refresh

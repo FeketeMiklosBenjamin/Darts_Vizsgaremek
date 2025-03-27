@@ -2,6 +2,7 @@ import type LoginModel from "@/models/LoginModel"
 import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
 import type UserModel from "@/models/UserModel"
+import type UserStatModel from "@/models/UserStatModel"
 import UserService from "@/services/UserService"
 import { defineStore } from "pinia"
 
@@ -12,7 +13,8 @@ export const useUserStore = defineStore('userStore', {
             _id: JSON.parse(sessionStorage.getItem('user') || '{}')?.id || '',
             isLoggedIn: !!sessionStorage.getItem('user')
         },
-        user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{}
+        user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{},
+        stats: <UserStatModel>{}
     }),
     actions: {
         register(data: RegisterModel) {
@@ -34,10 +36,10 @@ export const useUserStore = defineStore('userStore', {
                     if (data.username != '') {
                         this.user.username = data.username;
                     } if (data.emailAddress != '') {
-                        this.user.emailAddress = data.emailAddress;  
-                    } 
+                        this.user.emailAddress = data.emailAddress;
+                    }
                     sessionStorage.setItem('user', JSON.stringify(this.user));
-                    
+
                 })
                 .catch((err) => {
                     this.status.message = err.data.message;
@@ -79,6 +81,32 @@ export const useUserStore = defineStore('userStore', {
                 .then((res) => {
                     this.user.profilePictureUrl = res.profilePictureUrl;
                     sessionStorage.setItem('user', JSON.stringify(this.user));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                });
+        },
+        getYourStat() {
+            return UserService.getStat(this.user.id!, this.user.accessToken!)
+                .then((res) => {
+                    this.stats = {
+                        matches: res.data.matches,
+                        matchesWon: res.data.matchesWon,
+                        sets: res.data.sets,
+                        setsWon: res.data.setsWon,
+                        legs: res.data.legs,
+                        legsWon: res.data.legsWon,
+                        tournamentsWon: res.data.tournamentsWon,
+                        dartsPoints: res.data.dartsPoints,
+                        level: res.data.level,
+                        averages: res.data.averages,
+                        max180s: res.data.max180s,
+                        checkoutPercentage: res.data.checkoutPercentage,
+                        highestCheckout: res.data.highestCheckout,
+                        nineDarter: res.data.nineDarter,
+                        username: res.data.username,
+                        profilePictureUrl: res.data.profilePictureUrl
+                    }
                 })
                 .catch((err) => {
                     return Promise.reject(err);
