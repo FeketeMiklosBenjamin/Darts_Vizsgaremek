@@ -1,3 +1,4 @@
+import type LeaderBoardModel from "@/models/LeaderBoardModel"
 import type LoginModel from "@/models/LoginModel"
 import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
@@ -14,7 +15,8 @@ export const useUserStore = defineStore('userStore', {
             isLoggedIn: !!sessionStorage.getItem('user')
         },
         user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{},
-        stats: <UserStatModel>{}
+        stats: <UserStatModel>{},
+        leaderboard: <LeaderBoardModel[]>{}
     }),
     actions: {
         register(data: RegisterModel) {
@@ -111,6 +113,22 @@ export const useUserStore = defineStore('userStore', {
                 .catch((err) => {
                     return Promise.reject(err);
                 });
+        },
+        getLeaderBoard() {
+            return UserService.getLeaderBoard(this.user.accessToken)
+                .then((res) => {
+                    this.leaderboard = res.data.map((user: any) => ({
+                        id: user.id,
+                        username: user.username,
+                        emailAddress: user.emailAddress,
+                        profilePictureUrl: user.profilePictureUrl,
+                        registerDate: user.registerDate,
+                        lastLoginDate: user.lastLoginDate
+                    }));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
         },
         refreshTk() {
             return UserService.refreshToken(this.user.id!, this.user.accessToken!, this.user.refreshToken!)

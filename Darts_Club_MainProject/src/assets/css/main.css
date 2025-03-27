@@ -27,7 +27,7 @@
     z-index: 1;
 }
 
-body{
+body {
     overflow: hidden;
 }
 
@@ -35,7 +35,7 @@ body{
     height: 100vh;
     width: 100vw;
     position: relative;
-  
+
 }
 
 .transform {
@@ -124,12 +124,12 @@ body{
 .box-image {
     margin-top: 25px;
     margin-left: 50px;
-    height: 200px; 
+    height: 200px;
 }
 
 .box-title {
     font-size: 40px;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 .box-description {
@@ -150,7 +150,7 @@ body{
 }
 
 .boxnd-image {
-    height: 200px; 
+    height: 200px;
 }
 
 .text-container {
@@ -164,7 +164,7 @@ body{
 
 .boxnd-title {
     font-size: 40px;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     margin-left: 150px;
 }
 
@@ -199,7 +199,7 @@ body{
 }
 
 .box-statistic-image {
-    height: 200px; 
+    height: 200px;
     margin-left: -200px;
 }
 
@@ -291,12 +291,12 @@ body{
     font-weight: bold;
 }
 
-.statistic-section > .display-2 {
+.statistic-section>.display-2 {
     margin-bottom: 0;
     font-size: 3vh;
 }
 
-.statistic-section > .display-1 {
+.statistic-section>.display-1 {
     margin-bottom: 0;
     font-style: italic;
     font-size: 4vh;
@@ -310,4 +310,30 @@ body{
     background-color: rgba(17, 232, 31, 0.760);
 }
 
+.table {
+    background-color: transparent;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
 
+table tr {
+    background-color: rgba(255, 255, 255, 0.685)
+}
+
+.table td,
+.table th {
+    background-color: transparent;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+
+.table td {
+    padding-bottom: 10px;
+    vertical-align: middle
+}
+
+table td div {
+    list-style: none;
+    width: 2.25vw;
+
+}
