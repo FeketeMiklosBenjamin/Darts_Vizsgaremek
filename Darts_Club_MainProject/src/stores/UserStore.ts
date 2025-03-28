@@ -4,6 +4,7 @@ import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
 import type UserModel from "@/models/UserModel"
 import type UserStatModel from "@/models/UserStatModel"
+import router from "@/router"
 import UserService from "@/services/UserService"
 import { defineStore } from "pinia"
 
@@ -16,7 +17,7 @@ export const useUserStore = defineStore('userStore', {
         },
         user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{},
         stats: <UserStatModel>{},
-        leaderboard: <AllUsersModel[]>{}
+        alluser: <AllUsersModel[]>{}
     }),
     actions: {
         register(data: RegisterModel) {
@@ -67,14 +68,16 @@ export const useUserStore = defineStore('userStore', {
                     this.user = defaultUser;
                     this.status._id = '';
                     this.status.message = '';
-                    this.status.isLoggedIn = false
-                    sessionStorage.removeItem('user')
+                    this.status.isLoggedIn = false,
+                    this.alluser = [];
+                    sessionStorage.removeItem('user');
                 })
                 .catch(() => {
                     this.user = defaultUser;
                     this.status._id = '';
                     this.status.message = '';
                     this.status.isLoggedIn = false;
+                    this.alluser = [];
                     sessionStorage.removeItem('user');
                 })
         },
@@ -117,7 +120,7 @@ export const useUserStore = defineStore('userStore', {
         getAllUser() {
             return UserService.getAll(this.user.accessToken)
                 .then((res) => {
-                    this.leaderboard = res.data.map((user: any) => ({
+                    this.alluser = res.data.map((user: any) => ({
                         id: user.id,
                         username: user.username,
                         emailAddress: user.emailAddress,
@@ -137,6 +140,7 @@ export const useUserStore = defineStore('userStore', {
                     sessionStorage.setItem('user', JSON.stringify(this.user));
                 })
                 .catch((err) => {
+                    this.logout();
                     return Promise.reject(err);
                 })
         }

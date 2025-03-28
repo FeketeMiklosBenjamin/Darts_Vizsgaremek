@@ -108,6 +108,7 @@ export default {
             }
         })
             .then((res) => {
+                console.log(accesstoken);
                 return res;
             })
             .catch((err) => {

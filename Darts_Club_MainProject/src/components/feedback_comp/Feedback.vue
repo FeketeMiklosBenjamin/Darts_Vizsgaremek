@@ -73,7 +73,7 @@ async function onSend() {
 
 <style scoped>
 .margin-feed {
-    margin-top: 12vh;
+    margin-top: 10vh;
 }
 
 .width-feedback {

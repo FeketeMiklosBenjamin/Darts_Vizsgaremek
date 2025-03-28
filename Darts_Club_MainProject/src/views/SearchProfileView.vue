@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import Navbar from '@/components/standard_comp/Navbar.vue';
-import SearchProfile from '@/components/searchprofile_comp/SearchProfile.vue';
 import SearchProfile_Background from '@/components/searchprofile_comp/SearchProfile_Background.vue';
+import SearchProfileStat from '@/components/searchprofile_comp/SearchProfileStat.vue';
+import Navbar from '@/components/standard_comp/Navbar.vue';
 
 </script>
 
 <template>
     <Navbar />
     <SearchProfile_Background />
-    <SearchProfile />
+    <SearchProfileStat />
 </template>
 
 <style scoped>

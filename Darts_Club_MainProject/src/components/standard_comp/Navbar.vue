@@ -9,7 +9,7 @@ const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
 const router = useRouter();
 
-const remainingTime = ref(15 * 60 * 1000);
+const remainingTime = ref(2 * 60 * 1000);
 const hasRefreshed = ref(false);
 let countdownInterval: any;
 
@@ -104,7 +104,7 @@ onUnmounted(() => {
     <div class="shadow-lg stick">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg stick py-2">
             <div class="container">
-                <a class="navbar-brand"><em class="display-6 title">Dart's Club</em></a>
+                <a class="navbar-brand"><em class="display-6 title">Sons of the Fallen's</em></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
