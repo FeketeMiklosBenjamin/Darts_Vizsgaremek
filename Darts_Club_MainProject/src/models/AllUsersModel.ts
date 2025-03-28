@@ -1,8 +1,8 @@
-export default interface LeaderBoardModel {
+export default interface AllUsersModel {
     id: string,
     username: string,
     emailAddress: string,
     profilePictureUrl: string,
-    registerDate: string,
-    lastLoginDate: string
+    level: string,
+    dartsPoints: string
 }

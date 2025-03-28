@@ -84,8 +84,8 @@ export default {
                 return Promise.reject(err.response);
             })
     },
-    getLeaderBoard(accesstoken: string) {
-        return User_Endpoint.get(`/leaderboard`, {
+    getAll(accesstoken: string) {
+        return User_Endpoint.get(`/all`, {
             headers: {
                 Authorization: `Bearer ${accesstoken}`,
                 'Content-Type': 'application/json'

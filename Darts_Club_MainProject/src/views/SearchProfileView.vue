@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import LeaderBoard from '@/components/leaderboard_comp/LeaderBoard.vue';
-import LeaderBoard_Background from '@/components/leaderboard_comp/LeaderBoard_Background.vue';
 import Navbar from '@/components/standard_comp/Navbar.vue';
+import SearchProfile from '@/components/searchprofile_comp/SearchProfile.vue';
+import SearchProfile_Background from '@/components/searchprofile_comp/SearchProfile_Background.vue';
 
 </script>
 
 <template>
     <Navbar />
-    <LeaderBoard_Background />
-    <LeaderBoard />
+    <SearchProfile_Background />
+    <SearchProfile />
 </template>
 
 <style scoped>

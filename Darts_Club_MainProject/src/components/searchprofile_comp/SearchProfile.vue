@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type LeaderBoardModel from '@/models/LeaderBoardModel';
+import type AllUsersModel from '@/models/AllUsersModel';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, onUnmounted, ref } from 'vue';
 
 const { leaderboard, user } = storeToRefs(useUserStore());
-const { getLeaderBoard } = useUserStore();
-const leaderboardUsers = ref<LeaderBoardModel[]>([])
+const { getAllUser } = useUserStore();
+const leaderboardUsers = ref<AllUsersModel[]>([])
 const searchFor = ref('');
 
 onBeforeMount(() => {
-    getLeaderBoard()
+    getAllUser()
         .then(() => {
             leaderboard.value = leaderboard.value.filter(x => x.id !== user.value.id)
             leaderboardUsers.value = leaderboard.value
@@ -46,16 +46,16 @@ const filteredUsers = computed(() => {
                             <tr v-for="users in filteredUsers" :key="users.id">
                                 <td>
                                     <div class="rounded-circle border mx-auto border-3" :class="{
-                                        'border-success': user.level == 'Amateur',
-                                        'border-warning': user.level == 'Advanced',
-                                        'border-danger': user.level == 'Professional'
+                                        'border-success': users.level == 'Amateur',
+                                        'border-warning': users.level == 'Advanced',
+                                        'border-danger': users.level == 'Professional'
                                     }">
                                     <img :src="users.profilePictureUrl" class="profileImg border-0 mx-auto d-block" alt="Nincs">
                                     </div>
                                 </td>
                                 <td>{{ users.username }}</td>
                                 <td>{{ users.emailAddress }}</td>
-                                <td>{{ users.registerDate }}</td>
+                                <td>{{ users.dartsPoints }}</td>                        
                             </tr>
                         </tbody>
                     </table>

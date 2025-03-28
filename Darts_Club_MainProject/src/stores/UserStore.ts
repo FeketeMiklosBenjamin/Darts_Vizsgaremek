@@ -1,4 +1,4 @@
-import type LeaderBoardModel from "@/models/LeaderBoardModel"
+import type AllUsersModel from "@/models/AllUsersModel"
 import type LoginModel from "@/models/LoginModel"
 import type ModifyModel from "@/models/ModifyModel"
 import type RegisterModel from "@/models/RegisterModel"
@@ -16,7 +16,7 @@ export const useUserStore = defineStore('userStore', {
         },
         user: JSON.parse(sessionStorage.getItem('user') || '{}') as UserModel || <UserModel>{},
         stats: <UserStatModel>{},
-        leaderboard: <LeaderBoardModel[]>{}
+        leaderboard: <AllUsersModel[]>{}
     }),
     actions: {
         register(data: RegisterModel) {
@@ -114,16 +114,16 @@ export const useUserStore = defineStore('userStore', {
                     return Promise.reject(err);
                 });
         },
-        getLeaderBoard() {
-            return UserService.getLeaderBoard(this.user.accessToken)
+        getAllUser() {
+            return UserService.getAll(this.user.accessToken)
                 .then((res) => {
                     this.leaderboard = res.data.map((user: any) => ({
                         id: user.id,
                         username: user.username,
                         emailAddress: user.emailAddress,
                         profilePictureUrl: user.profilePictureUrl,
-                        registerDate: user.registerDate,
-                        lastLoginDate: user.lastLoginDate
+                        level: user.level,
+                        dartsPoints: user.dartsPoints
                     }));
                 })
                 .catch((err) => {
