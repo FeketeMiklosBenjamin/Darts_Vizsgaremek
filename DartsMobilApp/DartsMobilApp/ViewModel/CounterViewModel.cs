@@ -283,6 +283,25 @@ namespace DartsMobilApp.ViewModel
             }
         }
 
+        private async Task TextSpeach(string text)
+
+        {
+            var locales = await TextToSpeech.GetLocalesAsync();
+            foreach (var locale in locales)
+            {
+                Debug.WriteLine($"Nyelv: {locale.Language}, Név: {locale.Name}\n");
+            }
+            var hungarianLaungage = locales.FirstOrDefault(l => l.Language.Contains("hu"));
+            var settings = new SpeechOptions()
+            {
+                Volume = 1.0f,
+                Pitch = 1.0f,
+                Locale = hungarianLaungage
+            };
+            
+            await TextToSpeech.SpeakAsync(text, settings);
+        }
+
         [RelayCommand]
 
         private async void SendPoints(string point) 
@@ -296,12 +315,12 @@ namespace DartsMobilApp.ViewModel
             {
                 if (!isFirstPlayer && !IsWinner())
                 {
-                    
+                    TextSpeach(point);
                     SetPlayersPoints(point, 2);
                 }
                 else if(isFirstPlayer && !IsWinner())
                 {
-                   
+                    TextSpeach(point);
                     SetPlayersPoints(point, 1);
 
                 }
@@ -348,8 +367,7 @@ namespace DartsMobilApp.ViewModel
                 if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
                 {
                     isWinnerTheMatch = true;
-                    await Application.Current.MainPage.DisplayAlert("Meccs vége!", "GYŐZELEM!", "OK");
-                    Thread.Sleep(1000);
+                    TextSpeach("Meccs vége! Valaki nyerte a meccset!");
                     FirstPlayerWonLeg = 0;
                     SecondPlayerWonLeg = 0;
                 }
