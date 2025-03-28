@@ -27,14 +27,7 @@ namespace VizsgaBackend.Services
 
 
 
-        // GET végpontokhoz:
-
-
-
-        public async Task<List<User>> GetAsync()
-        {
-            return await _usersCollection.Find(x => x.Role == 1).ToListAsync();
-        }
+        // GET végpont:
 
         public async Task<List<User>> GetNotStrictBannedAsync()
         {
@@ -45,14 +38,6 @@ namespace VizsgaBackend.Services
         {
             return await _usersCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
-
-        //Nem biztos, hogy kell
-        public async Task<User?> GetByIdNotStrictBannedAsync(string id)
-        {
-            return await _usersCollection.Find(x => x.Id == id && x.StrictBan == false).FirstOrDefaultAsync();
-        }
-
-
 
         // Alap végpontokhoz vagy ellenőrzésekhez:
 

@@ -37,6 +37,26 @@ namespace VizsgaBackend.Services
             return result;
         }
 
+        public async Task<List<UsersTournamentStatWithUser>> GetTournamentsWithUsersNotStrictBannedAsync()
+        {
+            var pipeline = new[]
+            {
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "users" },
+                    { "localField", "user_id" },
+                    { "foreignField", "_id" },
+                    { "as", "user" }
+                }),
+                new BsonDocument("$unwind", "$user"),
+                new BsonDocument("$match", new BsonDocument("user.strict_ban", false))
+            };
+
+            var result = await _usersTournamentStatCollection.Aggregate<UsersTournamentStatWithUser>(pipeline).ToListAsync();
+            return result;
+        }
+
+
         public async Task<UsersTournamentStatWithUser?> GetTournamentWithUserByUserIdAsync(string userId)
         {
             if (!ObjectId.TryParse(userId, out var objectId))

@@ -391,7 +391,7 @@
   {
     "ContainingType": "VizsgaBackend.Controllers.UsersFriendlyStatController",
     "Method": "Put",
-    "RelativePath": "api/users/friendlystat/{userId}",
+    "RelativePath": "api/users/friendlystat",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -399,7 +399,7 @@
       {
         "Name": "userId",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "updatedUserStat",

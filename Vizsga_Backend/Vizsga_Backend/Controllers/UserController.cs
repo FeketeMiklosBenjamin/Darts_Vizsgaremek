@@ -47,16 +47,16 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
-                var users = await _service.GetAsync();
+                var users = await _userTournamentStatService.GetTournamentsWithUsersAsync();
 
                 var result = users.Select(user => new
                 {
-                    user.Id,
-                    user.Username,
-                    user.EmailAddress,
-                    profilePictureUrl = user.ProfilePicture,
-                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
-                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    id = user.User!.Id,
+                    username = user.User.Username,
+                    emailAddress = user.User.EmailAddress,
+                    profilePictureUrl = user.User.ProfilePicture,
+                    level = user.Level,
+                    dartsPoints = user.DartsPoints
                 }).ToList();
 
                 return Ok(result);
@@ -73,16 +73,16 @@ namespace VizsgaBackend.Controllers
         {
             try
             {
-                var users = await _service.GetNotStrictBannedAsync();
+                var users = await _userTournamentStatService.GetTournamentsWithUsersNotStrictBannedAsync();
 
                 var result = users.Select(user => new
                 {
-                    user.Id,
-                    user.Username,
-                    user.EmailAddress,
-                    profilePictureUrl = user.ProfilePicture,
-                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
-                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    id = user.User!.Id,
+                    username = user.User.Username,
+                    emailAddress = user.User.EmailAddress,
+                    profilePictureUrl = user.User.ProfilePicture,
+                    level = user.Level,
+                    dartsPoints = user.DartsPoints
                 }).ToList();
 
                 return Ok(result);
