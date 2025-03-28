@@ -12,7 +12,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="background_color">
+    <div class="background-color-view">
         <div class="row">
             <div class="col-10 mt-5 ms-5">
                 <router-link :to="`/competition`" class="no-underline">
@@ -91,4 +91,113 @@ onUnmounted(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.box-competition {
+    width: 85%;
+    height: 250px;
+    border: 2px solid aqua;
+    border-radius: 30px;
+    background-color: #070602;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+
+.box-image {
+    margin-top: 25px;
+    margin-left: 50px;
+    height: 200px;
+}
+
+.box-title {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.box-description {
+    font-size: 18px;
+}
+
+.box-leaderboard {
+    width: 85%;
+    height: 250px;
+    border: 2px solid red;
+    border-radius: 30px;
+    background-color: #3C2247;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 50px;
+}
+
+.boxnd-image {
+    height: 200px;
+}
+
+.text-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding-left: 100px;
+}
+
+.boxnd-title {
+    font-size: 40px;
+    margin-bottom: 10px;
+    margin-left: 150px;
+}
+
+.boxnd-description {
+    font-size: 18px;
+}
+
+.box-search {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #0D4E2A;
+    border-radius: 30px;
+    background-color: #5ABFC7;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+
+
+.box-statistic {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #E2AD00;
+    border-radius: 30px;
+    background-color: #F4F4F4;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.box-statistic-image {
+    height: 200px;
+    margin-left: -200px;
+}
+
+.box-feedback {
+    width: 85%;
+    height: 250px;
+    border: 4px solid #7F5D96;
+    border-radius: 30px;
+    background-color: #FDD49D;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 300px;
+}
+
+</style>

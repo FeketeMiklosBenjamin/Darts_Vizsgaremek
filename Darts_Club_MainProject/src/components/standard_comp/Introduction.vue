@@ -36,4 +36,16 @@
 </template>
 
 <style scoped>
+.glass-card-intro {
+    background: rgba(40, 38, 38, 0.336);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(40, 38, 38, 1);
+}
+
+.tops {
+    top: 30%;
+}
 </style>

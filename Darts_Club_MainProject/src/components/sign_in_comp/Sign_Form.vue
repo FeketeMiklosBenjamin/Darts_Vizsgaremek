@@ -33,7 +33,7 @@ function onLogin(){
 
 <template>
     <div class="position-rel">
-        <div class="container z-1 transform align-items-center glass-card width p-4">
+        <div class="container z-1 transform align-items-center glass-card width-form p-4">
             <div class="row">
                 <div class="col-12 mb-2">
                     <h1 class="text-start display-4 text-light">Bejelentkezés</h1>

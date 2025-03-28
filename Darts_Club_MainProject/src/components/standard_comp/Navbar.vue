@@ -82,7 +82,7 @@ const onLogout = async () => {
         router.push('/');
     } catch (err) {
         status.value._id = '';
-        router.push('/');
+        await router.push('/');
     }
 };
 
@@ -142,4 +142,13 @@ onUnmounted(() => {
 </template>
 
 
-<style scoped></style>
+<style scoped>
+.title {
+    font-family: serif;
+    cursor: context-menu;
+}
+
+.navbar-nav .nav-link {
+    padding: 0;
+}
+</style>

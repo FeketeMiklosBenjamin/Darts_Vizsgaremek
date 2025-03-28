@@ -61,7 +61,7 @@ async function onRegister() {
 
 <template>
     <div class="position-rel">
-        <div class="container z-1 transform align-items-center glass-card opacity width p-2 px-3">
+        <div class="container z-1 transform align-items-center glass-card opacity width-form p-2 px-3">
             <div class="row">
                 <div class="col-12 mb-2">
                     <h1 class="text-center display-4 text-light">Regisztráció</h1>

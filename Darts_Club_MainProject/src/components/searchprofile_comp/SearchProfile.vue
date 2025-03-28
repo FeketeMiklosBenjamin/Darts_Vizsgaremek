@@ -65,4 +65,31 @@ const filteredUsers = computed(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.table {
+    background-color: transparent;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+table tr {
+    background-color: rgba(255, 255, 255, 0.685)
+}
+
+.table td,
+.table th {
+    background-color: transparent;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+
+.table td {
+    padding-bottom: 10px;
+    vertical-align: middle
+}
+
+table td div {
+    list-style: none;
+    width: 2.25vw
+}
+</style>

@@ -9,4 +9,9 @@
 </template>
 
 <style scoped>
+.not-found {
+    text-align: center;
+    margin: 20px 0 0 0;
+    border: 2px solid black;
+}
 </style>

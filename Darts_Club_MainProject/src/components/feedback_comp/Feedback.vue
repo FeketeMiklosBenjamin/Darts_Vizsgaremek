@@ -71,4 +71,12 @@ async function onSend() {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.margin-feed {
+    margin-top: 12vh;
+}
+
+.width-feedback {
+    width: 250px;
+}
+</style>
