@@ -68,8 +68,9 @@ export const useUserStore = defineStore('userStore', {
                     this.user = defaultUser;
                     this.status._id = '';
                     this.status.message = '';
-                    this.status.isLoggedIn = false,
+                    this.status.isLoggedIn = false;
                     this.alluser = [];
+                    this.stats = defaultStats;
                     sessionStorage.removeItem('user');
                 })
                 .catch(() => {
@@ -78,6 +79,7 @@ export const useUserStore = defineStore('userStore', {
                     this.status.message = '';
                     this.status.isLoggedIn = false;
                     this.alluser = [];
+                    this.stats = defaultStats;
                     sessionStorage.removeItem('user');
                 })
         },
@@ -91,10 +93,11 @@ export const useUserStore = defineStore('userStore', {
                     return Promise.reject(err);
                 });
         },
-        getYourStat() {
-            return UserService.getStat(this.user.id!, this.user.accessToken!)
+        getStatById(id: string) {
+            return UserService.getStat(id, this.user.accessToken!)
                 .then((res) => {
                     this.stats = {
+                        userId: res.data.userId,
                         matches: res.data.matches,
                         matchesWon: res.data.matchesWon,
                         sets: res.data.sets,
@@ -174,3 +177,25 @@ const defaultUser: UserModel = {
     profilePictureUrl: '',
     level: ''
 };
+
+const defaultStats: UserStatModel = {
+    userId: '',
+    matches: 0,
+    matchesWon: 0, 
+    sets: 0,
+    setsWon: 0,
+    legs: 0,
+    legsWon: 0,
+    tournamentsWon: 0,
+    dartsPoints: 0,
+    level: '',
+    averages: 0,
+    max180s: 0,
+    checkoutPercentage: 0,
+    highestCheckout: 0,
+    nineDarter: 0,
+    username: '',
+    profilePictureUrl: '',
+    registerDate: '',
+    lastLoginDate: ''
+}

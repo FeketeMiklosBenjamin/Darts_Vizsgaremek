@@ -8,7 +8,9 @@ table {
 
 table::-webkit-scrollbar {
     display: none;
-} /* Míg nem működik az egerem laptopon, addig nincs a html-es scrollbar megcsinálva! TODO*/
+}
+
+/* Míg nem működik az egerem laptopon, addig nincs a html-es scrollbar megcsinálva! TODO*/
 
 .no-underline {
     text-decoration: none;
@@ -87,4 +89,3 @@ body {
 .btn-green:hover {
     background-color: rgba(17, 232, 31, 0.760);
 }
-

@@ -1,4 +1,5 @@
 export default interface UserStatModel {
+    userId: string,
     matches: number,
     matchesWon: number, 
     sets: number,

@@ -78,7 +78,7 @@ export default {
             }
         })
             .then((res) => {
-                return res; //lehetséges, hogy res.data
+                return res;
             })
             .catch((err) => {
                 return Promise.reject(err.response);
@@ -108,7 +108,6 @@ export default {
             }
         })
             .then((res) => {
-                console.log(accesstoken);
                 return res;
             })
             .catch((err) => {

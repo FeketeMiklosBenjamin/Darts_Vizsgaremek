@@ -116,7 +116,7 @@ onUnmounted(() => {
                             </router-link>
                         </li>
                         <li class="nav-item me-2 mt-2">
-                            <router-link :to="status._id ? '/statistic' : '/sign-in'" class="nav-link no-underline">
+                            <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'" class="nav-link no-underline">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
                         </li>

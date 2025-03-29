@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type AllUsersModel from '@/models/AllUsersModel';
+import router from '@/router';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref } from 'vue';
@@ -24,6 +25,10 @@ const filteredUsers = computed(() => {
     return searchUsers.value.filter(x => x.username.toLowerCase().includes(searchTerm));
 });
 
+const NavigateToStatistic = (userId: string) => {
+    router.push(`/statistic/${userId}`)
+}
+
 </script>
 
 <template>
@@ -39,9 +44,9 @@ const filteredUsers = computed(() => {
             </div>
             <div class="row justify-content-center my-4">
                 <div class="col-md-8">
-                    <table class="table text-center">
+                    <table class="table text-center" v-if="filteredUsers.length > 0">
                         <tbody>
-                            <tr v-for="users in filteredUsers" :key="users.id">
+                            <tr v-for="users in filteredUsers" :key="users.id" @click="NavigateToStatistic(users.id)">
                                 <td>
                                     <div class="rounded-circle border mx-auto border-3" :class="{
                                         'border-success': users.level == 'Amateur',
@@ -57,6 +62,10 @@ const filteredUsers = computed(() => {
                             </tr>
                         </tbody>
                     </table>
+                    <div v-if="filteredUsers.length == 0" class="alert alert-warning text-center mx-auto w-50">
+                        <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
+                        <div class="d-inline">Nem létezik ez a felhasználó!</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,7 +91,12 @@ const filteredUsers = computed(() => {
 }
 
 table tr {
-    background-color: rgba(255, 255, 255, 0.685)
+    background-color: rgba(255, 255, 255, 0.685);
+    cursor: pointer;
+}
+
+.table tr:hover {
+    background-color: rgba(255, 255, 255, 0.910);
 }
 
 .table td,
@@ -96,6 +110,7 @@ table tr {
     padding-bottom: 10px;
     vertical-align: middle
 }
+
 
 table td div {
     list-style: none;

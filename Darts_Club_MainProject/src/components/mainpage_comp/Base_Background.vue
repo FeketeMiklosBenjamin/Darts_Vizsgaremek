@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useUserStore } from "@/stores/UserStore";
 import { onMounted, onUnmounted } from "vue";
+
+const { user } = useUserStore();
 
 onMounted(() => {
   document.body.style.overflowY = "auto";
@@ -60,7 +63,7 @@ onUnmounted(() => {
         </div>
         <div class="row mt-5">
             <div class="offset-3 col-10">
-                <router-link :to="`/statistic`" class="no-underline">
+                <router-link :to="`/statistic/${user.id}`" class="no-underline">
                     <div class="box-statistic">
                         <div class="col-2 text-container text-dark tops">
                             <h3 class="display-6 boxnd-title">Statisztika</h3>

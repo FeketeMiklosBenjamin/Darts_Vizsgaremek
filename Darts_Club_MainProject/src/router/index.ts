@@ -51,7 +51,7 @@ const router = createRouter({
       meta: { requiresAuth: true}
     },
     { 
-      path: '/statistic', 
+      path: '/statistic/:userId', 
       component: StatisticView,
       meta: { requiresAuth: true}
     },
