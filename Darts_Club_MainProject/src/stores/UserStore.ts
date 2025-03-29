@@ -140,7 +140,7 @@ export const useUserStore = defineStore('userStore', {
                     sessionStorage.setItem('user', JSON.stringify(this.user));
                 })
                 .catch((err) => {
-                    this.logout();
+                    // this.logout(); // Folytatni a hibás refresh-tokent!
                     return Promise.reject(err);
                 })
         }

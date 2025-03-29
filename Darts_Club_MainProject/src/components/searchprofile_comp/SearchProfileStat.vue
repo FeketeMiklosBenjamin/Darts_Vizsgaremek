@@ -69,6 +69,12 @@ const filteredUsers = computed(() => {
     padding: 0.75vw;
 }
 
+.input-group .form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #aaa;
+}
+
 .table {
     background-color: transparent;
     border-collapse: separate;

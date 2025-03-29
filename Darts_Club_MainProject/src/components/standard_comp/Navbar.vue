@@ -99,7 +99,6 @@ onUnmounted(() => {
 
 </script>
 
-
 <template>
     <div class="shadow-lg stick">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg stick py-2">
@@ -111,6 +110,11 @@ onUnmounted(() => {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2">
+                        <li>
+                            <router-link v-if="status._id" :to="`/main-page`" class="nav-link nav-item m-2 text-secondary">
+                                <i class="bi bi-house-door-fill"></i>
+                            </router-link>
+                        </li>
                         <li class="nav-item me-2 mt-2">
                             <router-link :to="status._id ? '/statistic' : '/sign-in'" class="nav-link no-underline">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
