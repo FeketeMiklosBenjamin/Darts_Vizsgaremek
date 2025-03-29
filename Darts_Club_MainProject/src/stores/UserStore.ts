@@ -110,7 +110,9 @@ export const useUserStore = defineStore('userStore', {
                         highestCheckout: res.data.highestCheckout,
                         nineDarter: res.data.nineDarter,
                         username: res.data.username,
-                        profilePictureUrl: res.data.profilePictureUrl
+                        profilePictureUrl: res.data.profilePictureUrl,
+                        registerDate: res.data.registerDate,
+                        lastLoginDate: res.data.lastLoginDate
                     }
                 })
                 .catch((err) => {

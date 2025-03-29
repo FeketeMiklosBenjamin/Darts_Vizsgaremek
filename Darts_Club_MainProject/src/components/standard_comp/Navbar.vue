@@ -147,6 +147,10 @@ onUnmounted(() => {
 
 
 <style scoped>
+.bi:hover {
+    color:azure;
+}
+
 .title {
     font-family: serif;
     cursor: context-menu;

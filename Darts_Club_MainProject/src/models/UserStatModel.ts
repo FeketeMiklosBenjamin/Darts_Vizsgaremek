@@ -14,5 +14,7 @@ export default interface UserStatModel {
     highestCheckout: number,
     nineDarter: number,
     username: string,
-    profilePictureUrl: string
+    profilePictureUrl: string,
+    registerDate: string,
+    lastLoginDate: string
 }
