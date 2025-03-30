@@ -5,25 +5,30 @@ import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref } from 'vue';
 
-const { alluser, user } = storeToRefs(useUserStore());
-const { getLBUser } = useUserStore();
-const searchUsers = ref<AllUsersModel[]>([])
-const searchFor = ref('');
+const { alluser } = storeToRefs(useUserStore());
+const { getAllUser } = useUserStore();
+
+const leaderBoardUsers = ref<AllUsersModel[]>([]);
+const selectedLevel = ref<string>('Amateur');
 
 onBeforeMount(async () => {
-    await getLBUser();
-    searchUsers.value = alluser.value.filter(x => x.id !== user.value.id);
+    await getAllUser();
+    leaderBoardUsers.value = [...alluser.value];
 });
 
 const filteredUsers = computed(() => {
-    const searchTerm = searchFor.value.trim().toLowerCase();
-
-    if (!searchTerm) {
-        return searchUsers.value;
-    }
-
-    return searchUsers.value.filter(x => x.username.toLowerCase().includes(searchTerm));
+    return leaderBoardUsers.value
+        .filter(user => user.level === selectedLevel.value)
+        .sort((a, b) => Number(b.dartsPoints) - Number(a.dartsPoints));
 });
+
+const getRankClass = (index: number) => {
+    if (index === 0) return 'gold-rank';
+    if (index === 1) return 'silver-rank'; 
+    if (index === 2) return 'bronze-rank'; 
+    return '';
+};
+
 
 const NavigateToStatistic = (userId: string) => {
     router.push(`/statistic/${userId}`)
@@ -34,37 +39,38 @@ const NavigateToStatistic = (userId: string) => {
 <template>
     <div class="z-1 position-rel">
         <div class="row justify-content-center my-5">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Felhasználónév..." v-model="searchFor">
-                </div>
+            <div class="col-md-5">
+                <select class="form-control text-center" v-model="selectedLevel">
+                    <option value="Amateur">Amateur</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Professional">Professional</option>
+                </select>
             </div>
             <div class="row justify-content-center my-4">
                 <div class="col-md-8">
                     <table class="table text-center" v-if="filteredUsers.length > 0">
                         <tbody>
-                            <tr v-for="users in filteredUsers" :key="users.id" @click="NavigateToStatistic(users.id)">
+                            <tr v-for="(users, index) in filteredUsers" :key="users.id" @click="NavigateToStatistic(users.id)">
+                                <td :class="getRankClass(index)">{{ index + 1 }}.</td>
                                 <td>
                                     <div class="rounded-circle border mx-auto border-3" :class="{
                                         'border-success': users.level == 'Amateur',
                                         'border-warning': users.level == 'Advanced',
                                         'border-danger': users.level == 'Professional'
                                     }">
-                                    <img :src="users.profilePictureUrl" class="profileImg border-0 mx-auto d-block" alt="Nincs">
+                                        <img :src="users.profilePictureUrl" class="profileImg border-0 mx-auto d-block"
+                                            alt="Nincs">
                                     </div>
                                 </td>
                                 <td>{{ users.username }}</td>
                                 <td>{{ users.emailAddress }}</td>
-                                <td>{{ users.dartsPoints }}</td>                        
+                                <td>{{ users.dartsPoints }}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div v-else class="alert alert-warning text-center mx-auto w-50">
                         <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
-                        <div class="d-inline">Nem létezik ez a felhasználó!</div>
+                        <div class="d-inline">Nincsen ilyen szintű felhasználó!</div>
                     </div>
                 </div>
             </div>
@@ -73,15 +79,35 @@ const NavigateToStatistic = (userId: string) => {
 </template>
 
 <style scoped>
-
-.input-group .form-control {
-    padding: 0.75vw;
+.gold-rank {
+    color: #FFD70D;
+    font-style: italic;
+    font-size: 1.2em;
 }
 
-.input-group .form-control:focus {
+.silver-rank {
+    color: #C0C0C0;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.bronze-rank {
+    color: #cd7f32;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.form-control {
+    padding: 0.75vw;
+    font-weight: 600;
+    font-size: 2.5vh;
+    background-color: rgba(212, 210, 210, 0.601);
+}
+
+.form-control:focus {
     outline: none;
     box-shadow: none;
-    border-color: #aaa;
+    color: none;
 }
 
 .table {
@@ -91,9 +117,7 @@ const NavigateToStatistic = (userId: string) => {
 }
 
 table tr {
-    background-color: rgba(255, 255, 255, 0.585);
     cursor: pointer;
-    border: 3px solid black;
 }
 
 .table tr:hover {
@@ -101,10 +125,9 @@ table tr {
 }
 
 .table td {
-    background-color: transparent;
-}
-
-.table td {
+    background-color: rgba(86, 83, 83, 0.84);
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
     padding-bottom: 10px;
     vertical-align: middle;
 }

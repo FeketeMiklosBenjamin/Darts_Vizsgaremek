@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
-const { status, stats, user } = storeToRefs(useUserStore());
+const { status, stats } = storeToRefs(useUserStore());
 
 const route = useRoute();
 

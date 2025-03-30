@@ -125,7 +125,23 @@ export const useUserStore = defineStore('userStore', {
         getAllUser() {
             return UserService.getAll(this.user.accessToken)
                 .then((res) => {
-                    this.alluser = res.data.map((user: any) => ({
+                    this.alluser = res.data.map((user: AllUsersModel) => ({
+                        id: user.id,
+                        username: user.username,
+                        emailAddress: user.emailAddress,
+                        profilePictureUrl: user.profilePictureUrl,
+                        level: user.level,
+                        dartsPoints: user.dartsPoints
+                    }));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
+        },
+        getLBUser() {
+            return UserService.getLeaderBoard(this.user.accessToken)
+                .then((res) => {
+                    this.alluser = res.data.map((user: AllUsersModel) => ({
                         id: user.id,
                         username: user.username,
                         emailAddress: user.emailAddress,
