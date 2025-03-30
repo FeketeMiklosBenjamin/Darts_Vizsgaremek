@@ -62,9 +62,9 @@ const NavigateToStatistic = (userId: string) => {
                                             alt="Nincs">
                                     </div>
                                 </td>
-                                <td>{{ users.username }}</td>
-                                <td>{{ users.emailAddress }}</td>
-                                <td>{{ users.dartsPoints }}</td>
+                                <td class="text-white">{{ users.username }}</td>
+                                <td class="text-white">{{ users.emailAddress }}</td>
+                                <td class="text-white">{{ users.dartsPoints }}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -1,6 +1,11 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
+
+.border-purple {
+    border-color: purple !important;
+}
+
 table {
     scrollbar-width: none;
     -ms-overflow-style: none;

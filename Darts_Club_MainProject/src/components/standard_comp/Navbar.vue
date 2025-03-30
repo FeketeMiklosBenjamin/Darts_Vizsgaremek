@@ -4,9 +4,11 @@ import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
+import { useMessagesStore } from '@/stores/MessagesStore';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
+const { getYourMessages } = useMessagesStore();
 const router = useRouter();
 
 const remainingTime = ref(2 * 60 * 1000);
@@ -16,7 +18,7 @@ let countdownInterval: any;
 
 
 
-onMounted(() => {
+onMounted(async () => {
     const savedTime = sessionStorage.getItem('Time');
     if (savedTime) {
         remainingTime.value = parseInt(savedTime);
@@ -24,6 +26,12 @@ onMounted(() => {
     
     if (status.value.isLoggedIn) {
         startBackgroundTimer();
+
+        if (user.value.accessToken) {
+            await getYourMessages(user.value.accessToken);
+        } else {
+            console.error("Hiba: accessToken nem található!");
+        }
     }
     window.addEventListener("beforeunload", handleBeforeUnload);
     onBeforeRouteLeave((to, from, next) => {
@@ -110,6 +118,9 @@ onUnmounted(() => {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2">
+                        <li v-if="status._id" class="nav-item me-3 mt-1 text-secondary">
+                            <i class="bi bi-envelope fs-4"></i>
+                        </li>
                         <li>
                             <router-link v-if="status._id" :to="`/main-page`" class="nav-link nav-item m-2 text-secondary">
                                 <i class="bi bi-house-door-fill"></i>
@@ -124,6 +135,7 @@ onUnmounted(() => {
                             'border-success': user.level == 'Amateur',
                             'border-warning': user.level == 'Advanced',
                             'border-danger': user.level == 'Professional',
+                            'border-secondary': user.role == 2,
                             'bg-white border-info px-1': status._id == ''
                         }">
                             <img v-if="status._id" :src="user.profilePictureUrl"
@@ -137,6 +149,10 @@ onUnmounted(() => {
                             <VueCountdown v-if="status._id" :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="onLogout">
                                 <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0') }}</span>
                             </VueCountdown>
+                            <div v-if="user.role == 2" class="tooltip-container">
+                                <i class="bi bi-person-badge-fill text-secondary ms-2"></i>
+                                <div class="tooltip-text">Ön admin</div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -147,6 +163,30 @@ onUnmounted(() => {
 
 
 <style scoped>
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+}
+
 .bi:hover {
     color:azure;
 }

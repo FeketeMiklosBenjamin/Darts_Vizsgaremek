@@ -3,8 +3,10 @@ import type UserFeedModel from '@/models/UserFeedModel';
 import { useMessagesStore } from '@/stores/MessagesStore';
 import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap';
+import { useUserStore } from '@/stores/UserStore';
 
-const { sendUserFeed, status } = useMessagesStore();
+const { user } = useUserStore();
+const { sendUserFeed, sendAdminFeed, status } = useMessagesStore();
 const processing = ref<boolean>(false);
 
 const modal = ref<HTMLElement>();
@@ -18,6 +20,7 @@ onMounted(() => {
 
 const feedform = ref<UserFeedModel>({
     title: '',
+    emailAddress: '',
     text: ''
 });
 
@@ -28,10 +31,15 @@ async function onSend() {
 
     try {
         const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
-        sendUserFeed(accessToken, feedform.value)
-        feedform.value.title = '';
-        feedform.value.text = '';
+        if (user.role == 2) {
+            await sendAdminFeed(accessToken, feedform.value)
+        } else {
+            await sendUserFeed(accessToken, feedform.value)
+        }
     } catch (err) { }
+    feedform.value.title = '';
+    feedform.value.text = '';
+    feedform.value.emailAddress = '';
     processing.value = false;
     modalInstance.show();
 }
@@ -48,18 +56,26 @@ async function onSend() {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <div class="alert text-center" :class="{'alert-success': status.success, 'alert-danger': !status.success}"><i class="bi me-3" :class="{'bi-check-circle' : status.success, 'bi-x-circle': !status.success}"></i>{{ status.resp }}</div>
+                        <div class="alert text-center"
+                            :class="{ 'alert-success': status.success, 'alert-danger': !status.success }"><i
+                                class="bi me-3"
+                                :class="{ 'bi-check-circle': status.success, 'bi-x-circle': !status.success }"></i>{{
+                            status.resp }}</div>
                     </div>
                 </div>
             </div>
         </div>
         <form @submit.prevent="onSend()">
             <div class="row">
-                <input type="text" id="title" placeholder="Cím: pl. Felhasználó bejelentése!" v-model="feedform.title"
+                <input type="text" id="title" placeholder="Cím..." v-model="feedform.title"
                     class="form-control mx-auto w-50 mt-3">
             </div>
+            <div v-if="user.role == 2" class="row">
+                <input type="text" id="title" placeholder="Email..." v-model="feedform.emailAddress"
+                    class="form-control mx-auto w-50 mt-2">
+            </div>
             <div class="row">
-                <textarea id="subject" placeholder="Itt probléma van!" rows="12" v-model="feedform.text"
+                <textarea id="subject" placeholder="Tárgy..." rows="12" v-model="feedform.text"
                     class="form-control mt-2 mx-auto w-50"></textarea>
             </div>
             <div class="row">
