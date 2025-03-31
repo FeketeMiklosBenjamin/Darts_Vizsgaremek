@@ -8,15 +8,17 @@ import { useMessagesStore } from '@/stores/MessagesStore';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
-const { getYourMessages } = useMessagesStore();
+const { getYourMessages, forUserEmails, forAdminEmails } = useMessagesStore();
 const router = useRouter();
 
 const remainingTime = ref(2 * 60 * 1000);
 const hasRefreshed = ref(false);
 let countdownInterval: any;
+const isDropdownVisible = ref(false);  
 
-
-
+const toggleDropdown = () => {
+    isDropdownVisible.value = !isDropdownVisible.value; 
+};
 
 onMounted(async () => {
     const savedTime = sessionStorage.getItem('Time');
@@ -29,8 +31,6 @@ onMounted(async () => {
 
         if (user.value.accessToken) {
             await getYourMessages(user.value.accessToken);
-        } else {
-            console.error("Hiba: accessToken nem található!");
         }
     }
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -87,6 +87,8 @@ const onLogout = async () => {
     try {
         await logout();
         status.value._id = '';
+        forUserEmails.splice(0, forUserEmails.length);
+        forAdminEmails.splice(0, forAdminEmails.length);
         router.push('/');
     } catch (err) {
         status.value._id = '';
@@ -119,7 +121,18 @@ onUnmounted(() => {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2">
                         <li v-if="status._id" class="nav-item me-3 mt-1 text-secondary">
-                            <i class="bi bi-envelope fs-4"></i>
+                            <i class="bi bi-envelope fs-4" @click="toggleDropdown"></i>
+                            <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
+                                <div v-if="user.role == 2">
+                                    <div v-for="(email, index) in forAdminEmails" :key="index" class="message-box">
+                                        <div class="message-box-content">
+                                            <p>{{ email.title }}</p>
+                                            <p>{{ email.emailAddress }}</p>
+                                            <p>{{ email.sendDate }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <li>
                             <router-link v-if="status._id" :to="`/main-page`" class="nav-link nav-item m-2 text-secondary">
@@ -163,6 +176,47 @@ onUnmounted(() => {
 
 
 <style scoped>
+.message-box {
+    background-color: #343a40;
+    color: white;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 5px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.message-box-content {
+    font-size: 14px;
+}
+
+.message-box p {
+    margin: 5px 0;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 90%;
+    left: 60%;
+    background-color: white;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 5px;
+    min-width: 20vw;
+    opacity: 0;
+    overflow: hidden; 
+    display: block;
+    z-index: 1;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.dropdown-menu.visible {
+    display: block;
+    max-height: 500px;
+    opacity: 1; 
+}
+
+
 .tooltip-container {
     position: relative;
     display: inline-block;

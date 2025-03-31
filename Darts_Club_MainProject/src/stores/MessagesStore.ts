@@ -10,8 +10,8 @@ export const useMessagesStore = defineStore('messagesStore', {
             resp: '',
             success: false
         },
-        forUserEmails: <UserFeedModel[]>{},
-        forAdminEmails: <AdminEmailModel[]>{}
+        forUserEmails: [] as UserFeedModel[],
+        forAdminEmails: [] as AdminEmailModel[]
     }),
     actions: {
         getYourMessages(accesstoken: string) {
