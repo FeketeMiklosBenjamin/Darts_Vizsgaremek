@@ -51,5 +51,29 @@ namespace DartsMobilApp.Network
             return null;
             
         }
+        public static async Task<T> PostAToken(string url, StringContent content)
+        {
+            string? AToken = SecStoreItems.AToken;
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AToken);
+            request.Content = content;
+            using var response = await client.SendAsync(request).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                string resultStr = await response.Content.ReadAsStringAsync();
+                T result = JsonSerializer.Deserialize<T>(resultStr);
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
+
+        }
     }
 }

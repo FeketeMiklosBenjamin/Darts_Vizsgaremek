@@ -2,6 +2,7 @@
 using DartsMobilApp.Network;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
@@ -67,11 +68,13 @@ namespace DartsMobilApp.API
         }
 
 
-        public static Task<string> PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
+        public static AccessTokenResponse PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
         {
             try
             {
-                return HTTPCommunication<string>.Post($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken);
+                Debug.WriteLine($"RefreshToken:  {refreshToken} \n\n\n\n \t\t User Id:{UserId}");
+                var response = HTTPCommunication<AccessTokenResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken).Result;
+                return response;
             }
             catch (Exception)
             {

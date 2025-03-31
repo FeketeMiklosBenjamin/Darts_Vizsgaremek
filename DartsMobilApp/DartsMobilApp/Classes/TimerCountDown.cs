@@ -3,6 +3,7 @@ using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace DartsMobilApp.Classes
     public class TimerCountDown
     {
         private Timer _timer;
-        private int _remainingSeconds = 5 * 60;
+        private int _remainingSeconds = 250;
 
         public event Action OnCountdownReset;
 
@@ -41,22 +42,32 @@ namespace DartsMobilApp.Classes
 
             if (_remainingSeconds <= 0) // Ha lejárt, állítsuk vissza
             {
-                _remainingSeconds = 5 * 60;
+                _remainingSeconds = 250;
                 Debug.WriteLine("Timer újraindítva!");
             }
         }
 
         private async Task CheckAndResetTimer()
         {
-            if (_remainingSeconds < 5 * 60)
+            if (_remainingSeconds < 250)
             {
-                var content = new StringContent(SecStoreItems.RToken, Encoding.UTF8, "application/json");
-                var newAccessToken =  DartsAPI.PostRefreshAndGetNewAccess(content, SecStoreItems.UserId).Result.ToString();
+                var Model = new RefreshTokenModel()
+                {
+                    refreshToken = SecStoreItems.RToken
+                };
+                var JsonContent = JsonSerializer.Serialize(Model);
+                var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
+                var newAccessToken =  DartsAPI.PostRefreshAndGetNewAccess(content, SecStoreItems.UserId).accessToken;
+                Debug.WriteLine($"\n\n\n\n Access Token!!! --- {newAccessToken} \n\n\n\n");
                 await SecureStorage.SetAsync("Token", newAccessToken);
 
-                _remainingSeconds = 5 * 60;
-                Debug.WriteLine("Új token beállítva, timer újraindítva!");
+                Debug.WriteLine($"\n\n\n\n {SecStoreItems.AToken} \n\n\n\n");
 
+                _remainingSeconds = 250;
+
+                Debug.WriteLine($"\n\n\n\n {_remainingSeconds} \n\n\n\n");
+                Debug.WriteLine("Új token beállítva, timer újraindítva!");
+               
                 OnCountdownReset?.Invoke();
             }
         }
