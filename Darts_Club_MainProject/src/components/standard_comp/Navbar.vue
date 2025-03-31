@@ -2,13 +2,14 @@
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useMessagesStore } from '@/stores/MessagesStore';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
-const { getYourMessages, forUserEmails, forAdminEmails } = useMessagesStore();
+const { getYourMessages, deleteMyMessages } = useMessagesStore();
+const { forUserEmails, forAdminEmails } = storeToRefs(useMessagesStore());
 const router = useRouter();
 
 const remainingTime = ref(2 * 60 * 1000);
@@ -16,7 +17,26 @@ const hasRefreshed = ref(false);
 let countdownInterval: any;
 const isDropdownVisible = ref(false);  
 
-const toggleDropdown = () => {
+
+const MessageDelete = async (id: string) => {
+    await deleteMyMessages(id, user.value.accessToken);
+
+    const userIndex = forUserEmails.value.findIndex(email => email.id === id);
+    const AdminIndex = forAdminEmails.value.findIndex(email => email.id === id);
+    if (AdminIndex !== -1) {
+        forAdminEmails.value.splice(AdminIndex, 1);
+    }
+    if (userIndex !== -1) {
+        forUserEmails.value.splice(userIndex, 1);
+    }
+}
+
+const toggleDropdown = async () => {
+    if (user.value.accessToken) {
+        await getYourMessages(user.value.accessToken);
+    }
+
+    await nextTick();
     isDropdownVisible.value = !isDropdownVisible.value; 
 };
 
@@ -28,11 +48,8 @@ onMounted(async () => {
     
     if (status.value.isLoggedIn) {
         startBackgroundTimer();
-
-        if (user.value.accessToken) {
-            await getYourMessages(user.value.accessToken);
-        }
     }
+
     window.addEventListener("beforeunload", handleBeforeUnload);
     onBeforeRouteLeave((to, from, next) => {
         keepTimeOnNavigate(); 
@@ -87,8 +104,8 @@ const onLogout = async () => {
     try {
         await logout();
         status.value._id = '';
-        forUserEmails.splice(0, forUserEmails.length);
-        forAdminEmails.splice(0, forAdminEmails.length);
+        forUserEmails.value.splice(0, forUserEmails.value.length);
+        forAdminEmails.value.splice(0, forAdminEmails.value.length);
         router.push('/');
     } catch (err) {
         status.value._id = '';
@@ -126,9 +143,17 @@ onUnmounted(() => {
                                 <div v-if="user.role == 2">
                                     <div v-for="(email, index) in forAdminEmails" :key="index" class="message-box">
                                         <div class="message-box-content">
-                                            <p>{{ email.title }}</p>
-                                            <p>{{ email.emailAddress }}</p>
-                                            <p>{{ email.sendDate }}</p>
+                                            <p class="fs-5 text-center mb-3">{{ email.title }}<i class="bi bi-x-circle text-danger mt-1" @click="MessageDelete(email.id)"></i></p>
+                                            <p class="d-inline fst-italic">{{ email.emailAddress }}</p>
+                                            <p class="d-inline ms-5 fst-italic">{{ email.sendDate }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div v-for="(email, index) in forUserEmails" :key="index" class="message-box">
+                                        <div class="message-box-content text-center">
+                                            <p class="fs-5 mb-3">{{ email.title }}<i class="bi bi-x-circle text-danger mt-1" @click="MessageDelete(email.id!)"></i></p>
+                                            <p class="fst-italic">{{ email.sendDate }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -176,11 +201,20 @@ onUnmounted(() => {
 
 
 <style scoped>
+.bi-x-circle {
+    font-size: 1vw;
+    position: absolute;
+    left: 275px;
+    cursor: pointer;
+}
+
 .message-box {
     background-color: #343a40;
     color: white;
+    border: 2px solid black;
     border-radius: 5px;
-    padding: 15px;
+    padding: 10px;
+    padding-top: 0;
     margin: 5px 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
@@ -206,6 +240,7 @@ onUnmounted(() => {
     opacity: 0;
     overflow: hidden; 
     display: block;
+    padding: 5px;
     z-index: 1;
     transition: max-height 0.3s ease, opacity 0.3s ease;
 }

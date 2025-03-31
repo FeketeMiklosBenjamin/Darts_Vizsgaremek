@@ -27,13 +27,7 @@ export const useMessagesStore = defineStore('messagesStore', {
                             sendDate: email.sendDate
                         }));
                     } else {
-                        this.forAdminEmails = res.data.map((email: AdminEmailModel) => ({
-                            id: email.id,
-                            title: email.title,
-                            emailAddress: email.emailAddress,
-                            text: email.text,
-                            sendDate: email.sendDate
-                        }))
+                        this.forAdminEmails = [...res.data];
                     }
                 })
                 .catch((err) => {
@@ -61,6 +55,15 @@ export const useMessagesStore = defineStore('messagesStore', {
                 .catch((err) => {
                     this.status.success = false;
                     this.status.resp = err.data.message;
+                    return Promise.reject(err);
+                })
+        },
+        deleteMyMessages(id: string, accesstoken: string) {
+            return MessagesService.deleteMessage(id, accesstoken)
+                .then(() =>{
+                    console.log("Sikeres törlés");
+                })
+                .catch((err) => {
                     return Promise.reject(err);
                 })
         }
