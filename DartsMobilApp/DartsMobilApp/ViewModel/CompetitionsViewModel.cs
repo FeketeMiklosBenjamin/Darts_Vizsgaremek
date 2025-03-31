@@ -25,9 +25,9 @@ namespace DartsMobilApp.ViewModel
         public string? AccessToken = SecStoreItems.AToken;
 
         [ObservableProperty]
-        public List<MatchModel> sortedTournaments;
+        public List<MatchModel>? sortedTournaments;
 
-        public List<MatchModel> TakedTournaments { get; set; }
+        public List<MatchModel> TakedTournaments { get; set; } = new List<MatchModel>();
 
 
         [RelayCommand]

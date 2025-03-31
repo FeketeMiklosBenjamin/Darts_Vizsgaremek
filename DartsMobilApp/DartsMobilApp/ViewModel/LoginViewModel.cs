@@ -32,6 +32,9 @@ namespace DartsMobilApp.ViewModel
         }
 
 
+        private static TimerCountDown timer; 
+
+
 
 
 
@@ -53,6 +56,13 @@ namespace DartsMobilApp.ViewModel
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
                 await Application.Current.MainPage.DisplayAlert("Sikeresen Bejelntkezett" , $"{loginResponse.message}", "OK");
+
+                if (timer == null)
+                {
+                    timer = new TimerCountDown();
+                    timer.Start();
+                }
+
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
@@ -70,3 +80,7 @@ namespace DartsMobilApp.ViewModel
 
     }
 }
+
+
+
+// Timer Set Up

@@ -18,20 +18,22 @@ namespace DartsMobilApp.ViewModel
 
 
         [ObservableProperty]
-        public List<FriendlyMatchModel> sortedFriendlies;
+        public List<FriendlyMatchModel> sortedFriendlies = new List<FriendlyMatchModel>();
 
-        public List<FriendlyMatchModel> TakedFriendlies;
+        public List<FriendlyMatchModel> TakedFriendlies { get; set; } = new List<FriendlyMatchModel>();
 
         public string? AccessToken = SecStoreItems.AToken;
 
         [RelayCommand]
         private void Appearing()
         {
+            
             LoadFriendliesMatch();
             SortedFriendlies = friendlymatches.Take(4).ToList();
+
         }
 
-
+       
         private List<FriendlyMatchModel> LoadFriendliesMatch()
         {
             if (string.IsNullOrEmpty(AccessToken))
@@ -39,7 +41,8 @@ namespace DartsMobilApp.ViewModel
                 throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
             }
-            Friendlymatches = DartsAPI.GetFriendlyMatches();
+            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName).ToList();
+            
             if (Friendlymatches != null)
             {
                 return Friendlymatches;
@@ -70,10 +73,10 @@ namespace DartsMobilApp.ViewModel
             return TakedFriendlies;
         }
 
-
         [RelayCommand]
         private void FilterTournaments(string number)
         {
+            TakedFriendlies = FillTakedTList();
             if (number == "1")
             {
                 if (Friendlymatches?.Count > 4 && TakedFriendlies.Count != Friendlymatches.Count)
@@ -99,6 +102,29 @@ namespace DartsMobilApp.ViewModel
                     FillTakedTList();
                 }
             }
+        }
+
+        
+        private  List<FriendlyMatchModel> RefreshFriendfliesFunction()
+        {
+            Friendlymatches = DartsAPI.GetFriendlyMatches();
+            
+            return Friendlymatches;
+        }
+
+        private List<FriendlyMatchModel> RefreshSorted()
+        {
+            SortedFriendlies = RefreshFriendfliesFunction().Take(4).ToList();
+            return SortedFriendlies;
+        }
+
+
+        [RelayCommand]
+
+        private void RefreshFriendlies()
+        {
+            RefreshFriendfliesFunction();
+            RefreshSorted();
         }
     }
 }

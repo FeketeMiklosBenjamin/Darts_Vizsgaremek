@@ -67,11 +67,11 @@ namespace DartsMobilApp.API
         }
 
 
-        public static string PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
+        public static Task<string> PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
         {
             try
             {
-                return HTTPCommunication<AccessTokenModel>.Post($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken)?.Result?.ToString();
+                return HTTPCommunication<string>.Post($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken);
             }
             catch (Exception)
             {
@@ -79,5 +79,19 @@ namespace DartsMobilApp.API
                 throw;
             }
         }
+
+        //public static PostResponse PostNewFriendlyMatch(StringContent newFriendlyMatch)
+        //{
+        //    try
+        //    {
+        //        return HTTPCommunication<PostResponse>.Post("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newFriendlyMatch).Result;
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
     }
 }

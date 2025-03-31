@@ -8,15 +8,17 @@
              Shell.TabBarBackgroundColor="Transparent"
              Shell.NavBarIsVisible="True"   
              BackgroundImageSource="ally_pally.jpg"
+             
              >
   
     <ContentPage.Behaviors>
         <tools:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
     </ContentPage.Behaviors>    
 
-    <Grid RowDefinitions="*,5*,*" Margin="20" >
+    <Grid RowDefinitions="*,0.5*,5*,*" Margin="20" >
         <Label Text="Versenyeink" FontSize="40" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
-        <CollectionView Grid.Row="1" ItemsSource="{Binding SortedTournaments}" >
+        <Button HorizontalOptions="End" Grid.Row="1" BackgroundColor="Green" Text="Frissítés" HeightRequest="45" WidthRequest="110"/>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding SortedTournaments}" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border BackgroundColor="#99000000" Margin="0,0,0,20" WidthRequest="350" HeightRequest="120" StrokeShape="RoundRectangle 20,20,20,20">
