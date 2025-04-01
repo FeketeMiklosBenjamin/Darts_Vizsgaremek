@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.API;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
+using DartsMobilApp.SecureStorageItems;
 using Microsoft.Maui.Platform;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,13 @@ namespace DartsMobilApp.ViewModel
         public Color Btn501Color { get; set; } = Color.FromRgb(211, 211, 211);
 
         public Color Btn701Color { get; set; } = Color.FromRgb(211, 211, 211);
+
+        [ObservableProperty]
+        public int numberOfSetsOrLegs;
+
+
+
+
         private Color RecolorButton(Button BTN)
         {
             var color = BTN.BackgroundColor;
@@ -120,23 +128,59 @@ namespace DartsMobilApp.ViewModel
         }
 
 
+
         [RelayCommand]
 
         private async void Navigate()
         {
-           newFriendlyMatch.name = "Test";
-            newFriendlyMatch.playerLevel = "Amatour";
+            List<Color> colors = new List<Color>() { BtnSetColor, BtnLegColor, BestOfBtnColor, FirstToBtnColor, Btn301Color,Btn501Color, Btn701Color};
+
+
+            newFriendlyMatch.joinPassword = null;
             newFriendlyMatch.levelLocked = false;
-            newFriendlyMatch.setsCount = 0;
-            newFriendlyMatch.legsCount = 6;
-            newFriendlyMatch.startingPoint = 501;
-            newFriendlyMatch.joinPassword = "1123581321345589144233377";
+            if (BtnSetColor == selectedColor)
+            {
+                if (FirstToBtnColor == selectedColor)
+                {
+                    newFriendlyMatch.setsCount = NumberOfSetsOrLegs;
+                    newFriendlyMatch.legsCount = 3;
+                }
+                else if(BestOfBtnColor == selectedColor)
+                {
+                    newFriendlyMatch.setsCount = (int)Math.Floor(NumberOfSetsOrLegs / 2.00) + 1;
+                    newFriendlyMatch.legsCount = 3;
+                }
+            }
+            else if (BtnLegColor == selectedColor)
+            {
+                if (FirstToBtnColor == selectedColor)
+                {
+                    newFriendlyMatch.legsCount = NumberOfSetsOrLegs;
+                }
+                else if (BestOfBtnColor == selectedColor)
+                {
+                    newFriendlyMatch.legsCount = (int)Math.Floor(NumberOfSetsOrLegs/2.00);
+                }
+                newFriendlyMatch.setsCount = null;
+            }
+            if (Btn301Color == selectedColor)
+            {
+                newFriendlyMatch.startingPoint = 301;
+            }
+            else if(Btn501Color == selectedColor)
+            {
+                newFriendlyMatch.startingPoint = 501;
+            }
+            else if (Btn701Color == selectedColor)
+            {
+                newFriendlyMatch.startingPoint = 701;
+            }
             var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
             var friedlyMatch = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             //var response = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
-            
-            //if (response.StatusCode == 204)
+
+            //if (response == null)
             //{
             //    MainThread.BeginInvokeOnMainThread(async () =>
             //    {

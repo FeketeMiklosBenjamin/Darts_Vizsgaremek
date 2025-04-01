@@ -18,7 +18,7 @@
                     <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="{Binding BtnLegColor}" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
                 </Border>
             <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
-                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric"/>
+                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric" Text="{Binding NumberOfSetsOrLegs}"/>
             </Border>
             <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}">
                 <Button Text="First to" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}" TextColor="Black" x:Name="FirstToBtn" Command="{Binding FirstToOrBestofCommand}"  CommandParameter="{Binding Source={x:Reference FirstToBtn }}"/>
