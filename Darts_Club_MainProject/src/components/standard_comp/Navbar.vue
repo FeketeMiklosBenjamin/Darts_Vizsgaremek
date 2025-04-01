@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useMessagesStore } from '@/stores/MessagesStore';
+import { errorMessages } from 'vue/compiler-sfc';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
@@ -15,7 +16,7 @@ const router = useRouter();
 const remainingTime = ref(2 * 60 * 1000);
 const hasRefreshed = ref(false);
 let countdownInterval: any;
-const isDropdownVisible = ref(false);  
+const isDropdownVisible = ref(false);
 
 
 const MessageDelete = async (id: string) => {
@@ -37,22 +38,23 @@ const toggleDropdown = async () => {
     }
 
     await nextTick();
-    isDropdownVisible.value = !isDropdownVisible.value; 
+    isDropdownVisible.value = !isDropdownVisible.value;
 };
 
 onMounted(async () => {
+    sessionStorage.removeItem("emailId");
     const savedTime = sessionStorage.getItem('Time');
     if (savedTime) {
         remainingTime.value = parseInt(savedTime);
     }
-    
+
     if (status.value.isLoggedIn) {
         startBackgroundTimer();
     }
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     onBeforeRouteLeave((to, from, next) => {
-        keepTimeOnNavigate(); 
+        keepTimeOnNavigate();
         next();
     });
 });
@@ -75,19 +77,19 @@ const setAccesTk = async () => {
         hasRefreshed.value = false;
         remainingTime.value = 15 * 60 * 1000;
         keepTimeOnNavigate();
-    } catch (err) {}
+    } catch (err) { }
 }
 
 const startBackgroundTimer = () => {
     if (countdownInterval) return;
     countdownInterval = setInterval(() => {
         remainingTime.value -= 1000;
-        
+
         if (remainingTime.value <= 5 * 60 * 1000 && !hasRefreshed.value) {
             hasRefreshed.value = true;
             setAccesTk();
         }
-        
+
         keepTimeOnNavigate();
     }, 1000);
 }
@@ -123,6 +125,10 @@ onUnmounted(() => {
     clearInterval(countdownInterval);
 });
 
+const NavigateToMessage = (emailId: string) => {
+    sessionStorage.setItem("emailId", emailId);
+    router.push(`/messages`)
+}
 
 </script>
 
@@ -141,31 +147,37 @@ onUnmounted(() => {
                             <i class="bi bi-envelope fs-4" @click="toggleDropdown"></i>
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
-                                    <div v-for="(email, index) in forAdminEmails" :key="index" class="message-box">
-                                        <div class="message-box-content">
-                                            <p class="fs-5 text-center mb-3">{{ email.title }}<i class="bi bi-x-circle text-danger mt-1" @click="MessageDelete(email.id)"></i></p>
+                                    <div v-for="email in forAdminEmails" :key="email.id" class="message-box mx-auto">
+                                        <div class="message-box-content" @click="NavigateToMessage(email.id)">
+                                            <p class="fs-5 text-center mb-3">{{ email.title }}<i
+                                                    class="bi bi-x-circle text-danger mt-1"
+                                                    @click="MessageDelete(email.id)"></i></p>
                                             <p class="d-inline fst-italic">{{ email.emailAddress }}</p>
-                                            <p class="d-inline ms-5 fst-italic">{{ email.sendDate }}</p>
+                                            <p class="d-inline margin-date fst-italic">{{ email.sendDate }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-for="(email, index) in forUserEmails" :key="index" class="message-box">
-                                        <div class="message-box-content text-center">
-                                            <p class="fs-5 mb-3">{{ email.title }}<i class="bi bi-x-circle text-danger mt-1" @click="MessageDelete(email.id!)"></i></p>
-                                            <p class="fst-italic">{{ email.sendDate }}</p>
+                                    <div v-for="email in forUserEmails" :key="email.id" class="message-box mx-auto">
+                                        <div class="message-box-content text-center" @click="NavigateToMessage(email.id!)">
+                                            <p class="fs-5 mb-3">{{ email.title }}<i
+                                                    class="bi bi-x-circle text-danger mt-1"
+                                                    @click="MessageDelete(email.id!)"></i></p>
+                                            <p class="fst-italic mb-0">{{ email.sendDate }}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <router-link v-if="status._id" :to="`/main-page`" class="nav-link nav-item m-2 text-secondary">
+                            <router-link v-if="status._id" :to="`/main-page`"
+                                class="nav-link nav-item m-2 text-secondary">
                                 <i class="bi bi-house-door-fill"></i>
                             </router-link>
                         </li>
                         <li class="nav-item me-2 mt-2">
-                            <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'" class="nav-link no-underline">
+                            <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'"
+                                class="nav-link no-underline">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
                         </li>
@@ -184,8 +196,10 @@ onUnmounted(() => {
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
-                            <VueCountdown v-if="status._id" :time="15 * 60 * 1000" v-slot="{ minutes, seconds }" @end="onLogout">
-                                <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0') }}</span>
+                            <VueCountdown v-if="status._id" :time="15 * 60 * 1000" v-slot="{ minutes, seconds }"
+                                @end="onLogout">
+                                <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0')
+                                    }}</span>
                             </VueCountdown>
                             <div v-if="user.role == 2" class="tooltip-container">
                                 <i class="bi bi-person-badge-fill text-secondary ms-2"></i>
@@ -201,10 +215,14 @@ onUnmounted(() => {
 
 
 <style scoped>
+table::-webkit-scrollbar {
+    display: none;
+}
+
 .bi-x-circle {
     font-size: 1vw;
     position: absolute;
-    left: 275px;
+    left: 17vw;
     cursor: pointer;
 }
 
@@ -214,31 +232,31 @@ onUnmounted(() => {
     border: 2px solid black;
     border-radius: 5px;
     padding: 10px;
+    max-width: 18vw;
     padding-top: 0;
     margin: 5px 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.message-box-content {
-    font-size: 14px;
+.margin-date {
+    margin-left: 4.5vw;
 }
 
-.message-box p {
-    margin: 5px 0;
+
+.message-box-content {
+    font-size: 14px;
 }
 
 .dropdown-menu {
     position: absolute;
     top: 90%;
-    left: 60%;
+    left: 56%;
     background-color: white;
-    color: black;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 2px solid gray;
     border-radius: 5px;
     min-width: 20vw;
     opacity: 0;
-    overflow: hidden; 
+    overflow: hidden;
     display: block;
     padding: 5px;
     z-index: 1;
@@ -247,8 +265,15 @@ onUnmounted(() => {
 
 .dropdown-menu.visible {
     display: block;
-    max-height: 500px;
-    opacity: 1; 
+    max-height: 19.5vh;
+    overflow-y: auto;
+    opacity: 1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.dropdown-menu.visible::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -277,7 +302,7 @@ onUnmounted(() => {
 }
 
 .bi:hover {
-    color:azure;
+    color: azure;
 }
 
 .title {

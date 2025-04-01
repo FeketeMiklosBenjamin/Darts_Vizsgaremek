@@ -11,6 +11,7 @@ import SearchProfileView from '@/views/SearchProfileView.vue'
 import StatisticView from '@/views/StatisticView.vue'
 import FeedBackView from '@/views/FeedBackView.vue'
 import Modifyview from '@/views/Modifyview.vue'
+import SeeYourMessageView from '@/views/SeeYourMessageView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +64,11 @@ const router = createRouter({
     { 
       path: '/modify', 
       component: Modifyview,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/messages', 
+      component: SeeYourMessageView,
       meta: { requiresAuth: true}
     },
     {
