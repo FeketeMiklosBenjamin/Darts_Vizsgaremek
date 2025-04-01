@@ -190,7 +190,7 @@ const NavigateToMessage = (emailId: string) => {
                         }">
                             <img v-if="status._id" :src="user.profilePictureUrl"
                                 class="profileImg border-0 mx-auto d-block" alt="Nincs">
-                            <i v-else class="bi bi-person"></i>
+                            <i v-else class="bi-person"></i>
                         </li>
                         <li v-if="status._id" class="nav-item my-auto ms-4">
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
