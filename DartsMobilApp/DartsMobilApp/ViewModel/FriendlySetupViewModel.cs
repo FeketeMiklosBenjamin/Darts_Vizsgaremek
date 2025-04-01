@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,16 +21,35 @@ namespace DartsMobilApp.ViewModel
         private Color defaultColor = Color.FromRgb(211, 211, 211);
         private Color selectedColor = Color.FromRgb(255, 165, 0);
         private FriendlyMatchModel newFriendlyMatch = new FriendlyMatchModel();
+        public Button LegsBtn { get; set; } = new();
+        public Button SetsBtn { get; set; } = new();
 
-        [RelayCommand]
+        public Button FirstToBtn { get; set; }
+
         private void RecolorButton(Button BTN)
         {
             var color = BTN.BackgroundColor;
             if (color.Equals(defaultColor))            
                 BTN.BackgroundColor = selectedColor;            
             else            
-                BTN.BackgroundColor = defaultColor;
-            
+                BTN.BackgroundColor = defaultColor;  
+        }
+
+
+        [RelayCommand]
+        private void SetsLegsCheck(Button BTN)
+        {
+            switch (BTN.Text)
+            {
+                case "Legs":
+                    RecolorButton(BTN);
+                    SetsBtn.BackgroundColor = defaultColor;
+                    break;
+                case "Sets":
+                    RecolorButton(BTN);
+                    LegsBtn.BackgroundColor = defaultColor;
+                    break;
+            }
         }
 
         [RelayCommand]

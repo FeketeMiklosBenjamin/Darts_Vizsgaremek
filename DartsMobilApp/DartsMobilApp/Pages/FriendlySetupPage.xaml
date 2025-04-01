@@ -12,10 +12,10 @@
         <Label Text="Játékbeállítások" Grid.Row="1" TextColor="White" FontSize="20" HorizontalOptions="Center"/>
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="7" >
             <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50"  BackgroundColor="LightGrey">
-                <Button Text="Sets" x:Name="SetsBtn" WidthRequest="60" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" Command="{Binding RecolorButtonCommand}" CommandParameter="{Binding Source={x:Reference SetsBtn}}"/>
+                <Button Text="Sets" x:Name="SetsBtn" WidthRequest="60" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference SetsBtn}}"/>
             </Border>
             <Border  Stroke="Black" HeightRequest="50" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="LightGrey">
-                <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="LightGrey" Command="{Binding RecolorButtonCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
+                <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="LightGrey" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
             </Border>
             <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
                 <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric"/>
@@ -36,9 +36,6 @@
             </Border>
             <Border Stroke="Black" StrokeThickness="2" BackgroundColor="LightGrey" HeightRequest="50">
                 <Button Text="701" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="20" x:Name="sevenzerooneBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference sevenzerooneBtn}}"/>
-            </Border>
-            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="LightGrey">
-                <Button Text="Egyéni" WidthRequest="70" HeightRequest="50" BackgroundColor="LightGrey" TextColor="Black" FontSize="14" x:Name="UniqueBtn" Command="{Binding RecolorButtonCommand}"  CommandParameter="{Binding Source={x:Reference UniqueBtn}}"/>
             </Border>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">

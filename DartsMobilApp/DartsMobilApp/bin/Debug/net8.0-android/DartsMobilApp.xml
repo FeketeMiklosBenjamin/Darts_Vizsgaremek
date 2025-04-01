@@ -97,11 +97,11 @@
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.RefreshFriendliesCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.RefreshFriendlies"/>.</summary>
         </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.recolorButtonCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.RecolorButtonCommand"/>.</summary>
+        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.setsLegsCheckCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheckCommand"/>.</summary>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.RecolorButtonCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.RecolorButton(Microsoft.Maui.Controls.Button)"/>.</summary>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheckCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheck(Microsoft.Maui.Controls.Button)"/>.</summary>
         </member>
         <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.navigateCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NavigateCommand"/>.</summary>

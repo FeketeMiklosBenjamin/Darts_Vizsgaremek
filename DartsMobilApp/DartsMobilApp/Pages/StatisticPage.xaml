@@ -5,12 +5,12 @@
              x:Class="DartsMobilApp.Pages.StatisticPage"
              Shell.TabBarBackgroundColor="Transparent"
              Shell.NavBarIsVisible="True"
+             
              Title="StatisticPage"
                  BackgroundImageSource="darts_table.jpg">
     <ContentPage.Behaviors>
         <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
-        <tool:StatusBarBehavior StatusBarColor="Transparent"/>
-        
+        <tool:StatusBarBehavior StatusBarColor="Black"/>
     </ContentPage.Behaviors>
         
     <ContentPage.Resources>
