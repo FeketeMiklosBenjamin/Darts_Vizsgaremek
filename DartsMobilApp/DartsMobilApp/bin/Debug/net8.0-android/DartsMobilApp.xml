@@ -103,6 +103,18 @@
         <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheckCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheck(Microsoft.Maui.Controls.Button)"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.firstToOrBestofCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestofCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestofCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestof(Microsoft.Maui.Controls.Button)"/>.</summary>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.pointChangingCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChangingCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChangingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChanging(Microsoft.Maui.Controls.Button)"/>.</summary>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.navigateCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NavigateCommand"/>.</summary>
         </member>

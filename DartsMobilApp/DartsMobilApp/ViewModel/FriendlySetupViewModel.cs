@@ -23,18 +23,25 @@ namespace DartsMobilApp.ViewModel
         private FriendlyMatchModel newFriendlyMatch = new FriendlyMatchModel();
 
 
-        public Color BtnSetColor { get; set; } = Color.FromRgb(255, 165, 0);
-        public Color BtnLegColor { get; set; } = Color.FromRgb(255, 165, 0);
+        public Color BtnSetColor { get; set; } = Color.FromRgb(211, 211, 211);
+        public Color BtnLegColor { get; set; } = Color.FromRgb(211, 211, 211);
 
-        public Button FirstToBtn { get; set; }
+        public Color FirstToBtnColor { get; set; } = Color.FromRgb(211, 211, 211);
 
-   private void RecolorButton(Button BTN)
+        public Color BestOfBtnColor { get; set; } = Color.FromRgb(211, 211, 211);
+
+        public Color Btn301Color { get; set; } = Color.FromRgb(211, 211, 211);
+
+        public Color Btn501Color { get; set; } = Color.FromRgb(211, 211, 211);
+
+        public Color Btn701Color { get; set; } = Color.FromRgb(211, 211, 211);
+        private Color RecolorButton(Button BTN)
         {
             var color = BTN.BackgroundColor;
             if (color.Equals(defaultColor))            
-                BTN.BackgroundColor = selectedColor;            
+                return selectedColor;            
             else            
-                BTN.BackgroundColor = defaultColor;  
+                return defaultColor;  
         }
 
         [RelayCommand]
@@ -43,18 +50,75 @@ namespace DartsMobilApp.ViewModel
             switch (BTN.Text)
             {
                 case "Legs":
-                    RecolorButton(BTN);
+                    BtnLegColor = RecolorButton(BTN);
+                    OnPropertyChanged("BtnLegColor");
                     BtnSetColor = defaultColor;
                     OnPropertyChanged("BtnSetColor");
                    
                     break;
                 case "Sets":
-                    RecolorButton(BTN);
+                    BtnSetColor = RecolorButton(BTN);
+                    OnPropertyChanged("BtnSetColor");
                     BtnLegColor = defaultColor;
                     OnPropertyChanged("BtnLegColor");
                     break;
             }
         }
+
+        [RelayCommand]
+        private void FirstToOrBestof(Button BTN)
+        {
+            switch (BTN.Text)
+            {
+                case "First to":
+                    FirstToBtnColor = RecolorButton(BTN);
+                    OnPropertyChanged("FirstToBtnColor");
+                    BestOfBtnColor = defaultColor;
+                    OnPropertyChanged("BestOfBtnColor");
+
+                    break;
+                case "Best of":
+                    BestOfBtnColor = RecolorButton(BTN);
+                    OnPropertyChanged("BestOfBtnColor");
+                    FirstToBtnColor = defaultColor;
+                    OnPropertyChanged("FirstToBtnColor");
+                    break;
+            }
+        }
+
+        [RelayCommand]
+        private void PointChanging(Button BTN)
+        {
+            switch (BTN.Text)
+            {
+                case "301":
+                    Btn301Color = RecolorButton(BTN);
+                    OnPropertyChanged("Btn301Color");
+                    Btn501Color = defaultColor;
+                    OnPropertyChanged("Btn501Color");
+                    Btn701Color = defaultColor;
+                    OnPropertyChanged("Btn701Color");
+
+                    break;
+                case "501":
+                    Btn501Color = RecolorButton(BTN);
+                    OnPropertyChanged("Btn501Color");
+                    Btn301Color = defaultColor;
+                    OnPropertyChanged("Btn301Color");
+                    Btn701Color = defaultColor;
+                    OnPropertyChanged("Btn701Color");
+                    break;
+                case "701":
+                    Btn701Color = RecolorButton(BTN);
+                    OnPropertyChanged("Btn701Color");
+                    Btn301Color = defaultColor;
+                    OnPropertyChanged("Btn301Color");
+                    Btn501Color = defaultColor;
+                    OnPropertyChanged("Btn501Color");
+                    break;
+            }
+        }
+
 
         [RelayCommand]
 
