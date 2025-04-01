@@ -26,6 +26,7 @@ export const useMessagesStore = defineStore('messagesStore', {
                             text: email.text,
                             sendDate: email.sendDate
                         }));
+                        
                     } else {
                         this.forAdminEmails = [...res.data];
                     }

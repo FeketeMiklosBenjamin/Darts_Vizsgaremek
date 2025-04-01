@@ -5,7 +5,6 @@ import { storeToRefs } from 'pinia';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useMessagesStore } from '@/stores/MessagesStore';
-import { errorMessages } from 'vue/compiler-sfc';
 
 const { status, user } = storeToRefs(useUserStore());
 const { logout, refreshTk } = useUserStore();
@@ -108,9 +107,11 @@ const onLogout = async () => {
         status.value._id = '';
         forUserEmails.value.splice(0, forUserEmails.value.length);
         forAdminEmails.value.splice(0, forAdminEmails.value.length);
+        sessionStorage.removeItem("emailId");
         router.push('/');
     } catch (err) {
         status.value._id = '';
+        sessionStorage.removeItem("emailId");
         await router.push('/');
     }
 };
@@ -144,7 +145,9 @@ const NavigateToMessage = (emailId: string) => {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto py-2">
                         <li v-if="status._id" class="nav-item me-3 mt-1 text-secondary">
-                            <i class="bi bi-envelope fs-4" @click="toggleDropdown"></i>
+                            <i class="bi fs-4" :class="{'bi-envelope-fill': !isDropdownVisible,
+                                'bi-envelope-paper-fill': isDropdownVisible
+                            }" @click="toggleDropdown"></i>
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
                                     <div v-for="email in forAdminEmails" :key="email.id" class="message-box mx-auto">
@@ -159,7 +162,8 @@ const NavigateToMessage = (emailId: string) => {
                                 </div>
                                 <div v-else>
                                     <div v-for="email in forUserEmails" :key="email.id" class="message-box mx-auto">
-                                        <div class="message-box-content text-center" @click="NavigateToMessage(email.id!)">
+                                        <div class="message-box-content text-center"
+                                            @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 mb-3">{{ email.title }}<i
                                                     class="bi bi-x-circle text-danger mt-1"
                                                     @click="MessageDelete(email.id!)"></i></p>
@@ -303,6 +307,7 @@ table::-webkit-scrollbar {
 
 .bi:hover {
     color: azure;
+    cursor: pointer;
 }
 
 .title {

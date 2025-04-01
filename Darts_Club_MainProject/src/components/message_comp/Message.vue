@@ -5,77 +5,102 @@ import router from '@/router';
 import { useMessagesStore } from '@/stores/MessagesStore';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-const { getYourMessages, deleteMyMessages } = useMessagesStore();
-import { ref } from 'vue';
+import { onBeforeMount, onMounted, onUpdated, ref, watch } from 'vue';
 
-const { forAdminEmails, forUserEmails} = storeToRefs(useMessagesStore());
+const { deleteMyMessages } = useMessagesStore();
+const { forAdminEmails, forUserEmails } = storeToRefs(useMessagesStore());
 const { user } = useUserStore();
-const emailId = sessionStorage.getItem("emailId");
+const emailId = sessionStorage.getItem("emailId")
+let currentEmail = ref<AdminEmailModel | UserFeedModel>();
 
-let currentEmail = ref<AdminEmailModel | UserFeedModel | null>(null);
+const getCurrentEmail = () => {
+    if (emailId) {
+        if (user.role == 2) {
+            return forAdminEmails.value.find(x => x.id == emailId);
+        } else {
+            return forUserEmails.value.find(x => x.id == emailId);
+        }
+    }
+};
 
-if (user.role == 2) 
-    currentEmail.value = forAdminEmails.value.filter(x => x.id == emailId)[0];
-else 
-    currentEmail.value = forUserEmails.value.filter(x => x.id == emailId)[0];
+watch([forAdminEmails, forUserEmails], () => {
+    currentEmail.value = getCurrentEmail();
+    if (currentEmail.value) {
+        sessionStorage.setItem('currentEmail', JSON.stringify(currentEmail.value));
+    }
+}, { immediate: true });
 
-const deleteMessage = async(id: string) => {
-    console.log("Messagedeleted: "+ currentEmail.value?.id );
-    if (user.role == 2) 
-        forAdminEmails.value.filter(x=> x.id != currentEmail.value?.id)
-    else 
-        forUserEmails.value.filter(x=> x.id != currentEmail.value?.id)
-    
-    router.push("/main-page")
+onMounted(() => {
+    const savedEmail = sessionStorage.getItem("currentEmail");
+    if (savedEmail) {
+        currentEmail.value = JSON.parse(savedEmail);
+    } else {
+        currentEmail.value = getCurrentEmail();
+    }
+});
+
+const NavigateToMain = async () => {
+    sessionStorage.removeItem("currentEmail");
+    sessionStorage.removeItem("emailId");    
+    router.push("main-page");
+} 
+
+const deleteMessage = async (id: string) => {
+    await deleteMyMessages(id, user.accessToken);
+    NavigateToMain();
 }
 </script>
 
 <template>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
     <div class="background-color-view d-flex">
-
-
         <div class="email-box mx-auto">
-            <div class="trash" @click="deleteMessage(currentEmail?.id!)">X</div>
-    
-        
             <div class="row ">
-                <div class="text-center mt-2 display-6 fw-bold">
-                    {{ currentEmail?.title }}
+                <div class="col-md-4">
+                    <div class="text-center text-success mt-3 me-5 fs-5">
+                        <i class="bi bi-arrow-return-left" @click="NavigateToMain"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center mt-2 display-5 fw-bold font">
+                        {{ currentEmail?.title }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-end me-4 mt-2 text-danger fs-4" @click="deleteMessage(currentEmail?.id!)">X</div>
                 </div>
             </div>
-            <div class="row text">
-                {{ currentEmail?.text }}
+            <div class="row">
+                <div class="text-center mt-5 font fs-2">
+                    {{ currentEmail?.text }}
+                </div>
+            </div>
+            <div v-if="user.role == 2" class="row">
+                <div class="text-end me-5 font fs-4 email">{{ currentEmail?.emailAddress }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.font {
+    font-family: 'Tangerine', cursive;
+    font-weight: 700;
+}
+
+.text-danger {
+    cursor: pointer;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
 .display-6 {
     font-size: 2em;
 }
-.trash {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border-radius: 50%;
-    height: 35px;
-    width: 35px;
-    background-color: #ff4d4d;
-    color: white;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
 
-.trash:hover {
-    background-color: #e60000;
-    transform: scale(1.1);
+.email {
+    position: absolute;
+    bottom: 5%;
+    right: 0;
 }
 
 .email-box {
@@ -87,8 +112,5 @@ const deleteMessage = async(id: string) => {
     box-shadow: 10px 10px 2px 1px rgba(15, 15, 15, 0.877);
     border-radius: 5px;
     margin-top: 15vh;
-}
-.text{
-    padding: 15px; 
 }
 </style>
