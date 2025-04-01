@@ -21,11 +21,9 @@ namespace DartsMobilApp.Classes
             // Ha már fut, akkor ne indítsuk el újra
             if (_timer != null)
             {
-                Debug.WriteLine("Timer már fut!");
                 return;
             }
 
-            Debug.WriteLine("Timer elindult!");
 
             _timer = new Timer(TimerCallback, null, 0, 1000);
         }
@@ -33,7 +31,6 @@ namespace DartsMobilApp.Classes
         private async void TimerCallback(object state)
         {
             _remainingSeconds--;
-            Debug.WriteLine($"Timer: {_remainingSeconds} másodperc van hátra.");
 
             if (_remainingSeconds % 60 == 0) // Minden percben ellenőrizzük
             {
@@ -43,7 +40,6 @@ namespace DartsMobilApp.Classes
             if (_remainingSeconds <= 0) // Ha lejárt, állítsuk vissza
             {
                 _remainingSeconds = 250;
-                Debug.WriteLine("Timer újraindítva!");
             }
         }
 
@@ -58,15 +54,12 @@ namespace DartsMobilApp.Classes
                 var JsonContent = JsonSerializer.Serialize(Model);
                 var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
                 var newAccessToken =  DartsAPI.PostRefreshAndGetNewAccess(content, SecStoreItems.UserId).accessToken;
-                Debug.WriteLine($"\n\n\n\n Access Token!!! --- {newAccessToken} \n\n\n\n");
                 await SecureStorage.SetAsync("Token", newAccessToken);
 
-                Debug.WriteLine($"\n\n\n\n {SecStoreItems.AToken} \n\n\n\n");
 
                 _remainingSeconds = 250;
 
-                Debug.WriteLine($"\n\n\n\n {_remainingSeconds} \n\n\n\n");
-                Debug.WriteLine("Új token beállítva, timer újraindítva!");
+               
                
                 OnCountdownReset?.Invoke();
             }
@@ -76,7 +69,6 @@ namespace DartsMobilApp.Classes
         {
             _timer?.Dispose();
             _timer = null;
-            Debug.WriteLine("Timer leállítva!");
         }
     }
 }

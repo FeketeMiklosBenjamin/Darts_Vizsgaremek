@@ -21,12 +21,14 @@ namespace DartsMobilApp.ViewModel
         private Color defaultColor = Color.FromRgb(211, 211, 211);
         private Color selectedColor = Color.FromRgb(255, 165, 0);
         private FriendlyMatchModel newFriendlyMatch = new FriendlyMatchModel();
-        public Button LegsBtn { get; set; } = new();
-        public Button SetsBtn { get; set; } = new();
+
+
+        public Color BtnSetColor { get; set; } = Color.FromRgb(255, 165, 0);
+        public Color BtnLegColor { get; set; } = Color.FromRgb(255, 165, 0);
 
         public Button FirstToBtn { get; set; }
 
-        private void RecolorButton(Button BTN)
+   private void RecolorButton(Button BTN)
         {
             var color = BTN.BackgroundColor;
             if (color.Equals(defaultColor))            
@@ -35,7 +37,6 @@ namespace DartsMobilApp.ViewModel
                 BTN.BackgroundColor = defaultColor;  
         }
 
-
         [RelayCommand]
         private void SetsLegsCheck(Button BTN)
         {
@@ -43,11 +44,14 @@ namespace DartsMobilApp.ViewModel
             {
                 case "Legs":
                     RecolorButton(BTN);
-                    SetsBtn.BackgroundColor = defaultColor;
+                    BtnSetColor = defaultColor;
+                    OnPropertyChanged("BtnSetColor");
+                   
                     break;
                 case "Sets":
                     RecolorButton(BTN);
-                    LegsBtn.BackgroundColor = defaultColor;
+                    BtnLegColor = defaultColor;
+                    OnPropertyChanged("BtnLegColor");
                     break;
             }
         }

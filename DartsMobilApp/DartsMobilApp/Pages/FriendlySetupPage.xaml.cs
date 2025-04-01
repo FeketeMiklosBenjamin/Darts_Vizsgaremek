@@ -8,7 +8,5 @@ public partial class FriendlySetupPage : ContentPage
 	{
 		InitializeComponent();
 		this.BindingContext = vm;
-		LegsBtn = vm.LegsBtn;
-		SetsBtn = vm.SetsBtn;
 	}
 }
