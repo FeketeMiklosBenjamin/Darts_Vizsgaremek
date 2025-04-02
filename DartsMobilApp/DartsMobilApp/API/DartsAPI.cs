@@ -83,18 +83,18 @@ namespace DartsMobilApp.API
             }
         }
 
-        //public static dynamic PostNewFriendlyMatch(StringContent newfriendlymatch)
-        //{
-        //    try
-        //    {
-        //        var response = HTTPCommunication<dynamic>.PostWithHeader<dynamic>("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch);
-        //        return response;
-        //    }
-        //    catch (Exception)
-        //    {
+        public static dynamic PostNewFriendlyMatch(StringContent newfriendlymatch)
+        {
+            try
+            {
+                var response = HTTPCommunication<dynamic>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch);
+                return response;
+            }
+            catch (Exception)
+            {
 
-        //        throw;
-        //    }
-        //}
+                throw;
+            }
+        }
     }
 }

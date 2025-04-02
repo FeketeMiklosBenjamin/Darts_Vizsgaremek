@@ -2,6 +2,7 @@
 using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
@@ -76,33 +77,5 @@ namespace DartsMobilApp.Network
             return null;
 
         }
-
-        //public static T PostWithHeader<T>(string url, HttpContent content)
-        //{
-        //    string? AToken = SecStoreItems.AToken;
-        //    using var client = new HttpClient();
-        //    var request = new HttpRequestMessage(HttpMethod.Post, url);
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AToken);
-        //    request.Content = content;
-        //    var response = client.PostAsync(url, content).Result;
-
-        //    // Ellenőrizzük a válasz státuszkódját
-        //    if (response.StatusCode == HttpStatusCode.NoContent)
-        //    {
-        //        return default(T);
-        //    }
-
-        //    var responseContent = response.Content.ReadAsStringAsync().Result;
-
-        //    // Ha a válasz törzse üres, ne próbáljuk deszerializálni
-        //    if (string.IsNullOrWhiteSpace(responseContent))
-        //    {
-        //        return default(T);
-        //    }
-
-        //    // Deszerializálás JSON-re
-        //    return JsonSerializer.Deserialize<T>(responseContent);
-
-        //}
     }
 }

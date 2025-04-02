@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace DartsMobilApp.ViewModel
     {
         private Color defaultColor = Color.FromRgb(211, 211, 211);
         private Color selectedColor = Color.FromRgb(255, 165, 0);
-        private FriendlyMatchModel newFriendlyMatch = new FriendlyMatchModel();
+        private NewFriendlyMatchModel newFriendlyMatch = new NewFriendlyMatchModel();
 
 
         public Color BtnSetColor { get; set; } = Color.FromRgb(211, 211, 211);
@@ -136,7 +137,7 @@ namespace DartsMobilApp.ViewModel
             List<Color> colors = new List<Color>() { BtnSetColor, BtnLegColor, BestOfBtnColor, FirstToBtnColor, Btn301Color,Btn501Color, Btn701Color};
 
 
-            newFriendlyMatch.joinPassword = null;
+            newFriendlyMatch.joinPassword = "";
             newFriendlyMatch.levelLocked = false;
             if (BtnSetColor == selectedColor)
             {
@@ -178,19 +179,20 @@ namespace DartsMobilApp.ViewModel
             var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
             var friedlyMatch = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            //var response = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
+            var response = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
 
-            //if (response == null)
-            //{
-            //    MainThread.BeginInvokeOnMainThread(async () =>
-            //    {
-            //        await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
-            //    });
-            //}
-            //else
-            //{
-            //    Debug.WriteLine($"\n\n\n\n\n{response.StatusCode} - {response.Message}\n\n\n\n\n");
-            //}
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                NumberOfSetsOrLegs = 0;
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+                });
+            }
+            else
+            {
+                Debug.WriteLine($"\n\n\n\n\n{response.StatusCode} - {response.Message}\n\n\n\n\n");
+            }
 
         }
     }

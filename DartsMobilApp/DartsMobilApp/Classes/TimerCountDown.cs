@@ -12,7 +12,7 @@ namespace DartsMobilApp.Classes
     public class TimerCountDown
     {
         private Timer _timer;
-        private int _remainingSeconds = 250;
+        private int _remainingSeconds = 15 * 60;
 
         public event Action OnCountdownReset;
 
@@ -39,13 +39,13 @@ namespace DartsMobilApp.Classes
 
             if (_remainingSeconds <= 0) // Ha lejárt, állítsuk vissza
             {
-                _remainingSeconds = 250;
+                _remainingSeconds = 15*60;
             }
         }
 
         private async Task CheckAndResetTimer()
         {
-            if (_remainingSeconds < 250)
+            if (_remainingSeconds < 5*60)
             {
                 var Model = new RefreshTokenModel()
                 {
@@ -57,7 +57,7 @@ namespace DartsMobilApp.Classes
                 await SecureStorage.SetAsync("Token", newAccessToken);
 
 
-                _remainingSeconds = 250;
+                _remainingSeconds = 15*60;
 
                
                
