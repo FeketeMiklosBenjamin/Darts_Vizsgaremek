@@ -19,7 +19,7 @@
                 <Entry x:Name="password_ENT" WidthRequest="150" HeightRequest="40" IsPassword="True" Text="{Binding Password}"/>
             </Border>
             <HorizontalStackLayout Grid.Row="3" HorizontalOptions="Center">
-                <CheckBox x:Name="AutomaticLgn_Cbx" Color="White"/>
+                <CheckBox x:Name="AutomaticLgn_Cbx" Color="White" IsChecked="{Binding SaveChecked}"/>
                 <Label Text="Automatikus bejelentkezés" VerticalTextAlignment="Center"/>
             </HorizontalStackLayout>
             <Button Grid.Row="4" BackgroundColor="{x:StaticResource BlueButtons}"  Text="Bejelentkezés" WidthRequest="150" HeightRequest="40" Command="{Binding GoToHomePageCommand}"/>

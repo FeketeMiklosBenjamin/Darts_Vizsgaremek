@@ -130,6 +130,9 @@
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.Password">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.LoginViewModel.password"/>
         </member>
+        <member name="P:DartsMobilApp.ViewModel.LoginViewModel.SaveChecked">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.LoginViewModel.saveChecked"/>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.LoginViewModel.apperaringCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.ApperaringCommand"/>.</summary>
         </member>

@@ -181,17 +181,16 @@ namespace DartsMobilApp.ViewModel
 
             var response = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
 
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            if (response != null)
             {
-                NumberOfSetsOrLegs = 0;
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
                 });
             }
             else
             {
-                Debug.WriteLine($"\n\n\n\n\n{response.StatusCode} - {response.Message}\n\n\n\n\n");
+                Debug.WriteLine($"\n\n\n\n\n{response}\n\n\n\n\n");
             }
 
         }

@@ -25,6 +25,10 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public string password;
 
+
+        [ObservableProperty]
+        public bool saveChecked;
+
         [RelayCommand]
         private void Apperaring()
         {
@@ -51,6 +55,12 @@ namespace DartsMobilApp.ViewModel
                 
             }
 
+            if (SaveChecked)
+                await SecureStorage.Default.SetAsync("SaveCheckedBool", "1");
+            else
+               await SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
+           
+            
             var loginResponse = await _authService.LoginAsync(email, password);
 
             if (loginResponse.message == "Sikeres bejelentkezés.")

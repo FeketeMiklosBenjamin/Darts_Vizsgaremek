@@ -76,7 +76,7 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void FilterTournaments(string number)
         {
-            TakedFriendlies = FillTakedTList();
+           
             if (number == "1")
             {
                 if (Friendlymatches?.Count > 4 && TakedFriendlies.Count != Friendlymatches.Count)
@@ -91,6 +91,7 @@ namespace DartsMobilApp.ViewModel
                 DeleteTakedItem();
                 if (TakedFriendlies.Count != 0)
                 {
+                    
                     SortedFriendlies.Clear();
 
                     SortedFriendlies = TakedFriendlies.Take(new Range(TakedFriendlies.Count - 4, TakedFriendlies.Count)).ToList();
@@ -105,26 +106,26 @@ namespace DartsMobilApp.ViewModel
         }
 
         
-        private  List<FriendlyMatchModel> RefreshFriendfliesFunction()
+        private  List<FriendlyMatchModel> RefreshFriendliesFunction()
         {
-            Friendlymatches = DartsAPI.GetFriendlyMatches();
+            List<FriendlyMatchModel> newFriendliesList = LoadFriendliesMatch().ToList();
             
-            return Friendlymatches;
+            return newFriendliesList;
         }
 
         private List<FriendlyMatchModel> RefreshSorted()
         {
-            SortedFriendlies = RefreshFriendfliesFunction().Take(4).ToList();
-            return SortedFriendlies;
+            Friendlymatches = RefreshFriendliesFunction();
+            List<FriendlyMatchModel> newSortedFriendlies = Friendlymatches.Take(4).ToList();
+            return newSortedFriendlies;
         }
-
 
         [RelayCommand]
 
         private void RefreshFriendlies()
-        {
-            RefreshFriendfliesFunction();
-            RefreshSorted();
+        { 
+            SortedFriendlies = RefreshSorted();
+            TakedFriendlies = SortedFriendlies;
         }
     }
 }
