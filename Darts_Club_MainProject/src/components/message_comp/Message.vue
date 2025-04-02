@@ -5,7 +5,7 @@ import router from '@/router';
 import { useMessagesStore } from '@/stores/MessagesStore';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onBeforeMount, onMounted, onUpdated, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const { deleteMyMessages } = useMessagesStore();
 const { forAdminEmails, forUserEmails } = storeToRefs(useMessagesStore());
@@ -83,6 +83,10 @@ const deleteMessage = async (id: string) => {
 </template>
 
 <style scoped>
+.bi {
+    cursor: pointer;
+}
+
 .font {
     font-family: 'Tangerine', cursive;
     font-weight: 700;
