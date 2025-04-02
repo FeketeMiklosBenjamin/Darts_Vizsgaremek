@@ -4,9 +4,7 @@
 </script>
 
 <template>
-    <div class="z-n1 position-absolute">
-        <img src="../../assets/images/background.jpg" class="img-fluid background-img opacity-50" alt="háttér">
-    </div>
+    <div class="z-n1 position-absolute background-home-img opacity-50"></div>
 </template>
 
 <style scoped>

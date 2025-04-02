@@ -138,36 +138,44 @@ const NavigateToMessage = (emailId: string) => {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg stick py-2">
             <div class="container">
                 <a class="navbar-brand"><em class="display-6 title">Sons of the Fallen's</em></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto py-2">
-                        <li v-if="status._id" class="nav-item me-3 mt-1 text-secondary">
-                            <i class="bi fs-4" :class="{'bi-envelope-fill': !isDropdownVisible,
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li v-if="status._id" class="nav-item ms-2 me-3 my-auto text-secondary">
+                            <i class="bi fs-4" :class="{
+                                'bi-envelope-fill': !isDropdownVisible,
                                 'bi-envelope-paper-fill': isDropdownVisible
                             }" @click="toggleDropdown"></i>
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
-                                    <div v-for="email in forAdminEmails" :key="email.id" class="message-box mx-auto">
+                                    <div v-if="forAdminEmails.length < 1" class="text-center">Nincs üzenete!</div>
+                                    <div v-else v-for="email in forAdminEmails" class="message-box">
                                         <div class="message-box-content" @click="NavigateToMessage(email.id)">
-                                            <p class="fs-5 text-center mb-3">{{ email.title }}<i
-                                                    class="bi bi-x-circle text-danger mt-1"
-                                                    @click="MessageDelete(email.id)"></i></p>
+                                            <p class="fs-5 text-center mb-3">
+                                                {{ email.title
+                                                }}<i class="bi bi-x-circle text-danger mt-1"
+                                                    @click="MessageDelete(email.id)"></i>
+                                            </p>
                                             <p class="d-inline fst-italic">{{ email.emailAddress }}</p>
-                                            <p class="d-inline margin-date fst-italic">{{ email.sendDate }}</p>
+                                            <p class="d-inline ms-5 fst-italic">{{ email.sendDate }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-for="email in forUserEmails" :key="email.id" class="message-box mx-auto">
+                                    <div v-if="forUserEmails.length < 1" class="text-center">Nincs üzenete!</div>
+                                    <div v-for="email in forUserEmails" class="message-box">
                                         <div class="message-box-content text-center"
                                             @click="NavigateToMessage(email.id!)">
-                                            <p class="fs-5 mb-3">{{ email.title }}<i
-                                                    class="bi bi-x-circle text-danger mt-1"
-                                                    @click="MessageDelete(email.id!)"></i></p>
-                                            <p class="fst-italic mb-0">{{ email.sendDate }}</p>
+                                            <p class="fs-5 mb-3">
+                                                {{ email.title
+                                                }}<i class="bi bi-x-circle text-danger mt-1"
+                                                    @click="MessageDelete(email.id!)"></i>
+                                            </p>
+                                            <p class="fst-italic">{{ email.sendDate }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -175,28 +183,30 @@ const NavigateToMessage = (emailId: string) => {
                         </li>
                         <li>
                             <router-link v-if="status._id" :to="`/main-page`"
-                                class="nav-link nav-item m-2 text-secondary">
+                                class="nav-link nav-item ms-2 me-1 text-secondary" style="margin-top: 5px">
                                 <i class="bi bi-house-door-fill"></i>
                             </router-link>
                         </li>
-                        <li class="nav-item me-2 mt-2">
+                        <li class="nav-item ms-2 me-4 my-auto d-flex align-items-center">
                             <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'"
                                 class="nav-link no-underline">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
+
+                            <div class="rounded-circle border border-3 mt-lg-0 mt-1 ms-2"
+                                 :class="{
+                                    'border-success': user.level == 'Amateur',
+                                    'border-warning': user.level == 'Advanced',
+                                    'border-danger': user.level == 'Professional',
+                                    'border-secondary': user.role == 2,
+                                    'bg-white border-info px-1': status._id == '',
+                                }">
+                                <img v-if="status._id" :src="user.profilePictureUrl" class="profileImg" alt="Nincs" />
+                                <i v-else class="bi-person iconProfileImg"></i>
+                            </div>
                         </li>
-                        <li class="nav-item rounded-circle border border-3 mt-1" :class="{
-                            'border-success': user.level == 'Amateur',
-                            'border-warning': user.level == 'Advanced',
-                            'border-danger': user.level == 'Professional',
-                            'border-secondary': user.role == 2,
-                            'bg-white border-info px-1': status._id == ''
-                        }">
-                            <img v-if="status._id" :src="user.profilePictureUrl"
-                                class="profileImg border-0 mx-auto d-block" alt="Nincs">
-                            <i v-else class="bi-person"></i>
-                        </li>
-                        <li v-if="status._id" class="nav-item my-auto ms-4">
+
+                        <li v-if="status._id" class="nav-item my-auto ms-2">
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
                                 <i class="bi bi-box-arrow-right"></i>
                             </a>
@@ -217,16 +227,15 @@ const NavigateToMessage = (emailId: string) => {
     </div>
 </template>
 
-
 <style scoped>
-table::-webkit-scrollbar {
-    display: none;
-}
-
 .bi-x-circle {
     font-size: 1vw;
     position: absolute;
-    left: 17vw;
+    left: 275px;
+    cursor: pointer;
+}
+
+.bi {
     cursor: pointer;
 }
 
@@ -236,26 +245,27 @@ table::-webkit-scrollbar {
     border: 2px solid black;
     border-radius: 5px;
     padding: 10px;
-    max-width: 18vw;
     padding-top: 0;
     margin: 5px 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.margin-date {
-    margin-left: 4.5vw;
-}
-
-
 .message-box-content {
     font-size: 14px;
+    cursor: pointer;
+}
+
+.message-box p {
+    margin: 5px 0;
 }
 
 .dropdown-menu {
     position: absolute;
     top: 90%;
-    left: 56%;
+    left: 60%;
     background-color: white;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 2px solid gray;
     border-radius: 5px;
     min-width: 20vw;
@@ -264,14 +274,16 @@ table::-webkit-scrollbar {
     display: block;
     padding: 5px;
     z-index: 1;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.3s ease;
 }
 
 .dropdown-menu.visible {
     display: block;
-    max-height: 19.5vh;
-    overflow-y: auto;
+    max-height: 26vh;
     opacity: 1;
+    overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -279,7 +291,6 @@ table::-webkit-scrollbar {
 .dropdown-menu.visible::-webkit-scrollbar {
     display: none;
 }
-
 
 .tooltip-container {
     position: relative;
@@ -307,7 +318,6 @@ table::-webkit-scrollbar {
 
 .bi:hover {
     color: azure;
-    cursor: pointer;
 }
 
 .title {

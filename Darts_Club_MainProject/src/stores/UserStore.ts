@@ -114,8 +114,12 @@ export const useUserStore = defineStore('userStore', {
                         nineDarter: res.data.nineDarter,
                         username: res.data.username,
                         profilePictureUrl: res.data.profilePictureUrl,
-                        registerDate: res.data.registerDate,
-                        lastLoginDate: res.data.lastLoginDate
+                        registerDate: new Date(res.data.registerDate).toLocaleString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        }),
+                        lastLoginDate: new Date(res.data.lastLoginDate).toLocaleString()
                     }
                 })
                 .catch((err) => {
@@ -197,7 +201,7 @@ const defaultUser: UserModel = {
 const defaultStats: UserStatModel = {
     userId: '',
     matches: 0,
-    matchesWon: 0, 
+    matchesWon: 0,
     sets: 0,
     setsWon: 0,
     legs: 0,

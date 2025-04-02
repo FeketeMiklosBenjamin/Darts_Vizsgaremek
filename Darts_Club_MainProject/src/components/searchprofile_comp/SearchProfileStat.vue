@@ -34,7 +34,7 @@ const NavigateToStatistic = (userId: string) => {
 <template>
     <div class="z-1 position-rel">
         <div class="row justify-content-center my-5">
-            <div class="col-md-6">
+            <div class="col-lg-5 col-md-6 col-sm-8 col-10">
                 <div class="input-group">
                     <span class="input-group-text">
                         <i class="bi bi-search"></i>
@@ -43,12 +43,12 @@ const NavigateToStatistic = (userId: string) => {
                 </div>
             </div>
             <div class="row justify-content-center my-4">
-                <div class="col-md-8">
+                <div class="col-md-10 col-lg-10 table-responsive">
                     <table class="table text-center" v-if="filteredUsers.length > 0">
                         <tbody>
                             <tr v-for="users in filteredUsers" :key="users.id" @click="NavigateToStatistic(users.id)">
                                 <td>
-                                    <div class="rounded-circle border mx-auto border-3" :class="{
+                                    <div class="rounded-circle border mx-auto border-3" style="width: 36px; height: 36px;" :class="{
                                         'border-success': users.level == 'Amateur',
                                         'border-warning': users.level == 'Advanced',
                                         'border-danger': users.level == 'Professional'
@@ -58,7 +58,7 @@ const NavigateToStatistic = (userId: string) => {
                                 </td>
                                 <td>{{ users.username }}</td>
                                 <td>{{ users.emailAddress }}</td>
-                                <td>{{ users.dartsPoints }}</td>                        
+                                <td>{{ users.dartsPoints }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -114,4 +114,4 @@ table td div {
     list-style: none;
     width: 2.25vw
 }
-</style>
+</style>>

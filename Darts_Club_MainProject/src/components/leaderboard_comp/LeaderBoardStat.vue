@@ -39,7 +39,7 @@ const NavigateToStatistic = (userId: string) => {
 <template>
     <div class="z-1 position-rel">
         <div class="row justify-content-center my-5">
-            <div class="col-md-5">
+            <div class="col-md-5 col-sm-8 col-10">
                 <select class="form-control text-center" v-model="selectedLevel">
                     <option value="Amateur">Amateur</option>
                     <option value="Advanced">Advanced</option>
@@ -47,13 +47,13 @@ const NavigateToStatistic = (userId: string) => {
                 </select>
             </div>
             <div class="row justify-content-center my-4">
-                <div class="col-md-8">
+                <div class="col-md-10 col-lg-8 table-responsive">
                     <table class="table text-center" v-if="filteredUsers.length > 0">
                         <tbody>
                             <tr v-for="(users, index) in filteredUsers" :key="users.id" @click="NavigateToStatistic(users.id)">
                                 <td :class="getRankClass(index)">{{ index + 1 }}.</td>
                                 <td>
-                                    <div class="rounded-circle border mx-auto border-3" :class="{
+                                    <div class="rounded-circle border mx-auto border-3" style="width: 36px; height: 36px;" :class="{
                                         'border-success': users.level == 'Amateur',
                                         'border-warning': users.level == 'Advanced',
                                         'border-danger': users.level == 'Professional'

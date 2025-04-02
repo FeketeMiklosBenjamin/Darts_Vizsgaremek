@@ -66,20 +66,20 @@ async function onSend() {
             </div>
         </div>
         <form @submit.prevent="onSend()">
-            <div class="row">
+            <div class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
                 <input type="text" id="title" placeholder="Cím..." v-model="feedform.title"
-                    class="form-control mx-auto w-50 mt-3">
+                    class="form-control">
             </div>
-            <div v-if="user.role == 2" class="row">
+            <div v-if="user.role == 2" class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
                 <input type="text" id="title" placeholder="Email..." v-model="feedform.emailAddress"
-                    class="form-control mx-auto w-50 mt-2">
+                    class="form-control mt-2">
             </div>
-            <div class="row">
+            <div class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
                 <textarea id="subject" placeholder="Tárgy..." rows="12" v-model="feedform.text"
-                    class="form-control mt-2 mx-auto w-50"></textarea>
+                    class="form-control mt-2"></textarea>
             </div>
-            <div class="row">
-                <button type="submit" class="btn btn-warning width-feedback mx-auto mt-4">Elküldés
+            <div class="row col-10 col-lg-4 col-md-6 col-sm-8 offset-lg-4 offset-md-3 offset-sm-2 offset-1">
+                <button type="submit" class="btn btn-warning mt-4">Elküldés
                     <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                 </button>
             </div>
@@ -90,9 +90,5 @@ async function onSend() {
 <style scoped>
 .margin-feed {
     margin-top: 10vh;
-}
-
-.width-feedback {
-    width: 250px;
 }
 </style>

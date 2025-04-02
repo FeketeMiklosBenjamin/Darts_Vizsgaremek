@@ -75,10 +75,7 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       component: NotFound
     }
-  ],
-  scrollBehavior() {
-    return { top: 0, behavior: 'instant' };
-  }
+  ]
 })
 
 

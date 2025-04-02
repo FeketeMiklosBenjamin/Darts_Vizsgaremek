@@ -24,11 +24,30 @@ export const useMessagesStore = defineStore('messagesStore', {
                             id: email.id,
                             title: email.title,
                             text: email.text,
-                            sendDate: email.sendDate
+                            sendDate: new Date(email.sendDate!).toLocaleString(undefined, {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })
                         }));
-                        
+
                     } else {
-                        this.forAdminEmails = [...res.data];
+                        this.forAdminEmails = res.data.map((email: AdminEmailModel) => ({
+                            id: email.id,
+                            title: email.title,
+                            text: email.text,
+                            sendDate: new Date(email.sendDate).toLocaleString(undefined, {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }),
+                            username: email.username,
+                            emailAddress: email.emailAddress
+                        }));
                     }
                 })
                 .catch((err) => {
@@ -61,7 +80,7 @@ export const useMessagesStore = defineStore('messagesStore', {
         },
         deleteMyMessages(id: string, accesstoken: string) {
             return MessagesService.deleteMessage(id, accesstoken)
-                .then(() =>{
+                .then(() => {
                     console.log("Sikeres törlés");
                 })
                 .catch((err) => {
