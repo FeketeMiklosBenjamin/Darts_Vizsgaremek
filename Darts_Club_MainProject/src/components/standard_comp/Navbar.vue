@@ -1,136 +1,123 @@
 <script setup lang="ts">
-import VueCountdown from '@chenfengyuan/vue-countdown';
-import { useUserStore } from '@/stores/UserStore';
-import { storeToRefs } from 'pinia';
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
-import { onBeforeRouteLeave, useRouter } from 'vue-router';
-import { useMessagesStore } from '@/stores/MessagesStore';
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import { useUserStore } from '@/stores/UserStore'
+import { storeToRefs } from 'pinia'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { useMessagesStore } from '@/stores/MessagesStore'
 
-const { status, user } = storeToRefs(useUserStore());
-const { logout, refreshTk } = useUserStore();
-const { getYourMessages, deleteMyMessages } = useMessagesStore();
-const { forUserEmails, forAdminEmails } = storeToRefs(useMessagesStore());
-const router = useRouter();
+const { status, user } = storeToRefs(useUserStore())
+const { logout, refreshTk } = useUserStore()
+const { getYourMessages} = useMessagesStore()
+const { forUserEmails, forAdminEmails } = storeToRefs(useMessagesStore())
+const router = useRouter()
 
-const remainingTime = ref(2 * 60 * 1000);
-const hasRefreshed = ref(false);
-let countdownInterval: any;
-const isDropdownVisible = ref(false);
-
-
-const MessageDelete = async (id: string) => {
-    await deleteMyMessages(id, user.value.accessToken);
-
-    const userIndex = forUserEmails.value.findIndex(email => email.id === id);
-    const AdminIndex = forAdminEmails.value.findIndex(email => email.id === id);
-    if (AdminIndex !== -1) {
-        forAdminEmails.value.splice(AdminIndex, 1);
-    }
-    if (userIndex !== -1) {
-        forUserEmails.value.splice(userIndex, 1);
-    }
-}
+const remainingTime = ref(2 * 60 * 1000)
+const hasRefreshed = ref(false)
+let countdownInterval: any
+const isDropdownVisible = ref(false)
 
 const toggleDropdown = async () => {
     if (user.value.accessToken) {
-        await getYourMessages(user.value.accessToken);
+        await getYourMessages(user.value.accessToken)
     }
 
-    await nextTick();
-    isDropdownVisible.value = !isDropdownVisible.value;
-};
+    await nextTick()
+    isDropdownVisible.value = !isDropdownVisible.value
+}
 
 onMounted(async () => {
-    sessionStorage.removeItem("emailId");
-    const savedTime = sessionStorage.getItem('Time');
+    sessionStorage.removeItem('emailId')
+    const savedTime = sessionStorage.getItem('Time')
     if (savedTime) {
-        remainingTime.value = parseInt(savedTime);
+        remainingTime.value = parseInt(savedTime)
     }
 
     if (status.value.isLoggedIn) {
-        startBackgroundTimer();
+        startBackgroundTimer()
     }
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener('beforeunload', handleBeforeUnload)
     onBeforeRouteLeave((to, from, next) => {
-        keepTimeOnNavigate();
-        next();
-    });
-});
+        keepTimeOnNavigate()
+        next()
+    })
+})
 
-watch(() => status.value.isLoggedIn, (newVal) => {
-    if (newVal) {
-        startBackgroundTimer();
-    } else {
-        stopBackgroundTimer();
-    }
-});
+watch(
+    () => status.value.isLoggedIn,
+    (newVal) => {
+        if (newVal) {
+            startBackgroundTimer()
+        } else {
+            stopBackgroundTimer()
+        }
+    },
+)
 
 const keepTimeOnNavigate = () => {
-    sessionStorage.setItem('Time', String(remainingTime.value));
-};
+    sessionStorage.setItem('Time', String(remainingTime.value))
+}
 
 const setAccesTk = async () => {
     try {
-        await refreshTk();
-        hasRefreshed.value = false;
-        remainingTime.value = 15 * 60 * 1000;
-        keepTimeOnNavigate();
+        await refreshTk()
+        hasRefreshed.value = false
+        remainingTime.value = 15 * 60 * 1000
+        keepTimeOnNavigate()
     } catch (err) { }
 }
 
 const startBackgroundTimer = () => {
-    if (countdownInterval) return;
+    if (countdownInterval) return
     countdownInterval = setInterval(() => {
-        remainingTime.value -= 1000;
+        remainingTime.value -= 1000
 
         if (remainingTime.value <= 5 * 60 * 1000 && !hasRefreshed.value) {
-            hasRefreshed.value = true;
-            setAccesTk();
+            hasRefreshed.value = true
+            setAccesTk()
         }
 
-        keepTimeOnNavigate();
-    }, 1000);
+        keepTimeOnNavigate()
+    }, 1000)
 }
 
 const stopBackgroundTimer = () => {
     if (countdownInterval) {
-        clearInterval(countdownInterval);
-        countdownInterval = null;
+        clearInterval(countdownInterval)
+        countdownInterval = null
     }
-};
-
+}
 
 const onLogout = async () => {
     try {
-        await logout();
-        status.value._id = '';
-        forUserEmails.value.splice(0, forUserEmails.value.length);
-        forAdminEmails.value.splice(0, forAdminEmails.value.length);
-        sessionStorage.removeItem("emailId");
-        router.push('/');
+        await logout()
+        status.value._id = ''
+        forUserEmails.value.splice(0, forUserEmails.value.length)
+        forAdminEmails.value.splice(0, forAdminEmails.value.length)
+        sessionStorage.removeItem('emailId')
+        router.push('/')
     } catch (err) {
-        status.value._id = '';
-        sessionStorage.removeItem("emailId");
-        await router.push('/');
+        status.value._id = ''
+        sessionStorage.removeItem('emailId')
+        await router.push('/')
     }
-};
-
-const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
-    await onLogout();
-};
-
-onUnmounted(() => {
-    window.removeEventListener("beforeunload", handleBeforeUnload);
-    sessionStorage.removeItem("Time");
-    clearInterval(countdownInterval);
-});
-
-const NavigateToMessage = (emailId: string) => {
-    sessionStorage.setItem("emailId", emailId);
-    router.push(`/messages`)
 }
 
+const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+    await onLogout()
+}
+
+onUnmounted(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload)
+    sessionStorage.removeItem('Time')
+    clearInterval(countdownInterval)
+})
+
+const NavigateToMessage = (emailId: string) => {
+    sessionStorage.setItem('emailId', emailId)
+    router.push(`/messages`)
+}
 </script>
 
 <template>
@@ -148,7 +135,7 @@ const NavigateToMessage = (emailId: string) => {
                         <li v-if="status._id" class="nav-item ms-2 me-3 my-auto text-secondary">
                             <i class="bi fs-4" :class="{
                                 'bi-envelope-fill': !isDropdownVisible,
-                                'bi-envelope-paper-fill': isDropdownVisible
+                                'bi-envelope-paper-fill': isDropdownVisible,
                             }" @click="toggleDropdown"></i>
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
@@ -157,11 +144,12 @@ const NavigateToMessage = (emailId: string) => {
                                         <div class="message-box-content" @click="NavigateToMessage(email.id)">
                                             <p class="fs-5 text-center mb-3">
                                                 {{ email.title
-                                                }}<i class="bi bi-x-circle text-danger mt-1"
-                                                    @click="MessageDelete(email.id)"></i>
+                                                }}
                                             </p>
-                                            <p class="d-inline fst-italic">{{ email.emailAddress }}</p>
-                                            <p class="d-inline ms-5 fst-italic">{{ email.sendDate }}</p>
+                                            <div class="row">
+                                                <p class="col-6 fst-italic">{{ email.emailAddress }}</p>
+                                                <p class="col-6 d-flex justify-content-end fst-italic">{{ email.sendDate }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,8 +160,7 @@ const NavigateToMessage = (emailId: string) => {
                                             @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 mb-3">
                                                 {{ email.title
-                                                }}<i class="bi bi-x-circle text-danger mt-1"
-                                                    @click="MessageDelete(email.id!)"></i>
+                                                }}
                                             </p>
                                             <p class="fst-italic">{{ email.sendDate }}</p>
                                         </div>
@@ -193,14 +180,13 @@ const NavigateToMessage = (emailId: string) => {
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
 
-                            <div class="rounded-circle border border-3 mt-lg-0 mt-1 ms-2"
-                                 :class="{
-                                    'border-success': user.level == 'Amateur',
-                                    'border-warning': user.level == 'Advanced',
-                                    'border-danger': user.level == 'Professional',
-                                    'border-secondary': user.role == 2,
-                                    'bg-white border-info px-1': status._id == '',
-                                }">
+                            <div class="rounded-circle border border-3 mt-lg-0 mt-1 ms-2" :class="{
+                                'border-success': user.level == 'Amateur',
+                                'border-warning': user.level == 'Advanced',
+                                'border-danger': user.level == 'Professional',
+                                'border-secondary': user.role == 2,
+                                'bg-white border-info px-1': status._id == '',
+                            }">
                                 <img v-if="status._id" :src="user.profilePictureUrl" class="profileImg" alt="Nincs" />
                                 <i v-else class="bi-person iconProfileImg"></i>
                             </div>
@@ -261,8 +247,8 @@ const NavigateToMessage = (emailId: string) => {
 
 .dropdown-menu {
     position: absolute;
-    top: 90%;
-    left: 60%;
+    top: 100%;
+    left: 60vw;
     background-color: white;
     color: black;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -277,6 +263,35 @@ const NavigateToMessage = (emailId: string) => {
     transition:
         max-height 0.3s ease,
         opacity 0.3s ease;
+}
+
+@media (max-width: 991px){
+    .dropdown-menu {
+        position: fixed;
+        top:43vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 749px){
+    .dropdown-menu {
+        position: fixed;
+        top:42vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70vw;
+  }
+}
+
+@media (max-width: 520px){
+    .dropdown-menu {
+        position: fixed;
+        top:41vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100vw;
+  }
 }
 
 .dropdown-menu.visible {
