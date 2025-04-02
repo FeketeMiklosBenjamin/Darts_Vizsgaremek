@@ -1,0 +1,21 @@
+export default interface UserStatModel {
+    userId: string,
+    matches: number,
+    matchesWon: number, 
+    sets: number,
+    setsWon: number,
+    legs: number,
+    legsWon: number,
+    tournamentsWon: number,
+    dartsPoints: number,
+    level: string,
+    averages: number,
+    max180s: number,
+    checkoutPercentage: number,
+    highestCheckout: number,
+    nineDarter: number,
+    username: string,
+    profilePictureUrl: string,
+    registerDate: string,
+    lastLoginDate: string
+}

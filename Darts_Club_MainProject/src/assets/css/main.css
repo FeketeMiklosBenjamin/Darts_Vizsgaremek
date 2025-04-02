@@ -1,24 +1,103 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-.navbar-nav .nav-link {
-    padding: 0 !important;
+.background-competition-img {
+    height: 100vh;
+    background: url("../images/compteition_back.jpg");
+    width: 100vw;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.border-purple {
+    border-color: purple !important;
+}
+
+table {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+table::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    min-height: 200vh;
+    overflow: hidden;
+}
+
+
+/* Míg nem működik az egerem laptopon, addig nincs a html-es scrollbar megcsinálva! TODO*/
+
+.background-home-img {
+    height: 100vh;
+    background: url("../images/background.jpg");
+    width: 100vw;
+    background-position: 60% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.background-register-img {
+    height: 100vh;
+    background: url("../images/registry_back.png");
+    width: 100vw;
+    background-position: 30% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.background-login-img {
+    height: 100vh;
+    background: url("../images/login_back.jpg");
+    width: 100vw;
+    background-position: 10% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.background-leaderboard-img {
+    height: 100vh;
+    background: url("../images/leaderboard_back.jpg");
+    width: 100vw;
+    background-position: center 20%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    transform: rotate(180deg);
+}
+
+.background-search-profile-img {
+    height: 100vh;
+    background: url("../images/background_board.jpg");
+    width: 100vw;
+    background-position: center 20%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    transform: rotate(180deg);
 }
 
 .no-underline {
     text-decoration: none;
 }
 
-.not-found {
-    text-align: center;
-    margin: 20px 0 0 0;
-    border: 2px solid black;
+.profileImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
 }
 
-.background-img {
-    max-height: 92.25vh;
-    width: 210vh;
-    background-attachment: fixed;
+.iconProfileImg {
+    font-size: 20px;
+    padding-left: 0.5px;
+    border-radius: 100%;
 }
 
 .stick {
@@ -27,15 +106,10 @@
     z-index: 1;
 }
 
-body{
-    overflow: hidden;
-}
-
 .position-rel {
     height: 100vh;
     width: 100vw;
     position: relative;
-  
 }
 
 .transform {
@@ -44,10 +118,6 @@ body{
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.tops {
-    top: 30%;
 }
 
 .glass-card {
@@ -63,229 +133,31 @@ body{
     background: rgba(40, 38, 38, 0.50);
 }
 
-.glass-card-intro {
-    background: rgba(40, 38, 38, 0.336);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(40, 38, 38, 1);
-}
-
-.width {
+.width-form {
     width: 350px;
 }
 
-.width-feedback {
-    width: 250px;
-}
-
-.img {
-    height: 100vh;
-    width: 210vh;
-}
-
-.title {
-    font-family: serif;
-    cursor: context-menu;
-}
-
-.profileImg {
-    width: 30px;
-    height: 30px;
-    border-radius: 100%;
-}
-
-.background_color {
-    height: 1550px;
-    width: 100%;
-    background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
-}
-
 .background-color-view {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
 }
 
-.box-competition {
-    width: 85%;
-    height: 250px;
-    border: 2px solid aqua;
-    border-radius: 30px;
-    background-color: #070602;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 300px;
+.main-div{
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.box-image {
-    margin-top: 25px;
-    margin-left: 50px;
-    height: 200px; 
-}
-
-.box-title {
-    font-size: 40px;
-    margin-bottom: 10px; 
-}
-
-.box-description {
-    font-size: 18px;
-}
-
-.box-leaderboard {
-    width: 85%;
-    height: 250px;
-    border: 2px solid red;
-    border-radius: 30px;
-    background-color: #3C2247;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 50px;
-}
-
-.boxnd-image {
-    height: 200px; 
-}
-
-.text-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
-    padding-left: 100px;
-}
-
-.boxnd-title {
-    font-size: 40px;
-    margin-bottom: 10px; 
-    margin-left: 150px;
-}
-
-.boxnd-description {
-    font-size: 18px;
-}
-
-.box-search {
-    width: 85%;
-    height: 250px;
-    border: 4px solid #0D4E2A;
-    border-radius: 30px;
-    background-color: #5ABFC7;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 300px;
-}
-
-
-.box-statistic {
-    width: 85%;
-    height: 250px;
-    border: 4px solid #E2AD00;
-    border-radius: 30px;
-    background-color: #F4F4F4;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-}
-
-.box-statistic-image {
-    height: 200px; 
-    margin-left: -200px;
-}
-
-.box-feedback {
-    width: 85%;
-    height: 250px;
-    border: 4px solid #7F5D96;
-    border-radius: 30px;
-    background-color: #FDD49D;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 300px;
-}
-
-
-.margin-feed {
-    margin-top: 12vh;
-}
-
-.statistic-img {
-    margin: 10vh 8vw 2vh 8vw;
-    width: 19.5vw;
-    height: 40vh;
-}
-
-.statistic-profileImg {
-    width: 19vw;
-    height: 38.75vh;
-    border-radius: 100%;
-}
-
-.margin-statname {
-    margin: 2vh 6vw 2vh 6vw;
-    font-size: 40px;
-    font-style: italic;
-    font-weight: 350;
-    text-shadow: 3px 3px #000000;
-}
-
-.marginst-btn {
-    margin: 2vh 11vw;
-    width: 10vw;
+.main-div::-webkit-scrollbar {
+    display: none;
 }
 
 .modal-content {
     background-color: transparent;
     font-size: 105%;
-}
-
-
-.statistic-box{
-    margin: 6vh 1vw;
-    width: 60vw;
-    min-height: 55vh;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid black;
-    border-radius: 2vh;
-    position: absolute;
-}
-
-.statistic-line-margin-ver {
-    margin: 0vh 30vw;
-}
-
-.statistic-tline-margin-hor {
-    margin: 5vh 0vw;
-}
-
-.statistic-bline-margin-hor {
-    margin: 45vh 0vw;
-}
-
-.statistic-line-horizontal {
-    width: 0.060vw;
-    height: 55vh;
-    background-color: rgba(0,0,0);
-    position: absolute;
-}
-
-.statistic-line-vertical {
-    width: 60vw;
-    height: 0.06vh;
-    background-color: rgba(0,0,0);
-    position: absolute;
 }
 
 .btn-green {
@@ -295,5 +167,3 @@ body{
 .btn-green:hover {
     background-color: rgba(17, 232, 31, 0.760);
 }
-
-

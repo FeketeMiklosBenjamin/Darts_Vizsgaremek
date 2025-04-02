@@ -70,6 +70,48 @@ export default {
                 return Promise.reject(err.response);
             });
     },
+    getStat(id: string, accesstoken: string) {
+        return User_Endpoint.get(`/tournamentstat/${id}`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
+    },
+    getAll(accesstoken: string) {
+        return User_Endpoint.get(`/all`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
+    },
+    getLeaderBoard(accesstoken: string) {
+        return User_Endpoint.get(`/leaderboard`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
+    },
     refreshToken(id:string, accesstoken: string, refresh: string) {
         return RefreshTk_Endpoint.post(`/${id}`, {
             refreshToken: refresh
@@ -80,7 +122,7 @@ export default {
             }
         })
             .then((res) => {
-                return res
+                return res;
             })
             .catch((err) => {
                 return Promise.reject(err.response);

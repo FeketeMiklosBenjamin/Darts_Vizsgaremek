@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <div class="z-n1 position-absolute background-home-img opacity-50"></div>
+    <div class="z-n1 position-absolute background-competition-img"></div>
 </template>
 
 <style scoped>
