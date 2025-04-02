@@ -20,8 +20,8 @@ namespace DartsMobilApp
                 });
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginViewModel>();
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<MainViewModel>();
+            builder.Services.AddSingleton<HomePage>();
+            builder.Services.AddSingleton<HomeViewModel>();
             builder.Services.AddSingleton<CompetitionsPage>();
             builder.Services.AddSingleton<CompetitionsViewModel>();
             builder.Services.AddSingleton<CounterPage>();

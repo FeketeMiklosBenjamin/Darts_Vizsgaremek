@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace DartsMobilApp.Service
 {
-    public class AuthService
+    public static class AuthService
     {
-        public AuthService()
-        {
-        }
 
-        public async Task<LoginResponse> LoginAsync(string email, string password)
+        public static async Task<LoginResponse> LoginAsync(string email, string password)
         {
+            
             var loginModel = new LoginModel
             {
                 EmailAddress = email,

@@ -1,6 +1,8 @@
 ﻿using DartsMobilApp.API;
 using DartsMobilApp.Classes;
+using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Service;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -16,20 +18,30 @@ namespace DartsMobilApp
             MainPage = new AppShell();
         }
 
+        protected override async void OnStart()
+        {
+            string? IsChecked = await SecureStorage.Default.GetAsync("SaveCheckedBool");
+            if (IsChecked != null && IsChecked == "1")
+            {
+                LoginResponse response = await AuthService.LoginAsync(SecStoreItems.Email, SecStoreItems.Password);
 
-        //private void LogOut()
-        //{
-        //    var RefreshToken = new RefreshTokenModel()
-        //    {
-        //        refreshToken = SecStoreItems.RToken
-        //    };
-        //    var JsonContent = JsonSerializer.Serialize(RefreshToken);
-        //    var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
+                if (response.message == "Sikeres bejelentkezés.")
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    SecureStorage.SetAsync("Token", response.accessToken);
+                    SecureStorage.SetAsync("Email", response.emailAddress);
+                    SecureStorage.SetAsync("UserName", response.username);
+                    SecureStorage.SetAsync("UserId", response.id);
+                    SecureStorage.SetAsync("RefreshToken", response.refreshToken);
+                    SecureStorage.SetAsync("Password", SecStoreItems.Password);
+                    SecureStorage.SetAsync("Email", SecStoreItems.Email);
+                    
+                }
+            }
+            
 
-        //    var response = DartsAPI.PostLogout(content);
+        }
 
-        //    Debug.WriteLine($"\n\n\n\nResponse: {response}\n\n\n\n");
-        //}
 
     }
 }

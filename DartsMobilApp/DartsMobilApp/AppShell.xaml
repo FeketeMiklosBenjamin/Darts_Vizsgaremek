@@ -48,7 +48,7 @@ Route="FriendlySetupPage" />
     </FlyoutItem>
     <FlyoutItem Title="Fő oldal">
         <Tab>
-            <ShellContent Title="Fő oldal" ContentTemplate="{DataTemplate pages:MainPage}" Route="MainPage"/>
+            <ShellContent Title="Fő oldal" ContentTemplate="{DataTemplate pages:HomePage}" Route="HomePage"/>
         </Tab>
     </FlyoutItem>
 
@@ -79,7 +79,10 @@ Route="FriendlySetupPage" />
             <ShellContent Title="Barátságos meccek" ContentTemplate="{DataTemplate pages:FriendlyMatchPage}" Route="FriendlyMatchPage"/>
         </Tab>
     </FlyoutItem>
-    
+
+    <MenuItem Text="Kijelentkezés"
+              Clicked="OnLogoutClicked"
+              />
 
 
 </Shell>

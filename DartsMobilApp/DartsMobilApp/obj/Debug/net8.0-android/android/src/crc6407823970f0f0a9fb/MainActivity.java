@@ -10,6 +10,7 @@ public class MainActivity
 	public static final String __md_methods;
 	static {
 		__md_methods = 
+			"n_onDestroy:()V:GetOnDestroyHandler\n" +
 			"";
 		mono.android.Runtime.register ("DartsMobilApp.MainActivity, DartsMobilApp", MainActivity.class, __md_methods);
 	}
@@ -31,6 +32,14 @@ public class MainActivity
 			mono.android.TypeManager.Activate ("DartsMobilApp.MainActivity, DartsMobilApp", "System.Int32, System.Private.CoreLib", this, new java.lang.Object[] { p0 });
 		}
 	}
+
+
+	public void onDestroy ()
+	{
+		n_onDestroy ();
+	}
+
+	private native void n_onDestroy ();
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)

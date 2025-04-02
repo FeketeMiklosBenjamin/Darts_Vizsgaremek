@@ -1,10 +1,39 @@
-﻿namespace DartsMobilApp
+﻿using DartsMobilApp.Classes;
+using DartsMobilApp.SecureStorageItems;
+
+namespace DartsMobilApp
 {
     public partial class AppShell : Shell
     {
         public AppShell()
         {
             InitializeComponent();
+        }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            bool confirm = await Shell.Current.DisplayAlert("Kijelentkezés", "Biztosan kijelentkezel?", "Igen", "Mégse");
+            if (confirm)
+            {
+                SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
+               if (SecStoreItems.IsChecked == "1")
+                {
+                    LogOut.LogOutFunction();
+                    SecureStorage.Remove("Token");
+                    SecureStorage.Remove("RefreshToken");
+                    SecureStorage.Remove("UserName");
+                }
+                else
+                {
+                    LogOut.LogOutFunction();
+                    SecureStorage.RemoveAll();
+                }
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
+                }
+            }
         }
     }
 }

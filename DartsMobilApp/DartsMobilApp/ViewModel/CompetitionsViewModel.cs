@@ -104,6 +104,28 @@ namespace DartsMobilApp.ViewModel
             }
         }
 
+
+        private List<MatchModel> RefreshUserMatchesFunction()
+        {
+            List<MatchModel> newUserMatchesList = LoadUserMatches().ToList();
+
+            return newUserMatchesList;
+        }
+
+        private List<MatchModel> RefreshSorted()
+        {
+            Tournaments = RefreshUserMatchesFunction();
+            List<MatchModel> newsortedMatches = Tournaments.Take(4).ToList();
+            return newsortedMatches;
+        }
+
+        [RelayCommand]
+        private void RefreshFriendlies()
+        {
+            SortedTournaments = RefreshSorted();
+            TakedTournaments = SortedTournaments;
+        }
+
         [RelayCommand]
         private async Task StartMatch()
         {

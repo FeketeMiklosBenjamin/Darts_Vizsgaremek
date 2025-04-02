@@ -16,7 +16,6 @@ namespace DartsMobilApp.ViewModel
     public partial class LoginViewModel : ObservableObject
     {
 
-        private  AuthService _authService = new AuthService();
         //[ObservableProperty]
         //public List<L> userDatas;
         [ObservableProperty]
@@ -61,7 +60,7 @@ namespace DartsMobilApp.ViewModel
                await SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
            
             
-            var loginResponse = await _authService.LoginAsync(email, password);
+            var loginResponse = await AuthService.LoginAsync(email, password);
 
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
@@ -75,7 +74,7 @@ namespace DartsMobilApp.ViewModel
 
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 });
             }
             else

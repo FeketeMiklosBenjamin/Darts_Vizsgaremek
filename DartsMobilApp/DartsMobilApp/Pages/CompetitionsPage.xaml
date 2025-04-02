@@ -17,17 +17,18 @@
 
     <Grid RowDefinitions="*,0.5*,5*,*" Margin="20" >
         <Label Text="Versenyeink" FontSize="40" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
-        <Button HorizontalOptions="End" Grid.Row="1" BackgroundColor="Green" Text="Frissítés" HeightRequest="45" WidthRequest="110"/>
+        <Button HorizontalOptions="End" Grid.Row="1" BackgroundColor="Green" Text="Frissítés" HeightRequest="45" WidthRequest="110" Command="{Binding RefreshFriendliesCommand}" Margin="0,0,0,30"/>
         <CollectionView Grid.Row="2" ItemsSource="{Binding SortedTournaments}" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border BackgroundColor="#99000000" Margin="0,0,0,20" WidthRequest="350" HeightRequest="120" StrokeShape="RoundRectangle 20,20,20,20">
-                        <VerticalStackLayout Margin="0,0,3,0" VerticalOptions="Center" HorizontalOptions="Center"  >
+                    <Border BackgroundColor="#99000000" Margin="0,0,0,20" WidthRequest="320" HeightRequest="150" StrokeShape="RoundRectangle 20,20,20,20">
+                        <VerticalStackLayout Margin="0,0,3,0" VerticalOptions="Center" HorizontalOptions="Center">
                                 <Label Text="{Binding name}" HorizontalOptions="Center" Margin="0,0,0,10" FontAttributes="Bold" FontSize="18"/>
                             <HorizontalStackLayout Spacing="10">
                                 <VerticalStackLayout HorizontalOptions="Start">
                                     <Label Text="{Binding level, StringFormat='Szint: {0}'}" HorizontalTextAlignment="Start"/>
-                                    <Label Text="{Binding startDate, StringFormat='Meccs kezdete: {0}'}"/>
+                                    <Label Text="Meccs kezdete:"/>
+                                    <Label Text="{Binding startDate, StringFormat='{0:yyyy-MM-dd HH:mm}'}"/>
                                     <Label Text="{Binding opponentName, StringFormat='Ellenfél: {0}'}" />
                                 </VerticalStackLayout>
                                 <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompetitionsViewModel}}, Path=StartMatchCommand}" />
@@ -37,7 +38,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="20">
+        <HorizontalStackLayout Grid.Row="3" HorizontalOptions="Center" Spacing="20">
             <Button Text="↩" BackgroundColor="Green"  HeightRequest="35" Command="{Binding FilterTournamentsCommand}" CommandParameter="-1"/>
             <Button Text="↪" BackgroundColor="Green"  HeightRequest="35" Command="{Binding FilterTournamentsCommand}" CommandParameter="1"/>
         </HorizontalStackLayout>

@@ -12,7 +12,7 @@ namespace DartsMobilApp.Classes
         public string id { get; set; }
         public string name { get; set; }
         public string level { get; set; }
-        public string startDate { get; set; }
+        public DateTime startDate { get; set; }
         public string opponentName { get; set; }
     }
 
