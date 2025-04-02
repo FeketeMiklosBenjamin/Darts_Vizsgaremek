@@ -1,6 +1,15 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
+.background-competition-img {
+    height: 100vh;
+    background: url("../images/compteition_back.jpg");
+    width: 100vw;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
 
 .border-purple {
     border-color: purple !important;

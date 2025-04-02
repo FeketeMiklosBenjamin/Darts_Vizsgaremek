@@ -24,8 +24,9 @@ onUnmounted(() => {
                             <img src="../../assets/images/feature-world.jpg" alt="világ" class="box-image">
                         </div>
                         <div class="col-6 text-white tops">
-                            <h3 class="display-6 ms-5 box-title">Versenyek megtekintése</h3>
-                            <p class="fst-italic ms-4 box-description">Jelentkezés versenyekre, eredmények nyomon  követése </p>
+                            <h3 class="display-6 ms-5 box-title">Versenyek</h3>
+                            <p v-if="user.role == 2" class="fst-italic ms-4 box-description">Versenyek létrehozása megadott dátummal</p>
+                            <p v-else class="fst-italic ms-4 box-description">Jelentkezés versenyekre, eredmények nyomon  követése</p>
                         </div>
                     </div>
                 </router-link>
