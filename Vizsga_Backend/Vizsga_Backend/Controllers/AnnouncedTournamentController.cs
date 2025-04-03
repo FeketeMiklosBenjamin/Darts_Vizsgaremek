@@ -53,8 +53,8 @@ namespace Vizsga_Backend.Controllers
                     {
                         item.Id,
                         item.HeaderId,
-                        joinStartDate = TimeZoneInfo.ConvertTimeFromUtc(item.JoinStartDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
-                        joinEndDate = TimeZoneInfo.ConvertTimeFromUtc(item.JoinEndDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        item.JoinStartDate,
+                        item.JoinEndDate,
                         item.MaxPlayerJoin,
                         matchHeader = new
                         {
@@ -64,9 +64,9 @@ namespace Vizsga_Backend.Controllers
                             item.MatchHeader.LegsCount,
                             item.MatchHeader.StartingPoint,
                             item.MatchHeader.BackroundImageUrl,
-                            tournamentStartDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)item.MatchHeader.TournamentStartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                            tournamentEndDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)item.MatchHeader.TournamentEndDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                            matches = item.MatchHeader.MatchDates.Select((date, index) => new KeyValuePair<string, string>($"match{index + 1}", TimeZoneInfo.ConvertTimeFromUtc((DateTime)date, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                            tournamentStartDate = item.MatchHeader.TournamentStartDate,
+                            tournamentEndDate = item.MatchHeader.TournamentEndDate,
+                            matches = item.MatchHeader.MatchDates.Select((date, index) => new KeyValuePair<string, string>($"match{index + 1}", date.ToString())).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                         },
                         registeredPlayers = item.RegisteredPlayers.Select(player => new
                         {
@@ -83,8 +83,8 @@ namespace Vizsga_Backend.Controllers
                     {
                         item.Id,
                         item.HeaderId,
-                        joinStartDate = TimeZoneInfo.ConvertTimeFromUtc(item.JoinStartDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
-                        joinEndDate = TimeZoneInfo.ConvertTimeFromUtc(item.JoinEndDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        joinStartDate = item.JoinStartDate,
+                        joinEndDate = item.JoinEndDate,
                         item.MaxPlayerJoin,
                         matchHeader = new
                         {
@@ -94,9 +94,9 @@ namespace Vizsga_Backend.Controllers
                             item.MatchHeader.LegsCount,
                             item.MatchHeader.StartingPoint,
                             item.MatchHeader.BackroundImageUrl,
-                            tournamentStartDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)item.MatchHeader.TournamentStartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                            tournamentEndDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)item.MatchHeader.TournamentEndDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                            matches = item.MatchHeader.MatchDates.Select((date, index) => new KeyValuePair<string, string>($"match{index + 1}", TimeZoneInfo.ConvertTimeFromUtc((DateTime)date, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                            tournamentStartDate = item.MatchHeader.TournamentStartDate,
+                            tournamentEndDate = item.MatchHeader.TournamentEndDate,
+                            matches = item.MatchHeader.MatchDates.Select((date, index) => new KeyValuePair<string, string>($"match{index + 1}", date.ToString())).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                         },
                         registeredPlayers = item.RegisteredPlayers.Count()
                     }).ToList();
@@ -131,8 +131,6 @@ namespace Vizsga_Backend.Controllers
                 {
                     return BadRequest(new { message = "Nem lehet üres a cím!" });
                 }
-
-                datas.ConvertToUtc();
 
                 string badRequestMessage = _service.ValidateCreateDatas(datas);
 

@@ -38,7 +38,7 @@ namespace Vizsga_Backend.Controllers
                     {
                         match.Id,
                         match.Status,
-                        startDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        startDate = match.StartDate,
                         match.RemainingPlayer,
                         match.RowNumber,
                         playerOne = new
@@ -84,7 +84,7 @@ namespace Vizsga_Backend.Controllers
                 {
                     match.Id,
                     match.Status,
-                    startDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                    startDate = match.StartDate,
                     match.RemainingPlayer,
                     match.RowNumber,
                     playerOne = new

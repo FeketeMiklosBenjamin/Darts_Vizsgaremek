@@ -93,35 +93,6 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        // Nem kell
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetById(string id)
-        {
-            try
-            {
-                var user = await _service.GetByIdAsync(id);
-                if (user == null)
-                    return NotFound(new {message = $"A felhasználó az ID-vel ({id}) nem található." });
-
-                var result = new
-                {
-                    user.Id,
-                    user.Username,
-                    user.EmailAddress,
-                    profilePictureUrl = user.ProfilePicture,
-                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(user.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
-                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(user.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
-                };
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, new { message = "A lekérés során hiba történt." });
-                throw;
-            }
-        }
-
         [HttpPost("register/admin")]
         [Authorize]
         public async Task<IActionResult> RegisterAdmin([FromBody] User registerUser)
@@ -180,7 +151,7 @@ namespace VizsgaBackend.Controllers
                 await _service.CreateAsync(registerUser);
 
                 // Válasz küldése a sikeres regisztrációról, az új entitással
-                return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, new
+                return Ok(new
                 {
                     message = $"Sikeres regisztráció! Felhasználónév: {registerUser.Username}, E-mail cím: {registerUser.EmailAddress}"
                 });
@@ -292,7 +263,7 @@ namespace VizsgaBackend.Controllers
                 await _service.SaveRefreshTokenAsync(registerUser.Id, refreshTokenGen);
 
                 // Válasz küldése a sikeres regisztrációról, az új entitással
-                return CreatedAtAction(nameof(GetById), new { id = registerUser.Id }, new {
+                return Ok(new {
                     message = "Sikeres regisztráció.",
                     id = registerUser.Id,
                     username = registerUser.Username,
@@ -352,8 +323,8 @@ namespace VizsgaBackend.Controllers
                 {
                     if (user.BannedUntil > DateTime.UtcNow)
                     {
-                        string userBannedUntilDate = TimeZoneInfo.ConvertTimeFromUtc(user.BannedUntil.Value, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm");
-                        return Unauthorized(new { message = $"A profilja tiltva van van eddig: {userBannedUntilDate}" });
+                        string userBannedUntilDate = user.BannedUntil.Value.ToString("yyyy. MM. dd. HH:mm");
+                        return Unauthorized(new { message = $"A profilja tiltva van van eddig: {userBannedUntilDate} (világidő szerint)" });
                     }
                     else
                     {
@@ -550,9 +521,9 @@ namespace VizsgaBackend.Controllers
 
                 await _service.SetUserBanAsync(user.Id, request.BanDuration >= 30, bannedUntilDate);
 
-                string userBannedUntilDateString = TimeZoneInfo.ConvertTimeFromUtc(bannedUntilDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm");
+                string userBannedUntilDateString = bannedUntilDate.ToString("yyyy. MM. dd. HH:mm");
 
-                return Ok(new { message = $"A(z) {user.EmailAddress} e-mail címmel rendelkező felhasználó tiltva lett eddig: {userBannedUntilDateString}" });
+                return Ok(new { message = $"A(z) {user.EmailAddress} e-mail címmel rendelkező felhasználó tiltva lett eddig: {userBannedUntilDateString} (világidő szerint)" });
             }
             catch (Exception)
             {
@@ -629,7 +600,7 @@ namespace VizsgaBackend.Controllers
                         matchUpcomming.Header!.Id,
                         matchUpcomming.Header.Name,
                         matchUpcomming.Status,
-                        TimeZoneInfo.ConvertTimeFromUtc((DateTime)matchUpcomming.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        matchUpcomming.StartDate.ToString()!,
                         matchUpcomming.PlayerOne!.Username,
                         matchUpcomming.PlayerTwo!.Username,
                         null,
@@ -661,7 +632,7 @@ namespace VizsgaBackend.Controllers
                         match.Header!.Id,
                         match.Header.Name,
                         match.Status,
-                        TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        match.StartDate.ToString()!,
                         match.PlayerOne!.Username,
                         match.PlayerTwo!.Username,
                         match.PlayerOneStat!.SetsWon ?? match.PlayerOneStat.LegsWon,
@@ -706,7 +677,7 @@ namespace VizsgaBackend.Controllers
                         match.Id,
                         match.Header!.Name,
                         match.Header.Level,
-                        startDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        startDate = match.StartDate,
                         opponentName = match.PlayerOne!.Id != userId ? match.PlayerOne.Username : match.PlayerTwo!.Username,
                     });
                     return Ok(result);

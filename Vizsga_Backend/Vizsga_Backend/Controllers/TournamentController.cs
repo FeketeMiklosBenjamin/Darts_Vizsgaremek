@@ -31,8 +31,8 @@ namespace Vizsga_Backend.Controllers
                     x.Name,
                     x.Level,
                     x.BackroundImageUrl,
-                    tournamentStartDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)x.TournamentStartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                    tournamentEndDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)x.TournamentEndDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
+                    tournamentStartDate = x.TournamentStartDate,
+                    tournamentEndDate = x.TournamentEndDate,
                 });
                 return Ok(result);
             }
@@ -68,13 +68,13 @@ namespace Vizsga_Backend.Controllers
                     tournament.LegsCount,
                     tournament.StartingPoint,
                     tournament.BackroundImageUrl,
-                    tournamentStartDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)tournament.TournamentStartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
-                    tournamentEndDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)tournament.TournamentEndDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd."),
+                    tournamentStartDate = tournament.TournamentStartDate,
+                    tournamentEndDate = tournament.TournamentEndDate,
                     matches = tournament.Matches.Select(match => new
                     {
                         match.Id,
                         match.Status,
-                        startDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)match.StartDate!, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        startDate = match.StartDate,
                         match.RemainingPlayer,
                         match.RowNumber,
                         playerOne = new

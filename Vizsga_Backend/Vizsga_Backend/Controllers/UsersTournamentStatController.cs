@@ -48,8 +48,8 @@ namespace VizsgaBackend.Controllers
                     item.NineDarter,
                     item.User!.Username,
                     profilePictureUrl = item.User.ProfilePicture,
-                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(item.User.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
-                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(item.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    registerDate = item.User.RegisterDate,
+                    lastLoginDate = item.User.LastLoginDate
                 }).ToList();
                 return Ok(result);
             }
@@ -90,8 +90,8 @@ namespace VizsgaBackend.Controllers
                     tournamentWithUser.NineDarter,
                     tournamentWithUser.User!.Username,
                     profilePictureUrl = tournamentWithUser.User.ProfilePicture,
-                    registerDate = TimeZoneInfo.ConvertTimeFromUtc(tournamentWithUser.User.RegisterDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd"),
-                    lastLoginDate = TimeZoneInfo.ConvertTimeFromUtc(tournamentWithUser.User.LastLoginDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                    registerDate = tournamentWithUser.User.RegisterDate,
+                    lastLoginDate = tournamentWithUser.User.LastLoginDate
                 });
             }
             catch (Exception)

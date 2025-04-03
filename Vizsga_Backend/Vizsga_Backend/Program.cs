@@ -1,11 +1,13 @@
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Vizsga_Backend.Models;
 using Vizsga_Backend.Services;
+using Vizsga_Backend.SignalR;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
 
@@ -55,6 +57,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
+
+// SignalR konfigurálása Azure SignalR-rel
+builder.Services.AddSignalR()
+    .AddAzureSignalR(builder.Configuration["Azure:SignalR:ConnectionString"]);
 
 // Swagger konfigurálása
 builder.Services.AddSwaggerGen(options =>
@@ -117,6 +123,9 @@ app.UseCors("AllowSpecificOrigins");
 // Autentikáció és autorizáció middleware-ek
 app.UseAuthentication();
 app.UseAuthorization();
+
+// SignalR Hub hozzáadása
+app.MapHub<MatchHub>("/gamehub");
 
 // A vezérlõk térképezése
 app.MapControllers();

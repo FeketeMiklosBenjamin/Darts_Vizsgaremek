@@ -93,7 +93,7 @@ namespace Vizsga_Backend.Controllers
                     SetsCount = matchdatas.SetsCount,
                     LegsCount = matchdatas.LegsCount,
                     StartingPoint = matchdatas.StartingPoint,
-                    JoinPassword = BCrypt.Net.BCrypt.HashPassword(matchdatas.JoinPassword),
+                    JoinPassword = matchdatas.JoinPassword == null ? null : BCrypt.Net.BCrypt.HashPassword(matchdatas.JoinPassword),
                     BackroundImageUrl = null,
                     TournamentStartDate = null,
                     TournamentEndDate = null,

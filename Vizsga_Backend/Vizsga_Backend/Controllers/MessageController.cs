@@ -49,7 +49,7 @@ namespace Vizsga_Backend.Controllers
                         m.Id,
                         m.Title,
                         m.Text,
-                        sendDate = TimeZoneInfo.ConvertTimeFromUtc(m.SendDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm")
+                        sendDate = m.SendDate,
                     });
                     return Ok(result);
                 }
@@ -63,7 +63,7 @@ namespace Vizsga_Backend.Controllers
                         m.Id,
                         m.Title,
                         m.Text,
-                        sendDate = TimeZoneInfo.ConvertTimeFromUtc(m.SendDate, TimeZoneInfo.Local).ToString("yyyy.MM.dd. HH:mm"),
+                        sendDate = m.SendDate,
                         username = m.User!.Username,
                         emailAddress = m.User.EmailAddress
                     });
