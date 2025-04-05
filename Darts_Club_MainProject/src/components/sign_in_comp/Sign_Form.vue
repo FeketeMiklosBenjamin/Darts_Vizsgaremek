@@ -53,7 +53,7 @@ function onLogin(){
                             <label for="password">Jelszó</label>
                         </div>
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-warning w-100 py-2">Bejelentkezés
+                            <button type="submit" class="btn btn-warning w-100 py-2" :disabled="processing">Bejelentkezés
                                 <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                             </button>
                         </div>

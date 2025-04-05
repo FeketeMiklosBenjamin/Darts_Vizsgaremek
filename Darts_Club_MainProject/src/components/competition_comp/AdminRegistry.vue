@@ -6,7 +6,7 @@ import { Modal } from 'bootstrap';
 import { nextTick, onMounted, ref, watch } from 'vue'
 
 const { user } = useUserStore();
-const { status, matchHeader} = useAnnouncedTmStore();
+const { status, matchHeader } = useAnnouncedTmStore();
 const { registerCompetition, uploadMatchHeader } = useAnnouncedTmStore();
 
 const matchImg = ref<File | null>(null);
@@ -21,12 +21,16 @@ onMounted(async () => {
     }
 });
 
-const matchImgUrl = ref<string>('');
+const matchImgUrl = ref<string>('https://res.cloudinary.com/dvikunqov/image/upload/v1743843175/darts_background_pictures/ftrmvy0bpxjgoxj5tmzm.jpg');
+
 const handleFileChange = (event: Event) => {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput?.files?.length) {
         matchImg.value = fileInput.files[0];
         matchImgUrl.value = URL.createObjectURL(matchImg.value);
+    }
+    else {
+        matchImgUrl.value = "https://res.cloudinary.com/dvikunqov/image/upload/v1743843175/darts_background_pictures/ftrmvy0bpxjgoxj5tmzm.jpg"
     }
 };
 
@@ -55,7 +59,7 @@ const joinStartD = ref<string>('');
 const joinEndD = ref<string>('');
 const isSecondPage = ref(false);
 
-let borderColor: string = "success";
+let borderColor: string = "success-border";
 let isOpen = ref(false);
 
 
@@ -78,16 +82,16 @@ watch(() => competitionForm.value.level, (level: string) => {
     console.log(level);
     switch (level) {
         case "Amatőr":
-            borderColor = "success";
+            borderColor = "success-border";
             break;
         case "Haladó":
-            borderColor = "warning";
+            borderColor = "warning-border";
             break;
         case "Profi":
-            borderColor = "danger";
+            borderColor = "danger-border";
             break;
         case "Bajnok":
-            borderColor = "purple";
+            borderColor = "purple-border";
             break;
     }
 })
@@ -163,14 +167,34 @@ async function Send() {
                 await uploadMatchHeader(user.accessToken, matchImg.value, matchHeader);
             }
 
+            console.log(status.resp);
+            joinStartD.value = '';
+            joinEndD.value = '';
+            roundDates.value = ['', '', '', ''];
+            competitionForm.value = {
+                headerId: '',
+                name: '',
+                setsCount: 0,
+                legsCount: 3,
+                startingPoint: 501,
+                password: '',
+                validPassword: '',
+                level: 'Amatőr',
+                maxPlayerJoin: 16,
+                joinStartDate: '',
+                joinEndDate: '',
+                matchDates: [],
+            }
         } catch (err) {
             processing.value = false;
         }
     } else {
-        console.log(status.resp);
     }
-    console.log(modal.value);
     modalInstance.show();
+
+    setTimeout(() => {
+        modalInstance.hide();
+    }, 4000);
 }
 
 </script>
@@ -208,13 +232,13 @@ async function Send() {
                         </div>
                         <div class="mb-3 text-white fst-italic">
                             <label for="SetCount" class="form-label">Setek száma: {{ competitionForm.setsCount
-                                }}</label>
+                            }}</label>
                             <input type="range" class="form-range custom-range" min="0" max="12" id="SetCount"
                                 v-model="competitionForm.setsCount" />
                         </div>
                         <div class="mb-3 text-white fst-italic">
                             <label for="LegCount" class="form-label">Legek száma: {{ competitionForm.legsCount
-                                }}</label>
+                            }}</label>
                             <input type="range" class="form-range custom-range" min="3" max="20" id="LegCount"
                                 v-model="competitionForm.legsCount" />
                         </div>
@@ -272,8 +296,7 @@ async function Send() {
                         </div>
                         <div class="my-3 text-white fst-italic fs-5">
                             <label for="end_competition" class="form-label">Jelentkezés vége:</label>
-                            <input type="datetime-local" class="form-control" id="end_competition"
-                                v-model="joinEndD" />
+                            <input type="datetime-local" class="form-control" id="end_competition" v-model="joinEndD" />
                         </div>
                         <label class="text-white fst-italic fs-5" for="competition-maxPlayer">Hány fő:</label>
                         <div class="d-flex justify-content-center align-items-center">
@@ -294,15 +317,16 @@ async function Send() {
                                 Versenyek időpontjai: ({{ rounds[currentIndex] }})
                             </label>
                             <div class="d-flex gap-2">
-                                <button class="btn btn-primary bi bi-arrow-left-short" @click="prevRound"></button>
+                                <button class="btn btn-secondary bi bi-arrow-left-short" @click="prevRound"></button>
                                 <input type="datetime-local" class="form-control" id="matches_date"
                                     v-model="roundDates[currentIndex]" />
-                                <button class="btn btn-primary bi bi-arrow-right-short" @click="nextRound"></button>
+                                <button class="btn btn-secondary bi bi-arrow-right-short" @click="nextRound"></button>
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-warning w-100 mt-5" @click="Send">
-                        Elküldés
+                    <button type="button" class="btn btn-darkred text-white w-100 mt-5" :disabled="processing"
+                        @click="Send">
+                        Elküldés <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                     </button>
                 </div>
             </div>
@@ -312,8 +336,7 @@ async function Send() {
                 <div class="glass-card width-form">
                     <div class="d-flex justify-content-center">
                         <div class="card bg-black text-light" :class="borderColor" style="max-width: 45vh;">
-                            <img :src="matchImgUrl"
-                                class="card-img-middle" alt="...">
+                            <img :src="matchImgUrl" class="card-img-middle" alt="...">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <h5 class="card-title text-center fst-italic">{{ competitionForm.name }}</h5>
@@ -339,7 +362,7 @@ async function Send() {
                                                 időtartama:
                                             </p>
                                             <p class="text-center small">{{ new Date(roundDates[0]).toLocaleDateString()
-                                                }}
+                                            }}
                                                 -
                                                 {{ new
                                                     Date(roundDates[roundDates.length - 1]).toLocaleDateString() }}</p>
@@ -374,6 +397,31 @@ async function Send() {
 </template>
 
 <style scoped>
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.25);
+  border-color: rgb(194, 46, 46);
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.5);
+  border-color: rgb(194, 46, 46);
+}
+
+.form-check-input:checked {
+  background-color: rgb(194, 46, 46);
+  border-color: rgb(194, 46, 46);
+}
+
+.btn-secondary {
+  background-color: rgb(194, 46, 46);
+  border-color: rgb(194, 46, 46);
+}
+
+.btn-secondary:hover {
+  background-color: rgb(170, 30, 30);
+  border-color: rgb(170, 30, 30);
+}
+
 .width-form {
     width: 100%;
     min-height: 60vh;

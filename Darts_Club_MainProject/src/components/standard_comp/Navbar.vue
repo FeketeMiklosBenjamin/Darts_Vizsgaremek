@@ -8,14 +8,14 @@ import { useMessagesStore } from '@/stores/MessagesStore'
 
 const { status, user } = storeToRefs(useUserStore())
 const { logout, refreshTk } = useUserStore()
-const { getYourMessages} = useMessagesStore()
+const { getYourMessages } = useMessagesStore()
 const { forUserEmails, forAdminEmails } = storeToRefs(useMessagesStore())
 const router = useRouter()
 
 const remainingTime = ref(2 * 60 * 1000)
 const hasRefreshed = ref(false)
 let countdownInterval: any
-const isDropdownVisible = ref(false)
+let isDropdownVisible = ref(false)
 
 const toggleDropdown = async () => {
     if (user.value.accessToken) {
@@ -118,6 +118,7 @@ const NavigateToMessage = (emailId: string) => {
     sessionStorage.setItem('emailId', emailId)
     router.push(`/messages`)
 }
+
 </script>
 
 <template>
@@ -148,7 +149,8 @@ const NavigateToMessage = (emailId: string) => {
                                             </p>
                                             <div class="row">
                                                 <p class="col-6 fst-italic">{{ email.emailAddress }}</p>
-                                                <p class="col-6 d-flex justify-content-end fst-italic">{{ email.sendDate }}</p>
+                                                <p class="col-6 d-flex justify-content-end fst-italic">{{ email.sendDate
+                                                }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -180,12 +182,13 @@ const NavigateToMessage = (emailId: string) => {
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
 
-                            <div class="rounded-circle border border-3 mt-lg-0 mt-1 ms-2" :class="{
-                                'border-success': user.level == 'Amateur',
-                                'border-warning': user.level == 'Advanced',
-                                'border-danger': user.level == 'Professional',
-                                'border-secondary': user.role == 2,
-                                'bg-white border-info px-1': status._id == '',
+                            <div class="rounded-circle border-3 mt-lg-0 mt-1 ms-2" :class="{
+                                'success-border': user.level == 'Amateur',
+                                'warning-border': user.level == 'Advanced',
+                                'danger-border': user.level == 'Professional',
+                                'purple-border': user.level == 'Champion',
+                                'border border-secondary': user.role == 2,
+                                'bg-white border border-info px-1': status._id == '',
                             }">
                                 <img v-if="status._id" :src="user.profilePictureUrl" class="profileImg" alt="Nincs" />
                                 <i v-else class="bi-person iconProfileImg"></i>
@@ -257,7 +260,7 @@ const NavigateToMessage = (emailId: string) => {
     min-width: 20vw;
     opacity: 0;
     overflow: hidden;
-    display: block;
+    display: none;
     padding: 5px;
     z-index: 1;
     transition:
@@ -265,33 +268,33 @@ const NavigateToMessage = (emailId: string) => {
         opacity 0.3s ease;
 }
 
-@media (max-width: 991px){
+@media (max-width: 991px) {
     .dropdown-menu {
         position: fixed;
-        top:43vh;
+        top: 43vh;
         left: 50%;
         transform: translate(-50%, -50%);
-  }
+    }
 }
 
-@media (max-width: 749px){
+@media (max-width: 749px) {
     .dropdown-menu {
         position: fixed;
-        top:42vh;
+        top: 42vh;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 70vw;
-  }
+    }
 }
 
-@media (max-width: 520px){
+@media (max-width: 520px) {
     .dropdown-menu {
         position: fixed;
-        top:41vh;
+        top: 41vh;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 100vw;
-  }
+    }
 }
 
 .dropdown-menu.visible {

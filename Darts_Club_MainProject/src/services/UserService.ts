@@ -14,6 +14,20 @@ export default {
                 return Promise.reject(err.response)
             })
     },
+    registerAdmin(data: RegisterModel, accessToken: string) {
+        return User_Endpoint.post('/register/admin', data, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res
+            })
+            .catch((err) => {
+                return Promise.reject(err.response)
+            })
+    },
     loginUser(data: LoginModel) {
         return User_Endpoint.post('/login', data)
             .then((res) => {

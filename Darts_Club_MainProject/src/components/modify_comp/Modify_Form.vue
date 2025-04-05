@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type ModifyModel from '@/models/ModifyModel';
-import type RegisterModel from '@/models/RegisterModel';
 import { useUserStore } from '@/stores/UserStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -8,7 +7,6 @@ import { useRouter } from 'vue-router';
 const { uploadimage, modify, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
-let IsModifiedData: boolean = true;
 
 const profileImage = ref<File | null>(null);
 
@@ -18,7 +16,7 @@ const isFormModified = computed(() =>
     modifyform.value.newPassword
 );
 
-onMounted(() => {
+onMounted(async () => {
     status.message = '';
 });
 
@@ -37,11 +35,12 @@ const handleFileChange = (event: Event) => {
     }
 };
 
+let modificationSuccess = false;
 async function onModify() {
     status.message = '';
     processing.value = true;
 
-    if (modifyform.value.password !== modifyform.value.secondPassword) {
+    if (modifyform.value.newPassword !== modifyform.value.secondPassword) {
         status.message = "A két jelszó nem egyezik meg!";
         processing.value = false;
         return;
@@ -61,10 +60,13 @@ async function onModify() {
         if (profileImage.value) {
             await uploadimage(profileImage.value, accessToken);
         }
+        modificationSuccess = true;
+        setTimeout(() => {
+            router.push('/main-page');
+        }, 3000);
     } catch (err) {
         status.message = "Hiba történt a módosítás során!";
     }
-    router.push('/statistic');
     processing.value = false;
 }
 
@@ -72,6 +74,16 @@ async function onModify() {
 </script>
 
 <template>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" ref="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="alert alert-success text-center"><i class="bi bi-check-circle me-3"></i>
+                        {{ status.message }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="position-rel">
             <div class="container z-1 transform align-items-center glass-card opacity width-form p-2 px-3 mt-4">
                 <div class="row">
@@ -102,17 +114,17 @@ async function onModify() {
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="confirm_password"
-                                    placeholder="Jelszó újra" v-model="modifyform.secondPassword" autocomplete="off">
-                                <label for="confirm_password">Jelszó újra</label>
-                            </div>
-
-                            <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="new_password" placeholder="Új jelszó"
-                                    v-model="modifyform.newPassword" autocomplete="off">
+                                v-model="modifyform.newPassword" autocomplete="off">
                                 <label for="new_password">Új jelszó</label>
                             </div>
 
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirm_password"
+                                    placeholder="Jelszó újra" v-model="modifyform.secondPassword" autocomplete="off">
+                                <label for="confirm_password">Új jelszó újra</label>
+                            </div>
+                            
                             <div class="mt-2">
                                 <input class="form-control" type="file" id="formFile" @change="handleFileChange">
                                 <label for="formFile" class="form-label text-white">Profilkép módosítása (Nem
@@ -120,12 +132,12 @@ async function onModify() {
                             </div>
 
                             <div class="my-2">
-                                <button type="submit" class="btn btn-green w-100 py-2">Módosít
+                                <button type="submit" class="btn btn-success w-100 py-2" :disabled="processing">Módosít
                                     <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                                 </button>
                             </div>
                         </form>
-                        <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}
+                        <div v-if="status.message" class="alert text-center py-1" :class="modificationSuccess ? 'alert-success' : 'alert-danger'">{{ status.message }}
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/UserStore';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const { uploadimage, registerUser, status } = useUserStore();
+const { uploadimage, registerAdmin, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
 
@@ -29,10 +29,11 @@ const handleFileChange = (event: Event) => {
 };
 
 
-
+const RegisterSuccess = ref(false);
 async function onRegister() {
     status.message = '';
     processing.value = true;
+    RegisterSuccess.value = false;
     
     await new Promise(resolve => setTimeout(resolve, 100));
     
@@ -43,14 +44,17 @@ async function onRegister() {
     }
     
     try {
-        await registerUser(registerform.value);
+        await registerAdmin(registerform.value)
+        RegisterSuccess.value = true;
         const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
       
         if (profileImage.value) {
             await uploadimage(profileImage.value, accessToken);
         }
 
-        router.push('/main-page');
+        setTimeout(() => {
+            router.push('/main-page');
+        }, 3000);
     } catch (err) {
         processing.value = false;
     }
@@ -60,7 +64,7 @@ async function onRegister() {
 </script>
 
 <template>
-    <div class="position-rel">
+    <div class="background-color-view position-rel">
         <div class="container mt-4 z-1 transform align-items-center glass-card opacity width-form p-2 px-3">
             <div class="row">
                 <div class="col-12 mb-2">
@@ -102,12 +106,13 @@ async function onRegister() {
                         </div>
 
                         <div class="my-2">
-                            <button type="submit" class="btn btn-info w-100 py-2" :disabled="processing">Regisztráció
+                            <button type="submit" class="btn btn-darkred text-white w-100 py-2" :disabled="processing">Admin Regisztráció
                                 <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                             </button>
                         </div>
                     </form>
-                    <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}</div>
+                    <div v-if="status.message" class="alert text-center py-1" :class="RegisterSuccess ? 'alert-success' : 'alert-danger'">{{ status.message }}
+                    </div>
                 </div>
             </div>
         </div>
