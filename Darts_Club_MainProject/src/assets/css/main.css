@@ -167,3 +167,19 @@ body {
 .btn-green:hover {
     background-color: rgba(17, 232, 31, 0.760);
 }
+
+.success {
+    border: 5px solid #198754;
+}
+
+.warning {
+    border: 5px solid #ffc107;
+}
+
+.danger {
+    border: 5px solid #dc3545;
+}
+
+.purple{
+    border: 5px solid #6A0DAD;
+}

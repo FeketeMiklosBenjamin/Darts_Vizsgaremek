@@ -172,18 +172,6 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints / maxPoints.val
 </template>
 
 <style scoped>
-.success {
-  border: 5px solid #198754;
-}
-
-.warning {
-  border: 5px solid #ffc107;
-}
-
-.danger {
-  border: 5px solid #dc3545;
-}
-
 .left-side {
   display: flex;
   justify-content: center;

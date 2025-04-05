@@ -1,4 +1,5 @@
 export default interface RegisterCompetitionModel {
+    headerId?: string,
     name: string,
     setsCount: number,
     legsCount: number,
