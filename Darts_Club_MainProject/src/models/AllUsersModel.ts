@@ -4,5 +4,6 @@ export default interface AllUsersModel {
     emailAddress: string,
     profilePictureUrl: string,
     level: string,
-    dartsPoints: string
+    dartsPoints: string,
+    bannedUntil: string
 }

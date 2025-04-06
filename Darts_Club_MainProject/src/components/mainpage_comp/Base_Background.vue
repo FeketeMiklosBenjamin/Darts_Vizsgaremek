@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { useUserStore } from "@/stores/UserStore";
 
@@ -6,20 +7,28 @@ const { user } = useUserStore();
 </script>
 
 <template>
-    <div class="background-color-view">
+    <div class="background-main-img">
         <div class="main-div">
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/competition`" class="no-underline">
-                        <div class="box-competition row">
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <img src="../../assets/images/feature-world.jpg" alt="világ" class="box-image mb-5" />
+                        <div class="box-left row">
+                            <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-center">
+                                <img src="../../assets/images/earth.png" alt="világ" class="box-image"/>
                             </div>
-                            <div class="col-12 col-md-6 text-white text-container">
-                                <h3 class="display-6 box-title">Versenyek megtekintése</h3>
-                                <p class="fst-italic box-description">
-                                    Jelentkezés versenyekre, eredmények nyomon követése
-                                </p>
+                            <div class="col-12 col-md-6 text-light text-container">
+                                <div v-if="user.role != 2">
+                                    <h3 class="display-6 box-title">Versenyek Megtekintése</h3>
+                                    <p class="fst-italic box-description">
+                                        Jelentkezés versenyekre, eredmények nyomon követése
+                                    </p>
+                                </div>
+                                <div v-else>
+                                    <h3 class="display-6 box-title">Versenyek Létrehozása</h3>
+                                    <p class="fst-italic box-description">
+                                        Új versenyek beállítása, létrehozása 
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </router-link>
@@ -28,15 +37,15 @@ const { user } = useUserStore();
             <div class="row mt-5">
                 <div class="ms-auto col-10 col-lg-8 me-sm-5 me-4">
                     <router-link :to="`/leaderboard`" class="no-underline">
-                        <div class="box-leaderboard row">
-                            <div class="col-12 col-md-6 text-container text-white order-2 order-md-1">
+                        <div class="box-right row">
+                            <div class="col-12 col-md-6 text-container text-dark order-2 order-md-1">
                                 <h3 class="display-6 box-title">Ranglista</h3>  
                                 <p class="fst-italic box-description">
                                     Itt tekintheti meg globális szinten elért eredményeket
                                 </p>
                             </div>
-                            <div class="col-8 col-sm-6 col-md-3 col-lg-3 col-xxl-2 order-1 order-md-2 offset-md-0 offset-sm-3 offset-2">
-                                <img src="../../assets/images/phone_img.jpg" alt="telefon" class="box-image px-4" />
+                            <div class="col-10 col-sm-8 col-md-4 col-lg-4 order-1 order-md-2 offset-md-0 offset-sm-2 offset-1 d-flex justify-content-center align-center">
+                                <img src="../../assets/images/leaderboard-icon.png" alt="telefon" class="box-image" />
                             </div>
                         </div>
                     </router-link>
@@ -45,11 +54,11 @@ const { user } = useUserStore();
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/search-profile`" class="no-underline">
-                        <div class="box-search row">
-                            <div class="col-12 offset-md-0 offset-sm-3 col-sm-6 col-lg-4">
-                                <img src="../../assets/images/laptop_img.jpg" alt="telefon" class="box-image" />
+                        <div class="box-left row">
+                            <div class="col-12 offset-md-0 offset-sm-3 col-sm-6 col-lg-4 d-flex justify-content-center align-center">
+                                <img src="../../assets/images/search-icon.png" alt="telefon" class="box-image"/>
                             </div>
-                            <div class="col-12 col-md-6 text-white text-container">
+                            <div class="col-12 col-md-6 mx-auto text-light text-container">
                                 <h3 class="display-6 box-title">Profil Keresés</h3>
                                 <p class="fst-italic box-description">Más játékos adatainak megtekintése</p>
                             </div>
@@ -60,16 +69,24 @@ const { user } = useUserStore();
             <div class="row mt-5">
                 <div class="ms-auto col-10 col-lg-8 me-sm-5 me-4">
                     <router-link :to="`/statistic/${user.id}`" class="no-underline">
-                        <div class="box-statistic row">
+                        <div class="box-right row">
                             <div class="col-12 col-md-6 text-container text-dark order-2 order-md-1">
-                                <h3 class="display-6 box-title">Statisztika</h3>
-                                <p class="fst-italic box-description">
-                                    Egyéni adatok, elért eredmények megtekintése
-                                </p>
+                                <div v-if="user.role != 2">
+                                    <h3 class="display-6 box-title">Statisztika</h3>
+                                    <p class="fst-italic box-description">
+                                        Egyéni adatok, elért eredmények megtekintése
+                                    </p>
+                                </div>
+                                <div v-else>
+                                    <h3 class="display-6 box-title">Admin Regisztrácó</h3>
+                                    <p class="fst-italic box-description">
+                                        Új admin profil létrehozása 
+                                    </p>
+                                </div>
                             </div>
-                            <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-4 order-1 order-md-2 offset-0 offset-sm-2 offset-md-0">
-                                <img src="../../assets/images/statistic_img.jpg" alt="statisztika"
-                                    class="box-image" />
+                            <div class="col-12 col-sm-8 col-md-6 col-lg-4 order-1 order-md-2 offset-0 offset-sm-2 offset-md-0 d-flex justify-content-center align-center">
+                                <img src="../../assets/images/stat-icon.png" alt="statisztika"
+                                    class="box-image" style="height: 150px;"/>
                             </div>
                         </div>
                     </router-link>
@@ -78,14 +95,20 @@ const { user } = useUserStore();
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/feedback`" class="no-underline">
-                        <div class="box-feedback row">
+                        <div class="box-left row">
                             <div class="row">
-                                <div class="col-12 offset-md-0 offset-sm-2 col-sm-8 col-md-6 col-lg-6 col-xl-4">
-                                    <img src="../../assets/images/feedback_img.jpg" alt="feedback" class="box-image" />
+                                <div class="col-12 offset-md-0 offset-sm-2 col-sm-8 col-md-6 col-lg-6 col-xl-4 d-flex justify-content-center align-center">
+                                    <img src="../../assets/images/feedback-icon.png" alt="feedback" class="box-image" style="height: 150px;"/>
                                 </div>
-                                <div class="col-12 col-md-6 text-dark text-container">
-                                    <h3 class="display-6 box-title">Visszajelzés</h3>
-                                    <p class="fst-italic box-description">Adminoknak probléma, hiba jelentése</p>
+                                <div class="col-12 col-md-6 text-light text-container">
+                                    <div v-if="user.role != 2">
+                                        <h3 class="display-6 box-title">Hibabejelentés</h3>
+                                        <p class="fst-italic box-description">Adminoknak probléma, hiba jelentése</p>
+                                    </div>
+                                    <div v-else>
+                                        <h3 class="display-6 box-title">Visszajelzés</h3>
+                                        <p class="fst-italic box-description">Felhasználóknak probléma, hiba megoldása</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,11 +120,22 @@ const { user } = useUserStore();
 </template>
 
 <style scoped>
-.box-competition {
+.box-left {
     min-height: 250px;
-    border: 2px solid aqua;
+    border: 4px solid rgb(143, 46, 46);
     border-radius: 30px;
-    background-color: #070602;
+    background-color: black;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.box-right {
+    min-height: 250px;
+    border: 4px solid rgb(46, 143, 46);
+    border-radius: 30px;
+    background-color: white;
     position: relative;
     display: flex;
     align-items: center;
@@ -109,7 +143,6 @@ const { user } = useUserStore();
 }
 
 .box-image {
-    width: 100%;
     height: 200px;
 }
 
@@ -120,17 +153,6 @@ const { user } = useUserStore();
 
 .box-description {
     font-size: 18px;
-}
-
-.box-leaderboard {
-    min-height: 280px;
-    border: 2px solid red;
-    border-radius: 30px;
-    background-color: #3c2247;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 20px;
 }
 
 .text-container {
@@ -174,3 +196,8 @@ const { user } = useUserStore();
     padding: 20px;
 }
 </style>
+
+
+
+
+

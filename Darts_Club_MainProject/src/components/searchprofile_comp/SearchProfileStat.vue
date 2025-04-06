@@ -4,14 +4,32 @@ import router from '@/router';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref } from 'vue';
+import BanUserModal from './BanUserModal.vue';
 
 const { alluser, user } = storeToRefs(useUserStore());
-const { getLBUser } = useUserStore();
+const { getAllUser } = useUserStore();
 const searchUsers = ref<AllUsersModel[]>([])
 const searchFor = ref('');
 
+const selectedUserForBan = ref<AllUsersModel | null>(null);
+const showBanModal = ref(false);
+
+const openBanModal = (userId: string) => {
+    const foundUser = alluser.value.find(u => u.id === userId);
+    if (foundUser) {
+        selectedUserForBan.value = foundUser;
+        showBanModal.value = true;
+    }
+};
+
+const closeBanModal = () => {
+    showBanModal.value = false;
+    selectedUserForBan.value = null;
+};
+
+
 onBeforeMount(async () => {
-    await getLBUser();
+    await getAllUser();
     searchUsers.value = alluser.value.filter(x => x.id !== user.value.id).sort((a, b) => a.username.localeCompare(b.username));
 });
 
@@ -43,30 +61,34 @@ const NavigateToStatistic = (userId: string) => {
                 </div>
             </div>
             <div class="row justify-content-center my-4">
-                <div class="col-md-10 col-lg-10 table-responsive">
+                <div class="col-md-10 col-lg-10">
                     <div class="main-div" style="max-height: 70vh;">
-                        <table class="table text-center" v-if="filteredUsers.length > 0">
-                            <tbody>
-                                <tr v-for="users in filteredUsers" :key="users.id"
-                                    @click="NavigateToStatistic(users.id)">
-                                    <td>
-                                        <div class="rounded-circle mx-auto border-3"
-                                            style="width: 36px; height: 36px;" :class="{
-                                                'success-border': users.level == 'Amateur',
-                                                'warning-border': users.level == 'Advanced',
-                                                'danger-border': users.level == 'Professional',
-                                                'purple-border': users.level == 'Champion',
-                                            }">
-                                            <img :src="users.profilePictureUrl"
-                                                class="profileImg border-0 mx-auto d-block" alt="Nincs">
-                                        </div>
-                                    </td>
-                                    <td>{{ users.username }}</td>
-                                    <td>{{ users.emailAddress }}</td>
-                                    <td>{{ users.dartsPoints }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div v-if="filteredUsers.length > 0" class="table-responsive">
+                            <table class="table text-center">
+                                <tbody>
+                                    <tr v-for="users in filteredUsers" :key="users.id"
+                                        @click="NavigateToStatistic(users.id)">
+                                        <td>
+                                            <div class="rounded-circle mx-auto border-3"
+                                                style="width: 36px; height: 36px;" :class="{
+                                                    'success-border': users.level == 'Amateur',
+                                                    'warning-border': users.level == 'Advanced',
+                                                    'danger-border': users.level == 'Professional',
+                                                    'purple-border': users.level == 'Champion',
+                                                }">
+                                                <img :src="users.profilePictureUrl"
+                                                    class="profileImg border-0 mx-auto d-block" alt="Nincs">
+                                            </div>
+                                        </td>
+                                        <td>{{ users.username }}</td>
+                                        <td>{{ users.emailAddress }}</td>
+                                        <td>{{ users.dartsPoints }}</td>
+                                        <td v-if="user.role == 2"><i class="bi"
+                                                @click.stop="openBanModal(users.id)" :class="[users.bannedUntil != '' ? 'bi-dash-circle text-warning' : 'bi-ban text-danger']"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div v-else class="alert alert-warning text-center mx-auto w-50">
                             <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
                             <div class="d-inline">Nem létezik ez a felhasználó!</div>
@@ -76,6 +98,8 @@ const NavigateToStatistic = (userId: string) => {
             </div>
         </div>
     </div>
+    <BanUserModal v-if="selectedUserForBan" :current-user="selectedUserForBan" :visible="showBanModal"
+        @close="closeBanModal" />
 </template>
 
 <style scoped>
@@ -96,7 +120,7 @@ const NavigateToStatistic = (userId: string) => {
 }
 
 table tr {
-    background-color: rgba(255, 255, 255, 0.585);
+    background-color: rgba(255, 255, 255, 0.849);
     cursor: pointer;
     border: 3px solid black;
 }
@@ -113,7 +137,6 @@ table tr {
     padding-bottom: 10px;
     vertical-align: middle;
 }
-
 
 table td div {
     list-style: none;

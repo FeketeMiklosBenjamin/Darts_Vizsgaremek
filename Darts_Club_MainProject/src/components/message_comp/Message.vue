@@ -45,6 +45,12 @@ const NavigateToMain = async () => {
     router.push("main-page");
 }
 
+const NavigateToMessage = async () => {
+    await deleteMyMessages(currentEmail.value!.id!, user.accessToken);
+    sessionStorage.removeItem("emailId")
+    router.push("feedback");
+}
+
 const deleteMessage = async (id: string) => {
     await deleteMyMessages(id, user.accessToken);
     NavigateToMain();
@@ -58,7 +64,7 @@ const deleteMessage = async (id: string) => {
                 <div class="row">
                     <div class="col-1">
                         <div class="text-center text-success mt-3 fs-5">
-                            <i class="bi bi-arrow-return-left" @click="NavigateToMain"></i>
+                            <i class="bi bi-arrow-left" @click="NavigateToMain"></i>
                         </div>
                     </div>
                     <div class="col-10">
@@ -77,7 +83,8 @@ const deleteMessage = async (id: string) => {
                     </div>
                 </div>
                 <div v-if="user.role == 2" class="row">
-                    <div class="text-end me-5 caveat-text fs-4 mt-3">{{ currentEmail?.emailAddress }}</div>
+                    <div class="text-end me-5 caveat-text fs-4 mt-5">{{ currentEmail?.emailAddress }}</div>
+                    <div class="bi bi-arrow-left text-end bi bi-arrow-return-left text-primary" @click="NavigateToMessage()"></div>
                 </div>
             </div>
         </div>

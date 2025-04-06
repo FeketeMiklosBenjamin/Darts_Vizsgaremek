@@ -6,13 +6,13 @@ import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref } from 'vue';
 
 const { alluser } = storeToRefs(useUserStore());
-const { getAllUser } = useUserStore();
+const { getLBUser } = useUserStore();
 
 const leaderBoardUsers = ref<AllUsersModel[]>([]);
 const selectedLevel = ref<string>('Amateur');
 
 onBeforeMount(async () => {
-    await getAllUser();
+    await getLBUser();
     leaderBoardUsers.value = [...alluser.value];
 });
 
@@ -48,31 +48,33 @@ const NavigateToStatistic = (userId: string) => {
                 </select>
             </div>
             <div class="row justify-content-center my-4">
-                <div class="col-md-10 col-lg-8 table-responsive">
+                <div class="col-md-10 col-lg-8">
                     <div class="main-div" style="max-height: 70vh;">
-                        <table class="table text-center" v-if="filteredUsers.length > 0">
-                            <tbody>
-                                <tr v-for="(users, index) in filteredUsers" :key="users.id"
-                                    @click="NavigateToStatistic(users.id)">
-                                    <td :class="getRankClass(index)">{{ index + 1 }}.</td>
-                                    <td>
-                                        <div class="rounded-circle mx-auto border-3" style="width: 36px; height: 36px;"
-                                            :class="{
-                                                'success-border': users.level == 'Amateur',
-                                                'warning-border': users.level == 'Advanced',
-                                                'danger-border': users.level == 'Professional',
-                                                'purple-border': users.level == 'Champion',
-                                            }">
-                                            <img :src="users.profilePictureUrl"
-                                                class="profileImg border-0 mx-auto d-block" alt="Nincs">
-                                        </div>
-                                    </td>
-                                    <td class="text-white">{{ users.username }}</td>
-                                    <td class="text-white">{{ users.emailAddress }}</td>
-                                    <td class="text-white">{{ users.dartsPoints }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive" v-if="filteredUsers.length > 0">
+                            <table class="table text-center">
+                                <tbody>
+                                    <tr v-for="(users, index) in filteredUsers" :key="users.id"
+                                        @click="NavigateToStatistic(users.id)">
+                                        <td :class="getRankClass(index)">{{ index + 1 }}.</td>
+                                        <td>
+                                            <div class="rounded-circle mx-auto border-3"
+                                                style="width: 36px; height: 36px;" :class="{
+                                                    'success-border': users.level == 'Amateur',
+                                                    'warning-border': users.level == 'Advanced',
+                                                    'danger-border': users.level == 'Professional',
+                                                    'purple-border': users.level == 'Champion',
+                                                }">
+                                                <img :src="users.profilePictureUrl"
+                                                    class="profileImg border-0 mx-auto d-block" alt="Nincs">
+                                            </div>
+                                        </td>
+                                        <td class="text-white">{{ users.username }}</td>
+                                        <td class="text-white">{{ users.emailAddress }}</td>
+                                        <td class="text-white">{{ users.dartsPoints }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div v-else class="alert alert-warning text-center mx-auto w-50">
                             <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
                             <div class="d-inline">Nincsen ilyen szintű felhasználó!</div>

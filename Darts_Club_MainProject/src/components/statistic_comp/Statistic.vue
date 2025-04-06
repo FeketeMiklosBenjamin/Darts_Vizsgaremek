@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import Admin_UserRegistry from '../registration_comp/Admin_UserRegistry.vue';
 
 const { status, stats, user } = storeToRefs(useUserStore());
 
@@ -93,14 +94,7 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
 
 <template>
   <div class="background-color-view main-div">
-    <div v-if="isAdmin">
-      <div class="row">
-        <div class="alert alert-warning mx-auto text-center w-25 mt-5">
-          <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
-          <div class="d-inline">Adminnak nincsenek statisztikái!</div>
-        </div>
-      </div>
-    </div>
+    <Admin_UserRegistry v-if="isAdmin"/>
     <div v-else class="row py-5">
       <div class="col-12 col-xl-5">
         <div class="col-12 left-side my-0 my-sm-3 my-xl-4">
@@ -182,7 +176,7 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
             </tbody>
           </table>
         </div>
-        <div class="progress-container col-10 offset-1 mt-2 mt-sm-5">
+        <div class="progress-container col-10 offset-1 mt-3 mt-md-5 mb-5">
           <div class="progress-label progress-label-left">
             Szint: <span :class="textColor">{{ playerLevel }}</span>
           </div>

@@ -19,14 +19,34 @@
     opacity: 1 !important;
 }
 
+.btn-darkgreen {
+    background-color: rgb(46, 194, 46);
+}
+
+.btn-darkgreen:active {
+    background-color: rgb(46, 143, 46);
+}
+
+.btn-darkgreen:hover {
+    background-color: rgb(46, 143, 46);
+}
+
+.btn-darkgreen:disabled {
+    background-color: rgb(0, 73, 0) !important;
+    color: white;
+    opacity: 1 !important;
+}
+
+
 .background-competition-img {
     height: 110vh;
-    background: url("../images/compteition_back.jpg");
-    width: 100vw;
-    background-position: center center;
+    background: url("../images/competition-bg.jpg");
+    width: 100%;
+    background-position: center 0%;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    opacity: 60%;
 }
 
 table {
@@ -43,12 +63,19 @@ body {
     overflow: hidden;
 }
 
-
-/* Míg nem működik az egerem laptopon, addig nincs a html-es scrollbar megcsinálva! TODO*/
-
 .background-home-img {
     height: 110vh;
     background: url("../images/background.jpg");
+    width: 100vw;
+    background-position: 60% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.background-main-img {
+    height: 110vh;
+    background: url("../images/main-background-image.jpg");
     width: 100vw;
     background-position: 60% center;
     background-repeat: no-repeat;
@@ -78,18 +105,18 @@ body {
 
 .background-leaderboard-img {
     height: 110vh;
-    background: url("../images/leaderboard_back.jpg");
+    background: url("../images/leaderboard-image.png");
     width: 100vw;
-    background-position: center 20%;
+    background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    transform: rotate(180deg);
+    opacity: 90%;
 }
 
 .background-search-profile-img {
     height: 110vh;
-    background: url("../images/background_board.jpg");
+    background: url("../images/search-page-image.png");
     width: 100vw;
     background-position: center 20%;
     background-repeat: no-repeat;
@@ -134,6 +161,14 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.transform-with-navbar{
+    margin: 0;
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .glass-card {
     background: rgba(40, 38, 38, 0.09);
     border-radius: 16px;
@@ -154,7 +189,7 @@ body {
 .background-color-view {
     min-height: 110vh;
     width: 100vw;
-    background-image: linear-gradient(#101010 0%, #2D2525 12%, #666060 100%);
+    background-image: linear-gradient(to bottom left, rgb(184, 134, 11) 0%, #2D2525 60%, black 100%);
 }
 
 .main-div {

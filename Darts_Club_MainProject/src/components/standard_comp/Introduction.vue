@@ -4,7 +4,7 @@
 
 <template>
     <div class="z-1 position-rel" style="height: 20px;">
-        <div class="col-12 col-sm-10 col-lg-6 col-md-8 mx-auto px-0 glass-card-intro text-center">
+        <div class="col-12 col-sm-10 col-lg-6 col-md-8 mx-auto px-0 glass-card-intro text-center text-light">
             <div class="row">
                 <p class="display-6 mt-2">Üdvözöljük weboldalunkon!</p>
             </div>
@@ -40,7 +40,7 @@
 
 <style scoped>
 .glass-card-intro {
-    background: rgba(40, 38, 38, 0.336);
+    background: rgba(40, 38, 38, 0.636);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
@@ -58,6 +58,10 @@
 
 .glass-card-intro::-webkit-scrollbar {
     display: none;
+}
+
+.display-6 {
+    font-weight: 500;
 }
 
 </style>

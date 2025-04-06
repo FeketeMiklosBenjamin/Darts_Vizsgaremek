@@ -2,7 +2,7 @@
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { useMessagesStore } from '@/stores/MessagesStore'
 
@@ -16,6 +16,15 @@ const remainingTime = ref(2 * 60 * 1000)
 const hasRefreshed = ref(false)
 let countdownInterval: any
 let isDropdownVisible = ref(false)
+
+
+const sortedUserEmails = computed(() =>
+    [...forUserEmails.value].sort((a, b) => new Date(b.sendDate!).getTime() - new Date(a.sendDate!).getTime())
+)
+
+const sortedAdminEmails = computed(() =>
+    [...forAdminEmails.value].sort((a, b) => new Date(b.sendDate).getTime() - new Date(a.sendDate).getTime())
+)
 
 const toggleDropdown = async () => {
     if (user.value.accessToken) {
@@ -141,8 +150,8 @@ const NavigateToMessage = (emailId: string) => {
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
                                     <div v-if="forAdminEmails.length < 1" class="text-center">Nincs üzenete!</div>
-                                    <div v-else v-for="email in forAdminEmails" class="message-box">
-                                        <div class="message-box-content" @click="NavigateToMessage(email.id)">
+                                    <div v-else v-for="email in sortedAdminEmails" class="message-box">
+                                        <div class="message-box-content" @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 text-center mb-3">
                                                 {{ email.title
                                                 }}
@@ -157,7 +166,7 @@ const NavigateToMessage = (emailId: string) => {
                                 </div>
                                 <div v-else>
                                     <div v-if="forUserEmails.length < 1" class="text-center">Nincs üzenete!</div>
-                                    <div v-for="email in forUserEmails" class="message-box">
+                                    <div v-for="email in sortedUserEmails" class="message-box">
                                         <div class="message-box-content text-center"
                                             @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 mb-3">

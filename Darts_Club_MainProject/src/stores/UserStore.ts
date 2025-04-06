@@ -146,7 +146,14 @@ export const useUserStore = defineStore('userStore', {
                         emailAddress: user.emailAddress,
                         profilePictureUrl: user.profilePictureUrl,
                         level: user.level,
-                        dartsPoints: user.dartsPoints
+                        dartsPoints: user.dartsPoints,
+                        bannedUntil:(user.bannedUntil != null) ? new Date(user.bannedUntil).toLocaleString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : ''
                     }));
                 })
                 .catch((err) => {
@@ -164,6 +171,15 @@ export const useUserStore = defineStore('userStore', {
                         level: user.level,
                         dartsPoints: user.dartsPoints
                     }));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
+        },
+        banThisUser(userId: string, ban: number) {
+            return UserService.banUser(this.user.accessToken, userId, ban)
+                .then((res) => {
+                    this.status.message = res.data.message;
                 })
                 .catch((err) => {
                     return Promise.reject(err);

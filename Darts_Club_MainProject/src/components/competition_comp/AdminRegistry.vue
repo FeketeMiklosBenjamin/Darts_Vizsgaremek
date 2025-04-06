@@ -79,7 +79,6 @@ watch(
 );
 
 watch(() => competitionForm.value.level, (level: string) => {
-    console.log(level);
     switch (level) {
         case "Amatőr":
             borderColor = "success-border";
@@ -128,7 +127,6 @@ const updateAvailableRounds = (newValueString: Number, oldValueString: Number) =
 async function Send() {
     status.resp = '';
     processing.value = true;
-    console.log(roundDates.value);
     await new Promise(resolve => setTimeout(resolve, 100));
 
     if (competitionForm.value.password != competitionForm.value.validPassword) {
@@ -158,7 +156,6 @@ async function Send() {
 
     }
 
-    console.log(competitionForm.value);
     if (status.resp == '') {
         try {
             await registerCompetition(user.accessToken, competitionForm.value);
@@ -167,7 +164,6 @@ async function Send() {
                 await uploadMatchHeader(user.accessToken, matchImg.value, matchHeader);
             }
 
-            console.log(status.resp);
             joinStartD.value = '';
             joinEndD.value = '';
             roundDates.value = ['', '', '', ''];
@@ -186,10 +182,11 @@ async function Send() {
                 matchDates: [],
             }
         } catch (err) {
+            status.success = false;
             processing.value = false;
         }
-    } else {
-    }
+    } else {}
+    processing.value = false;
     modalInstance.show();
 
     setTimeout(() => {

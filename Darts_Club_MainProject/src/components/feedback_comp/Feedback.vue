@@ -4,6 +4,7 @@ import { useMessagesStore } from '@/stores/MessagesStore';
 import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap';
 import { useUserStore } from '@/stores/UserStore';
+import type AdminEmailModel from '@/models/AdminEmailModel';
 
 const { user } = useUserStore();
 const { sendUserFeed, sendAdminFeed, status } = useMessagesStore();
@@ -15,6 +16,14 @@ let modalInstance: Modal;
 onMounted(() => {
     if (modal.value) {
         modalInstance = new Modal(modal.value);
+    }
+    let currentMessage: AdminEmailModel | string | null;
+    currentMessage = sessionStorage.getItem("currentEmail");
+    if (currentMessage != undefined) {
+        const currentMessageJSON = JSON.parse(currentMessage);
+        feedform.value.title = `RE: ${currentMessageJSON.title}`,
+        feedform.value.emailAddress = currentMessageJSON.emailAddress,
+        sessionStorage.removeItem("currentEmail");
     }
 });
 

@@ -65,13 +65,12 @@ async function onRegister() {
 
 <template>
     <div class="background-color-view position-rel">
-        <div class="container mt-4 z-1 transform align-items-center glass-card opacity width-form p-2 px-3">
+        <div class="container z-1 transform-with-navbar glass-card opacity width-form p-2 px-3 main-div">
             <div class="row">
                 <div class="col-12 mb-2">
                     <h1 class="text-center display-4 text-light">Regisztráció</h1>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-12 col-md-12 mx-auto">
                     <form @submit.prevent="onRegister">

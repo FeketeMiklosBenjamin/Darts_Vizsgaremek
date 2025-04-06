@@ -36,7 +36,7 @@ function onLogin(){
         <div class="container z-1 transform align-items-center glass-card width-form p-4">
             <div class="row">
                 <div class="col-12 mb-2">
-                    <h1 class="text-center display-4 text-light mx-auto">Bejelentkezés</h1>
+                    <h1 class="text-center display-5 text-light mx-auto">Bejelentkezés</h1>
                 </div>
             </div>
 

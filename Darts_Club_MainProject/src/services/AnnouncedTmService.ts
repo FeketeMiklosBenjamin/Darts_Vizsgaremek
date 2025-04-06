@@ -16,6 +16,20 @@ export default {
                 return Promise.reject(err.response);
             })
     },
+    getCompetition(accesstoken: string) {
+        return AnnouncedTm_Endpoint.get('', {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            })
+    },
     uploadMatchImage(accesstoken: string, image: File, matchId: string) {
         const formData = new FormData();
         formData.append('file', image);
