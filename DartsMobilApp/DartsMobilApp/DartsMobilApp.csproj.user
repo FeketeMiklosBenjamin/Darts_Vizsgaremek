@@ -32,6 +32,9 @@
     <MauiXaml Update="Pages\HomePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Pages\LogOutPopUp.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Pages\StatisticPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

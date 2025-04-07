@@ -72,6 +72,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.LoginP
 build_metadata.AdditionalFiles.TargetPath = Pages\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LoginPage.xaml
 
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LogOutPopUp.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.LogOutPopUp.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\LogOutPopUp.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\LogOutPopUp.xaml
+
 [C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/StatisticPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.StatisticPage.xaml
