@@ -14,10 +14,16 @@
     <MauiXaml Update="Pages\CounterPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Pages\ExitPopUp.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Pages\FriendlyMatchPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Pages\FriendlySetupPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Pages\JoinRequestPopUp.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Pages\LoginPage.xaml">
@@ -27,6 +33,9 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Pages\StatisticPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Pages\WaitingForPlayersPopUp.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

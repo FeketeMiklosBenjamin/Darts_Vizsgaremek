@@ -1,7 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.API;
 using DartsMobilApp.Classes;
+using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Collections.Generic;
@@ -126,6 +128,18 @@ namespace DartsMobilApp.ViewModel
         { 
             SortedFriendlies = RefreshSorted();
             TakedFriendlies = SortedFriendlies;
+        }
+
+        [RelayCommand]
+        private async Task StartFriendlyMatch()
+        {
+            JoinRequestPopUp popUp = new JoinRequestPopUp();
+            Application.Current.MainPage.ShowPopup(popUp);
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            });
+            
         }
     }
 }

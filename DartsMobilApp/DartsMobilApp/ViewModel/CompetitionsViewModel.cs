@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DartsMobilApp.API;
@@ -133,6 +134,7 @@ namespace DartsMobilApp.ViewModel
             {
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
             });
+            
         }
 
     }

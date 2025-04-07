@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.API;
@@ -187,6 +188,8 @@ namespace DartsMobilApp.ViewModel
                 {
                     await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
                 });
+                WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp();
+                Application.Current.MainPage.ShowPopup(popUp);
             }
             else
             {
