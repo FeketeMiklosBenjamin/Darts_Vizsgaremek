@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DartsMobilApp.Pages.ExitPopUp"
-            Color="Black">
-    <Frame CornerRadius="25">
+            Color="Transparent">
+    <Frame CornerRadius="25" BackgroundColor="Black">
         <VerticalStackLayout>
             <Label Text="Biztos ki szeretnél lépni a meccsből?" TextColor="{x:StaticResource Primary}" FontSize="Header" HorizontalTextAlignment="Center"/>
             <HorizontalStackLayout Spacing="10" Margin="5" HorizontalOptions="Center">
