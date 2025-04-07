@@ -1,4 +1,6 @@
-﻿using DartsMobilApp.Classes;
+﻿using CommunityToolkit.Maui.Views;
+using DartsMobilApp.Classes;
+using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 
 namespace DartsMobilApp
@@ -12,6 +14,8 @@ namespace DartsMobilApp
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
+            LogOutPopUp popUp = new LogOutPopUp();
+            Application.Current.MainPage.ShowPopup(popUp);
             bool confirm = await Shell.Current.DisplayAlert("Kijelentkezés", "Biztosan kijelentkezel?", "Igen", "Mégse");
             if (confirm)
             {
