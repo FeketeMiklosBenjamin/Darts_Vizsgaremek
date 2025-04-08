@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
+const props = defineProps(['image'], )
 
 </script>
 
 <template>
-    <div class="z-n1 position-absolute background-home-img"></div>
+    <div class="z-n1 position-absolute" :class="props.image"></div>
 </template>
 
 <style scoped>

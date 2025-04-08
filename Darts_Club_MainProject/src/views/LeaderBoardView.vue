@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import LeaderBoard_Background from '@/components/leaderboard_comp/LeaderBoard_Background.vue';
 import LeaderBoardStat from '@/components/leaderboard_comp/LeaderBoardStat.vue';
+import Background from '@/components/standard_comp/Background.vue';
 import Navbar from '@/components/standard_comp/Navbar.vue';
 
 </script>
 
 <template>
     <Navbar />
-    <LeaderBoard_Background />
+    <Background image="background-leaderboard-img"/>
     <LeaderBoardStat />
 </template>
 

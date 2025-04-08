@@ -120,6 +120,24 @@ const { user } = useUserStore();
 </template>
 
 <style scoped>
+.box-left,
+.box-right,
+.box-search,
+.box-statistic,
+.box-feedback {
+    transition: transform 0.3s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+.box-left:hover,
+.box-right:hover,
+.box-search:hover,
+.box-statistic:hover,
+.box-feedback:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(173, 216, 230, 0.4);
+}
+
+
 .box-left {
     min-height: 250px;
     border: 4px solid rgb(143, 46, 46);

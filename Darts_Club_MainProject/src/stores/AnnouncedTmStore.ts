@@ -34,14 +34,14 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                     this.Competitions = res.data.map((comp: CompetitionModel) => ({
                         id: comp.id,
                         hedaerId: comp.headerId,
-                        joinStartDate: new Date(comp.joinStartDate).toLocaleString(undefined, {
+                        joinStartDate: new Date(comp.joinStartDate).toLocaleDateString(undefined, {
                             year: 'numeric',
                             month: '2-digit',
                             day: '2-digit',
                             hour: '2-digit',
                             minute: '2-digit'
                         }),
-                        joinEndDate: new Date(comp.joinEndDate).toLocaleString(undefined, {
+                        joinEndDate: new Date(comp.joinEndDate).toLocaleDateString(undefined, {
                             year: 'numeric',
                             month: '2-digit',
                             day: '2-digit',
@@ -52,6 +52,15 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                         matchHeader: comp.matchHeader,
                         registeredPlayers: comp.registeredPlayers
                     }));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
+        },
+        UserApplication(accesstoken: string, tournamentId: string) {
+            return AnnouncedTmService.application(accesstoken, tournamentId)
+                .then((res) => {
+                   this.status.resp = "Sikeres jelentkezett a versenyre";
                 })
                 .catch((err) => {
                     return Promise.reject(err);

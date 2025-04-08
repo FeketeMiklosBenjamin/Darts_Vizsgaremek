@@ -134,7 +134,10 @@ const NavigateToMessage = (emailId: string) => {
     <div class="shadow-lg stick">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg stick py-2">
             <div class="container">
-                <a class="navbar-brand"><em class="display-6 title">Sons of the Fallen's</em></a>
+                <a class="navbar-brand d-flex align-items-center">
+                    <img src="../../assets/images/darts_Icon.png" class="icon">
+                    <em class="display-6 title mb-0">Sons of the Fallen's</em>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -226,6 +229,47 @@ const NavigateToMessage = (emailId: string) => {
 </template>
 
 <style scoped>
+.icon {
+    height: auto;
+    max-height: 6vh;
+    width: auto;
+    max-width: 10vw;
+    margin-right: 10px;
+    animation: spinForward 0.6s ease-in-out forwards;
+    transition: transform 0.6s ease-in-out;
+    transform-origin: center;
+}
+
+@media (max-width: 768px) {
+    .icon {
+        max-height: 5vh;
+        max-width: 12vw;
+    }
+}
+
+.icon:active {
+    animation: spinBack 0.6s ease-in-out forwards;
+}
+
+@keyframes spinForward {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinBack {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
 .bi-x-circle {
     font-size: 1vw;
     position: absolute;

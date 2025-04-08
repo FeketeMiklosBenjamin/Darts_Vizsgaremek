@@ -7,7 +7,7 @@ import Navbar from '@/components/standard_comp/Navbar.vue';
 
 <template>
     <Navbar />
-    <Background />
+    <Background image="background-home-img"/>
     <Introduction />
 </template>
 

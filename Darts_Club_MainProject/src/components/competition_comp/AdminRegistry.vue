@@ -166,7 +166,10 @@ async function Send() {
 
             joinStartD.value = '';
             joinEndD.value = '';
-            roundDates.value = ['', '', '', ''];
+            roundDates.value = Array(rounds.value.length).fill('');
+            borderColor = "success-border";
+            currentIndex.value = 0;
+
             competitionForm.value = {
                 headerId: '',
                 name: '',
@@ -185,12 +188,13 @@ async function Send() {
             status.success = false;
             processing.value = false;
         }
-    } else {}
+    } else { }
     processing.value = false;
     modalInstance.show();
 
     setTimeout(() => {
         modalInstance.hide();
+        status.success = false;
     }, 4000);
 }
 
@@ -229,13 +233,13 @@ async function Send() {
                         </div>
                         <div class="mb-3 text-white fst-italic">
                             <label for="SetCount" class="form-label">Setek száma: {{ competitionForm.setsCount
-                            }}</label>
+                                }}</label>
                             <input type="range" class="form-range custom-range" min="0" max="12" id="SetCount"
                                 v-model="competitionForm.setsCount" />
                         </div>
                         <div class="mb-3 text-white fst-italic">
                             <label for="LegCount" class="form-label">Legek száma: {{ competitionForm.legsCount
-                            }}</label>
+                                }}</label>
                             <input type="range" class="form-range custom-range" min="3" max="20" id="LegCount"
                                 v-model="competitionForm.legsCount" />
                         </div>
@@ -265,12 +269,12 @@ async function Send() {
                         </div>
                         <div class="input-group mt-4">
                             <span class="input-group-text" id="competition-psw">Verseny jelszava:</span>
-                            <input type="password" class="form-control" placeholder="lajos" aria-label="competition-psw"
+                            <input type="password" class="form-control" aria-label="competition-psw"
                                 aria-describedby="competition-psw" v-model="competitionForm.password" />
                         </div>
                         <div class="input-group mt-4">
                             <span class="input-group-text" id="competition-psw">Jelszó újra:</span>
-                            <input type="password" class="form-control" placeholder="lajos" aria-label="competition-psw"
+                            <input type="password" class="form-control" aria-label="competition-psw"
                                 aria-describedby="competition-psw" v-model="competitionForm.validPassword" />
                         </div>
                         <label class="text-white text-center mt-3 fst-italic fs-5"
@@ -344,8 +348,21 @@ async function Send() {
                                     <p class="card-title text-center text-decoration-underline mt-2">Jelentkezés
                                         időtartama:
                                     </p>
-                                    <p class="text-center m-0">{{ new Date(joinStartD).toLocaleDateString() }} - {{ new
-                                        Date((joinEndD)).toLocaleDateString() }}</p>
+                                    <p class="text-center m-0 small">{{ new
+                                        Date(joinStartD).toLocaleDateString(undefined, {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        }) }}<br>-<br>{{ new
+                                            Date((joinEndD)).toLocaleDateString(undefined, {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) }}</p>
                                     <div class="d-flex justify-content-center p-0">
                                         <button type="button" data-bs-toggle="collapse" @click="isOpen = !isOpen"
                                             :class="isOpen ? 'bi bi-caret-up btn text-light' : 'bi bi-caret-down-fill btn text-light'"
@@ -359,7 +376,7 @@ async function Send() {
                                                 időtartama:
                                             </p>
                                             <p class="text-center small">{{ new Date(roundDates[0]).toLocaleDateString()
-                                            }}
+                                                }}
                                                 -
                                                 {{ new
                                                     Date(roundDates[roundDates.length - 1]).toLocaleDateString() }}</p>
@@ -377,7 +394,13 @@ async function Send() {
                                             <div>
                                                 <ul class="small">
                                                     <li v-for="date in roundDates" :key="date">{{ new
-                                                        Date(date).toLocaleDateString() }}</li>
+                                                        Date(date).toLocaleDateString(undefined, {
+                                                            year: 'numeric',
+                                                            month: '2-digit',
+                                                            day: '2-digit',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        }) }}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -395,28 +418,28 @@ async function Send() {
 
 <style scoped>
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.25);
-  border-color: rgb(194, 46, 46);
+    box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.25);
+    border-color: rgb(194, 46, 46);
 }
 
 .btn-primary:focus {
-  box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.5);
-  border-color: rgb(194, 46, 46);
+    box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.5);
+    border-color: rgb(194, 46, 46);
 }
 
 .form-check-input:checked {
-  background-color: rgb(194, 46, 46);
-  border-color: rgb(194, 46, 46);
+    background-color: rgb(194, 46, 46);
+    border-color: rgb(194, 46, 46);
 }
 
 .btn-secondary {
-  background-color: rgb(194, 46, 46);
-  border-color: rgb(194, 46, 46);
+    background-color: rgb(194, 46, 46);
+    border-color: rgb(194, 46, 46);
 }
 
 .btn-secondary:hover {
-  background-color: rgb(170, 30, 30);
-  border-color: rgb(170, 30, 30);
+    background-color: rgb(170, 30, 30);
+    border-color: rgb(170, 30, 30);
 }
 
 .width-form {

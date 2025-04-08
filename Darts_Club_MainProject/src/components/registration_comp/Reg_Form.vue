@@ -74,7 +74,7 @@ async function onRegister() {
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="name" placeholder="Név"
                                 v-model="registerform.username" autocomplete="off">
-                            <label for="name">Név</label>
+                            <label for="name">Felhasználónév</label>
                         </div>
 
                         <div class="form-floating mb-3">

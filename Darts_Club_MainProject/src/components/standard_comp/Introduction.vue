@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="z-1 position-rel" style="height: 20px;">
+    <div class="z-1 position-rel">
         <div class="col-12 col-sm-10 col-lg-6 col-md-8 mx-auto px-0 glass-card-intro text-center text-light">
             <div class="row">
                 <p class="display-6 mt-2">Üdvözöljük weboldalunkon!</p>
