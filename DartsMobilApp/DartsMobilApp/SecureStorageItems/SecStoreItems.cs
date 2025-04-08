@@ -16,12 +16,16 @@ namespace DartsMobilApp.SecureStorageItems
 
         public static string? UserName { get; set; } = SecureStorage.GetAsync("UserName")?.Result?.ToString();
 
-        public static string? IsChecked { get; set; } = SecureStorage.GetAsync("SaveCheckedBool").Result.ToString();
+        public static string? IsChecked { get; set; } = SecureStorage.GetAsync("SaveCheckedBool").Result?.ToString();
 
 
-        public static string? Password { get; set; } = SecureStorage.GetAsync("Password").Result.ToString();
+        public static string? Password { get; set; } = SecureStorage.GetAsync("Password").Result?.ToString();
 
-        public static string? Email { get; set; } = SecureStorage.GetAsync("Email").Result.ToString();
+        public static string? Email { get; set; } = SecureStorage.GetAsync("Email").Result?.ToString();
+
+        public static string? MyLevel { get; set; } = SecureStorage.GetAsync("MyLevel").Result?.ToString();
+
+        public static string? DartsPoints { get; set; } = SecureStorage.GetAsync("DartsPoints").Result?.ToString();
 
     }
 }

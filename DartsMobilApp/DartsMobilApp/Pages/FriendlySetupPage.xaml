@@ -7,7 +7,7 @@
              BackgroundImageSource="sunset_darts.jpg"
              >
 
-    <Grid RowDefinitions="*,0.5*,.5*,*,*,*,*">
+    <Grid RowDefinitions="*,0.5*,.5*,*,*,*,*,*">
         <Label Text="Barátságos meccs" TextColor="White" FontSize="36" Margin="10"/>
         <Label Text="Játékbeállítások" Grid.Row="1" TextColor="White" FontSize="20" HorizontalOptions="Center"/>
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="7" >
@@ -39,13 +39,23 @@
             </Border>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">
-            <Label Text="Publikus meccs?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
-            <Switch IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Green" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Text="Privát meccs?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
+            <Switch IsToggled="{Binding IsCheckedPrivate}"   ThumbColor="White" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" >
+                <Switch.Behaviors>
+                    <tool:EventToCommandBehavior EventName="Toggled" Command="{Binding CheckMatchIsPrivateCommand}"/>
+                </Switch.Behaviors>
+            </Switch>
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center">
             <Label Text="Csak az én szintemen lévők lássák?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
-            <Switch  IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Green" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Switch  IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
         </HorizontalStackLayout>
-        <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="6" Text="Meccs Létrehozása" Command="{Binding NavigateCommand}"/>
+        <HorizontalStackLayout Grid.Row="6" HorizontalOptions="Center" Spacing="10" IsVisible="{Binding Visible}">
+            <Label Text="A meccs jelszava:" FontAttributes="Bold" FontSize="15" TextColor="White" VerticalOptions="Center"/>
+            <Border Stroke="Black" StrokeThickness="3" StrokeShape="RoundRectangle 10 10 10 10" HeightRequest="35" WidthRequest="200">
+                <Entry IsPassword="True" WidthRequest="150" HeightRequest="35" BackgroundColor="Transparent" Text="{Binding Pwd}"/>
+            </Border>
+        </HorizontalStackLayout>
+        <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="7" Text="Meccs Létrehozása" Command="{Binding NavigateCommand}"/>
     </Grid>
 </ContentPage>

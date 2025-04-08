@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.Pages;
+using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,9 @@ namespace DartsMobilApp.ViewModel
 {
     public partial class HomeViewModel : ObservableObject
     {
-
+        public HomeViewModel()
+        {
+        }
         [RelayCommand]
 
         private async void GoToFriendlySetup()

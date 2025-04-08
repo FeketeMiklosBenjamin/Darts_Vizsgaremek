@@ -87,7 +87,7 @@ namespace DartsMobilApp.API
         {
             try
             {
-                var response = HTTPCommunication<dynamic>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch);
+                var response = HTTPCommunication<dynamic>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch).Result;
                 return response;
             }
             catch (Exception)

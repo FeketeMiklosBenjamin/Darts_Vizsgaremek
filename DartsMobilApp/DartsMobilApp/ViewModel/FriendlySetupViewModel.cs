@@ -6,6 +6,7 @@ using DartsMobilApp.API;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Services;
 using Microsoft.Maui.Platform;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,16 @@ namespace DartsMobilApp.ViewModel
         private Color defaultColor = Color.FromRgb(211, 211, 211);
         private Color selectedColor = Color.FromRgb(255, 165, 0);
         private NewFriendlyMatchModel newFriendlyMatch = new NewFriendlyMatchModel();
+        private SignalRService signalR = new SignalRService();
 
-
+        [ObservableProperty]
+        private bool isChecked = false;
+        [ObservableProperty]
+       private bool isCheckedPrivate  = false;
+        [ObservableProperty]
+       private bool visible = false;
+        [ObservableProperty]
+        private string pwd ;
         public Color BtnSetColor { get; set; } = Color.FromRgb(211, 211, 211);
         public Color BtnLegColor { get; set; } = Color.FromRgb(211, 211, 211);
 
@@ -41,6 +50,7 @@ namespace DartsMobilApp.ViewModel
 
         [ObservableProperty]
         public int numberOfSetsOrLegs;
+
 
 
 
@@ -129,8 +139,20 @@ namespace DartsMobilApp.ViewModel
             }
         }
 
+        [RelayCommand]
+         private  void CheckMatchIsPrivate()
+        {
+            if (IsCheckedPrivate == true)
+            {
+                Visible = true;
+            }
+            else
+            {
+                Visible = false;
+            }
+        }
 
-
+        
         [RelayCommand]
 
         private async void Navigate()
@@ -138,8 +160,6 @@ namespace DartsMobilApp.ViewModel
             List<Color> colors = new List<Color>() { BtnSetColor, BtnLegColor, BestOfBtnColor, FirstToBtnColor, Btn301Color,Btn501Color, Btn701Color};
 
 
-            newFriendlyMatch.joinPassword = "";
-            newFriendlyMatch.levelLocked = false;
             if (BtnSetColor == selectedColor)
             {
                 if (FirstToBtnColor == selectedColor)
@@ -177,10 +197,31 @@ namespace DartsMobilApp.ViewModel
             {
                 newFriendlyMatch.startingPoint = 701;
             }
+
+            if (IsChecked == true)
+            {
+                newFriendlyMatch.levelLocked = true;
+            }
+            else
+            {
+                newFriendlyMatch.levelLocked = false;
+            }
+            if (Visible == true)
+            {
+                newFriendlyMatch.joinPassword = Pwd;
+            }
+            else
+            {
+                newFriendlyMatch.joinPassword = null;
+            }
+
+
             var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
             var friedlyMatch = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
+            var responseJson = DartsAPI.PostNewFriendlyMatch(friedlyMatch);
+
+            var response = JsonSerializer.Deserialize<NewFriendlyMatchResponse>(responseJson);
 
             if (response != null)
             {
@@ -188,6 +229,8 @@ namespace DartsMobilApp.ViewModel
                 {
                     await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
                 });
+                
+                signalR.JoinFriendlyMatch(response.matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
                 WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp();
                 Application.Current.MainPage.ShowPopup(popUp);
             }

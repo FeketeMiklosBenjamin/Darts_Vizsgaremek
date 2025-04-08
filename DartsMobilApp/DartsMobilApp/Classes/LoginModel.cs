@@ -25,6 +25,9 @@ namespace DartsMobilApp.Classes
 
         public string? emailAddress { get; set; }
 
+        public string? level { get; set; }
+
+        public int? dartsPoints { get; set; }
         public int? role { get; set; }
     }
 }

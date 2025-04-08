@@ -9,4 +9,6 @@ public partial class FriendlySetupPage : ContentPage
 		InitializeComponent();
 		this.BindingContext = vm;
 	}
+
+    
 }

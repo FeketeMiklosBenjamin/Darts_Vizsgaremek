@@ -29,7 +29,7 @@ namespace DartsMobilApp.ViewModel
         public bool saveChecked;
 
         [RelayCommand]
-        private void Apperaring()
+        private void Appearing()
         {
             
         }

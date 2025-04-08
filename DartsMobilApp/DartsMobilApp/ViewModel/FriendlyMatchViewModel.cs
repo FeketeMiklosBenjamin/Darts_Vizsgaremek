@@ -5,9 +5,13 @@ using DartsMobilApp.API;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,13 +19,47 @@ namespace DartsMobilApp.ViewModel
 {
     public partial class FriendlyMatchViewModel : ObservableObject
     {
-        [ObservableProperty]
-        public List<FriendlyMatchModel>? friendlymatches;
 
+        private readonly SignalRService _signalRService;
+
+        private readonly string UserId = SecStoreItems.UserId;
+        private readonly string UserName = SecStoreItems.UserName;
+        private readonly string Dartspoint = SecStoreItems.DartsPoints; 
+
+        public FriendlyMatchViewModel()
+        {
+
+           
+            _signalRService = new SignalRService();
+           
+
+           _signalRService.OnFriendlyPlayerJoined += (joinedUserId, joinedUserName, joinedDartspoint) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    JoinedPlayers.Add(new FriendlyPlayerModel
+                    {
+                        UserId = joinedUserId,
+                        Name = joinedUserName,
+                        DartrsPoint = joinedDartspoint
+                    });
+                    Shell.Current.DisplayAlert("Új játékos!", $"{joinedUserName} csatlakozott {joinedDartspoint}","OK");
+                });
+            };
+        }
+
+        [ObservableProperty]
+        public ObservableCollection<FriendlyPlayerModel> joinedPlayers = new();
+
+
+        [ObservableProperty]
+        public List<FriendlyMatchModel>? friendlymatches;        
 
         [ObservableProperty]
         public List<FriendlyMatchModel> sortedFriendlies = new List<FriendlyMatchModel>();
 
+        [ObservableProperty]
+        private bool justPrivate = false;
         public List<FriendlyMatchModel> TakedFriendlies { get; set; } = new List<FriendlyMatchModel>();
 
         public string? AccessToken = SecStoreItems.AToken;
@@ -35,6 +73,26 @@ namespace DartsMobilApp.ViewModel
 
         }
 
+        [RelayCommand]
+        private void JustPrivateMatches()
+        {
+            if (JustPrivate == true)
+            {
+                TakedFriendlies.Clear();
+                Friendlymatches = Friendlymatches.Where(m => m.joinPassword != null && m.name != SecStoreItems.UserName && m.playerLevel == SecStoreItems.MyLevel).ToList();
+                SortedFriendlies = Friendlymatches.Take(4).ToList();
+                FillTakedTList();
+            }
+            else
+            {
+                TakedFriendlies.Clear();
+                Friendlymatches = LoadFriendliesMatch();
+                SortedFriendlies = Friendlymatches.Take(4).ToList();
+                FillTakedTList();
+            }
+        }
+           
+
        
         private List<FriendlyMatchModel> LoadFriendliesMatch()
         {
@@ -43,7 +101,7 @@ namespace DartsMobilApp.ViewModel
                 throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
             }
-            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName).ToList();
+            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName && match.playerLevel == SecStoreItems.MyLevel).ToList();
             
             if (Friendlymatches != null)
             {
@@ -131,10 +189,12 @@ namespace DartsMobilApp.ViewModel
         }
 
         [RelayCommand]
-        private async Task StartFriendlyMatch()
+        private async Task StartFriendlyMatch(string matchId)
         {
-            JoinRequestPopUp popUp = new JoinRequestPopUp();
-            Application.Current.MainPage.ShowPopup(popUp);
+            SignalRService rService = new SignalRService();
+            JoinRequestPopUpViewModel joinVm = new JoinRequestPopUpViewModel(rService, matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+            JoinRequestPopUp popUp = new JoinRequestPopUp(joinVm, matchId);
+            rService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");

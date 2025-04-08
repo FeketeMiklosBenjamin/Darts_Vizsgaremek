@@ -79,17 +79,29 @@
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.SendPointsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.SendPoints(System.String)"/>.</summary>
         </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JoinedPlayers">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.joinedPlayers"/>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.Friendlymatches">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.friendlymatches"/>
         </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.SortedFriendlies">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.sortedFriendlies"/>
         </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JustPrivate">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.justPrivate"/>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.appearingCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.AppearingCommand"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.AppearingCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.Appearing"/>.</summary>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.justPrivateMatchesCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JustPrivateMatchesCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JustPrivateMatchesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JustPrivateMatches"/>.</summary>
         </member>
         <member name="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.filterTournamentsCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.FilterTournamentsCommand"/>.</summary>
@@ -107,7 +119,19 @@
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatchCommand"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatchCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatch"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatch(System.String)"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.IsChecked">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.isChecked"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.IsCheckedPrivate">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.isCheckedPrivate"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.Visible">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.visible"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.Pwd">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.pwd"/>
         </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NumberOfSetsOrLegs">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.numberOfSetsOrLegs"/>
@@ -130,6 +154,12 @@
         <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChangingCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChanging(Microsoft.Maui.Controls.Button)"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.checkMatchIsPrivateCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivateCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivate"/>.</summary>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.navigateCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NavigateCommand"/>.</summary>
         </member>
@@ -148,6 +178,12 @@
         <member name="P:DartsMobilApp.ViewModel.HomeViewModel.GoToCompetitionPageCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.HomeViewModel.GoToCompetitionPage"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.acceptJoinRequestCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.AcceptJoinRequestCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.AcceptJoinRequestCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.AcceptJoinRequest"/>.</summary>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.EmailAddress">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.LoginViewModel.emailAddress"/>
         </member>
@@ -157,11 +193,11 @@
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.SaveChecked">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.LoginViewModel.saveChecked"/>
         </member>
-        <member name="F:DartsMobilApp.ViewModel.LoginViewModel.apperaringCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.ApperaringCommand"/>.</summary>
+        <member name="F:DartsMobilApp.ViewModel.LoginViewModel.appearingCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.AppearingCommand"/>.</summary>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.LoginViewModel.ApperaringCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.Apperaring"/>.</summary>
+        <member name="P:DartsMobilApp.ViewModel.LoginViewModel.AppearingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.Appearing"/>.</summary>
         </member>
         <member name="F:DartsMobilApp.ViewModel.LoginViewModel.goToHomePageCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePageCommand"/>.</summary>
