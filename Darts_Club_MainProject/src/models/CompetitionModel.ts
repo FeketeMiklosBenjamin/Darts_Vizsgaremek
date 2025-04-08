@@ -7,5 +7,6 @@ export default interface CompetitionModel {
     joinEndDate: string,
     maxPlayerJoin: number,
     matchHeader: MatchHeaderModel
-    registeredPlayers: number
+    registeredPlayers: number,
+    userJoined: boolean
 }

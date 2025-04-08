@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue';
 import type CompetitionModel from '@/models/CompetitionModel';
+import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
+import { useUserStore } from '@/stores/UserStore';
+import { storeToRefs } from 'pinia';
+
+const { UserApplication } = useAnnouncedTmStore();
+const { user } = storeToRefs(useUserStore());
 
 const props = defineProps<{
   currentComp: CompetitionModel | null;
@@ -12,10 +18,9 @@ const emit = defineEmits(['close', 'applied']);
 const isFormVisible = ref(true);
 
 const Applicate = async (compId: string) => {
-  // Simulate application process
+  await UserApplication(user.value.accessToken, compId)
   isFormVisible.value = false;
 
-  // Emit applied event
   emit('applied');
   emit('close');
 

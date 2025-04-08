@@ -4,7 +4,7 @@ import VerifyModal from './VerifyModal.vue';
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import ResponseModal from './ResponseModal.vue';
 
 const { user } = useUserStore();
@@ -23,10 +23,16 @@ const toggleOpen = (id: string) => {
     openState.value[id] = !openState.value[id];
 };
 
+const areJoinedCards = ref(false);
+
+watch(areJoinedCards, () => {
+    filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == areJoinedCards.value);
+});
+
 onMounted(async () => {
     await getAllCompetition(user.accessToken);
     if (user.role != 2) {
-        filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.level && new Date(x.joinEndDate) > new Date(Date.now()));
+        filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == false);
     } else {
         filteredCompetition.value = Competitions.value;
     }
@@ -34,6 +40,7 @@ onMounted(async () => {
 
 const openVerifyModal = (compId: string) => {
     const foundComp = filteredCompetition.value.find(u => u.id === compId);
+    
     if (foundComp) {
         selectedComp.value = foundComp;
         showModal.value = true;
@@ -46,11 +53,17 @@ const closeVerifyModal = () => {
 };
 
 const onApplied = () => {
-  showAlert.value = true;
-  alertMessage.value = status.resp;
-  alertSuccess.value = status.success;
+    showAlert.value = true;
+    alertMessage.value = status.resp;
+    alertSuccess.value = status.success;
 
-  showModal.value = false;
+    showModal.value = false;
+
+    if (status.success && selectedComp.value) {
+        filteredCompetition.value = filteredCompetition.value.filter(comp => comp.id !== selectedComp.value!.id);
+        
+        selectedComp.value.userJoined = true;
+    }
 };
 
 
@@ -89,7 +102,14 @@ const borderColor = (level: string) => {
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-center align-items-center custom-min-vh-md mt-5">
-                <button class="btn btn-darkred text-white mb-3 mt-5">Jelentkezések</button>
+                <div class="row form-check form-switch justify-content-center d-flex glass-card pe-3">
+                    <input class="col-4 form-check-input fs-5" type="checkbox" id="flexSwitchCheckDefault"
+                        v-model="areJoinedCards" />
+                    <label class="col-8 form-check-label fst-italic text-light fs-5" for="flexSwitchCheckDefault">
+                        {{ (areJoinedCards == false ? "Nevezés" : "Regisztrált") }}
+                    </label>
+                </div>
+                <button class="btn btn-darkred text-white mb-3 mt-3">Jelentkezések</button>
                 <button class="btn btn-warning">Előző versenyek</button>
             </div>
         </div>
@@ -157,7 +177,7 @@ const borderColor = (level: string) => {
                                     </div>
                                 </div>
                             </div>
-                            <button href="#"
+                            <button type="button"
                                 :class="new Date(comp.joinStartDate) > new Date(Date.now()) ? 'btn-secondary' : 'btn-success'"
                                 class="btn justify-content-center d-flex w-100"
                                 :disabled="new Date(comp.joinStartDate) > new Date(Date.now())"
@@ -168,8 +188,9 @@ const borderColor = (level: string) => {
             </div>
         </div>
     </div>
-    <VerifyModal v-if="showModal" :current-comp="selectedComp" :visible="showModal" @close="closeVerifyModal" @applied="onApplied" />
-  <ResponseModal v-if="showAlert" :message="alertMessage" :success="alertSuccess" @close="showAlert = false" />
+    <VerifyModal v-if="showModal" :current-comp="selectedComp" :visible="showModal" @close="closeVerifyModal"
+        @applied="onApplied" />
+    <ResponseModal v-if="showAlert" :message="alertMessage" :success="alertSuccess" @close="showAlert = false"/>
 </template>
 
 <style scoped>

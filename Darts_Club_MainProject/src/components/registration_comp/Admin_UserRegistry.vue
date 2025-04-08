@@ -221,18 +221,4 @@ async function onModify() {
 </template>
 
 <style scoped>
-.form-check-input:focus {
-    box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.25);
-    border-color: rgb(194, 46, 46);
-}
-
-.btn-primary:focus {
-    box-shadow: 0 0 0 0.25rem rgba(194, 46, 46, 0.5);
-    border-color: rgb(194, 46, 46);
-}
-
-.form-check-input:checked {
-    background-color: rgb(194, 46, 46);
-    border-color: rgb(194, 46, 46);
-}
 </style>

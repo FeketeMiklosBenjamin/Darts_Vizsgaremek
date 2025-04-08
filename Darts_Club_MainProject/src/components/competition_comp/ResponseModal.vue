@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import AnnouncedTmService from '@/services/AnnouncedTmService';
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
-import { useUserStore } from '@/stores/UserStore';
-import { defineEmits, onMounted } from 'vue';
+import { Modal } from 'bootstrap';
+import { defineEmits, onMounted, ref } from 'vue';
 
 const { status } = useAnnouncedTmStore();
+
+const modal = ref<HTMLElement>();
+let modalInstance: Modal;
 
 const props = defineProps<{
   message: string;
@@ -14,21 +16,31 @@ const props = defineProps<{
 const emit = defineEmits(['close']);
 
 onMounted(() => {
-  setTimeout(() => {
-    emit('close');
-  }, 3000);
+  if (modal.value) {
+    modalInstance = new Modal(modal.value);
+    modalInstance.show();
+
+    setTimeout(() => {
+      modalInstance.hide();
+      emit('close');
+    }, 3000);
+  }
 });
 </script>
 
 <template>
-  <div class="alert text-center mt-3" :class="success ? 'alert-success' : 'alert-danger'">
-    <i class="bi me-2" :class="success ? 'bi-check-circle' : 'bi-x-circle'"></i>
-    {{ status.resp }}
+  <div id="myModal" class="modal fade" role="dialog" ref="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="alert text-center mt-3" :class="success ? 'alert-success' : 'alert-danger'"><i class="bi me-2"
+            :class="success ? 'bi-check-circle' : 'bi-x-circle'"></i>
+            {{ message }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.alert {
-  transition: opacity 0.3s ease-in-out;
-}
 </style>

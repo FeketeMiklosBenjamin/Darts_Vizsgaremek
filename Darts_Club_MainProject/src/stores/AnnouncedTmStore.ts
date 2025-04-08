@@ -50,7 +50,8 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                         }),
                         maxPlayerJoin: comp.maxPlayerJoin,
                         matchHeader: comp.matchHeader,
-                        registeredPlayers: comp.registeredPlayers
+                        registeredPlayers: comp.registeredPlayers,
+                        userJoined: comp.userJoined
                     }));
                 })
                 .catch((err) => {
@@ -59,7 +60,7 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
         },
         UserApplication(accesstoken: string, tournamentId: string) {
             return AnnouncedTmService.application(accesstoken, tournamentId)
-                .then((res) => {
+                .then(() => {
                    this.status.resp = "Sikeres jelentkezett a versenyre";
                 })
                 .catch((err) => {
