@@ -14,7 +14,14 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "setup-and-start": "npm run run-mongo-localhost && npm run create-db && npm run start-project && npm run start-tests",
+    "run-mongo-localhost": "start cmd /k \"start_mongodb_localhost.bat\"",
+    "create-db": "mongodump --uri=\"mongodb+srv://m001-student:m001-student@cluster0.gcoqn.mongodb.net/darts_database_test\" && mongorestore --uri=\"mongodb://localhost:27017\" --dir=\"./dump\"",
+    "start-backend": "start cmd /k \"cd.. && cd Vizsga_Backend\\Vizsga_Backend && set ASPNETCORE_ENVIRONMENT=Development && dotnet run\"",
+    "start-frontend": "start cmd /k \"npm install && npm run dev\"",
+    "start-tests": "start cmd /k \"npx cypress open\"",
+    "start-project": "npm run start-backend && npm run start-frontend"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^2.1.3",

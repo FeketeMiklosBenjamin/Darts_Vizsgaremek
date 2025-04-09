@@ -68,7 +68,7 @@ async function onSend() {
     <div class="background-color-view">
         <div class="main-div" style="max-height: 85vh;">
             <div class="row">
-                <h1 class="display-5 text-center text-white margin-feed">Hibabejelentés</h1>
+                <h1 class="display-5 text-center text-white margin-feed">Visszajelzés</h1>
             </div>
             <div id="myModal" class="modal fade" tabindex="-1" role="dialog" ref="modal">
                 <div class="modal-dialog" role="document">

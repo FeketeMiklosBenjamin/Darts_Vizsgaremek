@@ -24,12 +24,12 @@
                 <div class="row mb-2 mx-0 px-4">
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3 offset-xl-3 col-xxl-3 offset-xxl-3 offset-lg-2 mb-2">
                         <router-link :to="`/registration`">
-                            <button class="btn btn-info opacity-75 w-100">Regisztráció</button>
+                            <button class="btn btn-info opacity-75 w-100" data-cy="registry_btn">Regisztráció</button>
                         </router-link>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                         <router-link :to="`/sign-in`">
-                            <button class="btn btn-dark w-100">Bejelentkezés</button>
+                            <button class="btn btn-dark w-100" data-cy="login_btn">Bejelentkezés</button>
                         </router-link>
                     </div>
                 </div>
