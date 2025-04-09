@@ -30,22 +30,22 @@ namespace DartsMobilApp.ViewModel
         {
 
            
-            _signalRService = new SignalRService();
-           
+           _signalRService = new SignalRService();
 
-           _signalRService.OnFriendlyPlayerJoined += (joinedUserId, joinedUserName, joinedDartspoint) =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    JoinedPlayers.Add(new FriendlyPlayerModel
-                    {
-                        UserId = joinedUserId,
-                        Name = joinedUserName,
-                        DartrsPoint = joinedDartspoint
-                    });
-                    Shell.Current.DisplayAlert("Új játékos!", $"{joinedUserName} csatlakozott {joinedDartspoint}","OK");
-                });
-            };
+
+            _signalRService.OnFriendlyPlayerJoined += (joinedUserId, joinedUserName, joinedDartspoint) =>
+             {
+                 MainThread.BeginInvokeOnMainThread(() =>
+                 {
+                     JoinedPlayers.Add(new FriendlyPlayerModel
+                     {
+                         UserId = joinedUserId,
+                         Name = joinedUserName,
+                         DartrsPoint = joinedDartspoint
+                     });
+                     Shell.Current.DisplayAlert("Új játékos!", $"{joinedUserName} csatlakozott {joinedDartspoint}", "OK");
+                 });
+             };
         }
 
         [ObservableProperty]
@@ -67,11 +67,14 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void Appearing()
         {
-            
+            _signalRService.ConnectAsync(SecStoreItems.AToken);
             LoadFriendliesMatch();
             SortedFriendlies = friendlymatches.Take(4).ToList();
 
         }
+
+       
+
 
         [RelayCommand]
         private void JustPrivateMatches()
@@ -191,10 +194,9 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartFriendlyMatch(string matchId)
         {
-            SignalRService rService = new SignalRService();
-            JoinRequestPopUpViewModel joinVm = new JoinRequestPopUpViewModel(rService, matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+            JoinRequestPopUpViewModel joinVm = new JoinRequestPopUpViewModel(_signalRService, matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             JoinRequestPopUp popUp = new JoinRequestPopUp(joinVm, matchId);
-            rService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+            _signalRService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");

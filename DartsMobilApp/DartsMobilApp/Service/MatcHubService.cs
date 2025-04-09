@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace DartsMobilApp.Services
@@ -47,6 +48,7 @@ namespace DartsMobilApp.Services
 
             _hubConnection.On<string, string, string>("FriendlyPlayerJoined", (playerId, username, dartsPoint) =>
             {
+                Debug.WriteLine($"{playerId} {username} {dartsPoint}\n\n\n\n");
                 OnFriendlyPlayerJoined?.Invoke(playerId, username, dartsPoint);
             });
 

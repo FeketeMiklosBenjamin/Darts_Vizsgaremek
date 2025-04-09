@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DartsMobilApp.ViewModel
@@ -229,10 +230,23 @@ namespace DartsMobilApp.ViewModel
                 {
                     await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
                 });
-                
-                signalR.JoinFriendlyMatch(response.matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
                 WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp();
                 Application.Current.MainPage.ShowPopup(popUp);
+                await signalR.ConnectAsync(SecStoreItems.AToken);
+
+            
+                await signalR.JoinFriendlyMatch(response.matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+
+                signalR.OnFriendlyPlayerJoined += async (playerId, username, dartsPoint) =>
+                {
+                    var popupVm = new JoinRequestPopUpViewModel(signalR, response.matchId, playerId, username, dartsPoint);
+                    var popupPage = new JoinRequestPopUp(popupVm, response.matchId);
+
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await Application.Current.MainPage.ShowPopupAsync(popupPage); // vagy PushPopupAsync
+                    });
+                };
             }
             else
             {

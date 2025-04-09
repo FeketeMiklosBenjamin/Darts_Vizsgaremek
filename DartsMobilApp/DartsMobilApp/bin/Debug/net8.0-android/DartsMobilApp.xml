@@ -178,6 +178,18 @@
         <member name="P:DartsMobilApp.ViewModel.HomeViewModel.GoToCompetitionPageCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.HomeViewModel.GoToCompetitionPage"/>.</summary>
         </member>
+        <member name="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.MatchId">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.matchId"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.UserId">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.userId"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.UserName">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.userName"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.Darts_point">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.darts_point"/>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.acceptJoinRequestCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.JoinRequestPopUpViewModel.AcceptJoinRequestCommand"/>.</summary>
         </member>

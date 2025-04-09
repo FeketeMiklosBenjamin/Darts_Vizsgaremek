@@ -16,18 +16,19 @@ namespace DartsMobilApp.ViewModel
     {
         private readonly SignalRService _signalRService;
 
+        [ObservableProperty]
         private string matchId;
 
+        [ObservableProperty]
         private string userId;
-
+        [ObservableProperty]
         private string userName;
-
+        [ObservableProperty]
         private string darts_point;
 
         public JoinRequestPopUpViewModel(SignalRService signalRService,string MatchId, string playerId, string Username, string dartsPoint)
         {
             _signalRService = signalRService;
-            _signalRService.ConnectAsync(SecStoreItems.AToken);
             matchId = MatchId;
             userId = playerId;
             userName = Username;

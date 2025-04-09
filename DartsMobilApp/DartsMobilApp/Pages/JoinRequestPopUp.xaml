@@ -6,9 +6,9 @@
              Color="Transparent">
     <Frame CornerRadius="25" BackgroundColor="Black">
         <VerticalStackLayout WidthRequest="280" HeightRequest="90" >
-            <Label Text="Valaki" TextColor="{x:StaticResource Primary}" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding UserName}" TextColor="{x:StaticResource Primary}" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
             <HorizontalStackLayout Spacing="10" Margin="3" HorizontalOptions="Center">
-                <Label VerticalTextAlignment="Center" Text="48.25" FontAttributes="Bold" FontSize="12" TextColor="{x:StaticResource Primary}"/>
+                <Label VerticalTextAlignment="Center" Text="{Binding Darts_point}" FontAttributes="Bold" FontSize="12" TextColor="{x:StaticResource Primary}"/>
                 <Button WidthRequest="100" HeightRequest="38" BackgroundColor="Green"  Text="Elfogadás" Command="{Binding AcceptJoinRequestCommand}"/>
                 <Button WidthRequest="100" HeightRequest="38" BackgroundColor="Red"  Text="Elutasít"/>
             </HorizontalStackLayout>

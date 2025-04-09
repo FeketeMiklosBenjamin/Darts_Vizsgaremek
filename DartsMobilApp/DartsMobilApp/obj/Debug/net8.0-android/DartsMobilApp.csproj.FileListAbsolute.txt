@@ -9845,3 +9845,7 @@ C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\n
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\Microsoft.Extensions.Features.dll
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\System.IO.Pipelines.dll
+C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\arm64-v8a\System.Private.CoreLib.dll
+C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\armeabi-v7a\System.Private.CoreLib.dll
+C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\x86\System.Private.CoreLib.dll
+C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\android\assets\x86_64\System.Private.CoreLib.dll
