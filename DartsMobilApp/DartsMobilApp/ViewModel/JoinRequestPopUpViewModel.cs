@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Services;
 using System;
@@ -38,8 +40,10 @@ namespace DartsMobilApp.ViewModel
 
         [RelayCommand]
 
-        private void AcceptJoinRequest()
+        private async void AcceptJoinRequest()
         {
+            await _signalRService.StartFriendlyMatch(matchId,SecStoreItems.UserId,UserId);
+            await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
         }
     }
 }

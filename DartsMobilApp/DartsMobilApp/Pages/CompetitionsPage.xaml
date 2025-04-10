@@ -8,7 +8,6 @@
              Shell.TabBarBackgroundColor="Transparent"
              Shell.NavBarIsVisible="True"   
              BackgroundImageSource="ally_pally.jpg"
-             
              >
   
     <ContentPage.Behaviors>

@@ -33,19 +33,10 @@ namespace DartsMobilApp.ViewModel
            _signalRService = new SignalRService();
 
 
-            //_signalRService.OnFriendlyPlayerJoined += (joinedUserId, joinedUserName, joinedDartspoint) =>
-            // {
-            //     MainThread.BeginInvokeOnMainThread(() =>
-            //     {
-            //         JoinedPlayers.Add(new FriendlyPlayerModel
-            //         {
-            //             UserId = joinedUserId,
-            //             Name = joinedUserName,
-            //             DartrsPoint = joinedDartspoint
-            //         });
-            //         Shell.Current.DisplayAlert("Új játékos!", $"{joinedUserName} csatlakozott {joinedDartspoint}", "OK");
-            //     });
-            // };
+            _signalRService.OnFriendlyMatchStarted += ( ) =>
+             {
+                
+             };
         }
 
         [ObservableProperty]
@@ -194,15 +185,17 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartFriendlyMatch(string matchId)
         {
-            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp();
+            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService);
             JoinRequestPopUpViewModel joinVm = new JoinRequestPopUpViewModel(_signalRService, matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             JoinRequestPopUp popUp = new JoinRequestPopUp(joinVm, matchId);
             _signalRService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Application.Current.MainPage.ShowPopupAsync(WaitingPopUp);
+                
             });
             
         }
+
     }
 }

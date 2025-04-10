@@ -230,7 +230,7 @@ namespace DartsMobilApp.ViewModel
                 {
                     await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
                 });
-                WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp();
+                WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp(signalR);
                 Application.Current.MainPage.ShowPopup(popUp);
                 await signalR.ConnectAsync(SecStoreItems.AToken);
 
