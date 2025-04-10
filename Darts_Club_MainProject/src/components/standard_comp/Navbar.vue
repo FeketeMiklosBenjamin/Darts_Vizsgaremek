@@ -2,20 +2,29 @@
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { useMessagesStore } from '@/stores/MessagesStore'
 
 const { status, user } = storeToRefs(useUserStore())
 const { logout, refreshTk } = useUserStore()
-const { getYourMessages} = useMessagesStore()
+const { getYourMessages } = useMessagesStore()
 const { forUserEmails, forAdminEmails } = storeToRefs(useMessagesStore())
 const router = useRouter()
 
 const remainingTime = ref(2 * 60 * 1000)
 const hasRefreshed = ref(false)
 let countdownInterval: any
-const isDropdownVisible = ref(false)
+let isDropdownVisible = ref(false)
+
+
+const sortedUserEmails = computed(() =>
+    [...forUserEmails.value].sort((a, b) => new Date(b.sendDate!).getTime() - new Date(a.sendDate!).getTime())
+)
+
+const sortedAdminEmails = computed(() =>
+    [...forAdminEmails.value].sort((a, b) => new Date(b.sendDate).getTime() - new Date(a.sendDate).getTime())
+)
 
 const toggleDropdown = async () => {
     if (user.value.accessToken) {
@@ -118,13 +127,17 @@ const NavigateToMessage = (emailId: string) => {
     sessionStorage.setItem('emailId', emailId)
     router.push(`/messages`)
 }
+
 </script>
 
 <template>
     <div class="shadow-lg stick">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg stick py-2">
             <div class="container">
-                <a class="navbar-brand"><em class="display-6 title">Sons of the Fallen's</em></a>
+                <a class="navbar-brand d-flex align-items-center">
+                    <img src="../../assets/images/darts_Icon.png" class="icon">
+                    <em class="display-6 title mb-0">Sons of the Fallen's</em>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -140,22 +153,23 @@ const NavigateToMessage = (emailId: string) => {
                             <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
                                 <div v-if="user.role == 2">
                                     <div v-if="forAdminEmails.length < 1" class="text-center">Nincs üzenete!</div>
-                                    <div v-else v-for="email in forAdminEmails" class="message-box">
-                                        <div class="message-box-content" @click="NavigateToMessage(email.id)">
+                                    <div v-else v-for="email in sortedAdminEmails" class="message-box">
+                                        <div class="message-box-content" @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 text-center mb-3">
                                                 {{ email.title
                                                 }}
                                             </p>
                                             <div class="row">
                                                 <p class="col-6 fst-italic">{{ email.emailAddress }}</p>
-                                                <p class="col-6 d-flex justify-content-end fst-italic">{{ email.sendDate }}</p>
+                                                <p class="col-6 d-flex justify-content-end fst-italic">{{ email.sendDate
+                                                }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div v-else>
                                     <div v-if="forUserEmails.length < 1" class="text-center">Nincs üzenete!</div>
-                                    <div v-for="email in forUserEmails" class="message-box">
+                                    <div v-for="email in sortedUserEmails" class="message-box">
                                         <div class="message-box-content text-center"
                                             @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 mb-3">
@@ -176,16 +190,17 @@ const NavigateToMessage = (emailId: string) => {
                         </li>
                         <li class="nav-item ms-2 me-4 my-auto d-flex align-items-center">
                             <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'"
-                                class="nav-link no-underline">
+                                class="nav-link no-underline" data-cy="user_title">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
 
-                            <div class="rounded-circle border border-3 mt-lg-0 mt-1 ms-2" :class="{
-                                'border-success': user.level == 'Amateur',
-                                'border-warning': user.level == 'Advanced',
-                                'border-danger': user.level == 'Professional',
-                                'border-secondary': user.role == 2,
-                                'bg-white border-info px-1': status._id == '',
+                            <div class="rounded-circle border-3 mt-lg-0 mt-1 ms-2" :class="{
+                                'success-border': user.level == 'Amateur',
+                                'warning-border': user.level == 'Advanced',
+                                'danger-border': user.level == 'Professional',
+                                'purple-border': user.level == 'Champion',
+                                'border border-secondary': user.role == 2,
+                                'bg-white border border-info px-1': status._id == '',
                             }">
                                 <img v-if="status._id" :src="user.profilePictureUrl" class="profileImg" alt="Nincs" />
                                 <i v-else class="bi-person iconProfileImg"></i>
@@ -214,6 +229,47 @@ const NavigateToMessage = (emailId: string) => {
 </template>
 
 <style scoped>
+.icon {
+    height: auto;
+    max-height: 6vh;
+    width: auto;
+    max-width: 10vw;
+    margin-right: 10px;
+    animation: spinForward 0.6s ease-in-out forwards;
+    transition: transform 0.6s ease-in-out;
+    transform-origin: center;
+}
+
+@media (max-width: 768px) {
+    .icon {
+        max-height: 5vh;
+        max-width: 12vw;
+    }
+}
+
+.icon:active {
+    animation: spinBack 0.6s ease-in-out forwards;
+}
+
+@keyframes spinForward {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinBack {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
 .bi-x-circle {
     font-size: 1vw;
     position: absolute;
@@ -257,7 +313,7 @@ const NavigateToMessage = (emailId: string) => {
     min-width: 20vw;
     opacity: 0;
     overflow: hidden;
-    display: block;
+    display: none;
     padding: 5px;
     z-index: 1;
     transition:
@@ -265,33 +321,33 @@ const NavigateToMessage = (emailId: string) => {
         opacity 0.3s ease;
 }
 
-@media (max-width: 991px){
+@media (max-width: 991px) {
     .dropdown-menu {
         position: fixed;
-        top:43vh;
+        top: 43vh;
         left: 50%;
         transform: translate(-50%, -50%);
-  }
+    }
 }
 
-@media (max-width: 749px){
+@media (max-width: 749px) {
     .dropdown-menu {
         position: fixed;
-        top:42vh;
+        top: 42vh;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 70vw;
-  }
+    }
 }
 
-@media (max-width: 520px){
+@media (max-width: 520px) {
     .dropdown-menu {
         position: fixed;
-        top:41vh;
+        top: 41vh;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 100vw;
-  }
+    }
 }
 
 .dropdown-menu.visible {

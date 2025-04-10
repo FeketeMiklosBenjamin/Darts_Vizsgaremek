@@ -14,6 +14,13 @@ const Messages_Endpoint = axios.create({
     }
 });
 
+const AnnouncedTm_Endpoint = axios.create({
+    baseURL: import.meta.env.VITE_ANNOUNCEDTM_BACKEND_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
 const RefreshTk_Endpoint = axios.create({
     baseURL: import.meta.env.VITE_REFRESHTK_BACKEND_URL,
     headers: {
@@ -21,4 +28,4 @@ const RefreshTk_Endpoint = axios.create({
     }
 });
 
-export { User_Endpoint, Messages_Endpoint, RefreshTk_Endpoint };
+export { User_Endpoint, Messages_Endpoint, RefreshTk_Endpoint, AnnouncedTm_Endpoint };

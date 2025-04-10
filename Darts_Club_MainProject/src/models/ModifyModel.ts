@@ -1,7 +1,7 @@
 export default interface ModifyModel {
     username: string,
-    password: string,
     emailAddress: string,
-    secondPassword: string,
+    oldPassword: string,
     newPassword: string
+    newSecondPassword: string
 }

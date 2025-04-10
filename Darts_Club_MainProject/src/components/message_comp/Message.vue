@@ -41,9 +41,15 @@ onMounted(() => {
 
 const NavigateToMain = async () => {
     sessionStorage.removeItem("currentEmail");
-    sessionStorage.removeItem("emailId");    
+    sessionStorage.removeItem("emailId");
     router.push("main-page");
-} 
+}
+
+const NavigateToMessage = async () => {
+    await deleteMyMessages(currentEmail.value!.id!, user.accessToken);
+    sessionStorage.removeItem("emailId")
+    router.push("feedback");
+}
 
 const deleteMessage = async (id: string) => {
     await deleteMyMessages(id, user.accessToken);
@@ -52,69 +58,74 @@ const deleteMessage = async (id: string) => {
 </script>
 
 <template>
-    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
-    <div class="background-color-view d-flex">
-        <div class="email-box mx-auto">
-            <div class="row ">
-                <div class="col-md-4">
-                    <div class="text-center text-success mt-3 me-5 fs-5">
-                        <i class="bi bi-arrow-return-left" @click="NavigateToMain"></i>
+    <div class="background-color-view">
+        <div class="main-div" style="max-height: 95vh;">
+            <div class="email-box col-12 col-md-6 col-lg-4 col-sm-10 offset-sm-1 offset-lg-4 offset-md-3 mb-3">
+                <div class="row">
+                    <div class="col-1">
+                        <div class="text-center text-success mt-3 fs-5">
+                            <i class="bi bi-arrow-left" @click="NavigateToMain"></i>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <div class="d-flex justify-content-center text-center mt-2 display-5 fw-bold caveat-text">
+                            {{ currentEmail?.title }}
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="text-end mt-3 text-danger fs-5" @click="deleteMessage(currentEmail?.id!)">X
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="text-center mt-2 display-5 fw-bold font">
-                        {{ currentEmail?.title }}
+                <div class="row">
+                    <div class="text-center mt-5 caveat-text fs-2">
+                        {{ currentEmail?.text }}
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="text-end me-4 mt-2 text-danger fs-4" @click="deleteMessage(currentEmail?.id!)">X</div>
+                <div v-if="user.role == 2" class="row">
+                    <div class="text-end me-5 caveat-text fs-4 mt-5">{{ currentEmail?.emailAddress }}</div>
+                    <div class="bi bi-arrow-left text-end bi bi-arrow-return-left text-primary" @click="NavigateToMessage()"></div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="text-center mt-5 font fs-2">
-                    {{ currentEmail?.text }}
-                </div>
-            </div>
-            <div v-if="user.role == 2" class="row">
-                <div class="text-end me-5 font fs-4 email">{{ currentEmail?.emailAddress }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+.caveat-text {
+    font-family: "Caveat", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .bi {
     cursor: pointer;
 }
 
-.font {
-    font-family: 'Tangerine', cursive;
-    font-weight: 700;
-}
-
 .text-danger {
     cursor: pointer;
-    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
 }
 
 .display-6 {
     font-size: 2em;
 }
 
-.email {
-    position: absolute;
-    bottom: 5%;
-    right: 0;
-}
-
 .email-box {
-    position: relative;
-    width: 40vw;
-    height: 70vh;
+    max-height: 100%;
+    overflow-y: auto;
     background-color: white;
     border: 2px solid black;
     box-shadow: 10px 10px 2px 1px rgba(15, 15, 15, 0.877);
     border-radius: 5px;
-    margin-top: 15vh;
+    margin-top: 10vh;
+    padding: 2rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.email-box::-webkit-scrollbar {
+    display: none;
 }
 </style>

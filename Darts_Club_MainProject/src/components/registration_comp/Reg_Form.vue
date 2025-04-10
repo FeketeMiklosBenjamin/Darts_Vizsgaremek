@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/UserStore';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const { uploadimage, register, status } = useUserStore();
+const { uploadimage, registerUser, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
 
@@ -43,7 +43,7 @@ async function onRegister() {
     }
     
     try {
-        await register(registerform.value);
+        await registerUser(registerform.value);
         const accessToken = JSON.parse(sessionStorage.getItem('user') || '{}')?.accessToken;
       
         if (profileImage.value) {
@@ -74,7 +74,7 @@ async function onRegister() {
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="name" placeholder="Név"
                                 v-model="registerform.username" autocomplete="off">
-                            <label for="name">Név</label>
+                            <label for="name">Felhasználónév</label>
                         </div>
 
                         <div class="form-floating mb-3">
@@ -102,7 +102,7 @@ async function onRegister() {
                         </div>
 
                         <div class="my-2">
-                            <button type="submit" class="btn btn-info w-100 py-2">Regisztráció
+                            <button type="submit" class="btn btn-info w-100 py-2" :disabled="processing">Regisztráció
                                 <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                             </button>
                         </div>

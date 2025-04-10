@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import router from '@/router';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import Admin_UserRegistry from '../registration_comp/Admin_UserRegistry.vue';
 
 const { status, stats, user } = storeToRefs(useUserStore());
 
@@ -34,46 +34,71 @@ const fetchStats = async (userId: string) => {
   } catch (err) { }
 };
 
-const levelColors = {
-  Amateur: 'success',
-  Advanced: 'warning',
-  Professional: 'danger'
+const BorderColors = {
+  Amateur: 'success-border',
+  Advanced: 'warning-border',
+  Professional: 'danger-border',
+  Champion: 'purple-border'
+};
+
+const TextColors = {
+  Amateur: 'success-text',
+  Advanced: 'warning-text',
+  Professional: 'danger-text',
+  Champion: 'purple-text'
+};
+
+const BgColors = {
+  Amateur: 'success-bg',
+  Advanced: 'warning-bg',
+  Professional: 'danger-bg',
+  Champion: 'purple-bg'
 };
 
 const levelPoints = {
-  Amateur: 1500,
-  Advanced: 4500,
-  Professional: 9000
+  Amateur: 1499,
+  Advanced: 4499,
+  Professional: 8999,
 };
 
+let playerLevel = '';
 
-const ownLevelColor = computed(() => `text-${levelColors[stats.value.level as keyof typeof levelColors]}`);
-const progressBarColor = computed(() => `bg-${levelColors[stats.value.level as keyof typeof levelColors]}`);
+watch(stats, (newStats) => {
+  if (newStats) {
+    switch (newStats.level) {
+      case "Amateur":
+        playerLevel = "Amatőr";
+        break;
+      case "Advanced":
+        playerLevel = "Haladó";
+        break;
+      case "Professional":
+        playerLevel = "Professzionális";
+        break;
+      case "Champion":
+        playerLevel = "Bajnok";
+        break;
+    }
+  }
+});
 
-const maxPoints = computed(() => levelPoints[stats.value.level as keyof typeof levelPoints]);
-const progressWidth = computed(() => `${(stats.value.dartsPoints / maxPoints.value) * 100}%`);
+const borderColor = computed(() => `${BorderColors[stats.value.level as keyof typeof BorderColors]}`);
+const textColor = computed(() => `${TextColors[stats.value.level as keyof typeof TextColors]}`);
+const progressBarColor = computed(() => `${BgColors[stats.value.level as keyof typeof BgColors]}`);
+
+const maxPoints = computed(() => (stats.value.dartsPoints <= 9000) ? (levelPoints[stats.value.level as keyof typeof levelPoints]) : stats.value.dartsPoints);
+const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((stats.value.dartsPoints / maxPoints.value) * 100) : 100 }%`);
 
 </script>
 
 
 <template>
   <div class="background-color-view main-div">
-    <div v-if="isAdmin">
-      <div class="row">
-        <div class="alert alert-warning mx-auto text-center w-25 mt-5">
-          <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
-          <div class="d-inline">Adminnak nincsenek statisztikái!</div>
-        </div>
-      </div>
-    </div>
+    <Admin_UserRegistry v-if="isAdmin"/>
     <div v-else class="row py-5">
       <div class="col-12 col-xl-5">
         <div class="col-12 left-side my-0 my-sm-3 my-xl-4">
-          <img
-            :src="stats.profilePictureUrl"
-            :class="`statistic-profileImg ${levelColors[stats.level as keyof typeof levelColors]}`"
-            alt="Nincs"
-          />
+          <img :src="stats.profilePictureUrl" :class="`statistic-profileImg ${borderColor}`" alt="Nincs" />
         </div>
         <div class="col-6 offset-3">
           <h1 class="display-6 text-white margin-statname text-center mb-3 mb-sm-5 mt-2">
@@ -143,7 +168,7 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints / maxPoints.val
                   <span class="display-6">Regisztrálás dátuma:</span> {{ stats.registerDate }}
                 </td>
                 <td colspan="2" class="med">
-                  <span class="display-6">Utoljára bejelentkezve:</span><br/>{{
+                  <span class="display-6">Utoljára bejelentkezve:</span><br />{{
                     stats.lastLoginDate
                   }}
                 </td>
@@ -151,19 +176,15 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints / maxPoints.val
             </tbody>
           </table>
         </div>
-        <div class="progress-container col-10 offset-1 mt-2 mt-sm-5">
+        <div class="progress-container col-10 offset-1 mt-3 mt-md-5 mb-5">
           <div class="progress-label progress-label-left">
-            Szint: <span :class="ownLevelColor">{{ stats.level }}</span>
+            Szint: <span :class="textColor">{{ playerLevel }}</span>
           </div>
           <div class="progress" role="progressbar" aria-label="prog">
-            <div
-              class="progress-bar"
-              :class="progressBarColor"
-              :style="{ width: progressWidth }"
-            ></div>
+            <div class="progress-bar" :class="progressBarColor" :style="{ width: progressWidth }"></div>
           </div>
           <div class="progress-label progress-label-right">
-            {{ stats.dartsPoints }}/{{ maxPoints }}
+            {{ stats.dartsPoints }}{{(stats.dartsPoints >= 9000 ? '' : '/')}}{{ (maxPoints < 9000 ? maxPoints : '') }}
           </div>
         </div>
       </div>
@@ -172,18 +193,6 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints / maxPoints.val
 </template>
 
 <style scoped>
-.success {
-  border: 5px solid #198754;
-}
-
-.warning {
-  border: 5px solid #ffc107;
-}
-
-.danger {
-  border: 5px solid #dc3545;
-}
-
 .left-side {
   display: flex;
   justify-content: center;
@@ -275,7 +284,7 @@ td .display-5 {
 }
 
 @media (max-width: 1199.98px) {
-    .stat-table {
+  .stat-table {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     border: 2.25px solid black;
@@ -284,10 +293,12 @@ td .display-5 {
     max-width: 100vw;
     display: block;
   }
+
   .progress-label-left,
   .progress-label-right {
     font-size: 2.8vw;
   }
+
   td .display-6 {
     font-size: 3vw;
   }
@@ -295,16 +306,20 @@ td .display-5 {
   td .display-5 {
     font-size: 2.6vw;
   }
+
   .stat-table td {
     font-size: 2.4vw;
     width: 150vw;
   }
+
   .stat-table .med {
     font-size: 2.4vw;
   }
+
   .modify-btn {
     font-size: 2vw;
   }
+
   .margin-statname {
     font-size: 6vw;
     font-style: italic;
@@ -313,10 +328,9 @@ td .display-5 {
   }
 }
 
-@media (max-width: 500px){
-    .modify-btn {
+@media (max-width: 500px) {
+  .modify-btn {
     font-size: 4vw;
   }
 }
-
 </style>

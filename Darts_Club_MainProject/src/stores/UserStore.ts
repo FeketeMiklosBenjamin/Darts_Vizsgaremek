@@ -20,7 +20,7 @@ export const useUserStore = defineStore('userStore', {
         alluser: <AllUsersModel[]>{}
     }),
     actions: {
-        register(data: RegisterModel) {
+        registerUser(data: RegisterModel) {
             return UserService.registerUser(data)
                 .then((res) => {
                     this.user = SetUser(res);
@@ -33,14 +33,25 @@ export const useUserStore = defineStore('userStore', {
                     return Promise.reject(err)
                 })
         },
+        registerAdmin(data: RegisterModel) {
+            return UserService.registerAdmin(data, this.user.accessToken)
+                .then((res) => {
+                    this.status.message = res.data.message;
+                })
+                .catch((err) => {
+                    this.status.message = err.data.message;
+                    return Promise.reject(err)
+                })
+        },
         modify(data: ModifyModel, accessToken: string) {
             return UserService.modifyUser(data, accessToken)
-                .then((res) => {
+                .then(() => {
                     if (data.username != '') {
                         this.user.username = data.username;
                     } if (data.emailAddress != '') {
                         this.user.emailAddress = data.emailAddress;
                     }
+                    this.status.message = "Sikeres módosítás!";
                     sessionStorage.setItem('user', JSON.stringify(this.user));
 
                 })
@@ -135,7 +146,14 @@ export const useUserStore = defineStore('userStore', {
                         emailAddress: user.emailAddress,
                         profilePictureUrl: user.profilePictureUrl,
                         level: user.level,
-                        dartsPoints: user.dartsPoints
+                        dartsPoints: user.dartsPoints,
+                        bannedUntil:(user.bannedUntil != null) ? new Date(user.bannedUntil).toLocaleString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : ''
                     }));
                 })
                 .catch((err) => {
@@ -153,6 +171,15 @@ export const useUserStore = defineStore('userStore', {
                         level: user.level,
                         dartsPoints: user.dartsPoints
                     }));
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                })
+        },
+        banThisUser(userId: string, ban: number) {
+            return UserService.banUser(this.user.accessToken, userId, ban)
+                .then((res) => {
+                    this.status.message = res.data.message;
                 })
                 .catch((err) => {
                     return Promise.reject(err);
