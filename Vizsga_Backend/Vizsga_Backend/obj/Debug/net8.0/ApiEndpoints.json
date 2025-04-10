@@ -317,22 +317,6 @@
   },
   {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
-    "Method": "GetById",
-    "RelativePath": "api/users/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VizsgaBackend.Controllers.UserController",
     "Method": "GetUserLastMatches",
     "RelativePath": "api/users/{userId}/lastmatches",
     "HttpMethod": "GET",
@@ -349,7 +333,7 @@
   },
   {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
-    "Method": "Get",
+    "Method": "GetAll",
     "RelativePath": "api/users/all",
     "HttpMethod": "GET",
     "IsController": true,

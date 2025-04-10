@@ -60,7 +60,7 @@ builder.Services.AddAuthorization();
 
 // SignalR konfigurálása Azure SignalR-rel
 builder.Services.AddSignalR()
-    .AddAzureSignalR(builder.Configuration["Azure:SignalR:ConnectionString"]);
+    .AddAzureSignalR(builder.Configuration["SignalR:ConnectionString"]);
 
 // Swagger konfigurálása
 builder.Services.AddSwaggerGen(options =>
@@ -98,7 +98,8 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("http://localhost:5173", "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app", "https://darts-vizsgaremek.vercel.app")
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
 });
 
@@ -125,7 +126,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // SignalR Hub hozzáadása
-app.MapHub<MatchHub>("/gamehub");
+app.MapHub<MatchHub>("/matchHub");
 
 // A vezérlõk térképezése
 app.MapControllers();

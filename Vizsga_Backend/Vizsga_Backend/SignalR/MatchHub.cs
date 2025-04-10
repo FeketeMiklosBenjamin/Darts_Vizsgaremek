@@ -1,13 +1,20 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
 
 namespace Vizsga_Backend.SignalR
 {
     public class MatchHub : Hub
     {
-        private static Dictionary<string, List<string>> matchPlayers = new();
+        private static readonly ConcurrentDictionary<string, List<string>> matchPlayers = new();
 
-        public async Task JoinMatch(string matchId, string playerId)
+        private static readonly ConcurrentDictionary<string, string> playerConnections = new();
+
+        // StartMatch
+
+        public async Task JoinFriendlyMatch(string matchId, string playerId, string username, string dartsPoint)
         {
+            playerConnections[playerId] = Context.ConnectionId;
+
             if (!matchPlayers.ContainsKey(matchId))
             {
                 matchPlayers[matchId] = new List<string>();
@@ -19,15 +26,69 @@ namespace Vizsga_Backend.SignalR
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId);
-            await Clients.Group(matchId).SendAsync("PlayerJoined", playerId);
 
-            if (matchPlayers[matchId].Count == 2)
+            if (matchPlayers[matchId].Count > 1)
             {
-                await Clients.Group(matchId).SendAsync("MatchStarted");
+                string firstPlayerId = matchPlayers[matchId][0];
+                if (firstPlayerId != playerId)
+                {
+                    await Clients.User(firstPlayerId).SendAsync("FriendlyPlayerJoined", playerId, username, dartsPoint);
+                }
             }
         }
 
-        public async Task LeaveMatch(string matchId, string playerId)
+
+
+        public async Task StartFriendlyMatch(string matchId, string playerId, string secondPlayerId)
+        {
+            if (matchPlayers.TryGetValue(matchId, out var players))
+            {
+                if (players.Contains(playerId) && players.Contains(secondPlayerId))
+                {
+                    // Takarítsuk ki a groupból azokat, akik nem a két játékos
+                    var allowedPlayers = new HashSet<string> { playerId, secondPlayerId };
+
+                    foreach (var pId in players.ToList())
+                    {
+                        if (!allowedPlayers.Contains(pId) && playerConnections.TryGetValue(pId, out var connId))
+                        {
+                            await Groups.RemoveFromGroupAsync(connId, matchId);
+                        }
+                    }
+                    matchPlayers[matchId] = new List<string> { playerId, secondPlayerId };
+
+                    var rnd = new Random();
+                    var startingPlayer = rnd.Next(0, 2) == 0 ? playerId : secondPlayerId;
+
+                    await Clients.Group(matchId).SendAsync("FriendlyMatchStarted", startingPlayer);
+                }
+                else
+                {
+                    await Clients.Caller.SendAsync("MatchStartFailed", "One or both players are not in the match.");
+                }
+            }
+            else
+            {
+                await Clients.Caller.SendAsync("MatchStartFailed", "Match not found.");
+            }
+        }
+
+
+        public async Task RemovePlayerFromFriendlyMatch(string matchId, string playerId, string removablePlayerId)
+        {
+            if (matchPlayers.ContainsKey(matchId) && matchPlayers[matchId][0] == playerId)
+            {
+                if (playerConnections.TryGetValue(removablePlayerId, out string? connectionId))
+                {
+                    await Groups.RemoveFromGroupAsync(connectionId, matchId);
+                    matchPlayers[matchId].Remove(removablePlayerId);
+                    playerConnections.TryRemove(removablePlayerId, out _);
+                    await Clients.Client(connectionId).SendAsync("FriendlyPlayerRemoved", playerId);
+                }
+            }
+        }
+
+        public async Task LeaveFriendlyMatch(string matchId, string playerId)
         {
             if (matchPlayers.ContainsKey(matchId))
             {
@@ -35,21 +96,61 @@ namespace Vizsga_Backend.SignalR
 
                 if (matchPlayers[matchId].Count == 0)
                 {
-                    matchPlayers.Remove(matchId);
+                    matchPlayers.TryRemove(matchId, out _);
                 }
             }
 
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, matchId);
-            await Clients.Group(matchId).SendAsync("PlayerLeft", playerId);
+            if (playerConnections.TryRemove(playerId, out string? connectionId))
+            {
+                await Groups.RemoveFromGroupAsync(connectionId, matchId);
+            }
+
+            if (matchPlayers.ContainsKey(matchId) && matchPlayers[matchId].Count > 0)
+            {
+                string firstPlayerId = matchPlayers[matchId][0];
+                await Clients.User(firstPlayerId).SendAsync("FriendlyPlayerLeft", playerId);
+            }
         }
+
+        public async Task JoinTournamentMatch(string matchId, string playerId)
+        {
+            playerConnections[playerId] = Context.ConnectionId;
+
+            if (!matchPlayers.ContainsKey(matchId))
+            {
+                matchPlayers[matchId] = new List<string>();
+            }
+
+            if (!matchPlayers[matchId].Contains(playerId))
+            {
+                matchPlayers[matchId].Add(playerId);
+            }
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, matchId);
+
+            if (matchPlayers[matchId].Count == 2)
+            {
+                await Clients.Group(matchId).SendAsync("TournamentMatchStarted");
+            }
+        }
+
+
+        // Communication
+
+
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var match = matchPlayers.FirstOrDefault(m => m.Value.Contains(Context.ConnectionId));
+            var player = playerConnections.FirstOrDefault(x => x.Value == Context.ConnectionId);
+            string playerId = player.Key;
 
-            if (!string.IsNullOrEmpty(match.Key))
+            if (!string.IsNullOrEmpty(playerId))
             {
-                await LeaveMatch(match.Key, Context.ConnectionId);
+                var match = matchPlayers.FirstOrDefault(m => m.Value.Contains(playerId));
+                if (!string.IsNullOrEmpty(match.Key))
+                {
+                    await LeaveFriendlyMatch(match.Key, playerId);
+                }
             }
 
             await base.OnDisconnectedAsync(exception);

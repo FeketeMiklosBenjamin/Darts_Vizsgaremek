@@ -43,7 +43,7 @@ namespace VizsgaBackend.Controllers
 
         [HttpGet("all")]
         [Authorize]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -56,7 +56,8 @@ namespace VizsgaBackend.Controllers
                     emailAddress = user.User.EmailAddress,
                     profilePictureUrl = user.User.ProfilePicture,
                     level = user.Level,
-                    dartsPoints = user.DartsPoints
+                    dartsPoints = user.DartsPoints,
+                    bannedUntil = user.User.BannedUntil
                 }).ToList();
 
                 return Ok(result);
@@ -423,7 +424,7 @@ namespace VizsgaBackend.Controllers
                 }
 
                 // Ellenőrizzük a jelszót
-                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(modifyUser.Password, updatedUser.Password);
+                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(modifyUser.OldPassword, updatedUser.Password);
                 if (!isPasswordValid)
                 {
                     return Unauthorized(new { message = "Hibás mostani jelszó." });
@@ -478,7 +479,7 @@ namespace VizsgaBackend.Controllers
 
                 await _service.UpdateOneAsync(filter, updateDefinition);
 
-                return Ok(new { message = $"A felhasználó az ID-vel ({userId}) sikeresen frissítve." });
+                return Ok(new { message = "Sikeres módosítás!" });
             }
             catch (Exception)
             {

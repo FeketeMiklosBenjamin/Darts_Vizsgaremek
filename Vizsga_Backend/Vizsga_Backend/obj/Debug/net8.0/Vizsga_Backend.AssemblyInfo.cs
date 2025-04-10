@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Vizsga_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53f52ea66bd692d582380b2d0b17ef6c610e0d28")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecd99af531158bc957cd189e92dc7d70038179b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("Vizsga_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Vizsga_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -57,7 +57,7 @@ namespace Vizsga_Backend.Services
         // Profilkép törlése a Cloudinary-ból
         public async Task DeleteBackgroundImageAsync(MatchHeader header)
         {
-            if (header != null && !string.IsNullOrEmpty(header.BackroundImageUrl) && header.BackroundImageUrl != "https://res.cloudinary.com/dvikunqov/image/upload/v1740128607/darts_profile_pictures/fvlownxvkn4etrkvfutl.jpg")
+            if (header != null && !string.IsNullOrEmpty(header.BackroundImageUrl) && header.BackroundImageUrl != "https://res.cloudinary.com/dvikunqov/image/upload/v1743843175/darts_background_pictures/ftrmvy0bpxjgoxj5tmzm.jpg")
             {
                 // Kép publicId-ját kinyerjük a profilkép URL-jéből
                 var publicId = ExtractPublicIdFromUrl(header.BackroundImageUrl);

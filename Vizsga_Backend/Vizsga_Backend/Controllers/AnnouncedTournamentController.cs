@@ -40,6 +40,8 @@ namespace Vizsga_Backend.Controllers
             {
                 var userRole = User.FindFirstValue(ClaimTypes.Role);
 
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 if (userRole == null)
                 {
                     return Unauthorized(new {message = "Nincs bejelentkezve!"});
@@ -98,7 +100,8 @@ namespace Vizsga_Backend.Controllers
                             tournamentEndDate = item.MatchHeader.TournamentEndDate,
                             matches = item.MatchHeader.MatchDates.Select((date, index) => new KeyValuePair<string, string>($"match{index + 1}", date.ToString())).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                         },
-                        registeredPlayers = item.RegisteredPlayers.Count()
+                        registeredPlayers = item.RegisteredPlayers.Count(),
+                        userJoined = item.RegisteredPlayers.Find(x => x.Id == userId) != null
                     }).ToList();
                     return Ok(result);
                 }
@@ -151,7 +154,7 @@ namespace Vizsga_Backend.Controllers
                     LegsCount = (int)datas.LegsCount!,
                     StartingPoint = (int)datas.StartingPoint!,
                     JoinPassword = datas.Password!,
-                    BackroundImageUrl = "",
+                    BackroundImageUrl = "https://res.cloudinary.com/dvikunqov/image/upload/v1743843175/darts_background_pictures/ftrmvy0bpxjgoxj5tmzm.jpg",
                     TournamentStartDate = datas.MatchDates[0],
                     TournamentEndDate = datas.MatchDates[datas.MatchDates.Count() - 1],
                     MatchDates = datas.MatchDates,
@@ -340,7 +343,12 @@ namespace Vizsga_Backend.Controllers
 
                 if (tournament == null)
                 {
-                    return NotFound(new { message = $"A verseny az ID-vel ({tournamentId}) nem található." });
+                    return NotFound(new { message = $"A verseny nem található." });
+                }
+
+                if (tournament.JoinEndDate > DateTime.UtcNow)
+                {
+                    return BadRequest(new { message = $"A versenyt csak a jelentkezési határidő lejárata után lehet csak sorsolni!" });
                 }
 
                 var matchHeader = await _matchHeaderService.GetByIdAsync(tournament.HeaderId);

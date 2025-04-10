@@ -102,7 +102,10 @@ namespace Vizsga_Backend.Controllers
 
                 await _matchHeaderService.CreateAsync(newFriendyMatch);
 
-                return Created();
+                return Ok(new
+                {
+                    matchId = newFriendyMatch.Id
+                });
 
             }
             catch (Exception)
