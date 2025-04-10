@@ -33,9 +33,9 @@ onMounted(() => {
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="alert text-center mt-3" :class="success ? 'alert-success' : 'alert-danger'"><i class="bi me-2"
-            :class="success ? 'bi-check-circle' : 'bi-x-circle'"></i>
-            {{ message }}</div>
+          <div class="alert text-center mt-3" :class="props.success ? 'alert-success' : 'alert-danger'"><i class="bi me-2"
+            :class="props.success ? 'bi-check-circle' : 'bi-x-circle'"></i>
+            {{ props.message }}</div>
         </div>
       </div>
     </div>

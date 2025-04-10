@@ -190,7 +190,7 @@ const NavigateToMessage = (emailId: string) => {
                         </li>
                         <li class="nav-item ms-2 me-4 my-auto d-flex align-items-center">
                             <router-link :to="status._id ? `/statistic/${user.id}` : '/sign-in'"
-                                class="nav-link no-underline">
+                                class="nav-link no-underline" data-cy="user_title">
                                 {{ status._id ? user.username : 'Bejelentkezés' }}
                             </router-link>
 

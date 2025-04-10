@@ -9,7 +9,7 @@ import { onMounted, ref, watchEffect } from 'vue';
 import ResponseModal from './ResponseModal.vue';
 
 const { user } = storeToRefs(useUserStore());
-const { getAllCompetition, drawTournament, status } = useAnnouncedTmStore();
+const { getAllCompetition, drawTournament, status, alertCard } = useAnnouncedTmStore();
 const { Competitions } = storeToRefs(useAnnouncedTmStore());
 
 const filteredCompetition = ref<CompetitionModel[]>([]);
@@ -25,17 +25,40 @@ const props = defineProps<{
 }>();
 
 watchEffect(() => {
+    let alertMessageHelp = "";
     if (user.value.role == 1) {
-        filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == props.areJoinedCards);
+        if (props.areJoinedCards) {
+            filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == props.areJoinedCards);
+            if (filteredCompetition.value.length == 0) {
+                alertMessageHelp = 'Még nem jelentkeztél egyetlen versenyre sem!'
+            }
+            
+        }
+        else {
+            filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == props.areJoinedCards && x.maxPlayerJoin != x.registeredPlayers);
+            if (filteredCompetition.value.length == 0) {
+                alertMessageHelp = 'Nincs meghírdetett verseny az ön szintjén!'
+            }
+            
+
+        }
     }
     else {
         if (props.areJoinedCards) {
             filteredCompetition.value = Competitions.value.filter(x => new Date(x.joinEndDate) < new Date(Date.now()))
+            if (filteredCompetition.value.length == 0) {
+                alertMessageHelp = 'Nincs sorsolható verseny!'
+            }
         }
         else {
             filteredCompetition.value = Competitions.value;
+            if (filteredCompetition.value.length == 0) {
+                alertMessageHelp = 'Nincs meghírdetve egyetlen verseny sem!'
+            }
         }
     }
+    alertCard.message = alertMessageHelp;
+    alertCard.show = (alertCard.message != '');
 });
 
 const toggleOpen = (id: string) => {
@@ -44,11 +67,20 @@ const toggleOpen = (id: string) => {
 
 onMounted(async () => {
     await getAllCompetition(user.value.accessToken);
+    let alertMessageHelp = "";
     if (user.value.role != 2) {
-        filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == false);
+        filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == false && x.maxPlayerJoin != x.registeredPlayers);
+        if (filteredCompetition.value.length == 0) {
+            alertMessageHelp = 'Nincs meghírdetett verseny az ön szintjén!'
+        }
     } else {
         filteredCompetition.value = Competitions.value;
+        if (filteredCompetition.value.length == 0) {
+            alertMessageHelp = 'Nincs meghírdetve egyetlen verseny sem!'
+        }
     }
+    alertCard.message = alertMessageHelp;
+    alertCard.show = (alertCard.message != '');
 })
 
 const openVerifyModal = (compId: string) => {
@@ -65,9 +97,9 @@ const drawTournamentClick = async (compId: string) => {
         await drawTournament(user.value.accessToken, compId)
     } catch (err) {
     }
-    alertMessage.value = status.resp;
-    alertSuccess.value = status.success;
-    if (alertSuccess.value) {
+    alertCard.message = status.resp;
+    alertCard.show = status.success;
+    if (alertCard.show) {
         await getAllCompetition(user.value.accessToken);
     }
     showAlert.value = true;
@@ -80,9 +112,9 @@ const closeVerifyModal = () => {
 
 const onApplied = () => {
     showModal.value = false;
-    alertMessage.value = status.resp;
-    alertSuccess.value = status.success;
-    if (alertSuccess.value) {
+    alertCard.message = status.resp;
+    alertCard.show = status.success;
+    if (alertCard.show) {
         selectedComp.value!.userJoined = true;
         selectedComp.value!.registeredPlayers = (selectedComp.value!.registeredPlayers as number) += 1;
     }
@@ -190,8 +222,8 @@ const borderColor = (level: string) => {
 
                     <button type="button" v-if="comp.userJoined == undefined"
                         :class="(new Date(comp.joinEndDate) > new Date(Date.now())) ? 'btn-secondary' : 'btn-success'"
-                        class="btn justify-content-center d-flex w-100"
-                        @click="drawTournamentClick(comp.id)">{{ "Sorsolás" }}
+                        class="btn justify-content-center d-flex w-100" @click="drawTournamentClick(comp.id)">{{
+                            "Sorsolás" }}
                         {{ (new Date(comp.joinEndDate) > new Date(Date.now())) ? "zárolva" : "" }}</button>
                 </div>
             </div>

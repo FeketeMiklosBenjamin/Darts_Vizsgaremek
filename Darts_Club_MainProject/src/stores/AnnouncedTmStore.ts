@@ -10,6 +10,10 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
             resp: '',
             success: false
         },
+        alertCard: {
+            message: '',
+            show: false,
+        },
         matchHeader: <string>{},
         Competitions: [] as CompetitionModel[]
     }),

@@ -3,8 +3,11 @@ import { ref } from 'vue';
 import CardCompetition from './CardCompetition.vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/UserStore';
+import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
 
-const {user} = storeToRefs(useUserStore());
+const { user } = storeToRefs(useUserStore());
+
+const { alertCard } = useAnnouncedTmStore();
 
 const areJoinedCards = ref(false);
 const isRegisterPage = ref(true);
@@ -35,21 +38,29 @@ const changePage = () => {
                 <div class="row form-check form-switch justify-content-center d-flex glass-card pe-3">
                     <input class="col-4 form-check-input fs-5" type="checkbox" id="flexSwitchCheckDefault"
                         v-model="areJoinedCards" />
-                    <label v-if="user.role == 1" class="col-8 form-check-label fst-italic text-light fs-5" for="flexSwitchCheckDefault">
+                    <label v-if="user.role == 1" class="col-8 form-check-label fst-italic text-light fs-5"
+                        for="flexSwitchCheckDefault">
                         {{ areJoinedCards ? "Regisztrált" : "Nevezés" }}
                     </label>
-                    <label v-else class="col-8 form-check-label fst-italic text-light fs-5" for="flexSwitchCheckDefault">
+                    <label v-else class="col-8 form-check-label fst-italic text-light fs-5"
+                        for="flexSwitchCheckDefault">
                         {{ areJoinedCards ? "Sorsolható" : "Összes" }}
                     </label>
                 </div>
-                <button class="btn btn-darkred text-white mb-3 mt-3" :disabled="isRegisterPage"
-                    @click="changePage">{{user.role == 1 ? 'Jelentkezés' : 'Sorsolás'}}</button>
+                <button class="btn btn-darkred text-white mb-3 mt-3" :disabled="isRegisterPage" @click="changePage">{{
+                    user.role == 1 ? 'Jelentkezés' : 'Sorsolás' }}</button>
                 <button class="btn btn-warning" :disabled="!isRegisterPage" @click="changePage">Előző versenyek</button>
             </div>
         </div>
 
-        <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div">
+        <div
+            class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div" :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')">
             <CardCompetition v-if="isRegisterPage" :are-joined-cards="areJoinedCards" />
+            <div v-if="alertCard.show" class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
+                style="height: 100px;">
+                <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
+                <div class="d-inline">{{ alertCard.message }}</div>
+            </div>
         </div>
     </div>
 </template>
