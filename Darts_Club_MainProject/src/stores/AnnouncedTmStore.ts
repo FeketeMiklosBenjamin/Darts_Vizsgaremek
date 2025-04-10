@@ -51,7 +51,7 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                         maxPlayerJoin: comp.maxPlayerJoin,
                         matchHeader: comp.matchHeader,
                         registeredPlayers: comp.registeredPlayers,
-                        userJoined: comp.userJoined
+                        userJoined: comp.userJoined != undefined ? comp.userJoined : undefined
                     }));
                 })
                 .catch((err) => {
@@ -62,19 +62,37 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
             return AnnouncedTmService.application(accesstoken, tournamentId)
                 .then(() => {
                    this.status.resp = "Sikeres jelentkezett a versenyre";
+                   this.status.success = true;
                 })
                 .catch((err) => {
+                    this.status.success = false;
+                    this.status.resp = err.data.message;
                     return Promise.reject(err);
                 })
         },
         uploadMatchHeader(accesstoken: string, image: File, matchId: string) {
             return AnnouncedTmService.uploadMatchImage(accesstoken, image, matchId)
                 .then((res) => {
+                    this.status.success = true;
                     return res;
                 })
                 .catch((err) => {
+                    this.status.success = false;
+                    this.status.resp = err.data.message;
                     return Promise.reject(err);
                 })
-        }
+        },
+        drawTournament(accesstoken: string, tournamentId: string) {
+            return AnnouncedTmService.drawCompetition(accesstoken, tournamentId)
+                .then(() => {
+                   this.status.resp = "Sikeresen sorsoltuk a versenyt!";
+                   this.status.success = true;
+                })
+                .catch((err) => {
+                    this.status.success = false;
+                    this.status.resp = err.data.message;
+                    return Promise.reject(err);
+                })
+        },
     }
 })

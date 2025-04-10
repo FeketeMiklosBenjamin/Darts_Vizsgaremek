@@ -60,5 +60,19 @@ export default {
             .catch((err) => {
                 return Promise.reject(err.response);
             });
+    },
+    drawCompetition(accesstoken: string, tournamentId: string) {
+        return AnnouncedTm_Endpoint.delete(`/draw/${tournamentId}`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err.response);
+            });
     }
 }

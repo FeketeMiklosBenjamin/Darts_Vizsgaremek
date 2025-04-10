@@ -12,6 +12,8 @@ import StatisticView from '@/views/StatisticView.vue'
 import FeedBackView from '@/views/FeedBackView.vue'
 import Modifyview from '@/views/Modifyview.vue'
 import SeeYourMessageView from '@/views/SeeYourMessageView.vue'
+import AdminCreateCompetitionView from '@/views/AdminCreateCompetitionView.vue'
+import AdminSelectionCompetitionView from '@/views/AdminSelectionCompetitionView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +41,16 @@ const router = createRouter({
     { 
       path: '/competition', 
       component: CompetitionView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/competition-create', 
+      component: AdminCreateCompetitionView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/competition-selection', 
+      component: AdminSelectionCompetitionView,
       meta: { requiresAuth: true}
     },
     { 

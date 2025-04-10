@@ -1,4 +1,5 @@
 import type MatchHeaderModel from "./MatchHeadersModel"
+import type RegisteredPlayerModel from "./RegisteredPlayerModel"
 
 export default interface CompetitionModel {
     id: string,
@@ -7,6 +8,6 @@ export default interface CompetitionModel {
     joinEndDate: string,
     maxPlayerJoin: number,
     matchHeader: MatchHeaderModel
-    registeredPlayers: number,
-    userJoined: boolean
+    registeredPlayers: number | RegisteredPlayerModel[],
+    userJoined?: boolean
 }

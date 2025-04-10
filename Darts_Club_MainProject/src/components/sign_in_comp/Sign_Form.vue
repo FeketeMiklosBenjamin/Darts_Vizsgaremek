@@ -44,21 +44,21 @@ function onLogin(){
                 <div class="col-12 col-md-12 mx-auto">
                     <form @submit.prevent="onLogin">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="loginform.emailAddress" autocomplete="off" data-cy="email_input">
+                            <input type="email" class="form-control" id="email" placeholder="E-mail" v-model="loginform.emailAddress" autocomplete="off">
                             <label for="email">E-mail</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="loginform.password" autocomplete="off" data-cy="password_input">
+                            <input type="password" class="form-control" id="password" placeholder="Jelszó" v-model="loginform.password" autocomplete="off">
                             <label for="password">Jelszó</label>
                         </div>
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-warning w-100 py-2" :disabled="processing" data-cy="sign-in_btn">Bejelentkezés
-                                <span v-if="processing" class="spinner-border spinner-border-sm" data-cy="loading_spinner"></span>
+                            <button type="submit" class="btn btn-warning w-100 py-2" :disabled="processing">Bejelentkezés
+                                <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                             </button>
                         </div>
                     </form>
-                    <div v-if="status.message" class="alert alert-danger text-center py-1" data-cy="error_message">{{ status.message }}</div>
+                    <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}</div>
                 </div>
             </div>
         </div>

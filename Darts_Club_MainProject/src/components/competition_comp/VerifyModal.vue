@@ -18,7 +18,11 @@ const emit = defineEmits(['close', 'applied']);
 const isFormVisible = ref(true);
 
 const Applicate = async (compId: string) => {
-  await UserApplication(user.value.accessToken, compId)
+  try {
+    await UserApplication(user.value.accessToken, compId)
+  } catch (error) {
+    
+  }
   isFormVisible.value = false;
 
   emit('applied');
