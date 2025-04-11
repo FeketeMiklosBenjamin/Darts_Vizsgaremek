@@ -39,11 +39,11 @@ namespace DartsMobilApp.ViewModel
 
 
         [RelayCommand]
-
         private async void AcceptJoinRequest()
         {
-            await _signalRService.StartFriendlyMatch(matchId,SecStoreItems.UserId,UserId);
-            await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            await _signalRService.StartFriendlyMatch(matchId, SecStoreItems.UserId, UserId);
+
         }
+
     }
 }

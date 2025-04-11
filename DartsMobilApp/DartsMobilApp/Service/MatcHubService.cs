@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using DartsMobilApp.Classes;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace DartsMobilApp.Services
         private HubConnection _hubConnection;
         private readonly string _hubUrl = "https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/matchHub";
 
-        public event Action? OnFriendlyMatchStarted;
+        public event Action<StartFriendlyMatchModel>? OnFriendlyMatchStarted;
         public event Action<string, string, string>? OnFriendlyPlayerJoined;
         public event Action<string>? OnFriendlyPlayerRemoved;
         public event Action<string>? OnFriendlyPlayerLeft;
@@ -41,14 +42,13 @@ namespace DartsMobilApp.Services
 
         private void RegisterEvents()
         {
-            _hubConnection.On("FriendlyMatchStarted", () =>
+            _hubConnection.On<StartFriendlyMatchModel>("FriendlyMatchStarted", (startingSetup) =>
             {
-                OnFriendlyMatchStarted?.Invoke();
+                OnFriendlyMatchStarted?.Invoke(startingSetup);
             });
 
             _hubConnection.On<string, string, string>("FriendlyPlayerJoined", (playerId, username, dartsPoint) =>
             {
-                Debug.WriteLine($"{playerId} {username} {dartsPoint}\n\n\n\n");
                 OnFriendlyPlayerJoined?.Invoke(playerId, username, dartsPoint);
             });
 

@@ -3,6 +3,7 @@ using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Service;
+using DartsMobilApp.Services;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -11,11 +12,13 @@ namespace DartsMobilApp
 {
     public partial class App : Application
     {
-        public App()
+        private readonly SignalRService _signalR;
+        public App(SignalRService service)
         {
             InitializeComponent();
 
             MainPage = new AppShell();
+            _signalR = service;
         }
 
         protected override async void OnStart()
@@ -27,6 +30,7 @@ namespace DartsMobilApp
 
                 if (response.message == "Sikeres bejelentkezés.")
                 {
+                    await _signalR.ConnectAsync(SecStoreItems.AToken);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                     SecureStorage.SetAsync("Token", response.accessToken);
                     SecureStorage.SetAsync("Email", response.emailAddress);

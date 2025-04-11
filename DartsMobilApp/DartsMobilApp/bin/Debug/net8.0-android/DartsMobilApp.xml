@@ -121,51 +121,6 @@
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatchCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatch(System.String)"/>.</summary>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.IsChecked">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.isChecked"/>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.IsCheckedPrivate">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.isCheckedPrivate"/>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.Visible">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.visible"/>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.Pwd">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.pwd"/>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NumberOfSetsOrLegs">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.numberOfSetsOrLegs"/>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.setsLegsCheckCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheckCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheckCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.SetsLegsCheck(Microsoft.Maui.Controls.Button)"/>.</summary>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.firstToOrBestofCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestofCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestofCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.FirstToOrBestof(Microsoft.Maui.Controls.Button)"/>.</summary>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.pointChangingCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChangingCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChangingCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.PointChanging(Microsoft.Maui.Controls.Button)"/>.</summary>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.checkMatchIsPrivateCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivateCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivateCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.CheckMatchIsPrivate"/>.</summary>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.FriendlySetupViewModel.navigateCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NavigateCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.FriendlySetupViewModel.NavigateCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlySetupViewModel.Navigate"/>.</summary>
-        </member>
         <member name="F:DartsMobilApp.ViewModel.HomeViewModel.goToFriendlySetupCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendlySetupCommand"/>.</summary>
         </member>
@@ -225,6 +180,51 @@
         </member>
         <member name="P:DartsMobilApp.ViewModel.StatisticViewModel.AppearingCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.StatisticViewModel.Appearing"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.IsChecked">
+            <inheritdoc cref="F:FriendlySetupViewModel.isChecked"/>
+        </member>
+        <member name="P:FriendlySetupViewModel.IsCheckedPrivate">
+            <inheritdoc cref="F:FriendlySetupViewModel.isCheckedPrivate"/>
+        </member>
+        <member name="P:FriendlySetupViewModel.Visible">
+            <inheritdoc cref="F:FriendlySetupViewModel.visible"/>
+        </member>
+        <member name="P:FriendlySetupViewModel.Pwd">
+            <inheritdoc cref="F:FriendlySetupViewModel.pwd"/>
+        </member>
+        <member name="P:FriendlySetupViewModel.NumberOfSetsOrLegs">
+            <inheritdoc cref="F:FriendlySetupViewModel.numberOfSetsOrLegs"/>
+        </member>
+        <member name="F:FriendlySetupViewModel.setsLegsCheckCommand">
+            <summary>The backing field for <see cref="P:FriendlySetupViewModel.SetsLegsCheckCommand"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.SetsLegsCheckCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:FriendlySetupViewModel.SetsLegsCheck(Microsoft.Maui.Controls.Button)"/>.</summary>
+        </member>
+        <member name="F:FriendlySetupViewModel.firstToOrBestofCommand">
+            <summary>The backing field for <see cref="P:FriendlySetupViewModel.FirstToOrBestofCommand"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.FirstToOrBestofCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:FriendlySetupViewModel.FirstToOrBestof(Microsoft.Maui.Controls.Button)"/>.</summary>
+        </member>
+        <member name="F:FriendlySetupViewModel.pointChangingCommand">
+            <summary>The backing field for <see cref="P:FriendlySetupViewModel.PointChangingCommand"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.PointChangingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:FriendlySetupViewModel.PointChanging(Microsoft.Maui.Controls.Button)"/>.</summary>
+        </member>
+        <member name="F:FriendlySetupViewModel.checkMatchIsPrivateCommand">
+            <summary>The backing field for <see cref="P:FriendlySetupViewModel.CheckMatchIsPrivateCommand"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.CheckMatchIsPrivateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:FriendlySetupViewModel.CheckMatchIsPrivate"/>.</summary>
+        </member>
+        <member name="F:FriendlySetupViewModel.navigateCommand">
+            <summary>The backing field for <see cref="P:FriendlySetupViewModel.NavigateCommand"/>.</summary>
+        </member>
+        <member name="P:FriendlySetupViewModel.NavigateCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:FriendlySetupViewModel.Navigate"/>.</summary>
         </member>
         <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Button.TextColorTo(Microsoft.Maui.Controls.Button,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
             <summary>

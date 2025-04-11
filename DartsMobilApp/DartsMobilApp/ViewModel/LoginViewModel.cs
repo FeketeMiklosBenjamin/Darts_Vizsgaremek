@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
+using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Service;
+using DartsMobilApp.Services;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using System;
@@ -16,6 +18,12 @@ namespace DartsMobilApp.ViewModel
     public partial class LoginViewModel : ObservableObject
     {
 
+        private readonly SignalRService _signalR;
+
+        public LoginViewModel(SignalRService signalR)
+        {
+            _signalR = signalR;
+        }
         //[ObservableProperty]
         //public List<L> userDatas;
         [ObservableProperty]
@@ -72,6 +80,7 @@ namespace DartsMobilApp.ViewModel
                     timer.Start();
                 }
 
+                await _signalR.ConnectAsync(SecStoreItems.AToken);
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");

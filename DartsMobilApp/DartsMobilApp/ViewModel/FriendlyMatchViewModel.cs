@@ -26,17 +26,14 @@ namespace DartsMobilApp.ViewModel
         private readonly string UserName = SecStoreItems.UserName;
         private readonly string Dartspoint = SecStoreItems.DartsPoints; 
 
-        public FriendlyMatchViewModel()
+        public FriendlyMatchViewModel(SignalRService signalR)
         {
 
            
-           _signalRService = new SignalRService();
+           _signalRService = signalR;
 
 
-            _signalRService.OnFriendlyMatchStarted += ( ) =>
-             {
-                
-             };
+  
         }
 
         [ObservableProperty]
@@ -58,7 +55,7 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void Appearing()
         {
-            _signalRService.ConnectAsync(SecStoreItems.AToken);
+            
             LoadFriendliesMatch();
             SortedFriendlies = friendlymatches.Take(4).ToList();
 
@@ -185,9 +182,7 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartFriendlyMatch(string matchId)
         {
-            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService);
-            JoinRequestPopUpViewModel joinVm = new JoinRequestPopUpViewModel(_signalRService, matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
-            JoinRequestPopUp popUp = new JoinRequestPopUp(joinVm, matchId);
+            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService, matchId);
             _signalRService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
