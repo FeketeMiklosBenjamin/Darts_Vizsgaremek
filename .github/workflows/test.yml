@@ -22,10 +22,10 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln  # Itt adjuk meg az elérési utat
 
       - name: Build the project
-        run: dotnet build --configuration Release
+        run: dotnet build ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release  # Itt is meg kell adni az elérési utat
 
       - name: Run tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
+        run: dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release --no-build --verbosity normal  # Itt is az elérési utat kell használni
