@@ -14,18 +14,22 @@
                 <Label Text="{Binding FirstPlayerWonLeg}" Margin="25"/>
                 <Label Text="{Binding SecondPlayerWonLeg}" Margin="25"/>
             </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="1" Spacing="35" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="{Binding StartingPlayerName}" Margin="5" FontSize="25"/>
+                <Label Text="{Binding SecondPlayerName}" Margin="5" FontSize="25"/>
+            </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="2"  VerticalOptions="Center" Padding="10">
                 <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="5,5,5,5" />
                 <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold"  Margin="5,5,5,5"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3"  BackgroundColor="LightGray"  HorizontalOptions="Center" VerticalOptions="Center" >
-                    <Label Text="{Binding RecommendedFirstCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
-                    <Label Text="{Binding RecommendedSecondCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
+                <Label Text="{Binding RecommendedFirstCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
+                <Label Text="{Binding RecommendedSecondCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
             </HorizontalStackLayout>
             <Border Grid.Row="4" Margin="25,10,25,10" BackgroundColor="White" StrokeThickness="3">
                 <HorizontalStackLayout>
                     <Entry Text="{Binding Points}" Keyboard="Numeric" TextColor="Black"  WidthRequest="210" Placeholder="Kérem a dobott értéket!" FontSize="Medium" PlaceholderColor="Red" VerticalOptions="Center"/>
-                    <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}" Margin="10,5,10,5" CommandParameter="{Binding Points}" Command="{Binding SendPointsCommand}"/>
+                    <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}" Margin="10,5,10,5"  IsEnabled="{Binding EnabledButton}" CommandParameter="{Binding Points}" Command="{Binding SendPointsCommand}"/>
                 </HorizontalStackLayout>
             </Border>
             <Grid x:Name="counterGrid" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*"  Grid.Row="5" Padding="5">
@@ -45,20 +49,3 @@
         </Grid>
     </ScrollView>
 </ContentPage>
-
-
-
-<!--using Microsoft.Maui.Essentials;
-
-public class TextToSpeechExample
-{
-    public async Task SpeakText(string text)
-    {
-        // Ellenőrizd, hogy a szöveg nem üres
-        if (!string.IsNullOrEmpty(text))
-        {
-            // A szöveg felolvasása
-            await TextToSpeech.SpeakAsync(text);
-        }
-    }
-}-->

@@ -6,12 +6,19 @@ using System.Collections.ObjectModel;
 using DartsMobilApp.Classes;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
+using DartsMobilApp.Services;
+using DartsMobilApp.SecureStorageItems;
 
 namespace DartsMobilApp.ViewModel
 {
 
     public partial class CounterViewModel : ObservableObject
     {
+
+        private readonly SignalRService _signalRService;
+
+        public static StartFriendlyMatchModel settings;
+
         [ObservableProperty]
         public Grid? counterGrid;
 
@@ -21,9 +28,19 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public string recommendedSecondCheckout;
 
+        [ObservableProperty]
+        public string startingPlayerName;
 
         [ObservableProperty]
-        public int needToWin = 2;
+        public string secondPlayerName;
+
+        [ObservableProperty]
+        public int needToWinSets;
+        
+        [ObservableProperty]
+        public int needToWinLegs;
+
+        public static string MatchId;
 
         [ObservableProperty]
         public int firstPlayerWonLeg;
@@ -55,14 +72,56 @@ namespace DartsMobilApp.ViewModel
 
         public string pointsSecondPlayer;
 
+        private bool ImTheFirst;
 
+        [ObservableProperty]
+        private bool enabledButton;
+
+
+        public CounterViewModel(SignalRService signalR)
+        {
+            _signalRService = signalR;
+            Debug.WriteLine("Hello");
+        }
+
+        
         [RelayCommand]
         private void Appearing()
         {
-          
-            PointsFirstPlayer = PointsSecondPlayer = "501";
+            CheckStartingPlayer();
+            PointsFirstPlayer = PointsSecondPlayer = settings.StartingPoint.ToString();
+            NeedToWinLegs = settings.LegCount;
+            NeedToWinSets = settings.SetCount;
+            StartingPlayerName = settings.PlayerOneName;
+            SecondPlayerName = settings.PlayerTwoName;
             SecondPlayerWonLeg = FirstPlayerWonLeg = 0;
+            _signalRService.OnGetPoints += async (OpponentPoint) =>
+            {
+                if (ImTheFirst)
+                {
+                    SetSecondPlayersPoints(OpponentPoint.ToString());
+                }
+                else
+                {
+                    SetFirstPlayersPoints(OpponentPoint.ToString());
+                }
+            };
         }
+
+        private void CheckStartingPlayer()
+        {
+            if (settings.StartingPlayer)
+            {
+                ImTheFirst = true;
+                EnabledButton = true;
+            }
+            else
+            {
+                ImTheFirst = false;
+                EnabledButton = false;
+            }
+        }
+
 
         [RelayCommand]
 
@@ -251,35 +310,58 @@ namespace DartsMobilApp.ViewModel
         bool isFirstPlayer = true;
 
 
-        private void SetPlayersPoints(string thrownPoint, int PlayerNum)
+        private void SetFirstPlayersPoints(string thrownPoint)
         {
-            if (PlayerNum == 2)
+            PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
+            if (PointsFirstPlayer == "0")
             {
-                if (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint) < 0)
+                FirstPlayerWonLeg++;
+                SetDefaultValues();
+                TextSpeach($"{StartingPlayerName} nyerte a {allPlayedLegs}. leget!");
+                if (allPlayedLegs % 2 == 0)
                 {
-                    Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                    thrownPoint = "0";
+                    isFirstPlayer = true;
+                    EnabledButton = true;
                 }
-                PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(thrownPoint)).ToString();
-                RecommendedSecondCheckout = Set_description(PointsSecondPlayer);
-                Points = "";
-                isFirstPlayer = true;
-
-                
+                else
+                {
+                    isFirstPlayer = false;
+                    EnabledButton = false;
+                }
             }
-            else if(PlayerNum == 1)
+            else
             {
-                if (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) < 0)
-                {
-                    Application.Current.MainPage.DisplayAlert("HIBA!", "Besokaltál!", "OK");
-                    thrownPoint = "0";
-                }
-                PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
-                RecommendedFirstCheckout = Set_description(PointsFirstPlayer);
-                Points = "";
+                Set_description(PointsFirstPlayer);
                 isFirstPlayer = false;
+                EnabledButton = false;
+            }
+        }
 
-                
+
+        private void SetSecondPlayersPoints(string thrownpoint)
+        {
+            PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(thrownpoint)).ToString();
+            if (PointsSecondPlayer == "0")
+            {
+                SecondPlayerWonLeg++;
+                SetDefaultValues();
+                TextSpeach($"{SecondPlayerName} nyerte a(z) {allPlayedLegs}. leget!");
+                if (allPlayedLegs % 2 == 0)
+                {
+                    isFirstPlayer = true;
+                    EnabledButton = false;
+                }
+                else
+                {
+                   isFirstPlayer = false;
+                    EnabledButton = true;
+                } 
+            }
+            else
+            {
+                Set_description(PointsSecondPlayer);
+                isFirstPlayer = true;
+                EnabledButton = false;
             }
         }
 
@@ -310,68 +392,27 @@ namespace DartsMobilApp.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("HIBA!", $"Nem lehetséges {point} pontot dobni!", "OK");
             }
-           
             else
             {
-                if (!isFirstPlayer && !IsWinner())
+                _signalRService?.PassPoints(MatchId, SecStoreItems.UserId, int.Parse(point));
+                if (ImTheFirst)
                 {
-                    TextSpeach(point);
-                    SetPlayersPoints(point, 2);
-                }
-                else if(isFirstPlayer && !IsWinner())
-                {
-                    TextSpeach(point);
-                    SetPlayersPoints(point, 1);
-
-                }
-                if (!isFirstPlayer && IsWinner())
-                {
-                    SetDefaultValues(point);
+                    SetFirstPlayersPoints(point);
                 }
                 else
                 {
-                    SetDefaultValues(point);
+                    SetSecondPlayersPoints(point);
                 }
             }
 
         }
 
-        private async void SetDefaultValues( string point)
+        private async void SetDefaultValues()
         {
-           
-            
-                
-                if (IsWinner())
-                {
-                    PointsSecondPlayer = "501";
-                    PointsFirstPlayer = "501";
-                    RecommendedFirstCheckout = "";
-                    RecommendedSecondCheckout = "";
-                    if (isFirstPlayer)
-                    {
-                        SecondPlayerWonLeg++;
-                        
-                    }
-                    else
-                    {
-                        FirstPlayerWonLeg++;
-                    }
-                    if (allPlayedLegs % 2 != 0)
-                    {
-                        isFirstPlayer = false;
-                    }
-                    else
-                    {
-                        isFirstPlayer = true;
-                    }
-                if (FirstPlayerWonLeg == NeedToWin || SecondPlayerWonLeg == NeedToWin)
-                {
-                    isWinnerTheMatch = true;
-                    TextSpeach("Meccs vége! Valaki nyerte a meccset!");
-                    FirstPlayerWonLeg = 0;
-                    SecondPlayerWonLeg = 0;
-                }
-            }
+            PointsSecondPlayer = "501";
+            PointsFirstPlayer = "501";
+            RecommendedFirstCheckout = "";
+            RecommendedSecondCheckout = "";
         }
 
         bool isWinnerTheMatch = false;
@@ -393,15 +434,5 @@ namespace DartsMobilApp.ViewModel
             }
             return description;
         }
-        private bool IsWinner()
-        {
-            if (PointsFirstPlayer == "0" || PointsSecondPlayer == "0")
-            {
-                return true;
-            }
-            
-            return false;
-        }
-
     }
 }

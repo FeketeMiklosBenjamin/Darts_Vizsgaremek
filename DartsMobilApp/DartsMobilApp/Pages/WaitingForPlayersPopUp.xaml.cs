@@ -30,15 +30,18 @@ public partial class WaitingForPlayersPopUp : Popup
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                if (popup is JoinRequestPopUp)
-                {
-                    popup.Close();
-                }
-                else
-                {
-                    this.Close();
-                }
-                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            if (popup is JoinRequestPopUp)
+            {
+                popup.Close();
+            }
+            else
+            {
+                this.Close();
+            }
+
+            CounterViewModel.settings = startingSetup;
+            CounterViewModel.MatchId = matchId;
+            await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
 
             });
         };

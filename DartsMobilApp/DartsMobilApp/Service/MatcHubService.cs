@@ -16,6 +16,7 @@ namespace DartsMobilApp.Services
         public event Action<string>? OnFriendlyPlayerRemoved;
         public event Action<string>? OnFriendlyPlayerLeft;
         public event Action? OnTournamentMatchStarted;
+        public event Action<int> OnGetPoints;
 
         public async Task ConnectAsync(string jwtToken)
         {
@@ -47,6 +48,11 @@ namespace DartsMobilApp.Services
                 OnFriendlyMatchStarted?.Invoke(startingSetup);
             });
 
+            _hubConnection.On< int>("GetPoints", (points) =>
+            {
+                OnGetPoints?.Invoke(points);
+            });
+
             _hubConnection.On<string, string, string>("FriendlyPlayerJoined", (playerId, username, dartsPoint) =>
             {
                 OnFriendlyPlayerJoined?.Invoke(playerId, username, dartsPoint);
@@ -68,6 +74,16 @@ namespace DartsMobilApp.Services
             });
         }
 
+
+
+        public async Task PassPoints(string matchId,string playerId, int points)
+        {
+            if (_hubConnection.State == HubConnectionState.Connected)
+            {
+                await _hubConnection.InvokeAsync("PassPoints", matchId, playerId,points);
+            }
+
+        }
         public async Task JoinFriendlyMatch(string matchId, string playerId, string username, string dartsPoint)
         {
             if (_hubConnection.State == HubConnectionState.Connected)
