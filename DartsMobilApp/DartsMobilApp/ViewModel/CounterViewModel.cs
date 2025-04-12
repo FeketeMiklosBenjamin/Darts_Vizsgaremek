@@ -45,6 +45,8 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public int firstPlayerWonLeg;
 
+        private bool isFirstPlayer = true;
+
         public List<string> firstPlayerPoints { get; set; }
 
         public List<string> secondPlayerPoints { get; set; }
@@ -100,17 +102,21 @@ namespace DartsMobilApp.ViewModel
                 if (ImTheFirst)
                 {
                     SetSecondPlayersPoints(OpponentPoint.ToString());
+                    CheckMatchWinner();
+
                 }
                 else
                 {
                     SetFirstPlayersPoints(OpponentPoint.ToString());
+                    CheckMatchWinner();
+
                 }
             };
         }
 
         private void CheckStartingPlayer()
         {
-            if (settings.StartingPlayer)
+            if (settings.StartingPlayer == SecStoreItems.UserId)
             {
                 ImTheFirst = true;
                 EnabledButton = true;
@@ -307,11 +313,14 @@ namespace DartsMobilApp.ViewModel
         ObservableCollection<string> impossibleThrows = new ObservableCollection<string>{ "163", "166", "169", "172", "173", "175", "176", "178", "179" };
 
 
-        bool isFirstPlayer = true;
 
 
         private void SetFirstPlayersPoints(string thrownPoint)
         {
+            if (int.Parse(thrownPoint) > int.Parse(PointsFirstPlayer) || int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) == 1)
+            {
+                thrownPoint = "0";
+            }
             PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
             if (PointsFirstPlayer == "0")
             {
@@ -321,25 +330,50 @@ namespace DartsMobilApp.ViewModel
                 if (allPlayedLegs % 2 == 0)
                 {
                     isFirstPlayer = true;
-                    EnabledButton = true;
+                    if (ImTheFirst)
+                    {
+                        EnabledButton = true;
+                    }
+                    else
+                    {
+                        EnabledButton = false;
+                    }
                 }
                 else
                 {
                     isFirstPlayer = false;
-                    EnabledButton = false;
+                    if (ImTheFirst)
+                    {
+                        EnabledButton = false;
+                    }
+                    else
+                    {
+                        EnabledButton = true;
+                    }
                 }
             }
             else
             {
                 Set_description(PointsFirstPlayer);
                 isFirstPlayer = false;
-                EnabledButton = false;
+                if (ImTheFirst)
+                {
+                    EnabledButton = false;
+                }
+                else
+                {
+                    EnabledButton = true;
+                }
             }
         }
 
 
         private void SetSecondPlayersPoints(string thrownpoint)
         {
+            if (int.Parse(thrownpoint) > int.Parse(PointsSecondPlayer) || int.Parse(PointsSecondPlayer) - int.Parse(thrownpoint) == 1)
+            {
+                thrownpoint = "0";
+            }
             PointsSecondPlayer = (int.Parse(PointsSecondPlayer) - int.Parse(thrownpoint)).ToString();
             if (PointsSecondPlayer == "0")
             {
@@ -349,21 +383,45 @@ namespace DartsMobilApp.ViewModel
                 if (allPlayedLegs % 2 == 0)
                 {
                     isFirstPlayer = true;
-                    EnabledButton = false;
+                    if (ImTheFirst)
+                    {
+                        EnabledButton = true;
+                    }
+                    else
+                    {
+                        EnabledButton = false;
+                    }
                 }
                 else
                 {
-                   isFirstPlayer = false;
-                    EnabledButton = true;
-                } 
+                    isFirstPlayer = false;
+                    if (ImTheFirst)
+                    {
+                        EnabledButton = false;
+                    }
+                    else
+                    {
+                        EnabledButton = true;
+                    }
+                }
             }
             else
             {
                 Set_description(PointsSecondPlayer);
                 isFirstPlayer = true;
-                EnabledButton = false;
+                if (ImTheFirst)
+                {
+                    EnabledButton = true;
+                }
+                else
+                {
+                    EnabledButton = false;
+                }
             }
         }
+
+
+
 
         private async Task TextSpeach(string text)
 
@@ -398,10 +456,14 @@ namespace DartsMobilApp.ViewModel
                 if (ImTheFirst)
                 {
                     SetFirstPlayersPoints(point);
+                    TextSpeach(point);
+                    CheckMatchWinner();
                 }
                 else
                 {
                     SetSecondPlayersPoints(point);
+                    TextSpeach(point);
+                    CheckMatchWinner();
                 }
             }
 
@@ -409,13 +471,12 @@ namespace DartsMobilApp.ViewModel
 
         private async void SetDefaultValues()
         {
-            PointsSecondPlayer = "501";
-            PointsFirstPlayer = "501";
+            PointsSecondPlayer = settings.StartingPoint.ToString();
+            PointsFirstPlayer = settings.StartingPoint.ToString();
             RecommendedFirstCheckout = "";
             RecommendedSecondCheckout = "";
         }
 
-        bool isWinnerTheMatch = false;
 
         string description = "";
         private string Set_description(string point)
@@ -433,6 +494,24 @@ namespace DartsMobilApp.ViewModel
                 }
             }
             return description;
+        }
+
+
+        private void CheckMatchWinner()
+        {
+            if (FirstPlayerWonLeg == needToWinLegs)
+            {
+                TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerWonLeg}-{SecondPlayerWonLeg} arányban!");
+                SetDefaultValues();
+                FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+            }
+            else if(SecondPlayerWonLeg == needToWinLegs)
+            {
+                TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerWonLeg}-{FirstPlayerWonLeg} arányban!");
+                SetDefaultValues() ;
+                FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+            }
+            
         }
     }
 }
