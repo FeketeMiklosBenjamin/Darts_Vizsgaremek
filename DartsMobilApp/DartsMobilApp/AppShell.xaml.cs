@@ -12,6 +12,7 @@ namespace DartsMobilApp
         public AppShell(SignalRService signalR)
         {
             InitializeComponent();
+            _signalRService = signalR;
         }
 
         private async void OnLogoutClicked(object sender, EventArgs e)
