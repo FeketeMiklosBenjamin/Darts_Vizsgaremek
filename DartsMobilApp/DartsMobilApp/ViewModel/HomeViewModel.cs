@@ -18,11 +18,11 @@ namespace DartsMobilApp.ViewModel
         }
         [RelayCommand]
 
-        private async void GoToFriendlySetup()
+        private async void GoToFriendlies()
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.GoToAsync($"//{nameof(FriendlySetupPage)}", true);
+                await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}", true);
             });
         }
 

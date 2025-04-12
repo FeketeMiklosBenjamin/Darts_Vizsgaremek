@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
 using DartsMobilApp.Services;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Pages;
 
 namespace DartsMobilApp.ViewModel
 {
@@ -503,15 +504,17 @@ namespace DartsMobilApp.ViewModel
             {
                 TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerWonLeg}-{SecondPlayerWonLeg} arányban!");
                 SetDefaultValues();
-                FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+                Thread.Sleep(5000);
+                Shell.Current.GoToAsync($"//{nameof(HomePage)}");
             }
             else if(SecondPlayerWonLeg == needToWinLegs)
             {
                 TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerWonLeg}-{FirstPlayerWonLeg} arányban!");
-                SetDefaultValues() ;
-                FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+                SetDefaultValues();
+                Thread.Sleep(5000);
+                Shell.Current.GoToAsync($"//{nameof(HomePage)}");
             }
-            
+
         }
     }
 }

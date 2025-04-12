@@ -133,11 +133,11 @@
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatchCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.FriendlyMatchViewModel.StartFriendlyMatch(System.String)"/>.</summary>
         </member>
-        <member name="F:DartsMobilApp.ViewModel.HomeViewModel.goToFriendlySetupCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendlySetupCommand"/>.</summary>
+        <member name="F:DartsMobilApp.ViewModel.HomeViewModel.goToFriendliesCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendliesCommand"/>.</summary>
         </member>
-        <member name="P:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendlySetupCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendlySetup"/>.</summary>
+        <member name="P:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendliesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.HomeViewModel.GoToFriendlies"/>.</summary>
         </member>
         <member name="F:DartsMobilApp.ViewModel.HomeViewModel.goToCompetitionPageCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.HomeViewModel.GoToCompetitionPageCommand"/>.</summary>
