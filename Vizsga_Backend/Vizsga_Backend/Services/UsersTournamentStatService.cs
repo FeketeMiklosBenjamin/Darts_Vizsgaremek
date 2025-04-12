@@ -8,7 +8,7 @@ using Vizsga_Backend.Models.UserStatsModels;
 
 namespace VizsgaBackend.Services
 {
-    public class UsersTournamentStatService
+    public class UsersTournamentStatService : IUsersTournamentStatService
     {
         private readonly IMongoCollection<UsersTournamentStat> _usersTournamentStatCollection;
 

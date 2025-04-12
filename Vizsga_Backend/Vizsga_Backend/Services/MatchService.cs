@@ -7,7 +7,7 @@ using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
 {
-    public class MatchService
+    public class MatchService : IMatchService
     {
         private readonly IMongoCollection<Match> _matchCollection;
 

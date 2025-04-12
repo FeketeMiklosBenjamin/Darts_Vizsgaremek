@@ -1,18 +1,15 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using StackExchange.Redis;
-using System.Net;
 using System.Text.RegularExpressions;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IMongoCollection<User> _usersCollection;
         private readonly Cloudinary _cloudinary;
@@ -90,7 +87,7 @@ namespace VizsgaBackend.Services
             return regex.IsMatch(email);
         }
 
-        public async Task<User> GetUserByEmailAsync(string emailAddress)
+        public async Task<User?> GetUserByEmailAsync(string emailAddress)
         {
             var user = await _usersCollection
                 .Find(u => u.EmailAddress == emailAddress)

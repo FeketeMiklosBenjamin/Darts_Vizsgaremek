@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.UserModels;
 using VizsgaBackend.Models;
 using VizsgaBackend.Services;
@@ -13,10 +14,10 @@ namespace Vizsga_Backend.Controllers
     [Route("api/token")]
     public class TokenController : ControllerBase
     {
-        private readonly JwtService _jwtService;
-        private readonly UserService _userService;
+        private readonly IJwtService _jwtService;
+        private readonly IUserService _userService;
 
-        public TokenController(JwtService jwtService, UserService userService)
+        public TokenController(IJwtService jwtService, IUserService userService)
         {
             _jwtService = jwtService;
             _userService = userService;

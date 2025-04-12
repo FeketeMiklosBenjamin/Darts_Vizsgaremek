@@ -14,9 +14,9 @@ namespace VizsgaBackend.Controllers
     [ApiController]
     public class UsersTournamentStatController : ControllerBase
     {
-        private readonly UsersTournamentStatService _service;
+        private readonly IUsersTournamentStatService _service;
 
-        public UsersTournamentStatController(UsersTournamentStatService service)
+        public UsersTournamentStatController(IUsersTournamentStatService service)
         {
             _service = service;
         }

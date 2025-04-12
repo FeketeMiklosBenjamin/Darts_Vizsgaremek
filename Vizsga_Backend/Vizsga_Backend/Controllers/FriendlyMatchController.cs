@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Services;
 using VizsgaBackend.Services;
@@ -12,11 +13,11 @@ namespace Vizsga_Backend.Controllers
     [ApiController]
     public class FriendlyMatchController : ControllerBase
     {
-        private readonly MatchHeaderService _matchHeaderService;
-        private readonly UsersTournamentStatService _userTournamentStatService;
-        private readonly UserService _userService;
+        private readonly IMatchHeaderService _matchHeaderService;
+        private readonly IUsersTournamentStatService _userTournamentStatService;
+        private readonly IUserService _userService;
 
-        public FriendlyMatchController(MatchHeaderService matchHeaderService, UsersTournamentStatService userTournamentStatService, UserService userService)
+        public FriendlyMatchController(IMatchHeaderService matchHeaderService, IUsersTournamentStatService userTournamentStatService, IUserService userService)
         {
             _matchHeaderService = matchHeaderService;
             _userTournamentStatService = userTournamentStatService;

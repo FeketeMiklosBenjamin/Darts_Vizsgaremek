@@ -11,10 +11,10 @@ namespace Vizsga_Backend.Controllers
     [ApiController]
     public class MatchController : ControllerBase
     {
-        private readonly MatchService _matchService;
-        private readonly MatchHeaderService _matchHeaderService;
+        private readonly IMatchService _matchService;
+        private readonly IMatchHeaderService _matchHeaderService;
 
-        public MatchController(MatchService matchService, MatchHeaderService matchHeaderService)
+        public MatchController(IMatchService matchService, IMatchHeaderService matchHeaderService)
         {
             _matchService = matchService;
             _matchHeaderService = matchHeaderService;

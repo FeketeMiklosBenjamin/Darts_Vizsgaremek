@@ -14,9 +14,9 @@ namespace VizsgaBackend.Controllers
     [ApiController]
     public class UsersFriendlyStatController : ControllerBase
     {
-        private readonly UsersFriendlyStatService _service;
+        private readonly IUsersFriendlyStatService _service;
 
-        public UsersFriendlyStatController(UsersFriendlyStatService service)
+        public UsersFriendlyStatController(IUsersFriendlyStatService service)
         {
             _service = service;
         }

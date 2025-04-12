@@ -10,7 +10,7 @@ using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
 {
-    public class MatchHeaderService
+    public class MatchHeaderService : IMatchHeaderService
     {
         private readonly IMongoCollection<MatchHeader> _matchHeaderCollection;
         private readonly Cloudinary _cloudinary;

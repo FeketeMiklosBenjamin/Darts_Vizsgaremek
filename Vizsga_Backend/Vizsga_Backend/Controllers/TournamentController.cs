@@ -10,9 +10,9 @@ namespace Vizsga_Backend.Controllers
     [ApiController]
     public class TournamentController : ControllerBase
     {
-        private readonly MatchHeaderService _matchHeaderService;
+        private readonly IMatchHeaderService _matchHeaderService;
 
-        public TournamentController(MatchHeaderService matchHeaderService)
+        public TournamentController(IMatchHeaderService matchHeaderService)
         {
             _matchHeaderService = matchHeaderService;
         }

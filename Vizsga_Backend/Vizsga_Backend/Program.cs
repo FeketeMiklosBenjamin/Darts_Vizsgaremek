@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models;
 using Vizsga_Backend.Services;
 using Vizsga_Backend.SignalR;
@@ -24,6 +25,15 @@ builder.Services.AddSingleton<MessageService>();
 builder.Services.AddSingleton<AnnouncedTournamentService>();
 builder.Services.AddSingleton<MatchHeaderService>();
 builder.Services.AddSingleton<MatchService>();
+
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IUsersFriendlyStatService, UsersFriendlyStatService>();
+builder.Services.AddSingleton<IUsersTournamentStatService, UsersTournamentStatService>();
+builder.Services.AddSingleton<IJwtService, JwtService>();
+builder.Services.AddSingleton<IMessageService, MessageService>();
+builder.Services.AddSingleton<IAnnouncedTournamentService, AnnouncedTournamentService>();
+builder.Services.AddSingleton<IMatchHeaderService, MatchHeaderService>();
+builder.Services.AddSingleton<IMatchService, MatchService>();
 
 // Cloudinary regisztrálása
 builder.Services.AddSingleton(serviceProvider =>

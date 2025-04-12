@@ -1,13 +1,27 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
+using Vizsga_Backend.Models.SignalRModels;
+using Vizsga_Backend.Services;
+using VizsgaBackend.Services;
 
 namespace Vizsga_Backend.SignalR
 {
     public class MatchHub : Hub
     {
-        private static readonly ConcurrentDictionary<string, List<string>> matchPlayers = new();
+        private static readonly ConcurrentDictionary<string, List<string>> matchPlayers = new(); // matchId, List<playerId>
 
-        private static readonly ConcurrentDictionary<string, string> playerConnections = new();
+        private static readonly ConcurrentDictionary<string, string> playerConnections = new(); // playerId, connectionId
+
+        private readonly MatchHeaderService _matchHeaderService;
+        private readonly UserService _userService;
+
+        public MatchHub(MatchHeaderService matchHeaderService, UserService userService)
+        {
+            _matchHeaderService = matchHeaderService;
+            _userService = userService;
+        }
+
+
 
         // StartMatch
 
@@ -45,7 +59,6 @@ namespace Vizsga_Backend.SignalR
             {
                 if (players.Contains(playerId) && players.Contains(secondPlayerId))
                 {
-                    // Takarítsuk ki a groupból azokat, akik nem a két játékos
                     var allowedPlayers = new HashSet<string> { playerId, secondPlayerId };
 
                     foreach (var pId in players.ToList())
@@ -55,12 +68,27 @@ namespace Vizsga_Backend.SignalR
                             await Groups.RemoveFromGroupAsync(connId, matchId);
                         }
                     }
-                    matchPlayers[matchId] = new List<string> { playerId, secondPlayerId };
+                    matchPlayers[matchId] = new List<string>() { playerId, secondPlayerId };
 
                     var rnd = new Random();
-                    var startingPlayer = rnd.Next(0, 2) == 0 ? playerId : secondPlayerId;
+                    var startingPlayer = rnd.Next(0, 2) == 0 ? true : false;
 
-                    await Clients.Group(matchId).SendAsync("FriendlyMatchStarted", startingPlayer);
+                    var match = await _matchHeaderService.GetByIdAsync(matchId);
+
+                    var PlayerOne = await _userService.GetByIdAsync(playerId);
+
+                    var PlayerTwo = await _userService.GetByIdAsync(secondPlayerId);
+
+                    StartFriendlyMatchModel startFriendlyMatchModel = new StartFriendlyMatchModel() { 
+                        StartingPlayer = startingPlayer,
+                        PlayerOneName = (startingPlayer ? PlayerOne!.Username : PlayerTwo!.Username),
+                        PlayerTwoName = (!startingPlayer ? PlayerOne!.Username : PlayerTwo!.Username),
+                        LegCount = match!.LegsCount,
+                        SetCount = (match.SetsCount == null ? 1 : (int)match.SetsCount),
+                        StartingPoint = match.StartingPoint
+                    };
+
+                    await Clients.Group(matchId).SendAsync("FriendlyMatchStarted", startFriendlyMatchModel);
                 }
                 else
                 {
@@ -134,9 +162,17 @@ namespace Vizsga_Backend.SignalR
             }
         }
 
+        public async Task PassPoints(string matchId, string senderplayerId, int points)
+        {
+            if (matchPlayers.TryGetValue(matchId, out var players))
+            {
+                var toPlayerId = players.Where(x => x != senderplayerId).First();
+                await Clients.User(toPlayerId).SendAsync("GetPoints", points);
+            }
+        }
+
 
         // Communication
-
 
 
         public override async Task OnDisconnectedAsync(Exception? exception)

@@ -6,7 +6,7 @@ using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
 {
-    public class AnnouncedTournamentService
+    public class AnnouncedTournamentService : IAnnouncedTournamentService
     {
         private readonly IMongoCollection<AnnouncedTournament> _announcedTournamentCollection;
         private readonly IMongoCollection<PlayerTournament> _playerTournamentCollection;

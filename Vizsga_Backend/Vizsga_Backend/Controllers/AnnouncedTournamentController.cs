@@ -15,14 +15,14 @@ namespace Vizsga_Backend.Controllers
     [ApiController]
     public class AnnouncedTournamentController : ControllerBase
     {
-        private readonly AnnouncedTournamentService _service;
-        private readonly MatchHeaderService _matchHeaderService;
-        private readonly UsersTournamentStatService _usersTournamentStatService;
-        private readonly MatchService _matchService;
-        private readonly MessageService _messageService;
+        private readonly IAnnouncedTournamentService _service;
+        private readonly IMatchHeaderService _matchHeaderService;
+        private readonly IUsersTournamentStatService _usersTournamentStatService;
+        private readonly IMatchService _matchService;
+        private readonly IMessageService _messageService;
         private readonly Cloudinary _cloudinary;
 
-        public AnnouncedTournamentController(AnnouncedTournamentService service, MatchHeaderService matchHeaderService, UsersTournamentStatService usersTournamentStatService, MatchService matchService, MessageService messageService, Cloudinary cloudinary)
+        public AnnouncedTournamentController(IAnnouncedTournamentService service, IMatchHeaderService matchHeaderService, IUsersTournamentStatService usersTournamentStatService, IMatchService matchService, IMessageService messageService, Cloudinary cloudinary)
         {
             _service = service;
             _matchHeaderService = matchHeaderService;

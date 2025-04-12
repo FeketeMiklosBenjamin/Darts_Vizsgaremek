@@ -6,7 +6,7 @@ using VizsgaBackend.Models;
 
 namespace VizsgaBackend.Services
 {
-    public class UsersFriendlyStatService
+    public class UsersFriendlyStatService : IUsersFriendlyStatService
     {
         private readonly IMongoCollection<UsersFriendlyStat> _usersFriendlyStatCollection;
 

@@ -6,7 +6,7 @@ using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
 {
-    public class MessageService
+    public class MessageService : IMessageService
     {
         private readonly IMongoCollection<Message> _messagesCollection;
 

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Models.UserStatsModels;
@@ -24,14 +25,14 @@ namespace VizsgaBackend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _service;
-        private readonly UsersFriendlyStatService _userFriendlyStatService;
-        private readonly UsersTournamentStatService _userTournamentStatService;
-        private readonly MatchService _matchService;
-        private readonly JwtService _jwtService;
+        private readonly IUserService _service;
+        private readonly IUsersFriendlyStatService _userFriendlyStatService;
+        private readonly IUsersTournamentStatService _userTournamentStatService;
+        private readonly IMatchService _matchService;
+        private readonly IJwtService _jwtService;
         private readonly Cloudinary _cloudinary;
 
-        public UserController(UserService service, UsersFriendlyStatService userFriendlyStatService, UsersTournamentStatService userTournamentStatService, MatchService matchService, JwtService jwtService, Cloudinary cloudinary)
+        public UserController(IUserService service, IUsersFriendlyStatService userFriendlyStatService, IUsersTournamentStatService userTournamentStatService, IMatchService matchService, IJwtService jwtService, Cloudinary cloudinary)
         {
             _service = service;
             _userFriendlyStatService = userFriendlyStatService;

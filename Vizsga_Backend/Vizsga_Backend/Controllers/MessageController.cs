@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.MessageModels;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Models.UserStatsModels;
@@ -17,10 +18,10 @@ namespace Vizsga_Backend.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly MessageService _service;
-        private readonly UserService _userService;
+        private readonly IMessageService _service;
+        private readonly IUserService _userService;
 
-        public MessageController(MessageService service, UserService userService)
+        public MessageController(IMessageService service, IUserService userService)
         {
             _service = service;
             _userService = userService;
