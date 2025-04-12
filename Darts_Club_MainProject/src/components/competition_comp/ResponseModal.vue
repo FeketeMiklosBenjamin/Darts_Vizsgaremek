@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
 import { Modal } from 'bootstrap';
-import { defineEmits, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const { status } = useAnnouncedTmStore();
 

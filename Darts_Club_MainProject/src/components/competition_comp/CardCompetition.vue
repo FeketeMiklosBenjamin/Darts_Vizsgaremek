@@ -222,6 +222,7 @@ const borderColor = (level: string) => {
 
                     <button type="button" v-if="comp.userJoined == undefined"
                         :class="(new Date(comp.joinEndDate) > new Date(Date.now())) ? 'btn-secondary' : 'btn-success'"
+                        :disabled="(new Date(comp.joinEndDate) > new Date(Date.now()))"
                         class="btn justify-content-center d-flex w-100" @click="drawTournamentClick(comp.id)">{{
                             "Sorsolás" }}
                         {{ (new Date(comp.joinEndDate) > new Date(Date.now())) ? "zárolva" : "" }}</button>

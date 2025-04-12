@@ -57,14 +57,14 @@ const NavigateToStatistic = (userId: string) => {
                     <span class="input-group-text">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Felhasználónév..." v-model="searchFor">
+                    <input type="text" class="form-control" placeholder="Felhasználónév..." v-model="searchFor" data-cy="search_username">
                 </div>
             </div>
             <div class="row justify-content-center my-4">
                 <div class="col-md-10 col-lg-10">
                     <div class="main-div" style="max-height: 70vh;">
                         <div v-if="filteredUsers.length > 0" class="table-responsive">
-                            <table class="table text-center">
+                            <table class="table text-center" data-cy="users_table">
                                 <tbody>
                                     <tr v-for="users in filteredUsers" :key="users.id"
                                         @click="NavigateToStatistic(users.id)">
@@ -80,7 +80,7 @@ const NavigateToStatistic = (userId: string) => {
                                                     class="profileImg border-0 mx-auto d-block" alt="Nincs">
                                             </div>
                                         </td>
-                                        <td>{{ users.username }}</td>
+                                        <td data-cy="username_in_table">{{ users.username }}</td>
                                         <td>{{ users.emailAddress }}</td>
                                         <td>{{ users.dartsPoints }}</td>
                                         <td v-if="user.role == 2"><i class="bi"
@@ -89,7 +89,7 @@ const NavigateToStatistic = (userId: string) => {
                                 </tbody>
                             </table>
                         </div>
-                        <div v-else class="alert alert-warning text-center mx-auto w-50">
+                        <div v-else class="alert alert-warning text-center mx-auto w-50" data-cy="alert_messagebox">
                             <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
                             <div class="d-inline">Nem létezik ez a felhasználó!</div>
                         </div>

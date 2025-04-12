@@ -149,11 +149,11 @@ const NavigateToMessage = (emailId: string) => {
                             <i class="bi fs-4" :class="{
                                 'bi-envelope-fill': !isDropdownVisible,
                                 'bi-envelope-paper-fill': isDropdownVisible,
-                            }" @click="toggleDropdown"></i>
-                            <div :class="['dropdown-menu', { visible: isDropdownVisible }]">
+                            }" @click="toggleDropdown" data-cy="message_icon"></i>
+                            <div :class="['dropdown-menu', { visible: isDropdownVisible }]" data-cy="incoming_message">
                                 <div v-if="user.role == 2">
-                                    <div v-if="forAdminEmails.length < 1" class="text-center">Nincs üzenete!</div>
-                                    <div v-else v-for="email in sortedAdminEmails" class="message-box">
+                                    <div v-if="forAdminEmails.length < 1" class="text-center" data-cy="null_message">Nincs üzenete!</div>
+                                    <div v-else v-for="email in sortedAdminEmails" class="message-box" data-cy="message">
                                         <div class="message-box-content" @click="NavigateToMessage(email.id!)">
                                             <p class="fs-5 text-center mb-3">
                                                 {{ email.title
@@ -185,7 +185,7 @@ const NavigateToMessage = (emailId: string) => {
                         <li>
                             <router-link v-if="status._id" :to="`/main-page`"
                                 class="nav-link nav-item ms-2 me-1 text-secondary" style="margin-top: 5px">
-                                <i class="bi bi-house-door-fill"></i>
+                                <i class="bi bi-house-door-fill" data-cy="home_icon"></i>
                             </router-link>
                         </li>
                         <li class="nav-item ms-2 me-4 my-auto d-flex align-items-center">
@@ -209,15 +209,14 @@ const NavigateToMessage = (emailId: string) => {
 
                         <li v-if="status._id" class="nav-item my-auto ms-2">
                             <a href="#" @click.prevent="onLogout" class="text-secondary">
-                                <i class="bi bi-box-arrow-right"></i>
+                                <i class="bi bi-box-arrow-right" data-cy="logout_icon"></i>
                             </a>
                             <VueCountdown v-if="status._id" :time="15 * 60 * 1000" v-slot="{ minutes, seconds }"
                                 @end="onLogout">
-                                <span class="text-light ms-2">{{ minutes }}:{{ String(seconds).padStart(2, '0')
-                                    }}</span>
+                                <span class="text-light ms-2" data-cy="logout_timer">{{ minutes }}:{{ String(seconds).padStart(2, '0')}}</span>
                             </VueCountdown>
                             <div v-if="user.role == 2" class="tooltip-container">
-                                <i class="bi bi-person-badge-fill text-secondary ms-2"></i>
+                                <i class="bi bi-person-badge-fill text-secondary ms-2" data-cy="admin_icon"></i>
                                 <div class="tooltip-text">Ön admin</div>
                             </div>
                         </li>

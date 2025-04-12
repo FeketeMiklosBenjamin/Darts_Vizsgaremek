@@ -40,7 +40,7 @@ const NavigateToStatistic = (userId: string) => {
     <div class="z-1 position-rel">
         <div class="row justify-content-center my-5">
             <div class="col-md-5 col-sm-8 col-10">
-                <select class="form-control text-center" v-model="selectedLevel">
+                <select class="form-control text-center" v-model="selectedLevel" data-cy="selection_level">
                     <option value="Amateur">Amatőr</option>
                     <option value="Advanced">Haladó</option>
                     <option value="Professional">Professzionális</option>
@@ -55,7 +55,7 @@ const NavigateToStatistic = (userId: string) => {
                                 <tbody>
                                     <tr v-for="(users, index) in filteredUsers" :key="users.id"
                                         @click="NavigateToStatistic(users.id)">
-                                        <td :class="getRankClass(index)">{{ index + 1 }}.</td>
+                                        <td :class="getRankClass(index)" data-cy="index_of_user">{{ index + 1 }}.</td>
                                         <td>
                                             <div class="rounded-circle mx-auto border-3"
                                                 style="width: 36px; height: 36px;" :class="{
@@ -68,14 +68,14 @@ const NavigateToStatistic = (userId: string) => {
                                                     class="profileImg border-0 mx-auto d-block" alt="Nincs">
                                             </div>
                                         </td>
-                                        <td class="text-white">{{ users.username }}</td>
+                                        <td class="text-white" data-cy="users_username">{{ users.username }}</td>
                                         <td class="text-white">{{ users.emailAddress }}</td>
                                         <td class="text-white">{{ users.dartsPoints }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div v-else class="alert alert-warning text-center mx-auto w-50">
+                        <div v-else class="alert alert-warning text-center mx-auto w-50" data-cy="alert_messagebox">
                             <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
                             <div class="d-inline">Nincsen ilyen szintű felhasználó!</div>
                         </div>
