@@ -31,11 +31,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln
 
-      # 4. Build the project
-      - name: Build the project
-        run: dotnet build ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release
-
-      # 5. Run tests (now ensuring the tests are properly executed)
+      # 4. Run tests (now ensuring the tests are properly executed)
       - name: Run tests
         run: |
           dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release --no-build --verbosity normal
