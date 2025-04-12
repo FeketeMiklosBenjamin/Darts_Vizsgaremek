@@ -17,7 +17,7 @@ namespace DartsMobilApp
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new AppShell(service);
             _signalR = service;
         }
 
@@ -45,7 +45,5 @@ namespace DartsMobilApp
             
 
         }
-
-
     }
 }

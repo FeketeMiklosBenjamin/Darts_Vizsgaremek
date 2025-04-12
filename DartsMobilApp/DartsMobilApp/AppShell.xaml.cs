@@ -2,12 +2,14 @@
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Services;
 
 namespace DartsMobilApp
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        private readonly SignalRService _signalRService;
+        public AppShell(SignalRService signalR)
         {
             InitializeComponent();
         }
@@ -38,6 +40,7 @@ namespace DartsMobilApp
                     System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
             }
+            await _signalRService.DisconnectAsync();
         }
     }
 }
