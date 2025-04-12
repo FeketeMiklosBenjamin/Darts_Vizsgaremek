@@ -37,5 +37,4 @@ jobs:
 
       # 5. Run tests using vstest command
       - name: Run tests
-        run: |
-          dotnet vstest ./Vizsga_Backend/Backend.Tests/bin/Release/net8.0/Backend.Tests.dll --configuration Release --verbosity normal
+        run: dotnet test ./Vizsga_Backend.sln --no-build --configuration Release --verbosity normal
