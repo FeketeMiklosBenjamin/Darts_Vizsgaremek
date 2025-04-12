@@ -1,37 +1,29 @@
-name: ASP.NET Backend CI
+name: Run Tests
 
 on:
   push:
-    branches:
-      - Backend
+    branches: [ "Backend" ]
   pull_request:
-    branches:
-      - Backend
+    branches: [ "Backend" ]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
 
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      ACTIONS_STEP_DEBUG: true
-
     steps:
-      # 1. Check out repository
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        
-      # 2. Set up .NET SDK
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '8.0'
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      # 3. Restore dependencies (ensure all dependencies are restored)
-      - name: Restore dependencies
-        run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
-      # 4. Run tests (now ensuring the tests are properly executed)
-      - name: Run tests
-        run: |
-          dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release --no-build --verbosity normal
+    - name: Restore dependencies
+      run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln
+
+    - name: Build solution
+      run: dotnet build ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release --no-build --verbosity normal
