@@ -65,7 +65,7 @@ namespace VizsgaBackend.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = "A lekérés során hiba történt." });
+                return StatusCode(500, new { message = "A lekérés során hiba törté." });
             }
         }
 
