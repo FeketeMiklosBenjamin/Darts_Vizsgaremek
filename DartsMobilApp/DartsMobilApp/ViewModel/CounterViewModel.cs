@@ -108,7 +108,7 @@ namespace DartsMobilApp.ViewModel
         {
             CheckStartingPlayer();
             PointsFirstPlayer = PointsSecondPlayer = settings.StartingPoint.ToString();
-            NeedToWinLegs = settings.LegCount;
+            NeedToWinLegs = settings.SetCount > 1 ? NeedToWinLegs = 3 : NeedToWinLegs = settings.LegCount;
             NeedToWinSets = settings.SetCount;
             StartingPlayerName = settings.PlayerOneName;
             SecondPlayerName = settings.PlayerTwoName;
