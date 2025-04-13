@@ -2,7 +2,16 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:res="clr-namespace:DartsMobilApp.Resources">
+
+    <FontImage x:Key="HomeIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Home}"/>
+    <FontImage x:Key="CompetitionIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Competition}"/>
+    <FontImage x:Key="FriendlyIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Friendly}"/>
+    <FontImage x:Key="SettingIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Setting}"/>
+    <FontImage x:Key="StatisticIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Statistic}"/>
+    <FontImage x:Key="LogoutIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Logout}"/>
+
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />

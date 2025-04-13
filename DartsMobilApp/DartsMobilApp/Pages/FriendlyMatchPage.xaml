@@ -4,7 +4,7 @@
              xmlns:tools="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              x:Class="DartsMobilApp.Pages.FriendlyMatchPage"
              xmlns:vm="clr-namespace:DartsMobilApp.ViewModel"
-             Title="FriendlyMatchPage"
+             Title="Barátságos mérkőzések"
              Shell.TabBarBackgroundColor="Transparent"
              Shell.NavBarIsVisible="True"   
              BackgroundImageSource="ally_pally.jpg">

@@ -22,8 +22,6 @@ namespace DartsMobilApp.Classes
             var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
 
             var response = DartsAPI.PostLogout(content);
-
-            Debug.WriteLine($"\n\n\n\nResponse: {response}\n\n\n\n");
         }
     }
 }

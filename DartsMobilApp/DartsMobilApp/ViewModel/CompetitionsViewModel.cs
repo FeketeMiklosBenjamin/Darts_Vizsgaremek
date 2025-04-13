@@ -139,7 +139,7 @@ namespace DartsMobilApp.ViewModel
             PasswordValidationPopUpViewModel vm = new PasswordValidationPopUpViewModel(_signalRService);
             PasswordValidationPopUpViewModel.MatchId = matchId;
             PasswordValidationPopUp validationPopUp = new PasswordValidationPopUp(vm);
-            await Shell.Current.ShowPopupAsync(validationPopUp);
+            await Application.Current.MainPage.ShowPopupAsync(validationPopUp);
         }
 
     }

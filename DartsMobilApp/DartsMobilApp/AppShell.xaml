@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:DartsMobilApp"
     xmlns:pages="clr-namespace:DartsMobilApp.Pages"
     Shell.FlyoutBehavior="Flyout"
+    FlyoutBackgroundColor="{x:StaticResource Primary}"
     Title="DartsMobilApp">
     <!--<ShellContent
 Title="Login"
@@ -37,7 +38,7 @@ Route="FriendlySetupPage" />
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid HeightRequest="150" BackgroundColor="Black">
-                <Label Text="Darts Verseny Levezető" FontSize="25" Margin="5" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="Sons of the Fallen's" FontSize="25" Margin="5" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center" VerticalOptions="Center"/>
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
@@ -46,25 +47,29 @@ Route="FriendlySetupPage" />
             <ShellContent Title="Login" ContentTemplate="{DataTemplate pages:LoginPage}" Route="LoginPage" />
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Fő oldal">
+    <FlyoutItem Title="Fő oldal"
+                FlyoutIcon="{x:StaticResource HomeIcon}">
         <Tab>
             <ShellContent Title="Fő oldal" ContentTemplate="{DataTemplate pages:HomePage}" Route="HomePage"/>
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="Meccs beállítás">
+    <FlyoutItem Title="Meccs beállítás"
+                FlyoutIcon="{x:StaticResource SettingIcon}">
         <Tab>
             <ShellContent Title="Meccs beállítás" ContentTemplate="{DataTemplate pages:FriendlySetupPage}" Route="FriendlySetupPage"/>
         </Tab>
     </FlyoutItem>
-    
-    <FlyoutItem Title="Statisztika">
+
+    <FlyoutItem Title="Statisztika" 
+                FlyoutIcon="{x:StaticResource StatisticIcon}">
         <Tab>
             <ShellContent Title="Statisztika" ContentTemplate="{DataTemplate pages:StatisticPage}" Route="StatisticPage"/>
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="Versenyek">
+    <FlyoutItem Title="Versenyek"
+                FlyoutIcon="{x:StaticResource CompetitionIcon}">
         <Tab>
             <ShellContent Title="Versenyek" ContentTemplate="{DataTemplate pages:CompetitionsPage}" Route="CompetitionsPage"/>
         </Tab>
@@ -74,7 +79,8 @@ Route="FriendlySetupPage" />
             <ShellContent Title="Meccs levezető" ContentTemplate="{DataTemplate pages:CounterPage}" Route="CounterPage" FlyoutItemIsVisible="False"/>
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Barátságos meccsek">
+    <FlyoutItem Title="Barátságos meccsek"
+                FlyoutIcon="{x:StaticResource FriendlyIcon}">
         <Tab>
             <ShellContent Title="Barátságos meccek" ContentTemplate="{DataTemplate pages:FriendlyMatchPage}" Route="FriendlyMatchPage"/>
         </Tab>
@@ -82,7 +88,8 @@ Route="FriendlySetupPage" />
 
     <MenuItem Text="Kijelentkezés"
               Clicked="OnLogoutClicked"
-              />
+              IconImageSource="{x:StaticResource LogoutIcon}"
+/>
 
 
 </Shell>

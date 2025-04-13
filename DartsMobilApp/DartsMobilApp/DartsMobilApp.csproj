@@ -40,12 +40,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-		<MauiIcon Include="Resources\AppIcon\fm_icon.png" />
-		<MauiIcon Include="Resources\AppIcon\tr_icon.png" />
+		<MauiIcon Include="Resources\AppIcon\darts_icon.jpg" Color="#000000" />
+		<MauiSplashScreen Include="Resources\Splash\darts_main.png" Color="#000000" BaseSize="128,128" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -59,8 +57,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\darts_icon.jpg" />
 	  <None Remove="Resources\AppIcon\fm_icon.png" />
 	  <None Remove="Resources\AppIcon\tr_icon.png" />
+	  <None Remove="Resources\Splash\darts_main.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -103,6 +103,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\LoginPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LogOutPopUp.xaml">

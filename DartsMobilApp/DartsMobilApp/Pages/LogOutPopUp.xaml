@@ -8,9 +8,9 @@
     <Frame BackgroundColor="Black" CornerRadius="25">
         <VerticalStackLayout>
             <Label Text="Biztos ki akarsz jelentkezni?" TextColor="{x:StaticResource Primary}" FontSize="Body" FontAttributes="Bold"/>
-            <HorizontalStackLayout>
-                <Button Text="Igen" BackgroundColor="{x:StaticResource Secondary}" WidthRequest="150" HeightRequest="38"/>
-                <Button Text="Nem" BackgroundColor="Red" WidthRequest="150" HeightRequest="38"/>
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Igen" BackgroundColor="{x:StaticResource Secondary}" WidthRequest="90" HeightRequest="38" Clicked="LoggingOut"/>
+                <Button Text="Nem" BackgroundColor="Red" WidthRequest="90" HeightRequest="38" Clicked="NotLoggedOut"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Frame>

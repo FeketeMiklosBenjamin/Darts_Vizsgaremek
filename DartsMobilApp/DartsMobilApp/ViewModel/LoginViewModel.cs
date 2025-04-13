@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
@@ -72,7 +73,8 @@ namespace DartsMobilApp.ViewModel
 
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
-                await Application.Current.MainPage.DisplayAlert("Sikeresen Bejelntkezett" , $"{loginResponse.message}", "OK");
+                LoginPopUp loginPopUp = new LoginPopUp();
+                await Application.Current.MainPage.ShowPopupAsync(loginPopUp);
 
                 if (timer == null)
                 {

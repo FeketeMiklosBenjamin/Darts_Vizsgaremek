@@ -33,7 +33,7 @@ namespace DartsMobilApp.ViewModel
 
         [RelayCommand]
 
-        private void CheckValidPassword(string password)
+        private  void CheckValidPassword(string password)
         {
             ValidatePassword ValidatePassword = new ValidatePassword()
             {
@@ -45,8 +45,8 @@ namespace DartsMobilApp.ViewModel
             {
                 WaitingForPlayersPopUp waitingPopUp = new WaitingForPlayersPopUp(_signalRService, MatchId);
                 _signalRService.JoinTournamentMatch(MatchId, SecStoreItems.UserId);
-                Shell.Current.ShowPopup(waitingPopUp);
                 
+                 Application.Current.MainPage.ShowPopup(waitingPopUp);
             }
         }
     }

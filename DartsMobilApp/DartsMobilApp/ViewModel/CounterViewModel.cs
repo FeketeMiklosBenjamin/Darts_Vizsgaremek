@@ -118,12 +118,14 @@ namespace DartsMobilApp.ViewModel
                 if (ImTheFirst)
                 {
                     SetSecondPlayersPoints(OpponentPoint.ToString());
+                    TextSpeach(OpponentPoint.ToString());
                     CheckMatchWinner();
 
                 }
                 else
                 {
                     SetFirstPlayersPoints(OpponentPoint.ToString());
+                    TextSpeach(OpponentPoint.ToString());
                     CheckMatchWinner();
 
                 }

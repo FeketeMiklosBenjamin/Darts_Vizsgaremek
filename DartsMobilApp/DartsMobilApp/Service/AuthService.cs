@@ -23,10 +23,6 @@ namespace DartsMobilApp.Service
 
             var jsonContent = JsonSerializer.Serialize(loginModel);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            
-
-
-
             try
             {
                 var response = DartsAPI.PostLogin(content);

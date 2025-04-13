@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui" 
              x:Class="DartsMobilApp.Pages.CounterPage"
-             Title="CounterPage">
+             Shell.NavBarIsVisible="False"
+             Title="Meccs levezető">
     <ContentPage.Behaviors>
         <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
         <tool:StatusBarBehavior StatusBarColor="Black"/>

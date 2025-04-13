@@ -2,27 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
-             Shell.NavBarIsVisible="True"   
+             Shell.NavBarIsVisible="False"   
              x:Class="DartsMobilApp.Pages.LoginPage"
              >
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
+            <GradientStop Color="Black" Offset="0.0" />
+            <GradientStop Color="#2D2525" Offset="0.6" />
+            <GradientStop Color="#B8860B" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ContentPage.Behaviors>
         <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
         <tool:StatusBarBehavior StatusBarColor="Black"/>
     </ContentPage.Behaviors>
     <VerticalStackLayout>
-        <Grid RowDefinitions="*,*,*,*,*">
-            <Label Text="Bejelentkezés" FontSize="Large" FontAttributes="Bold" Grid.Row="0" Margin="10,10,10,10"/>
-            <Border Grid.Row="1" HeightRequest="40" WidthRequest="150" Margin="20,50,20,20">
-                <Entry x:Name="email_ENT" WidthRequest="150" HeightRequest="40" Text="{Binding EmailAddress}" Placeholder="Email cím: pelda1234@gmail.com" PlaceholderColor="White"/>
+        <Grid RowDefinitions="*,*,*,*,*,*" Margin="0, 200">
+            <Label Text="Email cím:" FontAttributes="Italic" FontSize="20" Grid.Row="0" Margin="80, 40, 0, 0"/>
+            <Border Grid.Row="1" HeightRequest="40" WidthRequest="250" Margin="20,2,20,20">
+                <Entry x:Name="email_ENT" WidthRequest="250" HeightRequest="40" Text="{Binding EmailAddress}"/>
             </Border>
-            <Border Grid.Row="2" HeightRequest="40" WidthRequest="150" Margin="20,10,20,30">
-                <Entry x:Name="password_ENT" WidthRequest="150" HeightRequest="40" IsPassword="True" Text="{Binding Password}" Placeholder="Jelszó: Valami12!" PlaceholderColor="White"/>
+            <Label Text="Jelszó:" FontAttributes="Italic" FontSize="20" Grid.Row="2" Margin="80, 0, 0, 0"/>
+            <Border Grid.Row="3" HeightRequest="40" WidthRequest="250" Margin="20,2,20,5">
+                <Entry x:Name="password_ENT" WidthRequest="250" HeightRequest="40" IsPassword="True" Text="{Binding Password}"/>
             </Border>
-            <HorizontalStackLayout Grid.Row="3" HorizontalOptions="Center">
+            <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Margin="0, 0, 0, 3">
                 <CheckBox x:Name="AutomaticLgn_Cbx" Color="White" IsChecked="{Binding SaveChecked}"/>
                 <Label Text="Automatikus bejelentkezés" VerticalTextAlignment="Center"/>
             </HorizontalStackLayout>
-            <Button Grid.Row="4" BackgroundColor="{x:StaticResource BlueButtons}"  Text="Bejelentkezés" WidthRequest="150" HeightRequest="40" Command="{Binding GoToHomePageCommand}"/>
+            <Button Grid.Row="5" Margin="10" BackgroundColor="{x:StaticResource Primary}"  Text="Bejelentkezés" WidthRequest="150" HeightRequest="40" Command="{Binding GoToHomePageCommand}"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

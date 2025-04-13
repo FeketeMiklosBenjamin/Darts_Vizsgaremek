@@ -4,6 +4,4 @@ File=Resources\Images\cancel_round_icon.png;Link=;BaseSize=;Resize=;TintColor=;C
 File=Resources\Images\darts_table.jpg;Link=;BaseSize=;Resize=;TintColor=;Color=;IsAppIcon=;ForegroundScale=;ForegroundFile=
 File=Resources\Images\dotnet_bot.png;Link=;BaseSize=300,185;Resize=True;TintColor=;Color=;IsAppIcon=;ForegroundScale=;ForegroundFile=
 File=Resources\Images\sunset_darts.jpg;Link=;BaseSize=;Resize=;TintColor=;Color=;IsAppIcon=;ForegroundScale=;ForegroundFile=
-File=Resources\AppIcon\appicon.svg;Link=;BaseSize=;Resize=;TintColor=;Color=#512BD4;IsAppIcon=True;ForegroundScale=;ForegroundFile=Resources\AppIcon\appiconfg.svg
-File=Resources\AppIcon\fm_icon.png;Link=;BaseSize=;Resize=;TintColor=;Color=;IsAppIcon=True;ForegroundScale=;ForegroundFile=
-File=Resources\AppIcon\tr_icon.png;Link=;BaseSize=;Resize=;TintColor=;Color=;IsAppIcon=True;ForegroundScale=;ForegroundFile=
+File=Resources\AppIcon\darts_icon.jpg;Link=;BaseSize=;Resize=;TintColor=;Color=#000000;IsAppIcon=True;ForegroundScale=;ForegroundFile=
