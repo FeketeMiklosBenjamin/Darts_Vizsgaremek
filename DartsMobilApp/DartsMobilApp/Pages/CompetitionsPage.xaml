@@ -30,7 +30,7 @@
                                     <Label Text="{Binding startDate, StringFormat='{0:yyyy-MM-dd HH:mm}'}"/>
                                     <Label Text="{Binding opponentName, StringFormat='Ellenfél: {0}'}" />
                                 </VerticalStackLayout>
-                                <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompetitionsViewModel}}, Path=StartMatchCommand}" />
+                                <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompetitionsViewModel}}, Path=StartMatchCommand}"  CommandParameter="{Binding id}"/>
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>

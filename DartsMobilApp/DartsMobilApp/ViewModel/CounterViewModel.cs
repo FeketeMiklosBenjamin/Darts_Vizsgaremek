@@ -37,7 +37,22 @@ namespace DartsMobilApp.ViewModel
 
         [ObservableProperty]
         public int needToWinSets;
-        
+
+
+        [ObservableProperty]
+        private int firstPlayerSetsWon;
+
+        [ObservableProperty]
+        private int secondPlayerSetsWon;
+
+        public int allPlayedSet
+        {
+            get
+            {
+                return firstPlayerSetsWon + secondPlayerSetsWon;
+            }
+        }
+
         [ObservableProperty]
         public int needToWinLegs;
 
@@ -500,19 +515,52 @@ namespace DartsMobilApp.ViewModel
 
         private void CheckMatchWinner()
         {
-            if (FirstPlayerWonLeg == needToWinLegs)
+            if (NeedToWinSets != 1)
             {
-                TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerWonLeg}-{SecondPlayerWonLeg} arányban!");
-                SetDefaultValues();
-                Thread.Sleep(5000);
-                Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                if (FirstPlayerWonLeg == needToWinLegs)
+                {
+                    FirstPlayerSetsWon++;
+                    TextSpeach($"{StartingPlayerName} nyerte a  {allPlayedSet}. szettet!");
+                    SetDefaultValues();
+                    FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+                }
+                else if (SecondPlayerWonLeg == needToWinLegs)
+                {
+                    SecondPlayerSetsWon++;
+                    TextSpeach($"{SecondPlayerName} nyerte a {allPlayedSet}. szettet!");
+                    SetDefaultValues();
+                    FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
+                }
+                if (FirstPlayerSetsWon == needToWinSets)
+                {
+                    TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerSetsWon}-{SecondPlayerSetsWon} arányban!");
+                    SetDefaultValues();
+                    Thread.Sleep(15000);
+                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                }
+                else if(SecondPlayerSetsWon == needToWinSets){
+                    TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerSetsWon}-{FirstPlayerSetsWon} arányban!");
+                    SetDefaultValues();
+                    Thread.Sleep(15000);
+                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                }
             }
-            else if(SecondPlayerWonLeg == needToWinLegs)
+            else
             {
-                TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerWonLeg}-{FirstPlayerWonLeg} arányban!");
-                SetDefaultValues();
-                Thread.Sleep(5000);
-                Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                if (FirstPlayerWonLeg == needToWinLegs)
+                {
+                    TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerWonLeg}-{SecondPlayerWonLeg} arányban!");
+                    SetDefaultValues();
+                    Thread.Sleep(15000);
+                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                }
+                else if (SecondPlayerWonLeg == needToWinLegs)
+                {
+                    TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerWonLeg}-{FirstPlayerWonLeg} arányban!");
+                    SetDefaultValues();
+                    Thread.Sleep(15000);
+                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                }
             }
 
         }

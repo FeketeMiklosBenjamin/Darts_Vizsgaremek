@@ -111,7 +111,6 @@ public partial class FriendlySetupViewModel : ObservableObject
     [RelayCommand]
     private async Task Navigate()
     {
-        // Konfiguráció mentése
         if (BtnSetColor == selectedColor)
         {
             newFriendlyMatch.setsCount = FirstToBtnColor == selectedColor
@@ -123,7 +122,7 @@ public partial class FriendlySetupViewModel : ObservableObject
         {
             newFriendlyMatch.legsCount = FirstToBtnColor == selectedColor
                 ? NumberOfSetsOrLegs
-                : (int)Math.Floor(NumberOfSetsOrLegs / 2.0);
+                : (int)Math.Floor(NumberOfSetsOrLegs / 2.0) + 1;
             newFriendlyMatch.setsCount = null;
         }
 
@@ -134,7 +133,6 @@ public partial class FriendlySetupViewModel : ObservableObject
         newFriendlyMatch.levelLocked = IsChecked;
         newFriendlyMatch.joinPassword = Visible ? Pwd : null;
 
-        // API hívás
         var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
         var responseJson = DartsAPI.PostNewFriendlyMatch(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
         var response = JsonSerializer.Deserialize<NewFriendlyMatchResponse>(responseJson);

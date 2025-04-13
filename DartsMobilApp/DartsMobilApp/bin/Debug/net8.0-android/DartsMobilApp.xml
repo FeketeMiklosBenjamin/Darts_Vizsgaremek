@@ -32,7 +32,7 @@
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatchCommand"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatchCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatch"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CompetitionsViewModel.StartMatch(System.String)"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.CounterGrid">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.counterGrid"/>
@@ -51,6 +51,12 @@
         </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.NeedToWinSets">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.needToWinSets"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.FirstPlayerSetsWon">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.firstPlayerSetsWon"/>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.SecondPlayerSetsWon">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.secondPlayerSetsWon"/>
         </member>
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.NeedToWinLegs">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.CounterViewModel.needToWinLegs"/>
@@ -183,6 +189,15 @@
         </member>
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePageCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePage"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.Password">
+            <inheritdoc cref="F:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.password"/>
+        </member>
+        <member name="F:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.checkValidPasswordCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPassword(System.String)"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.StatisticViewModel.PlayerStatistic">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.StatisticViewModel.playerStatistic"/>

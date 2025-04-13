@@ -45,5 +45,18 @@ public partial class WaitingForPlayersPopUp : Popup
 
             });
         };
+        signalR.OnTournamentMatchStarted += async (startingSetup) =>
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                if (popup is PasswordValidationPopUp)
+                {
+                    popup.Close();
+                }
+                CounterViewModel.settings = startingSetup;
+                CounterViewModel.MatchId = matchId;
+                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            });
+        };
     }
 }

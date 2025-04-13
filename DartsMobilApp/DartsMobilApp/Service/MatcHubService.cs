@@ -15,7 +15,7 @@ namespace DartsMobilApp.Services
         public event Action<string, string, string>? OnFriendlyPlayerJoined;
         public event Action<string>? OnFriendlyPlayerRemoved;
         public event Action<string>? OnFriendlyPlayerLeft;
-        public event Action? OnTournamentMatchStarted;
+        public event Action<StartFriendlyMatchModel>? OnTournamentMatchStarted;
         public event Action<int> OnGetPoints;
 
         public async Task ConnectAsync(string jwtToken)
@@ -68,9 +68,9 @@ namespace DartsMobilApp.Services
                 OnFriendlyPlayerLeft?.Invoke(leaverId);
             });
 
-            _hubConnection.On("TournamentMatchStarted", () =>
+            _hubConnection.On<StartFriendlyMatchModel>("TournamentMatchStarted", (startingSetup) =>
             {
-                OnTournamentMatchStarted?.Invoke();
+                OnTournamentMatchStarted?.Invoke(startingSetup);
             });
         }
 

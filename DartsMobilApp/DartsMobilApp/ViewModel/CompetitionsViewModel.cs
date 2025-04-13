@@ -6,6 +6,7 @@ using DartsMobilApp.API;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
+using DartsMobilApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ namespace DartsMobilApp.ViewModel
     public partial class CompetitionsViewModel : ObservableObject
     {
 
-
+        private readonly SignalRService _signalRService;
         [ObservableProperty]
         public List<MatchModel>? tournaments;
 
@@ -29,6 +30,11 @@ namespace DartsMobilApp.ViewModel
         public List<MatchModel>? sortedTournaments;
 
         public List<MatchModel> TakedTournaments { get; set; } = new List<MatchModel>();
+
+      public CompetitionsViewModel(SignalRService service)
+        {
+                _signalRService = service;
+        }
 
 
         [RelayCommand]
@@ -128,13 +134,12 @@ namespace DartsMobilApp.ViewModel
         }
 
         [RelayCommand]
-        private async Task StartMatch()
+        private async Task StartMatch(string matchId)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
-            });
-            
+            PasswordValidationPopUpViewModel vm = new PasswordValidationPopUpViewModel(_signalRService);
+            PasswordValidationPopUpViewModel.MatchId = matchId;
+            PasswordValidationPopUp validationPopUp = new PasswordValidationPopUp(vm);
+            await Shell.Current.ShowPopupAsync(validationPopUp);
         }
 
     }

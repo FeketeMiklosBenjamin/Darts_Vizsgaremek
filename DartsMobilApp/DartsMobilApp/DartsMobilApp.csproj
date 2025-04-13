@@ -108,6 +108,9 @@
 	  <MauiXaml Update="Pages\LogOutPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PasswordValidationPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\StatisticPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

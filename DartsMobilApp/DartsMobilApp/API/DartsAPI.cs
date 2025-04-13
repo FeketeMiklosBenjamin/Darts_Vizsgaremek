@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +103,20 @@ namespace DartsMobilApp.API
             try
             {
                 return HTTPCommunication<LogoutResponse>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/logout", content).Result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static ValidationResponse ValidatePassword(StringContent content, string matchId)
+        {
+            try
+            {
+                var response = HTTPCommunication<ValidationResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/matches/tournament/join/{matchId}", content).Result;
+                return response;
             }
             catch (Exception)
             {
