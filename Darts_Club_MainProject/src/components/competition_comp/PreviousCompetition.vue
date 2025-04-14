@@ -2,38 +2,17 @@
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref } from 'vue';
 import type CardModel from '@/models/CardModel';
-import router from '@/router';
 import PreviousCard from '../bracket_comp/PreviousCard.vue';
 
 const { user } = storeToRefs(useUserStore());
-const { getAllPreviousCompetition, getOnlyOnePreviousComp} = useAnnouncedTmStore();
-const { PreviousComps, alertCard, matchId, OnePrevious} = storeToRefs(useAnnouncedTmStore());
+const { getAllPreviousCompetition} = useAnnouncedTmStore();
+const { PreviousComps, alertCard} = storeToRefs(useAnnouncedTmStore());
 
 const PreviousCompetitons = ref<CardModel[]>([]);
 
-const props = defineProps<{
-    IsOneCard: boolean
-}>();
-
-let card: CardModel;
-
 onMounted(async () => {
-    if (props.IsOneCard) {
-        console.log('Rossz');
-        await getOnlyOnePreviousComp(user.value.accessToken, matchId.value);
-        card = {
-            id: OnePrevious.value.id,
-            level: OnePrevious.value.level,
-            backroundImageUrl: OnePrevious.value.backroundImageUrl,
-            name: OnePrevious.value.name,
-            tournamentStartDate: OnePrevious.value.tournamentStartDate,
-            tournamentEndDate: OnePrevious.value.tournamentEndDate,
-        }
-    } 
-    else {
-        console.log('Jó');
         await getAllPreviousCompetition(user.value.accessToken);
         let alertMessageHelp = "";
         PreviousCompetitons.value = PreviousComps.value;
@@ -42,18 +21,14 @@ onMounted(async () => {
         }
         alertCard.value.message = alertMessageHelp;
         alertCard.value.show = (alertCard.value.message != '');
-    }
 })
 </script>
 
 
 <template>
     <div class="col-12 mx-3 mx-sm-0 col-sm-10 offset-0 offset-sm-1 offset-md-0 col-md-6 col-xl-4 p-2"
-        v-for="comp in PreviousCompetitons" :key="comp.id" v-if="IsOneCard">
-        <PreviousCard :competition="comp"/>
-    </div>
-    <div class="col-12 mx-3 mx-sm-0 col-sm-10 offset-0 offset-sm-1 offset-md-0 col-md-6 col-xl-4 p-2" v-else>
-        <PreviousCard :competition="card"/>
+        v-for="comp in PreviousCompetitons" :key="comp.id">
+        <PreviousCard :competition="comp" :is-one-card="false"/>
     </div>
 </template>
 

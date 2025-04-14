@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Bracket from '@/components/bracket_comp/Bracket.vue';
+import Bracket from '@/components/bracket_comp/BracketPage.vue';
 import Background from '@/components/standard_comp/Background.vue';
 import Navbar from '@/components/standard_comp/Navbar.vue';
 

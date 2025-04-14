@@ -4,14 +4,13 @@ import router from '@/router';
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
 import { storeToRefs } from 'pinia';
 
-const {matchId} = storeToRefs(useAnnouncedTmStore());
-
 const props = defineProps<{
-    competition: CardModel
+    competition: CardModel,
+    isOneCard: boolean
 }>();
 
 const NavigateTo = (competition_id: string) => {
-    matchId.value = competition_id;
+    sessionStorage.setItem("matchId", competition_id);
     router.push('/bracket');
 }
 
@@ -35,37 +34,37 @@ const borderColor = (level: string) => {
 
 <template>
     <div class="d-flex glass-card width-form-card justify-content-center">
-            <div class="card bg-black text-light" :class="borderColor(props.competition.level)" style="max-width: 45vh;">
-                <img :src="props.competition.backroundImageUrl" class="card-img-middle" alt="...">
+        <div class="card bg-black text-light" :class="borderColor(props.competition.level)" style="max-width: 45vh;">
+            <img :src="props.competition.backroundImageUrl" class="card-img-middle" alt="...">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <h5 class="card-title text-center fst-italic">{{ props.competition.name }}</h5>
+                </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <h5 class="card-title text-center fst-italic">{{ props.competition.name }}</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-title text-center text-decoration-underline mt-2">Verseny időtartama:
-                        </p>
-                        <p class="text-center m-0 small">
-                            {{ new Date(props.competition.tournamentStartDate).toLocaleDateString(undefined, {
+                    <p class="card-title text-center text-decoration-underline mt-2">Verseny időtartama:
+                    </p>
+                    <p class="text-center m-0 small">
+                        {{ new Date(props.competition.tournamentStartDate).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) }}<br>-<br>{{ new
+                            Date((props.competition.tournamentEndDate)).toLocaleDateString(undefined, {
                                 year: 'numeric',
                                 month: '2-digit',
                                 day: '2-digit',
                                 hour: '2-digit',
                                 minute: '2-digit'
-                            }) }}<br>-<br>{{ new
-                                Date((props.competition.tournamentEndDate)).toLocaleDateString(undefined, {
-                                    year: 'numeric',
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) }}
-                        </p>
-                    </div>
-                    <button type="button" class="btn btn-warning justify-content-center d-flex w-100"
-                        @click="NavigateTo(props.competition.id)">Eredmények megtekintése</button>
+                            }) }}
+                    </p>
                 </div>
+                <button v-if="!isOneCard" type="button" class="btn btn-warning justify-content-center d-flex w-100"
+                    @click="NavigateTo(props.competition.id)">Eredmények megtekintése</button>
             </div>
         </div>
+    </div>
 </template>
 
 <style scoped>

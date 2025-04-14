@@ -1,5 +1,5 @@
 import type RegisterCompetitionModel from "@/models/RegisterCompetitionModel";
-import { AnnouncedTm_Endpoint, Tournaments_Endpoint } from "./BackendService";
+import { AnnouncedTm_Endpoint, Matches_Endpoint, Tournaments_Endpoint } from "./BackendService";
 
 export default {
     createCompetition(accesstoken: string, data: RegisterCompetitionModel) {
@@ -18,6 +18,20 @@ export default {
     },
     getPreviousComp(accesstoken: string, matchHeaderId: string) {
         return Tournaments_Endpoint.get(`/${matchHeaderId}`, {
+            headers: {
+                Authorization: `Bearer ${accesstoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return Promise.reject(err);
+            })
+    },
+    getMatchData(accesstoken: string, matchId: string) {
+        return Matches_Endpoint.get(`/${matchId}`, {
             headers: {
                 Authorization: `Bearer ${accesstoken}`,
                 'Content-Type': 'application/json'

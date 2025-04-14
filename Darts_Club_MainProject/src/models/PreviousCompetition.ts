@@ -10,5 +10,5 @@ export default interface PreviousCompetitions {
     backroundImageUrl: string,
     tournamentStartDate: string,
     tournamentEndDate: string,
-    matches: MatchModel 
+    matches: MatchModel[]
 }

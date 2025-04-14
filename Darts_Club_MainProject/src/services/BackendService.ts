@@ -35,4 +35,11 @@ const RefreshTk_Endpoint = axios.create({
     }
 });
 
-export { User_Endpoint, Messages_Endpoint, RefreshTk_Endpoint, AnnouncedTm_Endpoint, Tournaments_Endpoint};
+const Matches_Endpoint = axios.create({
+    baseURL: import.meta.env.VITE_MATCHES_BACKEND_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+
+export { User_Endpoint, Messages_Endpoint, RefreshTk_Endpoint, AnnouncedTm_Endpoint, Tournaments_Endpoint, Matches_Endpoint};

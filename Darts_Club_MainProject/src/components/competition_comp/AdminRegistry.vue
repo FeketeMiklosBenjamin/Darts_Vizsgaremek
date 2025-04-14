@@ -40,7 +40,7 @@ const processing = ref<boolean>(false);
 const competitionForm = ref<RegisterCompetitionModel>({
     headerId: '',
     name: '',
-    setsCount: 0,
+    setsCount: 1,
     legsCount: 3,
     startingPoint: 501,
     password: '',
@@ -92,6 +92,12 @@ watch(() => competitionForm.value.level, (level: string) => {
         case "Bajnok":
             borderColor = "purple-border";
             break;
+    }
+})
+
+watch(() => competitionForm.value.setsCount, () => {
+    if (competitionForm.value.setsCount > 1) {
+        competitionForm.value.legsCount = 3;
     }
 })
 
@@ -234,14 +240,14 @@ async function Send() {
                         <div class="mb-3 text-white fst-italic">
                             <label for="SetCount" class="form-label">Setek száma: {{ competitionForm.setsCount
                                 }}</label>
-                            <input type="range" class="form-range custom-range" min="0" max="12" id="SetCount"
-                                v-model="competitionForm.setsCount" />
+                            <input type="range" class="form-range custom-range" min="1" max="12" id="SetCount"
+                                v-model="competitionForm.setsCount"/>
                         </div>
                         <div class="mb-3 text-white fst-italic">
                             <label for="LegCount" class="form-label">Legek száma: {{ competitionForm.legsCount
                                 }}</label>
-                            <input type="range" class="form-range custom-range" min="3" max="20" id="LegCount"
-                                v-model="competitionForm.legsCount" />
+                            <input type="range" class="form-range custom-range"  min="3" max="20" id="LegCount"
+                                v-model="competitionForm.legsCount" :disabled="competitionForm.setsCount > 1 ? true : false"/>
                         </div>
                         <div class="row justify-content-center">
                             <label class="text-white text-center fs-5 fst-italic mb-2">Kezdőpontok száma:</label>

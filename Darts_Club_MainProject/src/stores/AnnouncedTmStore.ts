@@ -5,7 +5,7 @@ import type MatchModel from "@/models/MatchModel";
 import AnnouncedTmService from "@/services/AnnouncedTmService";
 import { defineStore } from "pinia";
 import type CompetitionModel from "@/models/CompetitionModel";
-import type PlayerModel from "@/models/PlayerModel";
+import type MatchResultModel from "@/models/MatchResultModel";
 
 
 export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
@@ -18,11 +18,11 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
             message: '',
             show: false,
         },
-        matchId: '',
         matchHeader: <string>{},
         Competitions: [] as CompetitionModel[],
         PreviousComps: [] as CardModel[],
-        OnePrevious: <PreviousCompetitions>{}
+        OnePrevious: <PreviousCompetitions>{},
+        MatchStats: <MatchResultModel | null>{}
     }),
     actions: {
         registerCompetition(accesstoken: string, data: RegisterCompetitionModel) {
@@ -45,7 +45,7 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                     this.OnePrevious = {
                         id: res.data.id,
                         name: res.data.name,
-                        level: res.data.name,
+                        level: res.data.level,
                         setsCount: res.data.setsCount,
                         legsCount: res.data.legsCount,
                         startingPoint: res.data.startingPoint,
@@ -67,13 +67,26 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                         matches: res.data.matches.map((match: MatchModel) => ({
                             id: match.id,
                             status: match.status,
-                            startDate: match.startDate,
+                            startDate: new Date(match.startDate).toLocaleString(undefined, {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }),
                             remainingPlayer: match.remainingPlayer,
                             rowNumber: match.rowNumber,
-                            player: match.player.map((person: PlayerModel) => ({
-                                id: person.id,
-                                username: person.username
-                            }))
+                            playerOne: {
+                                id: match.playerOne.id,
+                                username: match.playerOne.username
+                            },
+                            playerTwo: {
+                                id: match.playerTwo.id,
+                                username: match.playerTwo.username
+                            },
+                            won: match.won,
+                            playerOneResult: match.playerOneResult,
+                            playerTwoResult: match.playerTwoResult
                         }))
                     }
                 })
@@ -136,6 +149,73 @@ export const useAnnouncedTmStore = defineStore('AnnouncedTmStore', {
                     return Promise.reject(err);
                 })
         },
+
+        getMatchResult(accesstoken: string, matchId: string) {
+            return AnnouncedTmService.getMatchData(accesstoken, matchId)
+                .then((res) => {
+                    const baseStats = {
+                        id: res.data.id,
+                        status: res.data.status,
+                        startDate: new Date(res.data.startDate).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }),
+                        remainingPlayer: res.data.remainingPlayer,
+                        rowNumber: res.data.rowNumber,
+                        playerOne: {
+                            id: res.data.playerOne.id,
+                            username: res.data.playerOne.username,
+                            profilePicture: res.data.playerOne.profilePicture
+                        },
+                        playerTwo: {
+                            id: res.data.playerTwo.id,
+                            username: res.data.playerTwo.username,
+                            profilePicture: res.data.playerTwo.profilePicture
+                        }
+                    };
+        
+                    if (res.data.status === "Finished") {
+                        this.MatchStats = {
+                            ...baseStats,
+                            playerOneStat: {
+                                appeared: res.data.playerOneStat.appeared,
+                                won: res.data.playerOneStat.won,
+                                setsWon: res.data.playerOneStat.setsWon,
+                                legsWon: res.data.playerOneStat.legsWon,
+                                averages: res.data.playerOneStat.averages,
+                                max180s: res.data.playerOneStat.max180s,
+                                checkoutPercentage: res.data.playerOneStat.checkoutPercentage,
+                                highestCheckout: res.data.playerOneStat.highestCheckout,
+                                nineDarter: res.data.playerOneStat.nineDarter
+                            },
+                            playerTwoStat: {
+                                appeared: res.data.playerTwoStat.appeared,
+                                won: res.data.playerTwoStat.won,
+                                setsWon: res.data.playerTwoStat.setsWon,
+                                legsWon: res.data.playerTwoStat.legsWon,
+                                averages: res.data.playerTwoStat.averages,
+                                max180s: res.data.playerTwoStat.max180s,
+                                checkoutPercentage: res.data.playerTwoStat.checkoutPercentage,
+                                highestCheckout: res.data.playerTwoStat.highestCheckout,
+                                nineDarter: res.data.playerTwoStat.nineDarter
+                            }
+                        };
+                    } else {
+                        this.MatchStats = {
+                            ...baseStats,
+                            playerOneStat: null,
+                            playerTwoStat: null
+                        };
+                    }
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                });
+        },
+
         UserApplication(accesstoken: string, tournamentId: string) {
             return AnnouncedTmService.application(accesstoken, tournamentId)
                 .then(() => {

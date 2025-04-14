@@ -6,5 +6,9 @@ export default interface MatchModel {
     startDate: string,
     remainingPlayer: number,
     rowNumber: number,
-    player: PlayerModel[]
+    playerOne: PlayerModel,
+    playerTwo: PlayerModel,
+    won: boolean | null,
+    playerOneResult: number,
+    playerTwoResult: number
 }

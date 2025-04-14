@@ -66,7 +66,7 @@ const changePage = () => {
         </div>
         <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div"
             :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')" v-else>
-            <PreviousCompetition :-is-one-card="true"/>
+            <PreviousCompetition :-is-one-card="false"/>
             <div v-if="alertCard.show"
                 class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
                 style="height: 100px;">
