@@ -97,6 +97,12 @@
         <member name="P:DartsMobilApp.ViewModel.CounterViewModel.SendPointsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.SendPoints(System.String)"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.CounterViewModel.removeADigitCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.CounterViewModel.RemoveADigitCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.CounterViewModel.RemoveADigitCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.CounterViewModel.RemoveADigit"/>.</summary>
+        </member>
         <member name="P:DartsMobilApp.ViewModel.FriendlyMatchViewModel.JoinedPlayers">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.FriendlyMatchViewModel.joinedPlayers"/>
         </member>
@@ -184,20 +190,17 @@
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.AppearingCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.Appearing"/>.</summary>
         </member>
+        <member name="F:DartsMobilApp.ViewModel.LoginViewModel.disappearingCommand">
+            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.DisappearingCommand"/>.</summary>
+        </member>
+        <member name="P:DartsMobilApp.ViewModel.LoginViewModel.DisappearingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.Disappearing"/>.</summary>
+        </member>
         <member name="F:DartsMobilApp.ViewModel.LoginViewModel.goToHomePageCommand">
             <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePageCommand"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePageCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.LoginViewModel.GoToHomePage"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.Password">
-            <inheritdoc cref="F:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.password"/>
-        </member>
-        <member name="F:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.checkValidPasswordCommand">
-            <summary>The backing field for <see cref="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPasswordCommand"/>.</summary>
-        </member>
-        <member name="P:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPasswordCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:DartsMobilApp.ViewModel.PasswordValidationPopUpViewModel.CheckValidPassword(System.String)"/>.</summary>
         </member>
         <member name="P:DartsMobilApp.ViewModel.StatisticViewModel.PlayerStatistic">
             <inheritdoc cref="F:DartsMobilApp.ViewModel.StatisticViewModel.playerStatistic"/>

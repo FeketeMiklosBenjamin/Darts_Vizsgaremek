@@ -33,7 +33,8 @@ namespace DartsMobilApp.ViewModel
 
       public CompetitionsViewModel(SignalRService service)
         {
-                _signalRService = service;
+            _signalRService = service;
+
         }
 
 
@@ -136,10 +137,12 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartMatch(string matchId)
         {
-            PasswordValidationPopUpViewModel vm = new PasswordValidationPopUpViewModel(_signalRService);
-            PasswordValidationPopUpViewModel.MatchId = matchId;
-            PasswordValidationPopUp validationPopUp = new PasswordValidationPopUp(vm);
-            await Application.Current.MainPage.ShowPopupAsync(validationPopUp);
+
+            PasswordValidationPopUp pwdValidPopUp = new PasswordValidationPopUp(_signalRService, matchId);
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Application.Current.MainPage.ShowPopupAsync(pwdValidPopUp);
+            });
         }
 
     }

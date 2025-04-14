@@ -8,13 +8,14 @@ namespace DartsMobilApp.Pages;
 
 public partial class WaitingForPlayersPopUp : Popup
 {
-	private SignalRService signalR;
+	private readonly SignalRService signalR;
     private Popup popup= new Popup();
 	public WaitingForPlayersPopUp(SignalRService signalRService, string matchId)
 	{
 
 		InitializeComponent();
         signalR = signalRService;
+
         signalR.OnFriendlyPlayerJoined += async (playerId, username, dartsPoint) =>
         {
             var popupVm = new JoinRequestPopUpViewModel(signalR, matchId, playerId, username, dartsPoint);
@@ -30,7 +31,7 @@ public partial class WaitingForPlayersPopUp : Popup
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-            if (popup is JoinRequestPopUp)
+            if (popup is JoinRequestPopUp || popup is PasswordValidationPopUp)
             {
                 popup.Close();
             }
@@ -45,23 +46,17 @@ public partial class WaitingForPlayersPopUp : Popup
 
             });
         };
+
         signalR.OnTournamentMatchStarted += async (startingSetup) =>
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                if (popup is PasswordValidationPopUp) 
-                {
-                    popup.Close();
-                }
-                else
-                {
-                    this.Close();
-                }
-
+                this.Close();
                 CounterViewModel.settings = startingSetup;
                 CounterViewModel.MatchId = matchId;
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
             });
         };
+
     }
 }

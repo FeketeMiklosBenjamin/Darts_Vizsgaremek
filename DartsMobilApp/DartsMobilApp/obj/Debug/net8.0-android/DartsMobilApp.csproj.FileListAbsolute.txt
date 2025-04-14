@@ -10886,7 +10886,6 @@ C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\n
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\drawable-xhdpi\darts_main.png
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\drawable-xxhdpi\darts_main.png
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\drawable-xxxhdpi\darts_main.png
-C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\drawable\darts_main.png
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\drawable\maui_splash_image.xml
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\sp\values\maui_colors.xml
 C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\obj\Debug\net8.0-android\resizetizer\f\fa-solid-900.ttf

@@ -37,16 +37,26 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public bool saveChecked;
 
+        AutomaticLogInPopUp autoLogInP = new AutomaticLogInPopUp();
+
         [RelayCommand]
         private void Appearing()
         {
-            
+            Application.Current.MainPage.ShowPopup(autoLogInP);
         }
 
 
-        private static TimerCountDown timer; 
+        private static TimerCountDown timer;
 
-
+        [RelayCommand]
+        private void Disappearing()
+        {
+            if (autoLogInP != null)
+            {
+                autoLogInP.Close();
+            }
+            
+        }
 
 
 
@@ -96,7 +106,6 @@ namespace DartsMobilApp.ViewModel
 
 
         }
-
 
     }
 }

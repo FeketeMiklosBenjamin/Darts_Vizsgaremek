@@ -29,7 +29,7 @@
             </HorizontalStackLayout>
             <Border Grid.Row="4" Margin="25,10,25,10" BackgroundColor="White" StrokeThickness="3">
                 <HorizontalStackLayout>
-                    <Entry Text="{Binding Points}" Keyboard="Numeric" TextColor="Black"  WidthRequest="210" Placeholder="Kérem a dobott értéket!" FontSize="Medium" PlaceholderColor="Red" VerticalOptions="Center"/>
+                    <Label Text="{Binding Points}"  TextColor="Black"  WidthRequest="210"  FontSize="Medium"  VerticalOptions="Center"/>
                     <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}" Margin="10,5,10,5"  IsEnabled="{Binding EnabledButton}" CommandParameter="{Binding Points}" Command="{Binding SendPointsCommand}"/>
                 </HorizontalStackLayout>
             </Border>
@@ -45,7 +45,7 @@
                 <Button Text="9" WidthRequest="70" HeightRequest="70" Grid.Row="2" Grid.Column="2" CommandParameter="9" Command="{Binding AddPointsCommand}"/>
                 <Button WidthRequest="70" HeightRequest="70"  Grid.Row="3" ImageSource="Images/cancel_round_icon.png" Command="{Binding RemoveRoundCommand}"/>
                 <Button Text="0" WidthRequest="70" HeightRequest="70" Grid.Row="3" Grid.Column="1"  CommandParameter="0" Command="{Binding AddPointsCommand}"/>
-                <Button  WidthRequest="70" HeightRequest="70"  Grid.Row="3" Grid.Column="2" ImageSource="Images/backspace_icon.png" Command="{Binding RemoveADigit}"/>
+                <Button  WidthRequest="70" HeightRequest="70"  Grid.Row="3" Grid.Column="2" ImageSource="Images/backspace_icon.png" Command="{Binding RemoveADigitCommand}"/>
             </Grid>
         </Grid>
     </ScrollView>

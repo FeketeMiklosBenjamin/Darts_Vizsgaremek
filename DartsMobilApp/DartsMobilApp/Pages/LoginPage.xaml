@@ -15,6 +15,7 @@
     <ContentPage.Behaviors>
         <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
         <tool:StatusBarBehavior StatusBarColor="Black"/>
+        <tool:EventToCommandBehavior EventName="Disappearing" Command="{Binding DisappearingCommand}" />
     </ContentPage.Behaviors>
     <VerticalStackLayout>
         <Grid RowDefinitions="*,*,*,*,*,*" Margin="0, 200">

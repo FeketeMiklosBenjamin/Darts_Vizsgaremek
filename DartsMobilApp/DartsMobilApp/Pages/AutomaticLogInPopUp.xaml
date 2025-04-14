@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="DartsMobilApp.Pages.AutomaticLogInPopUp"
+             Color="Transparent">
+    <VerticalStackLayout>
+        <Label Text="Bejelentkezés folyamatban!" FontSize="20" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" FontAttributes="Italic,Bold"/>
+        <ActivityIndicator  IsRunning="True" Color="{x:StaticResource Primary}" WidthRequest="350" HeightRequest="80"/>
+    </VerticalStackLayout>
+</tool:Popup>

@@ -9,4 +9,6 @@ public partial class LoginPage : ContentPage
 		InitializeComponent();
 		this.BindingContext = vm;
 	}
+
+   
 }

@@ -28,12 +28,7 @@ namespace DartsMobilApp.ViewModel
 
         public FriendlyMatchViewModel(SignalRService signalR)
         {
-
-           
            _signalRService = signalR;
-
-
-  
         }
 
         [ObservableProperty]
@@ -182,8 +177,8 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartFriendlyMatch(string matchId)
         {
-            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService, matchId);
             _signalRService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+            WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService, matchId);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Application.Current.MainPage.ShowPopupAsync(WaitingPopUp);
