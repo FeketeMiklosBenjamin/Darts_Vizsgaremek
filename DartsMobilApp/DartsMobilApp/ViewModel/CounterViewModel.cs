@@ -10,6 +10,7 @@ using DartsMobilApp.Services;
 using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Pages;
 using System.Threading.Tasks;
+using DartsMobilApp.API;
 
 namespace DartsMobilApp.ViewModel
 {
@@ -543,7 +544,7 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetFirstPlayersPoints(point);
                     TextSpeach(point);
-                    CheckMatchWinner();
+                    await CheckMatchWinner();
                 }
                 else
                 {
@@ -556,7 +557,7 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetSecondPlayersPoints(point);
                     TextSpeach(point);
-                    CheckMatchWinner();
+                    await CheckMatchWinner();
                 }
             }
             Points = "";
@@ -625,7 +626,7 @@ namespace DartsMobilApp.ViewModel
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
                 else if(SecondPlayerSetsWon == needToWinSets){
                     TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerSetsWon}-{FirstPlayerSetsWon} arányban!");
@@ -640,7 +641,7 @@ namespace DartsMobilApp.ViewModel
                         Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
             }
             else
@@ -659,7 +660,7 @@ namespace DartsMobilApp.ViewModel
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
                 else if (SecondPlayerWonLeg == needToWinLegs)
                 {
@@ -675,7 +676,7 @@ namespace DartsMobilApp.ViewModel
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
             }
 

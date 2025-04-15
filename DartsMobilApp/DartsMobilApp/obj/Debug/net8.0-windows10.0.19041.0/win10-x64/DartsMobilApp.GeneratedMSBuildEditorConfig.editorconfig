@@ -8,129 +8,119 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DartsMobilApp
-build_property.ProjectDir = C:\Users\Norbi\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\
+build_property.ProjectDir = C:\Users\gemes.norbert\Desktop\Darts_Vizsgaremek\DartsMobilApp\DartsMobilApp\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
-build_property.CsWinRTAotOptimizerEnabled = true
-build_property.CsWinRTAotExportsEnabled = 
-build_property.CsWinRTRcwFactoryFallbackGeneratorForceOptIn = 
-build_property.CsWinRTRcwFactoryFallbackGeneratorForceOptOut = 
-build_property.CsWinRTCcwLookupTableGeneratorEnabled = true
-build_property.CsWinRTMergeReferencedActivationFactories = 
-build_property.CsWinRTAotWarningLevel = 
-build_property.CsWinRTUseWindowsUIXamlProjections = false
-build_property.EffectiveAnalysisLevelStyle = 8.0
-build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/App.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/AppShell.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/AutomaticLogInPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/AutomaticLogInPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.AutomaticLogInPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\AutomaticLogInPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\AutomaticLogInPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CheckOutPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CheckOutPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.CheckOutPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\CheckOutPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\CheckOutPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CompetitionsPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CompetitionsPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.CompetitionsPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\CompetitionsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\CompetitionsPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CounterPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/CounterPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.CounterPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\CounterPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\CounterPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/ExitPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/ExitPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.ExitPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\ExitPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\ExitPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/FriendlyMatchPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/FriendlyMatchPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.FriendlyMatchPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\FriendlyMatchPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\FriendlyMatchPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/FriendlySetupPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/FriendlySetupPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.FriendlySetupPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\FriendlySetupPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\FriendlySetupPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/HomePage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/HomePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.HomePage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\HomePage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\HomePage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/JoinRequestPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/JoinRequestPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.JoinRequestPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\JoinRequestPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\JoinRequestPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LoginPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.LoginPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LoginPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LoginPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LoginPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.LoginPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\LoginPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LoginPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LogOutPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/LogOutPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.LogOutPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\LogOutPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LogOutPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/PasswordValidationPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/PasswordValidationPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.PasswordValidationPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\PasswordValidationPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\PasswordValidationPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/StatisticPage.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/StatisticPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.StatisticPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\StatisticPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\StatisticPage.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/WaitingForPlayersPopUp.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Pages/WaitingForPlayersPopUp.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Pages.WaitingForPlayersPopUp.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\WaitingForPlayersPopUp.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\WaitingForPlayersPopUp.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Resources/Styles/Colors.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/Users/Norbi/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Resources/Styles/Styles.xaml]
+[C:/Users/gemes.norbert/Desktop/Darts_Vizsgaremek/DartsMobilApp/DartsMobilApp/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = DartsMobilApp.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml

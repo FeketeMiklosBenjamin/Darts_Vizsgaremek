@@ -39,10 +39,16 @@ namespace DartsMobilApp.ViewModel
 
         AutomaticLogInPopUp autoLogInP = new AutomaticLogInPopUp();
 
+        private string isChecked;
+
         [RelayCommand]
         private void Appearing()
         {
-            Application.Current.MainPage.ShowPopup(autoLogInP);
+            isChecked = SecStoreItems.IsChecked;
+            if (isChecked != null && isChecked == "1")
+            {
+                Application.Current.MainPage.ShowPopup(autoLogInP);
+            }
         }
 
 
@@ -51,7 +57,8 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private void Disappearing()
         {
-            if (autoLogInP != null)
+   
+            if (isChecked != null && isChecked == "1")
             {
                 autoLogInP.Close();
             }
@@ -70,7 +77,6 @@ namespace DartsMobilApp.ViewModel
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 await Application.Current.MainPage.DisplayAlert("Hiba!", "A bejelentkezés nem lehetséges! Az email és a jelszó mező kitöltése kötelező!", "OK");
-                
             }
 
             if (SaveChecked)
@@ -84,7 +90,7 @@ namespace DartsMobilApp.ViewModel
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
                 LoginPopUp loginPopUp = new LoginPopUp();
-                await Application.Current.MainPage.ShowPopupAsync(loginPopUp);
+                Application.Current.MainPage.ShowPopupAsync(loginPopUp);
 
                 if (timer == null)
                 {
@@ -102,14 +108,7 @@ namespace DartsMobilApp.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("Hiba!", loginResponse.message, "OK");
             }
-
-
-
         }
 
     }
 }
-
-
-
-// Timer Set Up

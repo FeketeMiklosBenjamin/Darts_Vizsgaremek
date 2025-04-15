@@ -177,14 +177,15 @@ namespace DartsMobilApp.ViewModel
         [RelayCommand]
         private async Task StartFriendlyMatch(string matchId)
         {
+           
             _signalRService.JoinFriendlyMatch(matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
             WaitingForPlayersPopUp WaitingPopUp = new WaitingForPlayersPopUp(_signalRService, matchId);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Application.Current.MainPage.ShowPopupAsync(WaitingPopUp);
-                
+
             });
-            
+
         }
 
     }

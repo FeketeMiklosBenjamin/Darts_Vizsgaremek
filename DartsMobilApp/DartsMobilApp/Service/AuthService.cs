@@ -30,14 +30,14 @@ namespace DartsMobilApp.Service
                 if (response != null && response.role != 2)
                 {
 
-                    SecureStorage.SetAsync("Token", response.accessToken );
-                    SecureStorage.SetAsync("Email", response.emailAddress );
-                    SecureStorage.SetAsync("UserName", response.username);
-                    SecureStorage.SetAsync("UserId", response.id);
-                    SecureStorage.SetAsync("DartsPoints", response.dartsPoints.ToString());
-                    SecureStorage.SetAsync("MyLevel", response.level);
-                    SecureStorage.SetAsync("RefreshToken", response.refreshToken);
-                    SecureStorage.SetAsync("Password", loginModel.Password);
+                    await SecureStorage.SetAsync("Token", response.accessToken );
+                    await SecureStorage.SetAsync("Email", response.emailAddress );
+                    await SecureStorage.SetAsync("UserName", response.username);
+                    await SecureStorage.SetAsync("UserId", response.id);
+                    await SecureStorage.SetAsync("DartsPoints", response.dartsPoints.ToString());
+                    await SecureStorage.SetAsync("MyLevel", response.level);
+                    await SecureStorage.SetAsync("RefreshToken", response.refreshToken);
+                    await SecureStorage.SetAsync("Password", loginModel.Password);
                     return response;
                 }
                 else
