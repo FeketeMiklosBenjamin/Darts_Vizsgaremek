@@ -89,7 +89,6 @@ namespace Vizsga_Backend.Services
                 // Csak a nem megjelent játékos statját hozzuk létre
                 var stat = new PlayerMatchStat
                 {
-                    PlayerId = notApppearedId,
                     Appeared = false,
                     Won = false,
                     SetsWon = null,
