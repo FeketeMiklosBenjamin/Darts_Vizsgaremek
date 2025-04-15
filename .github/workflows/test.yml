@@ -27,7 +27,7 @@ jobs:
         with:
           dotnet-version: '8.0'
 
-      # 3. Restore dependencies (ensure all dependencies are restored)
+      # 3. Restore dependencies
       - name: Restore dependencies
         run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln
 
@@ -35,7 +35,6 @@ jobs:
       - name: Build the project
         run: dotnet build ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release
 
-      # 5. Run tests (explicitly specify the test project)
+      # 5. Run tests using vstest command
       - name: Run tests
-        run: |
-          dotnet test ./Vizsga_Backend/Backend.Tests/Backend.Tests.csproj --configuration Release --no-build --verbosity normal
+        run: dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --no-build --configuration Release --verbosity normal
