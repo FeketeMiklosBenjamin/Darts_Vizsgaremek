@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.TournamentModels;
+using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Models;
 
 namespace Vizsga_Backend.Services
@@ -11,11 +12,14 @@ namespace Vizsga_Backend.Services
     {
         private readonly IMongoCollection<Match> _matchCollection;
 
+        private readonly IMongoCollection<PlayerMatchStat> _playerMatchStatCollection;
+
         public MatchService(IOptions<MongoDBSettings> mongoDBSettings)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
             _matchCollection = database.GetCollection<Match>(mongoDBSettings.Value.MatchesCollectionName);
+            _playerMatchStatCollection = database.GetCollection<PlayerMatchStat>(mongoDBSettings.Value.Players_Match_StatsCollectionName);
         }
 
         public async Task CreateMatchAsync(Match match)
@@ -27,6 +31,86 @@ namespace Vizsga_Backend.Services
         {
             return await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
         }
+
+        public async Task SetAllPlayerStatNotAppearedAsync(string matchId, string? notApppearedId)
+        {
+            var match = await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
+            if (match == null) return;
+
+            if (string.IsNullOrEmpty(notApppearedId))
+            {
+                // Régi logika: mindkét játékos statja létrejön, random nyertessel
+                var stat1 = new PlayerMatchStat
+                {
+                    Appeared = false,
+                    Won = false,
+                    SetsWon = null,
+                    LegsWon = null,
+                    Averages = null,
+                    Max180s = null,
+                    CheckoutPercentage = null,
+                    HighestCheckout = null,
+                    NineDarter = null
+                };
+
+                var stat2 = new PlayerMatchStat
+                {
+                    Appeared = false,
+                    Won = false,
+                    SetsWon = null,
+                    LegsWon = null,
+                    Averages = null,
+                    Max180s = null,
+                    CheckoutPercentage = null,
+                    HighestCheckout = null,
+                    NineDarter = null
+                };
+
+                await _playerMatchStatCollection.InsertOneAsync(stat1);
+                await _playerMatchStatCollection.InsertOneAsync(stat2);
+
+                var rand = new Random();
+                bool playerOneWon = rand.Next(2) == 0;
+
+                var winnerStatId = playerOneWon ? stat1.Id : stat2.Id;
+                var loserStatId = playerOneWon ? stat2.Id : stat1.Id;
+
+                await _playerMatchStatCollection.UpdateOneAsync(s => s.Id == winnerStatId, Builders<PlayerMatchStat>.Update.Set(s => s.Won, true));
+
+                var update = Builders<Match>.Update
+                    .Set(m => m.PlayerOneStatId, match.PlayerOneId == (playerOneWon ? match.PlayerOneId : match.PlayerTwoId) ? stat1.Id : stat2.Id)
+                    .Set(m => m.PlayerTwoStatId, match.PlayerTwoId == (playerOneWon ? match.PlayerTwoId : match.PlayerOneId) ? stat2.Id : stat1.Id)
+                    .Set(m => m.Status, "Finished");
+
+                await _matchCollection.UpdateOneAsync(m => m.Id == match.Id, update);
+            }
+            else
+            {
+                // Csak a nem megjelent játékos statját hozzuk létre
+                var stat = new PlayerMatchStat
+                {
+                    PlayerId = notApppearedId,
+                    Appeared = false,
+                    Won = false,
+                    SetsWon = null,
+                    LegsWon = null,
+                    Averages = null,
+                    Max180s = null,
+                    CheckoutPercentage = null,
+                    HighestCheckout = null,
+                    NineDarter = null
+                };
+
+                await _playerMatchStatCollection.InsertOneAsync(stat);
+
+                var update = Builders<Match>.Update
+                    .Set(m => m.PlayerOneStatId, match.PlayerOneId == notApppearedId ? stat.Id : match.PlayerOneStatId)
+                    .Set(m => m.PlayerTwoStatId, match.PlayerTwoId == notApppearedId ? stat.Id : match.PlayerTwoStatId);
+
+                await _matchCollection.UpdateOneAsync(m => m.Id == match.Id, update);
+            }
+        }
+
 
         public async Task<MatchWithPlayers?> GetMatchWithPlayersByIdAsync(string matchId)
         {
@@ -109,7 +193,6 @@ namespace Vizsga_Backend.Services
                         }
                     }
                 },
-
                 new BsonDocument
                 {
                     { "$unset", new BsonArray { "player_one_id", "player_two_id", "player_one_stat_id", "player_two_stat_id", "header_id" } }

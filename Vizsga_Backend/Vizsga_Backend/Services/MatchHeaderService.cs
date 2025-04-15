@@ -1,5 +1,6 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -313,5 +314,63 @@ namespace Vizsga_Backend.Services
 
             await _matchHeaderCollection.UpdateOneAsync(filter, update);
         }
+
+        public async Task<MatchWithMatchHeader?> GetMatchWithHeaderAsync(string matchId)
+        {
+            var objectId = ObjectId.Parse(matchId);
+
+            var pipeline = new[]
+            {
+                new BsonDocument("$match", new BsonDocument("_id", objectId)),
+
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "match_headers" },
+                    { "localField", "header_id" },
+                    { "foreignField", "_id" },
+                    { "as", "match_header" }
+                }),
+                new BsonDocument("$unwind", "$match_header"),
+
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "users" },
+                    { "localField", "player_one_id" },
+                    { "foreignField", "_id" },
+                    { "as", "player_one" }
+                }),
+                new BsonDocument("$unwind", new BsonDocument("path", "$player_one").Add("preserveNullAndEmptyArrays", true)),
+
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "users" },
+                    { "localField", "player_two_id" },
+                    { "foreignField", "_id" },
+                    { "as", "player_two" }
+                }),
+                new BsonDocument("$unwind", new BsonDocument("path", "$player_two").Add("preserveNullAndEmptyArrays", true)),
+
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "player_match_stats" },
+                    { "localField", "player_one_stat_id" },
+                    { "foreignField", "_id" },
+                    { "as", "player_one_stat" }
+                }),
+                new BsonDocument("$unwind", new BsonDocument("path", "$player_one_stat").Add("preserveNullAndEmptyArrays", true)),
+
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", "player_match_stats" },
+                    { "localField", "player_two_stat_id" },
+                    { "foreignField", "_id" },
+                    { "as", "player_two_stat" }
+                }),
+                new BsonDocument("$unwind", new BsonDocument("path", "$player_two_stat").Add("preserveNullAndEmptyArrays", true))
+            };
+
+            return await _matchHeaderCollection.Aggregate<MatchWithMatchHeader>(pipeline).FirstOrDefaultAsync();
+        }
+
     }
 }

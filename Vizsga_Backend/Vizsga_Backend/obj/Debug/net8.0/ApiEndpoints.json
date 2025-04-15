@@ -188,6 +188,22 @@
       },
       {
         "Name": "password",
+        "Type": "Vizsga_Backend.Models.MatchModels.ValidatePassword",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Vizsga_Backend.Controllers.MatchController",
+    "Method": "GetMatchWithHeader",
+    "RelativePath": "api/matches/with_header/{matchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchId",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -373,27 +389,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "VizsgaBackend.Controllers.UsersFriendlyStatController",
-    "Method": "Put",
-    "RelativePath": "api/users/friendlystat",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "updatedUserStat",
-        "Type": "Vizsga_Backend.Models.UserStatsModels.UsersFriendlyStat",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "VizsgaBackend.Controllers.UserController",
     "Method": "GetLeaderboard",
     "RelativePath": "api/users/leaderboard",
@@ -514,27 +509,6 @@
       {
         "Name": "userId",
         "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VizsgaBackend.Controllers.UsersTournamentStatController",
-    "Method": "Put",
-    "RelativePath": "api/users/tournamentstat/{userId}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "updatedUserStat",
-        "Type": "Vizsga_Backend.Models.UserStatsModels.UsersTournamentStat",
         "IsRequired": true
       }
     ],

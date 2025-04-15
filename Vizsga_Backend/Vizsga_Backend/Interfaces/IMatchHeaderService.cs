@@ -15,5 +15,6 @@ namespace Vizsga_Backend.Services
         Task<List<MatchHeader>> GetAllFriendlyMatchAsync();
         string ValidateFriendlyMatchDatas(FriendlyGameCreate datas);
         Task SetDeleteDateToNullAsync(string matchHeaderId);
+        Task<MatchWithMatchHeader> GetMatchWithHeaderAsync(string matchId);
     }
 }

@@ -19,7 +19,7 @@ namespace Vizsga_Backend.Models.UserStatsModels
         public int? SetsWon { get; set; }
 
         [BsonElement("legs_won")]
-        public int LegsWon { get; set; }
+        public int? LegsWon { get; set; }
 
         [BsonElement("averages")]
         public double? Averages { get; set; }

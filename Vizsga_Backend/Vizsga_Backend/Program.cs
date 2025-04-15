@@ -69,7 +69,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 
 // SignalR konfigurálása Azure SignalR-rel
-builder.Services.AddSignalR()
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(30);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(120);
+})
     .AddAzureSignalR(builder.Configuration["SignalR:ConnectionString"]);
 
 // Swagger konfigurálása

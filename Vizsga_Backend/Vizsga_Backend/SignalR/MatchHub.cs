@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
+using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.SignalRModels;
 using Vizsga_Backend.Services;
 using VizsgaBackend.Services;
@@ -12,18 +13,19 @@ namespace Vizsga_Backend.SignalR
 
         private static readonly ConcurrentDictionary<string, string> playerConnections = new(); // playerId, connectionId
 
-        private readonly MatchHeaderService _matchHeaderService;
-        private readonly UserService _userService;
+        private readonly IMatchHeaderService _matchHeaderService;
+        private readonly IUsersFriendlyStatService _userFriendlyStatService;
+        private readonly IUserService _userService;
 
-        public MatchHub(MatchHeaderService matchHeaderService, UserService userService)
+        public MatchHub(IMatchHeaderService matchHeaderService, IUsersFriendlyStatService userFriendlyStatService, IUserService userService)
         {
             _matchHeaderService = matchHeaderService;
+            _userFriendlyStatService = userFriendlyStatService;
             _userService = userService;
         }
 
 
-
-        // StartMatch
+        // Friendly
 
         public async Task JoinFriendlyMatch(string matchId, string playerId, string username, string dartsPoint)
         {
@@ -71,7 +73,7 @@ namespace Vizsga_Backend.SignalR
                     matchPlayers[matchId] = new List<string>() { playerId, secondPlayerId };
 
                     var rnd = new Random();
-                    var startingPlayer = rnd.Next(0, 2) == 0 ? true : false;
+                    var startingPlayer = rnd.Next(0, 2) == 0 ? playerId : secondPlayerId;
 
                     var match = await _matchHeaderService.GetByIdAsync(matchId);
 
@@ -81,8 +83,8 @@ namespace Vizsga_Backend.SignalR
 
                     StartFriendlyMatchModel startFriendlyMatchModel = new StartFriendlyMatchModel() { 
                         StartingPlayer = startingPlayer,
-                        PlayerOneName = (startingPlayer ? PlayerOne!.Username : PlayerTwo!.Username),
-                        PlayerTwoName = (!startingPlayer ? PlayerOne!.Username : PlayerTwo!.Username),
+                        PlayerOneName = (startingPlayer == PlayerOne!.Id ? PlayerOne!.Username : PlayerTwo!.Username),
+                        PlayerTwoName = (startingPlayer != PlayerOne!.Id ? PlayerOne!.Username : PlayerTwo!.Username),
                         LegCount = match!.LegsCount,
                         SetCount = (match.SetsCount == null ? 1 : (int)match.SetsCount),
                         StartingPoint = match.StartingPoint
@@ -140,6 +142,29 @@ namespace Vizsga_Backend.SignalR
             }
         }
 
+        public async Task EndFriendlyMatch(string matchId, string playerId, EndMatchModel stats)
+        {
+            if (matchPlayers.TryGetValue(matchId, out var players) && players.Contains(playerId))
+            {
+                await _userFriendlyStatService.SavePlayerStat(playerId, stats);
+
+                if (playerConnections.TryRemove(playerId, out string? connectionId))
+                {
+                    await Groups.RemoveFromGroupAsync(connectionId, matchId);
+                }
+
+                players.Remove(playerId);
+
+                if (players.Count == 0)
+                {
+                    matchPlayers.TryRemove(matchId, out _);
+                }
+            }
+        }
+
+
+        // Tournament
+
         public async Task JoinTournamentMatch(string matchId, string playerId)
         {
             playerConnections[playerId] = Context.ConnectionId;
@@ -156,9 +181,40 @@ namespace Vizsga_Backend.SignalR
 
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId);
 
-            if (matchPlayers[matchId].Count == 2)
+
+            if (matchPlayers[matchId].Count > 1)
             {
-                await Clients.Group(matchId).SendAsync("TournamentMatchStarted");
+                var matchWithMatchHeader = await _matchHeaderService.GetMatchWithHeaderAsync(matchId);
+                StartFriendlyMatchModel startMatchModel = new StartFriendlyMatchModel()
+                {
+                    StartingPlayer = matchWithMatchHeader!.PlayerOne!.Id,
+                    PlayerOneName = matchWithMatchHeader.PlayerOne.Username,
+                    PlayerTwoName = matchWithMatchHeader.PlayerTwo!.Username,
+                    LegCount = matchWithMatchHeader.MatchHeader.LegsCount,
+                    SetCount = (matchWithMatchHeader.MatchHeader.SetsCount == null) ? 0 : (int)matchWithMatchHeader.MatchHeader.SetsCount,
+                    StartingPoint = matchWithMatchHeader.MatchHeader.StartingPoint
+                };
+                await Clients.Group(matchId).SendAsync("TournamentMatchStarted", startMatchModel);
+            }
+        }
+
+        public async Task EndTournamentMatch(string matchId, string playerId, EndMatchModel stats)
+        {
+            if (matchPlayers.TryGetValue(matchId, out var players) && players.Contains(playerId))
+            {
+                await _userFriendlyStatService.SavePlayerStat(playerId, stats);
+
+                if (playerConnections.TryRemove(playerId, out string? connectionId))
+                {
+                    await Groups.RemoveFromGroupAsync(connectionId, matchId);
+                }
+
+                players.Remove(playerId);
+
+                if (players.Count == 0)
+                {
+                    matchPlayers.TryRemove(matchId, out _);
+                }
             }
         }
 
@@ -170,9 +226,6 @@ namespace Vizsga_Backend.SignalR
                 await Clients.User(toPlayerId).SendAsync("GetPoints", points);
             }
         }
-
-
-        // Communication
 
 
         public override async Task OnDisconnectedAsync(Exception? exception)

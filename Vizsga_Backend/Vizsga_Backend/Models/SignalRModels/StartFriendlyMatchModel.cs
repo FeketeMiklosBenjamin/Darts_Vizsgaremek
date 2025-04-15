@@ -2,7 +2,7 @@
 {
     public class StartFriendlyMatchModel
     {
-        public bool StartingPlayer { get; set; }
+        public string StartingPlayer { get; set; }
         public int SetCount { get; set; }
         public int LegCount { get; set; }
         public int StartingPoint { get; set; }

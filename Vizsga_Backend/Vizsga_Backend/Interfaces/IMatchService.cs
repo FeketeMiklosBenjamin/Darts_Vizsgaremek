@@ -11,5 +11,6 @@ namespace Vizsga_Backend.Services
         Task<MatchWithPlayers?> GetMatchWithPlayersByIdAsync(string matchId);
         Task<List<MatchWithPlayers>?> GetUserUpcomingMatchesAsync(string userId, int? matchesCount);
         Task<List<MatchWithPlayers>> GetUserLastMatchesAsync(string userId, int matchesCount);
+        Task SetAllPlayerStatNotAppearedAsync(string matchId, string? notAppearedId);
     }
 }
