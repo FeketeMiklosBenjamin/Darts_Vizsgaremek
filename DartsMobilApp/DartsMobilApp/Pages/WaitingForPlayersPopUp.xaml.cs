@@ -40,6 +40,7 @@ public partial class WaitingForPlayersPopUp : Popup
                 this.Close();
             }
 
+            CounterViewModel.IsFriendlyMatch = true;
             CounterViewModel.settings = startingSetup;
             CounterViewModel.MatchId = matchId;
             await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
@@ -52,6 +53,7 @@ public partial class WaitingForPlayersPopUp : Popup
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 this.Close();
+                CounterViewModel.IsFriendlyMatch = false;
                 CounterViewModel.settings = startingSetup;
                 CounterViewModel.MatchId = matchId;
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");

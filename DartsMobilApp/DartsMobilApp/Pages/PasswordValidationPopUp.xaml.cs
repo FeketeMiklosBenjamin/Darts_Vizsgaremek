@@ -37,10 +37,9 @@ public partial class PasswordValidationPopUp : Popup
         if (response.message == "Sikeres belépés!")
         {
             WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp(_signalRService, MatchId);
+            Application.Current?.MainPage?.ShowPopup(popUp);
             _signalRService.JoinTournamentMatch(MatchId, SecStoreItems.UserId);
-            await Application.Current?.MainPage.ShowPopupAsync(popUp);
             this.Close();
-
         }
     }
 }

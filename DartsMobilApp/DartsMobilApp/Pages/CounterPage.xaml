@@ -12,16 +12,22 @@
     <ScrollView>
         <Grid RowDefinitions="*, *,2*,*,*,6*">
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
-                <Label Text="{Binding FirstPlayerWonLeg}" Margin="25"/>
-                <Label Text="{Binding SecondPlayerWonLeg}" Margin="25"/>
+                <Grid ColumnDefinitions="*,*">
+                    <Label Grid.Column="0" Text="{Binding FirstPlayerSetWon, StringFormat='Sets: {0}'}" Margin="25"/>
+                    <Label Grid.Column="1" Text="{Binding FirstPlayerWonLeg, StringFormat='Legs: {0}'}" Margin="25"/>
+                </Grid>
+                <Grid ColumnDefinitions="*,*">
+                    <Label Grid.Column="0" Text="{Binding SecondPlayerSetWon, StringFormat='Sets: {0}'}" Margin="25"/>
+                    <Label Grid.Column="1" Text="{Binding SecondPlayerWonLeg, StringFormat='Legs: {0}'}" Margin="25"/>
+                </Grid>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="1" Spacing="35" HorizontalOptions="Center" VerticalOptions="Center">
-                <Label Text="{Binding StartingPlayerName}" Margin="5" FontSize="25"/>
-                <Label Text="{Binding SecondPlayerName}" Margin="5" FontSize="25"/>
+                <Label Text="{Binding StartingPlayerName}" Margin="5" FontSize="25" LineBreakMode="WordWrap"/>
+                <Label Text="{Binding SecondPlayerName}" Margin="5" FontSize="25" LineBreakMode="WordWrap"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="2"  VerticalOptions="Center" Padding="10">
-                <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="5,5,5,5" />
-                <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold"  Margin="5,5,5,5"/>
+                <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="5,5,5,5" HorizontalTextAlignment="Center"/>
+                <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold"  Margin="5,5,5,5" HorizontalTextAlignment="Center"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3"  BackgroundColor="LightGray"  HorizontalOptions="Center" VerticalOptions="Center" >
                 <Label Text="{Binding RecommendedFirstCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>

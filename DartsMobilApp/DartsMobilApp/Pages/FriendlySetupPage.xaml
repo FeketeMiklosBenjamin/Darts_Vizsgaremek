@@ -52,7 +52,7 @@
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="6" HorizontalOptions="Center" Spacing="10" IsVisible="{Binding Visible}">
             <Label Text="A meccs jelszava:" FontAttributes="Bold" FontSize="15" TextColor="White" VerticalOptions="Center"/>
-            <Border Stroke="Black" StrokeThickness="3" StrokeShape="RoundRectangle 10 10 10 10" HeightRequest="35" WidthRequest="200">
+            <Border Stroke="White" StrokeThickness="3" StrokeShape="RoundRectangle 10 10 10 10" HeightRequest="35" WidthRequest="200">
                 <Entry IsPassword="True" WidthRequest="150" HeightRequest="35" BackgroundColor="Transparent" Text="{Binding Pwd}"/>
             </Border>
         </HorizontalStackLayout>

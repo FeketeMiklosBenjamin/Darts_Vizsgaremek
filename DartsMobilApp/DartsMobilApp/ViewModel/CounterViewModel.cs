@@ -109,6 +109,10 @@ namespace DartsMobilApp.ViewModel
             }
         }
 
+        public int AllWonLegsOnTheMatchSecond = 0;
+
+        private int AllPlayedLegsOnTheMatch = 0;
+
         [ObservableProperty]
         public string points;
 
@@ -124,6 +128,10 @@ namespace DartsMobilApp.ViewModel
 
         [ObservableProperty]
         private bool enabledButton;
+
+        private int AllWonLegsOnTheMatchFirst = 0;
+
+        public static bool IsFriendlyMatch;
 
 
         private int MyHighestCheckOut = 0;
@@ -388,6 +396,7 @@ namespace DartsMobilApp.ViewModel
                 {
                     MyNineDarters++;
                 }
+                AllWonLegsOnTheMatchFirst++;
                 FirstPlayerWonLeg++;
                 MyLegScores.Clear();
                 SetDefaultValues();
@@ -456,6 +465,7 @@ namespace DartsMobilApp.ViewModel
                 {
                     MyNineDarters++;
                 }
+                AllWonLegsOnTheMatchSecond++;
                 SecondPlayerWonLeg++;
                 MyLegScores.Clear();
                 SetDefaultValues();
@@ -568,8 +578,8 @@ namespace DartsMobilApp.ViewModel
         {
             PointsSecondPlayer = settings.StartingPoint.ToString();
             PointsFirstPlayer = settings.StartingPoint.ToString();
-            RecommendedFirstCheckout = "";
-            RecommendedSecondCheckout = "";
+            //RecommendedFirstCheckout = "";
+            //RecommendedSecondCheckout = "";
         }
 
 
@@ -602,6 +612,7 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{StartingPlayerName} nyerte a  {allPlayedSet}. szettet!");
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
+                    AllPlayedLegsOnTheMatch += allPlayedLegs;
                     FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
                 }
                 else if (SecondPlayerWonLeg == needToWinLegs)
@@ -610,6 +621,7 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{SecondPlayerName} nyerte a {allPlayedSet}. szettet!");
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
+                    AllPlayedLegsOnTheMatch += allPlayedLegs;
                     FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
                 }
                 if (FirstPlayerSetsWon == needToWinSets)
@@ -617,11 +629,25 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerSetsWon}-{SecondPlayerSetsWon} arányban!");
                     if (ImTheFirst)
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = FirstPlayerWonLeg, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
                     }
                     else
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = SecondPlayerWonLeg, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
                     }
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
@@ -632,13 +658,27 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerSetsWon}-{FirstPlayerSetsWon} arányban!");
                     if (ImTheFirst)
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = FirstPlayerWonLeg, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
                     }
                     else
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = SecondPlayerWonLeg, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
                     }
-                        Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
+                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -651,11 +691,25 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{StartingPlayerName} nyerte a mérkőzést {FirstPlayerWonLeg}-{SecondPlayerWonLeg} arányban!");
                     if (ImTheFirst)
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = FirstPlayerWonLeg, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
                     }
                     else
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = SecondPlayerWonLeg, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
                     }
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
@@ -667,11 +721,25 @@ namespace DartsMobilApp.ViewModel
                     TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerWonLeg}-{FirstPlayerWonLeg} arányban!");
                     if (ImTheFirst)
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = FirstPlayerWonLeg, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchFirst, Sets = allPlayedSet, SetsWon = FirstPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
+                        }
                     }
                     else
                     {
-                        await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = SecondPlayerWonLeg, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        if (IsFriendlyMatch)
+                        {
+                            await _signalRService.EndFriendlyMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
+                        else
+                        {
+                            await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
+                        }
                     }
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();

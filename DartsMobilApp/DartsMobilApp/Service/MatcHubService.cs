@@ -75,6 +75,14 @@ namespace DartsMobilApp.Services
         }
 
 
+        public async Task EndTournamentMatch(string matchId, string playerId, EndMatchModel stats)
+        {
+            if (_hubConnection.State == HubConnectionState.Connected)
+            {
+                await _hubConnection.InvokeAsync("EndTournamentMatch", matchId, playerId, stats);
+            }
+        }
+
         public async Task EndFriendlyMatch(string matchId, string playerId, EndMatchModel stats)
         {
                 if (_hubConnection.State == HubConnectionState.Connected)
