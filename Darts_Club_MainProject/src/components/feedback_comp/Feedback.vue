@@ -74,7 +74,7 @@ async function onSend() {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <div class="alert text-center"
+                            <div class="alert text-center" data-cy="response_message"
                                 :class="{ 'alert-success': status.success, 'alert-danger': !status.success }"><i
                                     class="bi me-3"
                                     :class="{ 'bi-check-circle': status.success, 'bi-x-circle': !status.success }"></i>{{
@@ -86,19 +86,19 @@ async function onSend() {
             </div>
             <form @submit.prevent="onSend()">
                 <div class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
-                    <input type="text" id="title" placeholder="Cím..." v-model="feedform.title" class="form-control">
+                    <input type="text" id="title" placeholder="Cím..." v-model="feedform.title" class="form-control" data-cy="title_input">
                 </div>
                 <div v-if="user.role == 2"
                     class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
-                    <input type="text" id="title" placeholder="Email..." v-model="feedform.emailAddress"
-                        class="form-control mt-2">
+                    <input type="text" id="email" placeholder="Email..." v-model="feedform.emailAddress"
+                        class="form-control mt-2" data-cy="email_input">
                 </div>
                 <div class="row col-12 col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1 offset-0">
                     <textarea id="subject" placeholder="Tárgy..." rows="12" v-model="feedform.text"
-                        class="form-control mt-2"></textarea>
+                        class="form-control mt-2" data-cy="subject_input"></textarea>
                 </div>
                 <div class="row col-10 col-lg-4 col-md-6 col-sm-8 offset-lg-4 offset-md-3 offset-sm-2 offset-1">
-                    <button type="submit" class="btn btn-warning mt-4" :disabled="processing">Elküldés
+                    <button type="submit" class="btn btn-warning mt-4" :disabled="processing" data-cy="submit_button">Elküldés
                         <span v-if="processing" class="spinner-border spinner-border-sm"></span>
                     </button>
                 </div>

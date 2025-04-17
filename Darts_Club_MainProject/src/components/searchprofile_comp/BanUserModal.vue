@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { defineEmits, ref, onMounted } from 'vue';
+import { defineEmits, ref, onBeforeMount } from 'vue';
 import type AllUsersModel from '@/models/AllUsersModel';
 import { useUserStore } from '@/stores/UserStore';
 
 const { banThisUser, status, alluser } = useUserStore();
 
-onMounted(() => {
+onBeforeMount(() => {
     status.message = '';
+    updatedUser = alluser.find(u => u.id === props.currentUser.id);
 })
 
 const messageSuccess = ref(false);
+
+let updatedUser: AllUsersModel | undefined = undefined;
 
 const banTime = ref<{ bannedDuration: number | null }>(
     { bannedDuration: null }
@@ -26,10 +29,15 @@ const banUser = async () => {
     if (banTime.value.bannedDuration != null) {
         await banThisUser(props.currentUser.id, banTime.value.bannedDuration);
         messageSuccess.value = true;
-
-        const updatedUser = alluser.find(u => u.id === props.currentUser.id);
         if (updatedUser) {
-            updatedUser.bannedUntil = `${new Date().toLocaleString() + banTime.value.bannedDuration}`;
+            const milliseconds = banTime.value.bannedDuration * 24 * 60 * 60 * 1000;
+            updatedUser.bannedUntil = new Date(Date.now() + milliseconds).toLocaleString(undefined, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
     } else {
         status.message = 'Nem adott meg adatot!';
@@ -41,7 +49,6 @@ const unBunUser = async () => {
     await banThisUser(props.currentUser.id, banTime.value.bannedDuration);
     messageSuccess.value = true;
 
-    const updatedUser = alluser.find(u => u.id === props.currentUser.id);
     if (updatedUser) {
         updatedUser.bannedUntil = '';
     }
@@ -59,7 +66,8 @@ const unBunUser = async () => {
                 </div>
                 <div class="modal-body">
                     <div class="mb-2">
-                        <strong>Felhasználó:</strong> {{ currentUser.username }} {{ props.currentUser.bannedUntil != '' ? `(${props.currentUser.bannedUntil})` : '' }}
+                        <strong>Felhasználó:</strong> {{ currentUser.username }} {{ updatedUser?.bannedUntil ?
+                            `(${updatedUser.bannedUntil})` : '' }}
                     </div>
                     <label>Ban ideje (napban megadva):</label>
                     <div class="input-group">

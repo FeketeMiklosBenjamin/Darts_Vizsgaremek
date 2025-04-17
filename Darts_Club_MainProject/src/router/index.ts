@@ -14,6 +14,7 @@ import Modifyview from '@/views/Modifyview.vue'
 import SeeYourMessageView from '@/views/SeeYourMessageView.vue'
 import AdminCreateCompetitionView from '@/views/AdminCreateCompetitionView.vue'
 import AdminSelectionCompetitionView from '@/views/AdminSelectionCompetitionView.vue'
+import BracketView from '@/views/BracketView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
     { 
       path: '/messages', 
       component: SeeYourMessageView,
+      meta: { requiresAuth: true}
+    },
+    { 
+      path: '/bracket', 
+      component: BracketView,
       meta: { requiresAuth: true}
     },
     {

@@ -60,30 +60,30 @@ const deleteMessage = async (id: string) => {
 <template>
     <div class="background-color-view">
         <div class="main-div" style="max-height: 95vh;">
-            <div class="email-box col-12 col-md-6 col-lg-4 col-sm-10 offset-sm-1 offset-lg-4 offset-md-3 mb-3">
+            <div class="email-box col-12 col-md-6 col-lg-4 col-sm-10 offset-sm-1 offset-lg-4 offset-md-3 mb-3" data-cy="message">
                 <div class="row">
                     <div class="col-1">
                         <div class="text-center text-success mt-3 fs-5">
-                            <i class="bi bi-arrow-left" @click="NavigateToMain"></i>
+                            <i class="bi bi-arrow-left" @click="NavigateToMain" data-cy="back_to_main"></i>
                         </div>
                     </div>
                     <div class="col-10">
-                        <div class="d-flex justify-content-center text-center mt-2 display-5 fw-bold caveat-text">
+                        <div class="d-flex justify-content-center text-center mt-2 display-5 fw-bold caveat-text" data-cy="message_title">
                             {{ currentEmail?.title }}
                         </div>
                     </div>
                     <div class="col-1">
-                        <div class="text-end mt-3 text-danger fs-5" @click="deleteMessage(currentEmail?.id!)">X
+                        <div class="text-end mt-3 text-danger fs-5" @click="deleteMessage(currentEmail?.id!)" data-cy="delete_message">X
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="text-center mt-5 caveat-text fs-2">
+                    <div class="text-center mt-5 caveat-text fs-2" data-cy="message_subject">
                         {{ currentEmail?.text }}
                     </div>
                 </div>
                 <div v-if="user.role == 2" class="row">
-                    <div class="text-end me-5 caveat-text fs-4 mt-5">{{ currentEmail?.emailAddress }}</div>
+                    <div class="text-end me-5 caveat-text fs-4 mt-5" data-cy="message_email_address">{{ currentEmail?.emailAddress }}</div>
                     <div class="bi bi-arrow-left text-end bi bi-arrow-return-left text-primary" @click="NavigateToMessage()"></div>
                 </div>
             </div>

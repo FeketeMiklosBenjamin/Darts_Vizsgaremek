@@ -12,7 +12,7 @@ const { user } = useUserStore();
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/competition`" class="no-underline">
-                        <div class="box-left row">
+                        <div class="box-left row" data-cy="competition_box">
                             <div class="col-12 col-md-6 col-xl-4 d-flex justify-content-center">
                                 <img src="../../assets/images/earth.png" alt="világ" class="box-image"/>
                             </div>
@@ -37,7 +37,7 @@ const { user } = useUserStore();
             <div class="row mt-5">
                 <div class="ms-auto col-10 col-lg-8 me-sm-5 me-4">
                     <router-link :to="`/leaderboard`" class="no-underline">
-                        <div class="box-right row">
+                        <div class="box-right row" data-cy="leaderboard_box">
                             <div class="col-12 col-md-6 text-container text-dark order-2 order-md-1">
                                 <h3 class="display-6 box-title">Ranglista</h3>  
                                 <p class="fst-italic box-description">
@@ -54,7 +54,7 @@ const { user } = useUserStore();
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/search-profile`" class="no-underline">
-                        <div class="box-left row">
+                        <div class="box-left row" data-cy="searchboard_box">
                             <div class="col-12 offset-md-0 offset-sm-3 col-sm-6 col-lg-4 d-flex justify-content-center align-center">
                                 <img src="../../assets/images/search-icon.png" alt="telefon" class="box-image"/>
                             </div>
@@ -69,7 +69,7 @@ const { user } = useUserStore();
             <div class="row mt-5">
                 <div class="ms-auto col-10 col-lg-8 me-sm-5 me-4">
                     <router-link :to="`/statistic/${user.id}`" class="no-underline">
-                        <div class="box-right row">
+                        <div class="box-right row" data-cy="statistic_box">
                             <div class="col-12 col-md-6 text-container text-dark order-2 order-md-1">
                                 <div v-if="user.role != 2">
                                     <h3 class="display-6 box-title">Statisztika</h3>
@@ -95,7 +95,7 @@ const { user } = useUserStore();
             <div class="row">
                 <div class="col-10 col-lg-8 mt-5 ms-sm-5 ms-4">
                     <router-link :to="`/feedback`" class="no-underline">
-                        <div class="box-left row">
+                        <div class="box-left row" data-cy="feedback_box">
                             <div class="row">
                                 <div class="col-12 offset-md-0 offset-sm-2 col-sm-8 col-md-6 col-lg-6 col-xl-4 d-flex justify-content-center align-center">
                                     <img src="../../assets/images/feedback-icon.png" alt="feedback" class="box-image" style="height: 150px;"/>

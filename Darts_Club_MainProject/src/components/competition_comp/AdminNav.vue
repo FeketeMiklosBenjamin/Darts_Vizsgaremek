@@ -1,17 +1,3 @@
-<template>
-    <div class="row justify-content-center align-items-center">
-        <div class="col-md-6 col-12 d-flex justify-content-center align-items-center">
-            <button class="admin-nav-btn btn" @click="goToCreate">
-                <i class="bi bi-plus-circle me-2"></i> Verseny létrehozása
-            </button>
-        </div>
-        <div class="col-md-6 col-12 d-flex justify-content-center align-items-center">
-            <button class="admin-nav-btn btn" @click="goToExisting">
-                <i class="bi bi-list-ul me-2"></i> Létező versenyek
-            </button>
-        </div>
-    </div>
-</template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
@@ -26,6 +12,21 @@ const goToExisting = () => {
     router.push('/competition-selection');
 };
 </script>
+
+<template>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-12 d-flex justify-content-center align-items-center">
+            <button class="admin-nav-btn btn" @click="goToCreate">
+                <i class="bi bi-plus-circle me-2"></i> Verseny létrehozása
+            </button>
+        </div>
+        <div class="col-md-6 col-12 d-flex justify-content-center align-items-center">
+            <button class="admin-nav-btn btn" @click="goToExisting">
+                <i class="bi bi-list-ul me-2"></i> Létező versenyek
+            </button>
+        </div>
+    </div>
+</template>
 
 <style scoped>
 .admin-nav-btn {

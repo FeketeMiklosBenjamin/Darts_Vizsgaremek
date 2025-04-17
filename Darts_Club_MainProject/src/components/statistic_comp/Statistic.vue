@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import Admin_UserRegistry from '../registration_comp/Admin_UserRegistry.vue';
 
@@ -101,14 +101,14 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
           <img :src="stats.profilePictureUrl" :class="`statistic-profileImg ${borderColor}`" alt="Nincs" />
         </div>
         <div class="col-6 offset-3">
-          <h1 class="display-6 text-white margin-statname text-center mb-3 mb-sm-5 mt-2">
+          <h1 class="display-6 text-white margin-statname text-center mb-3 mb-sm-5 mt-2" data-cy="username_title">
             {{ stats.username }}
           </h1>
         </div>
         <div class="col-10 offset-1">
           <div v-if="status._id == stats.userId">
             <router-link :to="`/modify`">
-              <button class="btn btn-warning col-6 offset-3 py-2 modify-btn">Módosítás</button>
+              <button class="btn btn-warning col-6 offset-3 py-2 modify-btn" data-cy="modify_btn">Módosítás</button>
             </router-link>
           </div>
         </div>
@@ -118,10 +118,10 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
           <table class="table table-dark table-bordered stat-table border-5">
             <tbody>
               <tr>
-                <td colspan="2" class="med">
+                <td colspan="2" class="med" data-cy="numof_matches">
                   <span class="display-6">Mérkőzések száma:</span><br />{{ stats.matches }}
                 </td>
-                <td colspan="2" class="med">
+                <td colspan="2" class="med" data-cy="win_matches">
                   <span class="display-6">Győzelmek:</span><br />{{ stats.matchesWon }}
                 </td>
               </tr>
@@ -164,7 +164,7 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
                 </td>
               </tr>
               <tr>
-                <td colspan="2" rowspan="2" class="med">
+                <td colspan="2" rowspan="2" class="med" data-cy="register_date">
                   <span class="display-6">Regisztrálás dátuma:</span> {{ stats.registerDate }}
                 </td>
                 <td colspan="2" class="med">
@@ -178,10 +178,10 @@ const progressWidth = computed(() => `${(stats.value.dartsPoints <= 9000) ? ((st
         </div>
         <div class="progress-container col-10 offset-1 mt-3 mt-md-5 mb-5">
           <div class="progress-label progress-label-left">
-            Szint: <span :class="textColor">{{ playerLevel }}</span>
+            Szint: <span :class="textColor" data-cy="user_level">{{ playerLevel }}</span>
           </div>
           <div class="progress" role="progressbar" aria-label="prog">
-            <div class="progress-bar" :class="progressBarColor" :style="{ width: progressWidth }"></div>
+            <div class="progress-bar" :class="progressBarColor" :style="{ width: progressWidth }" data-cy="level_bar"></div>
           </div>
           <div class="progress-label progress-label-right">
             {{ stats.dartsPoints }}{{(stats.dartsPoints >= 9000 ? '' : '/')}}{{ (maxPoints < 9000 ? maxPoints : '') }}

@@ -4,6 +4,7 @@ import CardCompetition from './CardCompetition.vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/UserStore';
 import { useAnnouncedTmStore } from '@/stores/AnnouncedTmStore';
+import PreviousCompetition from './PreviousCompetition.vue';
 
 const { user } = storeToRefs(useUserStore());
 
@@ -35,7 +36,7 @@ const changePage = () => {
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-center align-items-center custom-min-vh-md mt-5">
-                <div class="row form-check form-switch justify-content-center d-flex glass-card pe-3">
+                <div class="row form-check form-switch justify-content-center d-flex glass-card pe-3" v-if="isRegisterPage">
                     <input class="col-4 form-check-input fs-5" type="checkbox" id="flexSwitchCheckDefault"
                         v-model="areJoinedCards" />
                     <label v-if="user.role == 1" class="col-8 form-check-label fst-italic text-light fs-5"
@@ -53,10 +54,21 @@ const changePage = () => {
             </div>
         </div>
 
-        <div
-            class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div" :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')">
-            <CardCompetition v-if="isRegisterPage" :are-joined-cards="areJoinedCards" />
-            <div v-if="alertCard.show" class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
+        <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div"
+            :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')" v-if="isRegisterPage">
+            <CardCompetition :are-joined-cards="areJoinedCards" />
+            <div v-if="alertCard.show"
+                class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
+                style="height: 100px;">
+                <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
+                <div class="d-inline">{{ alertCard.message }}</div>
+            </div>
+        </div>
+        <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div"
+            :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')" v-else>
+            <PreviousCompetition :-is-one-card="false"/>
+            <div v-if="alertCard.show"
+                class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
                 style="height: 100px;">
                 <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
                 <div class="d-inline">{{ alertCard.message }}</div>

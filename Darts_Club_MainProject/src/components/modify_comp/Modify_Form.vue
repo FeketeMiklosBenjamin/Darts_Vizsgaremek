@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type ModifyModel from '@/models/ModifyModel';
 import { useUserStore } from '@/stores/UserStore';
+import { Modal } from 'bootstrap';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -8,15 +9,21 @@ const { uploadimage, modify, status } = useUserStore();
 const router = useRouter();
 const processing = ref<boolean>(false);
 
+// const modal = ref<HTMLElement>();
+// let modalInstance: Modal;
+
 const profileImage = ref<File | null>(null);
 
 const isFormModified = computed(() =>
     modifyform.value.username ||
     modifyform.value.emailAddress ||
-    modifyform.value.oldPassword
+    modifyform.value.newPassword
 );
 
 onMounted(async () => {
+    // if (modal.value) {
+    //     modalInstance = new Modal(modal.value);
+    // }
     status.message = '';
 });
 
@@ -38,12 +45,14 @@ const handleFileChange = (event: Event) => {
 let modificationSuccess = false;
 
 async function onModify() {
-    console.log("ok");
     status.message = '';
     processing.value = true;
     modificationSuccess = false;
-
+    console.log("kezd");
+    
     if (!isFormModified.value && !profileImage.value) {
+        console.log("ok");
+        
         status.message = "Kötelező legalább egy mezőt módosítani!";
         processing.value = false;
         return;
@@ -81,6 +90,7 @@ async function onModify() {
         }
     }
     processing.value = false;
+    // modalInstance.show();
 }
 
 
@@ -88,16 +98,6 @@ async function onModify() {
 
 <template>
     <div class="background-color-view">
-        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" ref="modal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="alert alert-success text-center"><i class="bi bi-check-circle me-3"></i>
-                            {{ status.message }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="position-rel main-div" style="max-height: 100vh;">
             <div class="container z-1 transform align-items-center glass-card opacity width-form p-2 px-3 mt-5">
                 <div class="row">

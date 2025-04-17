@@ -73,41 +73,41 @@ async function onRegister() {
                     <form @submit.prevent="onRegister">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="name" placeholder="Név"
-                                v-model="registerform.username" autocomplete="off">
+                                v-model="registerform.username" autocomplete="off" data-cy="username_input">
                             <label for="name">Felhasználónév</label>
                         </div>
 
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control" id="email" placeholder="E-mail"
-                                v-model="registerform.emailAddress" autocomplete="off">
+                                v-model="registerform.emailAddress" autocomplete="off" data-cy="email_input">
                             <label for="email">E-mail</label>
                         </div>
 
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="password" placeholder="Jelszó"
-                                v-model="registerform.password" autocomplete="off">
+                                v-model="registerform.password" autocomplete="off" data-cy="password_input">
                             <label for="password">Jelszó</label>
                         </div>
 
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="confirm_password" placeholder="Jelszó újra"
-                                v-model="registerform.secondPassword" autocomplete="off">
+                                v-model="registerform.secondPassword" autocomplete="off" data-cy="SecondPassword_input">
                             <label for="confirm_password">Jelszó újra</label>
                         </div>
 
                         <div class="mt-2">
-                            <input class="form-control" type="file" id="formFile" @change="handleFileChange">
+                            <input class="form-control" type="file" id="formFile" @change="handleFileChange" data-cy="image_upload">
                             <label for="formFile" class="form-label text-white">Profilkép feltöltése (Nem
                                 kötelező!)</label>
                         </div>
 
                         <div class="my-2">
-                            <button type="submit" class="btn btn-info w-100 py-2" :disabled="processing">Regisztráció
-                                <span v-if="processing" class="spinner-border spinner-border-sm"></span>
+                            <button type="submit" class="btn btn-info w-100 py-2" :disabled="processing" data-cy="registration_btn">Regisztráció
+                                <span v-if="processing" class="spinner-border spinner-border-sm" data-cy="loading_spinner"></span>
                             </button>
                         </div>
                     </form>
-                    <div v-if="status.message" class="alert alert-danger text-center py-1">{{ status.message }}</div>
+                    <div v-if="status.message" class="alert alert-danger text-center py-1" data-cy="error_message">{{ status.message }}</div>
                 </div>
             </div>
         </div>
