@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DartsMobilApp.ViewModel"
+             xmlns:classes="clr-namespace:DartsMobilApp.Classes"
              xmlns:tools="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              x:Class="DartsMobilApp.Pages.CompetitionsPage"
              Title="Versenyeink"
@@ -12,11 +13,15 @@
   
     <ContentPage.Behaviors>
         <tools:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
-    </ContentPage.Behaviors>    
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <classes:TimeWindowConverter x:Key="TimeWindowConverter"/>
+    </ContentPage.Resources>
+    
 
     <Grid RowDefinitions="*,0.5*,5*,*" Margin="20" >
         <Label Text="Versenyeink" FontSize="40" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold"/>
-        <Button HorizontalOptions="End" Grid.Row="1" BackgroundColor="Green" Text="Frissítés" HeightRequest="45" WidthRequest="110" Command="{Binding RefreshFriendliesCommand}" Margin="0,0,0,30"/>
+        <Button HorizontalOptions="End" Grid.Row="1" BackgroundColor="Green" Text="Frissítés" HeightRequest="45" WidthRequest="110" Command="{Binding RefreshTournamentsCommand}" Margin="0,0,0,30"/>
         <CollectionView Grid.Row="2" ItemsSource="{Binding SortedTournaments}" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -27,10 +32,25 @@
                                 <VerticalStackLayout HorizontalOptions="Start">
                                     <Label Text="{Binding level, StringFormat='Szint: {0}'}" HorizontalTextAlignment="Start"/>
                                     <Label Text="Meccs kezdete:"/>
-                                    <Label Text="{Binding startDate, StringFormat='{0:yyyy-MM-dd HH:mm}'}"/>
+                                    <Label Text="{Binding formattedTime, StringFormat='{0:yyyy-MM-dd HH:mm}'}"/>
                                     <Label Text="{Binding opponentName, StringFormat='Ellenfél: {0}'}" />
                                 </VerticalStackLayout>
-                                <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompetitionsViewModel}}, Path=StartMatchCommand}"  CommandParameter="{Binding id}"/>
+                                <Button VerticalOptions="Center" IsEnabled="{Binding formattedTime, Converter={StaticResource TimeWindowConverter}}"  Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompetitionsViewModel}}, Path=StartMatchCommand}"  CommandParameter="{Binding id}">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Green" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Disabled">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="LightGray" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Button>
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>

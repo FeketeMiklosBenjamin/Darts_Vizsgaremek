@@ -10,5 +10,5 @@ public partial class LoginPage : ContentPage
 		this.BindingContext = vm;
 	}
 
-   
+  
 }

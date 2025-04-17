@@ -98,7 +98,7 @@ namespace DartsMobilApp.ViewModel
                     timer.Start();
                 }
 
-                await _signalR.ConnectAsync(SecStoreItems.AToken);
+                await _signalR.ConnectAsync(SecureStorage.GetAsync("Token").Result);
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");

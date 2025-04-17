@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,12 @@ namespace DartsMobilApp.ViewModel
 
         public List<MatchModel> TakedTournaments { get; set; } = new List<MatchModel>();
 
-      public CompetitionsViewModel(SignalRService service)
+        public bool IsMatchStartable(DateTime startDate)
+        {
+            var now = DateTime.Now;
+            return now >= startDate && now <= startDate.AddMinutes(10);
+        }
+        public CompetitionsViewModel(SignalRService service)
         {
             _signalRService = service;
 
@@ -128,7 +134,7 @@ namespace DartsMobilApp.ViewModel
         }
 
         [RelayCommand]
-        private void RefreshFriendlies()
+        private void RefreshTournaments()
         {
             SortedTournaments = RefreshSorted();
             TakedTournaments = SortedTournaments;
@@ -145,5 +151,7 @@ namespace DartsMobilApp.ViewModel
             });
         }
 
+
+        
     }
 }

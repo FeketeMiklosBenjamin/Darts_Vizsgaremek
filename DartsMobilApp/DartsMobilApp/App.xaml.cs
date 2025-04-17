@@ -4,6 +4,7 @@ using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Service;
 using DartsMobilApp.Services;
+using DartsMobilApp.ViewModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -30,7 +31,6 @@ namespace DartsMobilApp
 
                 if (response.message == "Sikeres bejelentkezés.")
                 {
-                    await _signalR.ConnectAsync(SecStoreItems.AToken);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                     SecureStorage.SetAsync("Token", response.accessToken);
                     SecureStorage.SetAsync("Email", response.emailAddress);
@@ -40,6 +40,7 @@ namespace DartsMobilApp
                     SecureStorage.SetAsync("Password", SecStoreItems.Password);
                     SecureStorage.SetAsync("Email", SecStoreItems.Email);
                     
+                    await _signalR.ConnectAsync(SecureStorage.GetAsync("Token").Result);
                 }
             }
             

@@ -14,6 +14,12 @@ namespace DartsMobilApp.Classes
         public string level { get; set; }
         public DateTime startDate { get; set; }
         public string opponentName { get; set; }
+
+        public DateTime? formattedTime { get
+            {
+                return startDate.ToLocalTime();
+            }
+        }
     }
 
 }
