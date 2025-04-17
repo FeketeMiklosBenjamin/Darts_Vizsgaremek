@@ -21,67 +21,6 @@ const showPopup = ref(false);
 const selectedTeamId = ref<string | undefined>();
 
 
-const exampleFinishedMatch = {
-    id: "123",
-    status: "Finished",
-    startDate: "2023. 10. 15. 18:30",
-    remainingPlayer: 16,
-    rowNumber: 5,
-    playerOne: {
-        id: "1",
-        username: "DartMaster92",
-        profilePicture: "https://res.cloudinary.com/dvikunqov/image/upload/v1742460324/darts_profile_pictures/c7s9umnr2kim4y9jreed.jpg"
-    },
-    playerTwo: {
-        id: "1",
-        username: "BullseyeKing",
-        profilePicture: "https://res.cloudinary.com/dvikunqov/image/upload/v1742414082/darts_profile_pictures/k0p8et5dgyekrxf5ywht.jpg"
-    },
-    playerOneStat: {
-        appeared: true,
-        won: true,
-        setsWon: 36,
-        legsWon: 112,
-        averages: 98.4,
-        max180s: 8,
-        checkoutPercentage: 42.5,
-        highestCheckout: 164,
-        nineDarter: 1
-    },
-    playerTwoStat: {
-        appeared: true,
-        won: false,
-        setsWon: 30,
-        legsWon: 98,
-        averages: 94.2,
-        max180s: 6,
-        checkoutPercentage: 38.1,
-        highestCheckout: 148,
-        nineDarter: 0
-    }
-};
-
-const examplePedingMatch: MatchResultModel = {
-    id: "123",
-    status: "Finished",
-    startDate: "2023. 10. 15. 18:30",
-    remainingPlayer: 16,
-    rowNumber: 5,
-    playerOne: {
-        id: "1",
-        username: "DartMaster92",
-        profilePicture: "https://res.cloudinary.com/dvikunqov/image/upload/v1742460324/darts_profile_pictures/c7s9umnr2kim4y9jreed.jpg"
-    },
-    playerTwo: {
-        id: "1",
-        username: "BullseyeKing",
-        profilePicture: "https://res.cloudinary.com/dvikunqov/image/upload/v1742414082/darts_profile_pictures/k0p8et5dgyekrxf5ywht.jpg"
-    },
-    playerOneStat: null,
-    playerTwoStat: null
-};
-
-
 
 const borderColor = (level: string) => {
     switch (level) {
@@ -120,6 +59,7 @@ const bracketPadding = computed(() => {
             basePadding = 100;
     }
 
+    if (width < 450) return `${basePadding * 0.0}px`;
     if (width < 768) return `${basePadding * 0.3}px`;
     if (width < 992) return `${basePadding * 0.3}px`;
     return `${basePadding}px`;
@@ -177,9 +117,9 @@ const generateBracketStructure = (matches: MatchModel[]): IBracketNode => {
 
     const findMatch = (round: number, position: number): IMatch | undefined => {
         const match = matches.find(m =>
-            m.remainingPlayer === round &&
-            m.rowNumber === position
-        );
+        m.remainingPlayer === round &&
+        m.rowNumber === position
+    );
 
         return match ? {
             id: match.id,
@@ -194,7 +134,7 @@ const generateBracketStructure = (matches: MatchModel[]): IBracketNode => {
                 name: match.playerTwo.username,
                 score: match.playerTwoResult ?? undefined
             },
-            winner: match.won !== null ? (match.won ? "team1" : "team2") : ""
+            winner: match.won !== null ? (match.won ? match.playerOne.id : match.playerTwo.id) : ""
         } : undefined;
     };
 
@@ -293,7 +233,7 @@ const NavigateToStatistic = (userId: string) => {
                     versenyekhez</button>
             </div>
         </div>
-        <div class="row ms-sm-0 ms-5 offset-1 offset-md-2 offset-md-0 col-10 offset-md-0 offset-sm-1 col-lg-9 col-md-8 mt-3"
+        <div class="row ms-sm-2 ms-3 offset-2 col-12 offset-md-0 offset-sm-1 col-lg-9 col-md-8 mt-3"
             v-if="exampleBracketData">
             <div class="bracket-side row col-12 main-div" :style="{ paddingRight: bracketPadding }">
                 <Bracket :bracket-node="exampleBracketData" :highlighted-team-id="selectedTeamId"
@@ -317,29 +257,35 @@ const NavigateToStatistic = (userId: string) => {
                         <div class="d-flex justify-content-center align-items-center fst-italic cursor" @click="NavigateToStatistic(MatchStats!.playerOne.id)">
                             <h2>{{ MatchStats?.playerOne.username }}</h2>
                         </div>
-                        <h3 v-if="MatchStats?.playerOneStat != null" class="mt-3">{{ (MatchStats?.playerOneStat?.setsWon
-                            > 1) ?
-                            MatchStats?.playerOneStat?.setsWon : MatchStats?.playerOneStat?.legsWon }}</h3>
                     </div>
                     <div class="col-4"
                         :style="(MatchStats?.playerTwoStat?.won ? 'color: rgb(184, 134, 11);' : 'color: white')">
                         <div class="d-flex justify-content-center align-items-center fst-italic cursor" @click="NavigateToStatistic(MatchStats!.playerTwo.id)">
                             <h2>{{ MatchStats?.playerTwo.username }}</h2>
                         </div>
-                        <h3 v-if="MatchStats?.playerTwoStat != null" class="mt-3">{{ (MatchStats?.playerTwoStat?.setsWon
-                            > 1) ?
-                            MatchStats?.playerTwoStat?.setsWon : MatchStats?.playerTwoStat?.legsWon }}</h3>
                     </div>
                     <div class="col-2">
                         <img :src="MatchStats?.playerTwo.profilePicture"
                             :class="`statistic-profileImg me-3 ${borderColor}`" alt="Nincs" />
                     </div>
                 </div>
-                <div v-if="MatchStats?.playerOneStat != null && MatchStats.playerTwoStat != null"
+                <div class="row col-8 offset-2">
+                    <div class="col-6 text-center">
+                        <h3 v-if="MatchStats?.playerOneStat != null">{{ (MatchStats?.playerOneStat?.setsWon
+                            > 1) ?
+                            MatchStats?.playerOneStat?.setsWon : MatchStats?.playerOneStat?.legsWon }}</h3>
+                    </div>
+                    <div class="col-6 text-center">
+                        <h3 v-if="MatchStats?.playerTwoStat != null">{{ (MatchStats?.playerTwoStat?.setsWon
+                            > 1) ?
+                            MatchStats?.playerTwoStat?.setsWon : MatchStats?.playerTwoStat?.legsWon }}</h3>
+                    </div>
+                </div>
+                <div v-if="MatchStats?.playerOneStat != null && MatchStats.playerTwoStat != null && MatchStats.playerOneStat.appeared && MatchStats.playerTwoStat.appeared"
                     class="row col-8 offset-2 mt-3">
                     <table class="table table-dark table-bordered border-5">
                         <tbody>
-                            <tr>
+                            <tr v-if="MatchStats.playerOneStat.setsWon != 0 && MatchStats.playerTwoStat.setsWon != 0">
                                 <td> {{ MatchStats?.playerOneStat?.setsWon }} db</td>
                                 <td colspan="2">
                                     <span>Nyert setek száma</span>
@@ -360,7 +306,7 @@ const NavigateToStatistic = (userId: string) => {
                                 <td colspan="2">
                                     <span>Átlagok</span>
                                 </td>
-                                <td>{{ MatchStats?.playerTwoStat?.setsWon }}
+                                <td>{{ MatchStats?.playerTwoStat?.averages }}
                                 </td>
                             </tr>
                             <tr>
@@ -402,7 +348,25 @@ const NavigateToStatistic = (userId: string) => {
                     class="row col-8 offset-2 mt-3">
                     <div class="alert alert-warning d-flex align-items-center justify-content-center">
                         <div class="text-center fw-bold">
-                           <span class="bi bi-exclamation-circle me-2"></span> A statisztikák csak a befejezett mérkőzésekért érhetőek el!
+                            <p class="mb-1">
+                                <span class="bi bi-exclamation-circle me-2"></span> A statisztikák csak a befejezett mérkőzésekért érhetőek el!
+                            </p>
+                            <p class="mb-0">
+                                A meccs kezdeze: {{ MatchStats?.startDate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="MatchStats?.playerOneStat?.appeared == false || MatchStats?.playerTwoStat?.appeared == false"
+                    class="row col-8 offset-2 mt-3">
+                    <div class="alert alert-warning d-flex align-items-center justify-content-center">
+                        <div class="text-center fw-bold">
+                            <p class="mb-1" v-if="MatchStats.playerOneStat?.appeared || MatchStats.playerTwoStat?.appeared">
+                                <span class="bi bi-exclamation-circle me-2"></span> A {{ (MatchStats.playerOneStat?.appeared ? MatchStats.playerTwo.username : MatchStats.playerOne.username) }} nevű versenyző nem jelent meg a meccsen, ezért {{ (MatchStats.playerOneStat?.appeared ? MatchStats.playerOne.username : MatchStats.playerTwo.username) }} nevű versenyző {{ MatchStats.remainingPlayer == 2 ? "nyerte meg a versenyt!" : "jutott tovább!" }}
+                            </p>
+                            <p class="mb-1" v-else>
+                                <span class="bi bi-exclamation-circle me-2"></span> Egyikük sem jelent meg a versenyen, ezért sorsolással {{ MatchStats.playerOneStat?.won ? MatchStats.playerOne.username : MatchStats.playerTwo.username }} nevű versenyző {{ MatchStats.remainingPlayer == 2 ? "nyerte meg a versenyt!" : "jutott tovább!" }}
+                            </p>
                         </div>
                     </div>
                 </div>

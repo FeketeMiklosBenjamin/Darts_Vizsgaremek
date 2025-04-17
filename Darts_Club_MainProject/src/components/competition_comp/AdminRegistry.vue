@@ -165,7 +165,8 @@ async function Send() {
     if (status.resp == '') {
         try {
             await registerCompetition(user.accessToken, competitionForm.value);
-
+            console.log(matchImg.value);
+            
             if (matchImg.value) {
                 await uploadMatchHeader(user.accessToken, matchImg.value, matchHeader);
             }

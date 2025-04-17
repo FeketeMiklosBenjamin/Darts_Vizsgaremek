@@ -41,7 +41,7 @@ const borderColor = (level: string) => {
                     <h5 class="card-title text-center fst-italic">{{ props.competition.name }}</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-title text-center text-decoration-underline mt-2">Verseny időtartama:
+                    <p class="card-title text-center text-decoration-underline mt-3">Verseny időtartama:
                     </p>
                     <p class="text-center m-0 small">
                         {{ new Date(props.competition.tournamentStartDate).toLocaleDateString(undefined, {
@@ -60,7 +60,7 @@ const borderColor = (level: string) => {
                             }) }}
                     </p>
                 </div>
-                <button v-if="!isOneCard" type="button" class="btn btn-warning justify-content-center d-flex w-100"
+                <button v-if="!isOneCard" type="button" class="btn btn-warning justify-content-center d-flex mt-4 mb-0 w-100"
                     @click="NavigateTo(props.competition.id)">Eredmények megtekintése</button>
             </div>
         </div>

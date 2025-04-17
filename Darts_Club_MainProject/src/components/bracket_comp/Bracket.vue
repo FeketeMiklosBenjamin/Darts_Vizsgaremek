@@ -75,6 +75,7 @@ const getBracketNodeClass = (node: IBracketNode) => {
 
 const getTeamClass = (team: ITeam): string => {
     let clazz = '';
+    
     if (props.bracketNode.match?.winner === team.id) {
         clazz = 'winner';
     }
@@ -195,6 +196,7 @@ const getHighlightClass = (teamId: string): string => {
 
 .vt-team .score {
     width: 20px;
+    padding: 3px 6px;
     text-align: center;
 }
 
@@ -208,10 +210,10 @@ const getHighlightClass = (teamId: string): string => {
 }
 
 .winner {
-    background-color: #d4edda;
+    background-color: rgb(212, 168, 57);
 }
 
 .highlight {
-    border: 2px solid rgb(184, 134, 11);
+    border: 2px solid red;
 }
 </style>
