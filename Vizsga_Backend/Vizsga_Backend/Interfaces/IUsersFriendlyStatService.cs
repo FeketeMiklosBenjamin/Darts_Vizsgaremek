@@ -9,7 +9,6 @@ namespace VizsgaBackend.Services
     {
         Task<UsersFriendlyStat> GetByUserIdAsync(string userId);
         Task CreateAsync(UsersFriendlyStat stat);
-        Task<UpdateResult> UpdateOneAsync(FilterDefinition<UsersFriendlyStat> filter, UpdateDefinition<UsersFriendlyStat> update);
         Task<UpdateResult> SavePlayerStat(string userId, EndMatchModel stats);
     }
 }

@@ -570,88 +570,88 @@ namespace VizsgaBackend.Controllers
             }
         }
 
-        [HttpGet("{userId}/lastmatches")]
-        [Authorize]
-        public async Task<IActionResult> GetUserLastMatches(string userId)
-        {
-            try
-            {
-                var user = await _service.GetByIdAsync(userId);
-                if (user == null)
-                    return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
+        //[HttpGet("{userId}/lastmatches")]
+        //[Authorize]
+        //public async Task<IActionResult> GetUserLastMatches(string userId)
+        //{
+        //    try
+        //    {
+        //        var user = await _service.GetByIdAsync(userId);
+        //        if (user == null)
+        //            return NotFound(new { message = $"A felhasználó az ID-vel ({userId}) nem található." });
 
-                int previousMatchesCount = 2;
+        //        int previousMatchesCount = 2;
 
-                List<MatchToCard> AllMatchesResult = new List<MatchToCard>();
+        //        List<MatchToCard> AllMatchesResult = new List<MatchToCard>();
 
-                MatchToCard? matchUpcommingResult = null;
+        //        MatchToCard? matchUpcommingResult = null;
 
-                var matchUpcommings = await _matchService.GetUserUpcomingMatchesAsync(userId, 1);
+        //        var matchUpcommings = await _matchService.GetUserUpcomingMatchesAsync(userId, 1);
 
-                var matchUpcomming = matchUpcommings == null ? null : matchUpcommings[0];
+        //        var matchUpcomming = matchUpcommings == null ? null : matchUpcommings[0];
 
-                if (matchUpcomming == null)
-                {
-                    previousMatchesCount = 3;
-                }
-                else
-                {
-                    matchUpcommingResult = new MatchToCard
-                    (
-                        matchUpcomming.Id,
-                        matchUpcomming.Header!.Id,
-                        matchUpcomming.Header.Name,
-                        matchUpcomming.Status,
-                        matchUpcomming.StartDate.ToString()!,
-                        matchUpcomming.PlayerOne!.Username,
-                        matchUpcomming.PlayerTwo!.Username,
-                        null,
-                        null,
-                        null
-                    );
+        //        if (matchUpcomming == null)
+        //        {
+        //            previousMatchesCount = 3;
+        //        }
+        //        else
+        //        {
+        //            matchUpcommingResult = new MatchToCard
+        //            (
+        //                matchUpcomming.Id,
+        //                matchUpcomming.Header!.Id,
+        //                matchUpcomming.Header.Name,
+        //                matchUpcomming.Status,
+        //                matchUpcomming.StartDate.ToString()!,
+        //                matchUpcomming.PlayerOne!.Username,
+        //                matchUpcomming.PlayerTwo!.Username,
+        //                null,
+        //                null,
+        //                null
+        //            );
 
-                    AllMatchesResult.Add(matchUpcommingResult);
-                }
+        //            AllMatchesResult.Add(matchUpcommingResult);
+        //        }
 
-                var previousMatches = await _matchService.GetUserLastMatchesAsync(userId, previousMatchesCount);
+        //        var previousMatches = await _matchService.GetUserLastMatchesAsync(userId, previousMatchesCount);
 
-                foreach ( var match in previousMatches )
-                {
-                    bool userWon = false;
+        //        foreach ( var match in previousMatches )
+        //        {
+        //            bool userWon = false;
 
-                    if (match.PlayerOne!.Id == userId && match.PlayerOneStat!.Won)
-                    {
-                        userWon = true;
-                    }
-                    else if (match.PlayerTwo!.Id == userId && match.PlayerTwoStat!.Won)
-                    {
-                        userWon = true;
-                    }
+        //            if (match.PlayerOne!.Id == userId && match.PlayerOneStat!.Won)
+        //            {
+        //                userWon = true;
+        //            }
+        //            else if (match.PlayerTwo!.Id == userId && match.PlayerTwoStat!.Won)
+        //            {
+        //                userWon = true;
+        //            }
 
-                    MatchToCard matchResult = new MatchToCard
-                    (
-                        match.Id,
-                        match.Header!.Id,
-                        match.Header.Name,
-                        match.Status,
-                        match.StartDate.ToString()!,
-                        match.PlayerOne!.Username,
-                        match.PlayerTwo!.Username,
-                        match.PlayerOneStat!.SetsWon ?? match.PlayerOneStat.LegsWon,
-                        match.PlayerTwoStat!.SetsWon ?? match.PlayerTwoStat.LegsWon,
-                        userWon
-                    );
+        //            MatchToCard matchResult = new MatchToCard
+        //            (
+        //                match.Id,
+        //                match.Header!.Id,
+        //                match.Header.Name,
+        //                match.Status,
+        //                match.StartDate.ToString()!,
+        //                match.PlayerOne!.Username,
+        //                match.PlayerTwo!.Username,
+        //                match.PlayerOneStat!.SetsWon ?? match.PlayerOneStat.LegsWon,
+        //                match.PlayerTwoStat!.SetsWon ?? match.PlayerTwoStat.LegsWon,
+        //                userWon
+        //            );
 
-                    AllMatchesResult.Add(matchResult);
-                }
+        //            AllMatchesResult.Add(matchResult);
+        //        }
 
-                return Ok(new {matches = AllMatchesResult} );
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, new { message = "A lekérés során hiba történt." });
-            }
-        }
+        //        return Ok(new {matches = AllMatchesResult} );
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(500, new { message = "A lekérés során hiba történt." });
+        //    }
+        //}
 
         [HttpGet("tournament_matches")]
         [Authorize]

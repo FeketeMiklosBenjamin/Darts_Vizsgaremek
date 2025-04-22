@@ -13,14 +13,21 @@ namespace Vizsga_Backend.SignalR
 
         private static readonly ConcurrentDictionary<string, string> playerConnections = new(); // playerId, connectionId
 
+        private readonly ILogger<MatchHub> _logger;
+
+        private readonly IMatchService _matchService;
         private readonly IMatchHeaderService _matchHeaderService;
         private readonly IUsersFriendlyStatService _userFriendlyStatService;
+        private readonly IUsersTournamentStatService _userTorunamentStatService;
         private readonly IUserService _userService;
 
-        public MatchHub(IMatchHeaderService matchHeaderService, IUsersFriendlyStatService userFriendlyStatService, IUserService userService)
+        public MatchHub(ILogger<MatchHub> logger, IMatchService matchService, IMatchHeaderService matchHeaderService, IUsersFriendlyStatService userFriendlyStatService, IUsersTournamentStatService userTorunamentStatService, IUserService userService)
         {
+            _logger = logger;
+            _matchService = matchService;
             _matchHeaderService = matchHeaderService;
             _userFriendlyStatService = userFriendlyStatService;
+            _userTorunamentStatService = userTorunamentStatService;
             _userService = userService;
         }
 
@@ -43,7 +50,7 @@ namespace Vizsga_Backend.SignalR
 
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId);
 
-            if (matchPlayers[matchId].Count > 1)
+            if (matchPlayers[matchId].Count() > 1)
             {
                 string firstPlayerId = matchPlayers[matchId][0];
                 if (firstPlayerId != playerId)
@@ -81,7 +88,7 @@ namespace Vizsga_Backend.SignalR
 
                     var PlayerTwo = await _userService.GetByIdAsync(secondPlayerId);
 
-                    StartFriendlyMatchModel startFriendlyMatchModel = new StartFriendlyMatchModel() { 
+                    StartMatchModel startFriendlyMatchModel = new StartMatchModel() { 
                         StartingPlayer = startingPlayer,
                         PlayerOneName = (startingPlayer == PlayerOne!.Id ? PlayerOne!.Username : PlayerTwo!.Username),
                         PlayerTwoName = (startingPlayer != PlayerOne!.Id ? PlayerOne!.Username : PlayerTwo!.Username),
@@ -91,6 +98,8 @@ namespace Vizsga_Backend.SignalR
                     };
 
                     await Clients.Group(matchId).SendAsync("FriendlyMatchStarted", startFriendlyMatchModel);
+
+                    await _matchHeaderService.DeleteMatchHeaderAsync(matchId);
                 }
                 else
                 {
@@ -146,7 +155,10 @@ namespace Vizsga_Backend.SignalR
         {
             if (matchPlayers.TryGetValue(matchId, out var players) && players.Contains(playerId))
             {
-                await _userFriendlyStatService.SavePlayerStat(playerId, stats);
+                if (stats.Legs != null || stats.Sets != null)
+                {
+                    await _userFriendlyStatService.SavePlayerStat(playerId, stats);                
+                }
 
                 if (playerConnections.TryRemove(playerId, out string? connectionId))
                 {
@@ -181,19 +193,22 @@ namespace Vizsga_Backend.SignalR
 
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId);
 
+            _logger.LogInformation("Player {PlayerId} joined tournament match {MatchId}. Current players: {Count}", playerId, matchId, matchPlayers[matchId].Count);
 
-            if (matchPlayers[matchId].Count > 1)
+            if (matchPlayers[matchId].Count == 2)
             {
-                var matchWithMatchHeader = await _matchHeaderService.GetMatchWithHeaderAsync(matchId);
-                StartFriendlyMatchModel startMatchModel = new StartFriendlyMatchModel()
+                var matchWithMatchHeader = await _matchService.GetMatchWithPlayersByIdAsync(matchId);
+
+                StartMatchModel startMatchModel = new StartMatchModel()
                 {
                     StartingPlayer = matchWithMatchHeader!.PlayerOne!.Id,
                     PlayerOneName = matchWithMatchHeader.PlayerOne.Username,
                     PlayerTwoName = matchWithMatchHeader.PlayerTwo!.Username,
-                    LegCount = matchWithMatchHeader.MatchHeader.LegsCount,
-                    SetCount = (matchWithMatchHeader.MatchHeader.SetsCount == null) ? 0 : (int)matchWithMatchHeader.MatchHeader.SetsCount,
-                    StartingPoint = matchWithMatchHeader.MatchHeader.StartingPoint
+                    LegCount = matchWithMatchHeader.Header!.LegsCount,
+                    SetCount = (matchWithMatchHeader.Header!.SetsCount == null) ? 0 : (int)matchWithMatchHeader.Header!.SetsCount,
+                    StartingPoint = matchWithMatchHeader.Header!.StartingPoint
                 };
+
                 await Clients.Group(matchId).SendAsync("TournamentMatchStarted", startMatchModel);
             }
         }
@@ -202,7 +217,7 @@ namespace Vizsga_Backend.SignalR
         {
             if (matchPlayers.TryGetValue(matchId, out var players) && players.Contains(playerId))
             {
-                await _userFriendlyStatService.SavePlayerStat(playerId, stats);
+                await _matchService.SetPlayerStatAsync(matchId, playerId, stats);
 
                 if (playerConnections.TryRemove(playerId, out string? connectionId))
                 {
@@ -236,13 +251,33 @@ namespace Vizsga_Backend.SignalR
             if (!string.IsNullOrEmpty(playerId))
             {
                 var match = matchPlayers.FirstOrDefault(m => m.Value.Contains(playerId));
-                if (!string.IsNullOrEmpty(match.Key))
+                string matchId = match.Key;
+
+                if (!string.IsNullOrEmpty(matchId))
                 {
-                    await LeaveFriendlyMatch(match.Key, playerId);
+                    match.Value.Remove(playerId);
+                    playerConnections.TryRemove(playerId, out _);
+                    await Groups.RemoveFromGroupAsync(Context.ConnectionId, matchId);
+
+                    if (match.Value.Count > 0)
+                    {
+                        string opponentId = match.Value.First();
+                        if (playerConnections.TryGetValue(opponentId, out var opponentConnId))
+                        {
+                            await Clients.Client(opponentConnId).SendAsync("OpponentDisconnected");
+                            await Groups.RemoveFromGroupAsync(opponentConnId, matchId);
+                        }
+                    }
+
+                    if (match.Value.Count == 0)
+                    {
+                        matchPlayers.TryRemove(matchId, out _);
+                    }
                 }
             }
 
             await base.OnDisconnectedAsync(exception);
         }
+
     }
 }

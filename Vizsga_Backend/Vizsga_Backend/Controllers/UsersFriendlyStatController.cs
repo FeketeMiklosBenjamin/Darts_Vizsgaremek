@@ -44,27 +44,5 @@ namespace VizsgaBackend.Controllers
                 throw;
             }
         }
-
-        //[HttpPut("test/{userId}")]
-        //public async Task<IActionResult> TestSaveStat(string userId, [FromBody] EndMatchModel stat)
-        //{
-        //    try
-        //    {
-        //        if (stat == null)
-        //            return BadRequest(new { message = "A statisztikai adat nem lehet null." });
-
-        //        var result = await _service.SavePlayerStat(userId, stat);
-
-        //        return Ok(new
-        //        {
-        //            message = "Statisztika frissítve teszt módban.",
-        //            ModifiedCount = result?.ModifiedCount ?? 0
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "A teszt stat frissítése során hiba történt.", error = ex.Message });
-        //    }
-        //}
     }
 }

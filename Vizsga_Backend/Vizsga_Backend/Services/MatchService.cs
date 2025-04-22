@@ -2,9 +2,11 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Vizsga_Backend.Models.MatchModels;
+using Vizsga_Backend.Models.SignalRModels;
 using Vizsga_Backend.Models.TournamentModels;
 using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Models;
+using VizsgaBackend.Services;
 
 namespace Vizsga_Backend.Services
 {
@@ -14,12 +16,18 @@ namespace Vizsga_Backend.Services
 
         private readonly IMongoCollection<PlayerMatchStat> _playerMatchStatCollection;
 
-        public MatchService(IOptions<MongoDBSettings> mongoDBSettings)
+        private readonly IUsersTournamentStatService _usersTournamentStatService;
+
+        private readonly IMatchHeaderService _matchHeaderService;
+
+        public MatchService(IOptions<MongoDBSettings> mongoDBSettings, IUsersTournamentStatService usersTournamentStatService, IMatchHeaderService matchHeaderService)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
             _matchCollection = database.GetCollection<Match>(mongoDBSettings.Value.MatchesCollectionName);
             _playerMatchStatCollection = database.GetCollection<PlayerMatchStat>(mongoDBSettings.Value.Players_Match_StatsCollectionName);
+            _usersTournamentStatService = usersTournamentStatService;
+            _matchHeaderService = matchHeaderService;
         }
 
         public async Task CreateMatchAsync(Match match)
@@ -32,6 +40,7 @@ namespace Vizsga_Backend.Services
             return await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
         }
 
+        // Frontend
         public async Task SetAllPlayerStatNotAppearedAsync(string matchId, string? notApppearedId)
         {
             var match = await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
@@ -39,7 +48,6 @@ namespace Vizsga_Backend.Services
 
             if (string.IsNullOrEmpty(notApppearedId))
             {
-                // Régi logika: mindkét játékos statja létrejön, random nyertessel
                 var stat1 = new PlayerMatchStat
                 {
                     Appeared = false,
@@ -83,10 +91,11 @@ namespace Vizsga_Backend.Services
                     .Set(m => m.Status, "Finished");
 
                 await _matchCollection.UpdateOneAsync(m => m.Id == match.Id, update);
+
+                await CreateNextMatchAsync(match, (playerOneWon ? match.PlayerOneId! : match.PlayerTwoId!));
             }
             else
             {
-                // Csak a nem megjelent játékos statját hozzuk létre
                 var stat = new PlayerMatchStat
                 {
                     Appeared = false,
@@ -110,6 +119,99 @@ namespace Vizsga_Backend.Services
             }
         }
 
+        // Mobil
+        public async Task SetPlayerStatAsync(string matchId, string playerId, EndMatchModel stat)
+        {
+            var match = await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
+            if (match == null) return;
+
+            var playerStat = new PlayerMatchStat
+            {
+                Appeared = true,
+                Won = stat.Won,
+                SetsWon = stat.SetsWon,
+                LegsWon = stat.LegsWon,
+                Averages = stat.Averages,
+                Max180s = stat.Max180s,
+                CheckoutPercentage = stat.CheckoutPercentage,
+                HighestCheckout = stat.HighestCheckout,
+                NineDarter = stat.NineDarter
+            };
+
+            await _playerMatchStatCollection.InsertOneAsync(playerStat);
+
+            bool isTournamentWon = match.RemainingPlayer == 2 && stat.Won;
+
+            if (stat.Legs != null || stat.Sets != null)
+            {
+                await _usersTournamentStatService.SavePlayerTournamentStatAsync(playerId, match, stat, isTournamentWon);
+            }
+
+            UpdateDefinition<Match> update;
+
+            if (playerId == match.PlayerOneId)
+            {
+                update = Builders<Match>.Update.Set(m => m.PlayerOneStatId, playerStat.Id).Set(m => m.Status, "Finished");
+            }
+            else if (playerId == match.PlayerTwoId)
+            {
+                update = Builders<Match>.Update.Set(m => m.PlayerTwoStatId, playerStat.Id).Set(m => m.Status, "Finished");
+            }
+            else
+            {
+                return;
+            }
+
+            await _matchCollection.UpdateOneAsync(m => m.Id == match.Id, update);
+
+            if (stat.Won)
+            {
+                await CreateNextMatchAsync(match, playerId);            
+            }
+
+        }
+
+        public async Task CreateNextMatchAsync(Match oldMatch, string winnerPlayerId)
+        {
+            int newRemainingPlayer = oldMatch.RemainingPlayer / 2;
+            if (newRemainingPlayer == 1)
+            {
+                return;
+            }
+            int newRowNumber = (oldMatch.RowNumber + 1) / 2;
+            bool isFirstPlayer = (oldMatch.RowNumber + 1) % 2 == 0;
+
+            var matchHeader = await _matchHeaderService.GetByIdAsync(oldMatch.HeaderId);
+
+            DateTime newStartDate = matchHeader!.MatchDates[matchHeader.MatchDates.IndexOf((DateTime)oldMatch.StartDate!) + 1];
+            
+            var isMatchExist = _matchCollection.Find(x => x.HeaderId == oldMatch.HeaderId && x.RemainingPlayer == newRemainingPlayer && x.RowNumber == newRowNumber).FirstOrDefault();
+
+            if (isMatchExist == null)
+            {
+                Match addMatch = new Match()
+                {
+                    HeaderId = oldMatch.HeaderId,
+                    PlayerOneId = isFirstPlayer ? winnerPlayerId : null,
+                    PlayerTwoId = isFirstPlayer ? null : winnerPlayerId,
+                    Status = "Pedding",
+                    PlayerOneStatId = null,
+                    PlayerTwoStatId = null,
+                    StartDate = newStartDate,
+                    RemainingPlayer = newRemainingPlayer,
+                    RowNumber = newRowNumber
+                };
+                await _matchCollection.InsertOneAsync(addMatch);
+            }
+            else
+            {
+                var update = Builders<Match>.Update
+                    .Set(m => m.PlayerOneId, isFirstPlayer ? winnerPlayerId : isMatchExist.PlayerOneId)
+                    .Set(m => m.PlayerTwoId, isFirstPlayer ? isMatchExist.PlayerTwoId : winnerPlayerId);
+
+                await _matchCollection.UpdateOneAsync(m => m.Id == isMatchExist.Id, update);
+            }
+        }
 
         public async Task<MatchWithPlayers?> GetMatchWithPlayersByIdAsync(string matchId)
         {
@@ -148,7 +250,7 @@ namespace Vizsga_Backend.Services
                 {
                     { "$lookup", new BsonDocument
                         {
-                            { "from", "player_match_stats" },
+                            { "from", "players_match_stats" },
                             { "localField", "player_one_stat_id" },
                             { "foreignField", "_id" },
                             { "as", "player_one_stat" }
@@ -160,7 +262,7 @@ namespace Vizsga_Backend.Services
                 {
                     { "$lookup", new BsonDocument
                         {
-                            { "from", "player_match_stats" },
+                            { "from", "players_match_stats" },
                             { "localField", "player_two_stat_id" },
                             { "foreignField", "_id" },
                             { "as", "player_two_stat" }
@@ -207,14 +309,24 @@ namespace Vizsga_Backend.Services
 
             var matchFilter = new BsonDocument
             {
-                { "$or", new BsonArray
+                { "$and", new BsonArray
                     {
-                        new BsonDocument { { "player_one_id", userObjectId } },
-                        new BsonDocument { { "player_two_id", userObjectId } }
+                        new BsonDocument
+                        {
+                            { "$or", new BsonArray
+                                {
+                                    new BsonDocument { { "player_one_id", userObjectId } },
+                                    new BsonDocument { { "player_two_id", userObjectId } }
+                                }
+                            }
+                        },
+                        new BsonDocument { { "status", new BsonDocument { { "$ne", "Finished" } } } },
+                        new BsonDocument { { "player_one_id", new BsonDocument { { "$ne", BsonNull.Value } } } },
+                        new BsonDocument { { "player_two_id", new BsonDocument { { "$ne", BsonNull.Value } } } }
                     }
-                },
-                { "status", new BsonDocument { { "$ne", "Finished" } } }
+                }
             };
+
 
             if (!matchesCount.HasValue)
             {
@@ -304,111 +416,5 @@ namespace Vizsga_Backend.Services
 
             return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).ToListAsync();
         }
-
-
-        public async Task<List<MatchWithPlayers>> GetUserLastMatchesAsync(string userId, int matchesCount)
-        {
-            var userObjectId = new ObjectId(userId);
-
-            var pipeline = new List<BsonDocument>
-            {
-                new BsonDocument
-                {
-                    { "$match", new BsonDocument
-                        {
-                            { "$or", new BsonArray
-                                {
-                                    new BsonDocument { { "player_one_id", userObjectId } },
-                                    new BsonDocument { { "player_two_id", userObjectId } }
-                                }
-                            },
-                            { "status", "Finished" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$sort", new BsonDocument { { "start_date", -1 } } }
-                },
-                new BsonDocument
-                {
-                    { "$limit", matchesCount }
-                },
-                new BsonDocument
-                {
-                    { "$lookup", new BsonDocument
-                        {
-                            { "from", "users" },
-                            { "localField", "player_one_id" },
-                            { "foreignField", "_id" },
-                            { "as", "player_one_info" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$lookup", new BsonDocument
-                        {
-                            { "from", "users" },
-                            { "localField", "player_two_id" },
-                            { "foreignField", "_id" },
-                            { "as", "player_two_info" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$lookup", new BsonDocument
-                        {
-                            { "from", "player_match_stats" },
-                            { "localField", "player_one_stat_id" },
-                            { "foreignField", "_id" },
-                            { "as", "player_one_stat_info" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$lookup", new BsonDocument
-                        {
-                            { "from", "player_match_stats" },
-                            { "localField", "player_two_stat_id" },
-                            { "foreignField", "_id" },
-                            { "as", "player_two_stat_info" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$lookup", new BsonDocument
-                        {
-                            { "from", "match_headers" },
-                            { "localField", "header_id" },
-                            { "foreignField", "_id" },
-                            { "as", "header" }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$addFields", new BsonDocument
-                        {
-                            { "player_one", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_info", 0 } } } },
-                            { "player_two", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_info", 0 } } } },
-                            { "player_one_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_one_stat_info", 0 } } } },
-                            { "player_two_stat", new BsonDocument { { "$arrayElemAt", new BsonArray { "$player_two_stat_info", 0 } } } },
-                            { "header", new BsonDocument { { "$arrayElemAt", new BsonArray { "$header", 0 } } } }
-                        }
-                    }
-                },
-                new BsonDocument
-                {
-                    { "$unset", new BsonArray { "player_one_info", "player_two_info", "player_one_stat_info", "player_two_stat_info", "header_id" } }
-                }
-            };
-
-            return await _matchCollection.Aggregate<MatchWithPlayers>(pipeline).ToListAsync();
-        }
-
     }
 }

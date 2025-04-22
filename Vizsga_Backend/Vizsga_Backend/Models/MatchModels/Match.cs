@@ -15,11 +15,11 @@ namespace Vizsga_Backend.Models.MatchModels
 
         [BsonElement("player_one_id")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string PlayerOneId { get; set; } = string.Empty;
+        public string? PlayerOneId { get; set; } = string.Empty;
 
         [BsonElement("player_two_id")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string PlayerTwoId { get; set; } = string.Empty;
+        public string? PlayerTwoId { get; set; } = string.Empty;
 
         [BsonElement("status")]
         public string Status { get; set; } = string.Empty;

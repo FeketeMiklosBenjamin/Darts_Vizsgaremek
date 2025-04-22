@@ -1,6 +1,6 @@
 ﻿namespace Vizsga_Backend.Models.SignalRModels
 {
-    public class StartFriendlyMatchModel
+    public class StartMatchModel
     {
         public string StartingPlayer { get; set; }
         public int SetCount { get; set; }

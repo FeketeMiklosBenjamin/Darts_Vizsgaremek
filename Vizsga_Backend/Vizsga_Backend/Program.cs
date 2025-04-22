@@ -17,14 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 // MongoDB és egyéb szolgáltatások regisztrálása
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
-builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<UsersFriendlyStatService>();
-builder.Services.AddSingleton<UsersTournamentStatService>();
-builder.Services.AddSingleton<JwtService>();
-builder.Services.AddSingleton<MessageService>();
-builder.Services.AddSingleton<AnnouncedTournamentService>();
-builder.Services.AddSingleton<MatchHeaderService>();
-builder.Services.AddSingleton<MatchService>();
 
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IUsersFriendlyStatService, UsersFriendlyStatService>();

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Vizsga_Backend.Models;
 using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.UserModels;
 using Vizsga_Backend.Services;
@@ -31,17 +32,6 @@ namespace Vizsga_Backend.Controllers
                 if (match == null)
                 {
                     return NotFound(new { message = $"A mérkőzés az ID-vel ({matchId}) nem található." });
-                }
-
-                if (match.StartDate!.Value.AddMinutes(10) < DateTime.UtcNow && match.Status == "Pedding")
-                {
-                    await _matchService.SetAllPlayerStatNotAppearedAsync(matchId, null);
-                }
-
-                if ((match.PlayerOneStat == null || match.PlayerTwoStat == null) && match.Status == "Finished")
-                {
-                    var notAppearedId = match.PlayerOneStat == null ? match.PlayerOne!.Id : match.PlayerTwo!.Id;
-                    await _matchService.SetAllPlayerStatNotAppearedAsync(matchId, notAppearedId);
                 }
 
                 if (match.Status == "Finished")
@@ -114,76 +104,6 @@ namespace Vizsga_Backend.Controllers
                 };
 
                 return Ok(resultPedding);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, new { message = "A lekérés során hiba történt." });
-            }
-        }
-
-        [HttpGet("with_header/{matchId}")]
-        [Authorize]
-        public async Task<IActionResult> GetMatchWithHeader(string matchId)
-        {
-            try
-            {
-                var matchWithHeader = await _matchHeaderService.GetMatchWithHeaderAsync(matchId);
-                if (matchWithHeader == null)
-                {
-                    return NotFound(new { message = $"A mérkőzés az ID-vel ({matchId}) nem található." });
-                }
-                var resultFinished = new
-                {
-                    matchWithHeader.Id,
-                    matchWithHeader.Status,
-                    startDate = matchWithHeader.StartDate,
-                    matchWithHeader.RemainingPlayer,
-                    matchWithHeader.RowNumber,
-                    playerOne = new
-                    {
-                        matchWithHeader.PlayerOne!.Id,
-                        matchWithHeader.PlayerOne.Username,
-                        matchWithHeader.PlayerOne.ProfilePicture
-                    },
-                    playerTwo = new
-                    {
-                        matchWithHeader.PlayerTwo!.Id,
-                        matchWithHeader.PlayerTwo.Username,
-                        matchWithHeader.PlayerTwo.ProfilePicture
-                    },
-                    playerOneStat = new
-                    {
-                        matchWithHeader.PlayerOneStat!.Appeared,
-                        matchWithHeader.PlayerOneStat.Won,
-                        matchWithHeader.PlayerOneStat.SetsWon,
-                        matchWithHeader.PlayerOneStat.LegsWon,
-                        matchWithHeader.PlayerOneStat.Averages,
-                        matchWithHeader.PlayerOneStat.Max180s,
-                        matchWithHeader.PlayerOneStat.CheckoutPercentage,
-                        matchWithHeader.PlayerOneStat.HighestCheckout,
-                        matchWithHeader.PlayerOneStat.NineDarter,
-                    },
-                    playerTwoStat = new
-                    {
-                        matchWithHeader.PlayerTwoStat!.Appeared,
-                        matchWithHeader.PlayerTwoStat.Won,
-                        matchWithHeader.PlayerTwoStat.SetsWon,
-                        matchWithHeader.PlayerTwoStat.LegsWon,
-                        matchWithHeader.PlayerTwoStat.Averages,
-                        matchWithHeader.PlayerTwoStat.Max180s,
-                        matchWithHeader.PlayerTwoStat.CheckoutPercentage,
-                        matchWithHeader.PlayerTwoStat.HighestCheckout,
-                        matchWithHeader.PlayerTwoStat.NineDarter,
-                    },
-                    matchHeader = new
-                    {
-                        matchWithHeader.MatchHeader.JoinPassword,
-                        matchWithHeader.MatchHeader.StartingPoint,
-                        matchWithHeader.MatchHeader.LegsCount,
-                        matchWithHeader.MatchHeader.SetsCount,
-                    }
-                };
-                return Ok(resultFinished);
             }
             catch (Exception)
             {

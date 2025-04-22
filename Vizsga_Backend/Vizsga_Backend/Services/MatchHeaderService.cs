@@ -144,9 +144,9 @@ namespace Vizsga_Backend.Services
                 {
                     { "$lookup", new BsonDocument
                         {
-                            { "from", "player_match_stats" },
-                            { "localField", "matches.player_one_id" },
-                            { "foreignField", "player_id" },
+                            { "from", "players_match_stats" },
+                            { "localField", "matches.player_one_stat_id" },
+                            { "foreignField", "_id" },
                             { "as", "player_one_stats" }
                         }
                     }
@@ -156,9 +156,9 @@ namespace Vizsga_Backend.Services
                 {
                     { "$lookup", new BsonDocument
                         {
-                            { "from", "player_match_stats" },
-                            { "localField", "matches.player_two_id" },
-                            { "foreignField", "player_id" },
+                            { "from", "players_match_stats" },
+                            { "localField", "matches.player_two_stat_id" },
+                            { "foreignField", "_id" },
                             { "as", "player_two_stats" }
                         }
                     }
@@ -237,7 +237,7 @@ namespace Vizsga_Backend.Services
                                                                             { "cond", new BsonDocument
                                                                                 {
                                                                                     { "$eq", new BsonArray
-                                                                                        { "$$stat.player_id", "$$match.player_one_id" }
+                                                                                        { "$$stat._id", "$$match.player_one_stat_id" }
                                                                                     }
                                                                                 }
                                                                             }
@@ -259,7 +259,7 @@ namespace Vizsga_Backend.Services
                                                                             { "cond", new BsonDocument
                                                                                 {
                                                                                     { "$eq", new BsonArray
-                                                                                        { "$$stat.player_id", "$$match.player_two_id" }
+                                                                                        { "$$stat._id", "$$match.player_two_stat_id" }
                                                                                     }
                                                                                 }
                                                                             }
@@ -283,7 +283,7 @@ namespace Vizsga_Backend.Services
             };
 
             return await _matchHeaderCollection.Aggregate<MatchHeaderWithMatches>(pipeline).FirstOrDefaultAsync();
-        }
+            }
 
         public async Task<List<MatchHeader>> GetAllFriendlyMatchAsync()
         {
@@ -314,63 +314,5 @@ namespace Vizsga_Backend.Services
 
             await _matchHeaderCollection.UpdateOneAsync(filter, update);
         }
-
-        public async Task<MatchWithMatchHeader?> GetMatchWithHeaderAsync(string matchId)
-        {
-            var objectId = ObjectId.Parse(matchId);
-
-            var pipeline = new[]
-            {
-                new BsonDocument("$match", new BsonDocument("_id", objectId)),
-
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "match_headers" },
-                    { "localField", "header_id" },
-                    { "foreignField", "_id" },
-                    { "as", "match_header" }
-                }),
-                new BsonDocument("$unwind", "$match_header"),
-
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "users" },
-                    { "localField", "player_one_id" },
-                    { "foreignField", "_id" },
-                    { "as", "player_one" }
-                }),
-                new BsonDocument("$unwind", new BsonDocument("path", "$player_one").Add("preserveNullAndEmptyArrays", true)),
-
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "users" },
-                    { "localField", "player_two_id" },
-                    { "foreignField", "_id" },
-                    { "as", "player_two" }
-                }),
-                new BsonDocument("$unwind", new BsonDocument("path", "$player_two").Add("preserveNullAndEmptyArrays", true)),
-
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "player_match_stats" },
-                    { "localField", "player_one_stat_id" },
-                    { "foreignField", "_id" },
-                    { "as", "player_one_stat" }
-                }),
-                new BsonDocument("$unwind", new BsonDocument("path", "$player_one_stat").Add("preserveNullAndEmptyArrays", true)),
-
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "player_match_stats" },
-                    { "localField", "player_two_stat_id" },
-                    { "foreignField", "_id" },
-                    { "as", "player_two_stat" }
-                }),
-                new BsonDocument("$unwind", new BsonDocument("path", "$player_two_stat").Add("preserveNullAndEmptyArrays", true))
-            };
-
-            return await _matchHeaderCollection.Aggregate<MatchWithMatchHeader>(pipeline).FirstOrDefaultAsync();
-        }
-
     }
 }

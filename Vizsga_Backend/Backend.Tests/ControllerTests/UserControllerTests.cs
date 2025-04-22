@@ -712,142 +712,142 @@ namespace Backend.Tests.ControllerTests
             Assert.Equal("Hibás mostani jelszó.", GetResponseMessage(unauthorizedResult.Value));
         }
 
-        [Fact]
-        public async Task GetUserTournamentMatches_WithUpcomingMatches_ReturnsMatches()
-        {
-            var userId = "507f1f77bcf86cd799439011";
-            var opponentId = "507f191e810c19729de860ea";
-            var matches = new List<MatchWithPlayers> {
-                new MatchWithPlayers
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Header = new MatchHeader
-                    {
-                        Id = ObjectId.GenerateNewId().ToString(),
-                        Name = "Tournament 1",
-                        Level = "Amateur",
-                        SetsCount = 5,
-                        LegsCount = 10,
-                        StartingPoint = 501,
-                        IsDrawed = false
-                    },
-                    StartDate = DateTime.UtcNow.AddDays(1),
-                    PlayerOne = new User
-                    {
-                        Id = userId,
-                        Username = "currentUser",
-                        Password = "hashed_password",
-                        EmailAddress = "currentuser@test.com",
-                        ProfilePicture = "/images/currentuser.jpg",
-                        Role = 1,
-                        RegisterDate = DateTime.UtcNow.AddMonths(-1),
-                        RefreshTokens = new List<string> { "token1", "token2" },
-                        LastLoginDate = DateTime.UtcNow,
-                        StrictBan = false,
-                        BannedUntil = null
-                    },
-                    PlayerTwo = new User
-                    {
-                        Id = opponentId,
-                        Username = "opponent1",
-                        Password = "hashed_password",
-                        EmailAddress = "opponent1@test.com",
-                        ProfilePicture = "/images/opponent1.jpg",
-                        Role = 1,
-                        RegisterDate = DateTime.UtcNow.AddMonths(-2),
-                        RefreshTokens = new List<string> { "token3", "token4" },
-                        LastLoginDate = DateTime.UtcNow.AddHours(-2),
-                        StrictBan = false,
-                        BannedUntil = null
-                    },
-                    Status = "Started"
-                },
-                new MatchWithPlayers
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Header = new MatchHeader
-                    {
-                        Id = ObjectId.GenerateNewId().ToString(),
-                        Name = "Tournament 2",
-                        Level = "Amateur",
-                        SetsCount = 3,
-                        LegsCount = 9,
-                        StartingPoint = 301,
-                        IsDrawed = false
-                    },
-                    StartDate = DateTime.UtcNow.AddDays(2),
-                    PlayerOne = new User
-                    {
-                        Id = opponentId,
-                        Username = "opponent2",
-                        Password = "hashed_password",
-                        EmailAddress = "opponent2@test.com",
-                        ProfilePicture = "/images/opponent2.jpg",
-                        Role = 1,
-                        RegisterDate = DateTime.UtcNow.AddMonths(-3),
-                        RefreshTokens = new List<string> { "token5", "token6" },
-                        LastLoginDate = DateTime.UtcNow.AddHours(-3),
-                        StrictBan = false,
-                        BannedUntil = null
-                    },
-                    PlayerTwo = new User
-                    {
-                        Id = userId,
-                        Username = "currentUser",
-                        Password = "hashed_password",
-                        EmailAddress = "currentuser@test.com",
-                        ProfilePicture = "/images/currentuser.jpg",
-                        Role = 1,
-                        RegisterDate = DateTime.UtcNow.AddMonths(-1),
-                        RefreshTokens = new List<string> { "token1", "token2" },
-                        LastLoginDate = DateTime.UtcNow,
-                        StrictBan = false,
-                        BannedUntil = null
-                    },
-                    Status = "Started"
-                }
-            };
-            SetupAuthenticatedUser(userId);
-            _mockMatchService.Setup(x => x.GetUserUpcomingMatchesAsync(userId, null))
-                .ReturnsAsync(matches);
+        //[Fact]
+        //public async Task GetUserTournamentMatches_WithUpcomingMatches_ReturnsMatches()
+        //{
+        //    var userId = "507f1f77bcf86cd799439011";
+        //    var opponentId = "507f191e810c19729de860ea";
+        //    var matches = new List<MatchWithPlayers> {
+        //        new MatchWithPlayers
+        //        {
+        //            Id = ObjectId.GenerateNewId().ToString(),
+        //            Header = new MatchHeader
+        //            {
+        //                Id = ObjectId.GenerateNewId().ToString(),
+        //                Name = "Tournament 1",
+        //                Level = "Amateur",
+        //                SetsCount = 5,
+        //                LegsCount = 10,
+        //                StartingPoint = 501,
+        //                IsDrawed = false
+        //            },
+        //            StartDate = DateTime.UtcNow.AddDays(1),
+        //            PlayerOne = new User
+        //            {
+        //                Id = userId,
+        //                Username = "currentUser",
+        //                Password = "hashed_password",
+        //                EmailAddress = "currentuser@test.com",
+        //                ProfilePicture = "/images/currentuser.jpg",
+        //                Role = 1,
+        //                RegisterDate = DateTime.UtcNow.AddMonths(-1),
+        //                RefreshTokens = new List<string> { "token1", "token2" },
+        //                LastLoginDate = DateTime.UtcNow,
+        //                StrictBan = false,
+        //                BannedUntil = null
+        //            },
+        //            PlayerTwo = new User
+        //            {
+        //                Id = opponentId,
+        //                Username = "opponent1",
+        //                Password = "hashed_password",
+        //                EmailAddress = "opponent1@test.com",
+        //                ProfilePicture = "/images/opponent1.jpg",
+        //                Role = 1,
+        //                RegisterDate = DateTime.UtcNow.AddMonths(-2),
+        //                RefreshTokens = new List<string> { "token3", "token4" },
+        //                LastLoginDate = DateTime.UtcNow.AddHours(-2),
+        //                StrictBan = false,
+        //                BannedUntil = null
+        //            },
+        //            Status = "Started"
+        //        },
+        //        new MatchWithPlayers
+        //        {
+        //            Id = ObjectId.GenerateNewId().ToString(),
+        //            Header = new MatchHeader
+        //            {
+        //                Id = ObjectId.GenerateNewId().ToString(),
+        //                Name = "Tournament 2",
+        //                Level = "Amateur",
+        //                SetsCount = 3,
+        //                LegsCount = 9,
+        //                StartingPoint = 301,
+        //                IsDrawed = false
+        //            },
+        //            StartDate = DateTime.UtcNow.AddDays(2),
+        //            PlayerOne = new User
+        //            {
+        //                Id = opponentId,
+        //                Username = "opponent2",
+        //                Password = "hashed_password",
+        //                EmailAddress = "opponent2@test.com",
+        //                ProfilePicture = "/images/opponent2.jpg",
+        //                Role = 1,
+        //                RegisterDate = DateTime.UtcNow.AddMonths(-3),
+        //                RefreshTokens = new List<string> { "token5", "token6" },
+        //                LastLoginDate = DateTime.UtcNow.AddHours(-3),
+        //                StrictBan = false,
+        //                BannedUntil = null
+        //            },
+        //            PlayerTwo = new User
+        //            {
+        //                Id = userId,
+        //                Username = "currentUser",
+        //                Password = "hashed_password",
+        //                EmailAddress = "currentuser@test.com",
+        //                ProfilePicture = "/images/currentuser.jpg",
+        //                Role = 1,
+        //                RegisterDate = DateTime.UtcNow.AddMonths(-1),
+        //                RefreshTokens = new List<string> { "token1", "token2" },
+        //                LastLoginDate = DateTime.UtcNow,
+        //                StrictBan = false,
+        //                BannedUntil = null
+        //            },
+        //            Status = "Started"
+        //        }
+        //    };
+        //    SetupAuthenticatedUser(userId);
+        //    _mockMatchService.Setup(x => x.GetUserUpcomingMatchesAsync(userId, null))
+        //        .ReturnsAsync(matches);
 
-            // Act
-            // Előkészületek
-            var result = await _controller.GetUserTournamentMatches();
+        //    // Act
+        //    // Előkészületek
+        //    var result = await _controller.GetUserTournamentMatches();
 
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var response = JsonSerializer.Deserialize<List<dynamic>>(JsonSerializer.Serialize(okResult.Value));
+        //    var okResult = Assert.IsType<OkObjectResult>(result);
+        //    var response = JsonSerializer.Deserialize<List<dynamic>>(JsonSerializer.Serialize(okResult.Value));
 
-            Assert.Equal(2, response.Count);
+        //    Assert.Equal(2, response.Count);
 
-            // Ellenőrizzük az első mérkőzés adatait
-            Assert.Equal("Tournament 1", response[0].GetProperty("Name").GetString());
-            Assert.Equal("Amateur", response[0].GetProperty("Level").GetString());
-            Assert.Equal("opponent1", response[0].GetProperty("opponentName").GetString());
+        //    // Ellenőrizzük az első mérkőzés adatait
+        //    Assert.Equal("Tournament 1", response[0].GetProperty("Name").GetString());
+        //    Assert.Equal("Amateur", response[0].GetProperty("Level").GetString());
+        //    Assert.Equal("opponent1", response[0].GetProperty("opponentName").GetString());
 
-            // Ellenőrizzük a második mérkőzés adatait
-            Assert.Equal("Tournament 2", response[1].GetProperty("Name").GetString());
-            Assert.Equal("Amateur", response[1].GetProperty("Level").GetString());
-            Assert.Equal("opponent2", response[1].GetProperty("opponentName").GetString());
+        //    // Ellenőrizzük a második mérkőzés adatait
+        //    Assert.Equal("Tournament 2", response[1].GetProperty("Name").GetString());
+        //    Assert.Equal("Amateur", response[1].GetProperty("Level").GetString());
+        //    Assert.Equal("opponent2", response[1].GetProperty("opponentName").GetString());
 
-        }
+        //}
 
-        [Fact]
-        public async Task GetUserTournamentMatches_NoMatches_ReturnsNotFound()
-        {
-            // Arrange
-            var userId = "507f1f77bcf86cd799439011";
-            SetupAuthenticatedUser(userId);
-            _mockMatchService.Setup(x => x.GetUserUpcomingMatchesAsync(userId, null))
-                .ReturnsAsync((List<MatchWithPlayers>)null);
+        //[Fact]
+        //public async Task GetUserTournamentMatches_NoMatches_ReturnsNotFound()
+        //{
+        //    // Arrange
+        //    var userId = "507f1f77bcf86cd799439011";
+        //    SetupAuthenticatedUser(userId);
+        //    _mockMatchService.Setup(x => x.GetUserUpcomingMatchesAsync(userId, null))
+        //        .ReturnsAsync((List<MatchWithPlayers>)null);
 
-            // Act
-            var result = await _controller.GetUserTournamentMatches();
+        //    // Act
+        //    var result = await _controller.GetUserTournamentMatches();
 
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("Nincsen közelgő verseny mérkőzése", GetResponseMessage(notFoundResult.Value));
-        }
+        //    // Assert
+        //    var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        //    Assert.Equal("Nincsen közelgő verseny mérkőzése", GetResponseMessage(notFoundResult.Value));
+        //}
 
         private void SetupAuthenticatedUser(string userId)
         {
