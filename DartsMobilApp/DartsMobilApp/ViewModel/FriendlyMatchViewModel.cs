@@ -87,8 +87,8 @@ namespace DartsMobilApp.ViewModel
                 throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
             }
-            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName && match.playerLevel == SecStoreItems.MyLevel).ToList();
-            
+            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName &&(match.playerLevel == SecStoreItems.MyLevel || 
+            match.levelLocked == false)).ToList();
             if (Friendlymatches != null)
             {
                 return Friendlymatches;

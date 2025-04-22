@@ -3,20 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DartsMobilApp.Pages.SimpleCheckoutPopUp"
-             Color="Black">
+             Color="Transparent">
     <Frame>
-        <VerticalStackLayout>
-            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*">
-                <VerticalStackLayout>
-                    <Label Text="Hány nyílat dobtál el a duplára?" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
-                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Button Text="0" BackgroundColor="White"/>
-                        <Button Text="1" BackgroundColor="White" Grid.Column="1"/>
-                        <Button Text="2" BackgroundColor="White" Grid.Column="2"/>
-                        <Button Text="3" BackgroundColor="White" Grid.Column="3"/>
+        <VerticalStackLayout BackgroundColor="Black" WidthRequest="300" Spacing="20">
+            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*" HorizontalOptions="Center">
+                <VerticalStackLayout Grid.ColumnSpan="3" >
+                    <Label Text="Hány nyílat dobtál el a duplára?" FontSize="25" TextColor="{x:StaticResource Primary}" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="20">
+                        <Button Text="0" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="0"/>
+                        <Button Text="1" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="1"/>
+                        <Button Text="2" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="2"/>
+                        <Button Text="3" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="3"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
-                <Button Text="Elküldés" BackgroundColor="{x:StaticResource Primary}" TextColor="Black" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Center"/>
             </Grid>
         </VerticalStackLayout>
     </Frame>

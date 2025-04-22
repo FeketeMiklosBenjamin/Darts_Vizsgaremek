@@ -5,23 +5,23 @@
              x:Class="DartsMobilApp.Pages.EndGameCheckOutPopUp"
              Color="Black">
     <Frame>
-        <VerticalStackLayout>
-            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,*">
-                <VerticalStackLayout Grid.ColumnSpan="3" HorizontalOptions="Center">
+        <VerticalStackLayout BackgroundColor="Black"  WidthRequest="300" Spacing="20">
+            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,*" HorizontalOptions="Center">
+                <VerticalStackLayout Grid.ColumnSpan="3" HorizontalOptions="Center" Spacing="10">
                     <Label Text="Hány nyílat dobtál el a duplára?" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
                     <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                        <Button Text="0" BackgroundColor="White"/>
-                        <Button Text="1" BackgroundColor="White"/>
-                        <Button Text="2" BackgroundColor="White"/>
-                        <Button Text="3" BackgroundColor="White"/>
+                        <Button Text="0" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
+                        <Button Text="1" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
+                        <Button Text="2" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
+                        <Button Text="3" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
-                <VerticalStackLayout Grid.ColumnSpan="3" HorizontalOptions="Center" Grid.Row="1">
+                <VerticalStackLayout Grid.ColumnSpan="3" HorizontalOptions="Center" Grid.Row="1" Spacing="10">
                     <Label Text="A kiszállóban használt nyílak száma:" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
                     <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                        <Button Text="1" BackgroundColor="White" TextColor="Black"/>
-                        <Button Text="2" BackgroundColor="White" TextColor="Black"/>
-                        <Button Text="3" BackgroundColor="White" TextColor="Black"/>
+                        <Button Text="1" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
+                        <Button Text="2" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
+                        <Button Text="3" BackgroundColor="White" TextColor="Black" FontAttributes="Bold"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
                 <Button Text="Elküldés" BackgroundColor="{x:StaticResource Primary}" TextColor="Black" Grid.Row="2" Grid.ColumnSpan="3" HorizontalOptions="Center"/>

@@ -11,6 +11,7 @@ using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Pages;
 using System.Threading.Tasks;
 using DartsMobilApp.API;
+using CommunityToolkit.Maui.Views;
 
 namespace DartsMobilApp.ViewModel
 {
@@ -22,12 +23,12 @@ namespace DartsMobilApp.ViewModel
 
         public static StartFriendlyMatchModel settings;
 
+
         [ObservableProperty]
         public Grid? counterGrid;
 
         [ObservableProperty]
         public string recommendedFirstCheckout;
-
         [ObservableProperty]
         public string recommendedSecondCheckout;
 
@@ -42,10 +43,10 @@ namespace DartsMobilApp.ViewModel
 
 
         [ObservableProperty]
-        private int firstPlayerSetsWon;
+        public int firstPlayerSetsWon;
 
         [ObservableProperty]
-        private int secondPlayerSetsWon;
+        public int secondPlayerSetsWon;
 
         public int allPlayedSet
         {
@@ -67,13 +68,13 @@ namespace DartsMobilApp.ViewModel
 
 
 
-        private int MyPlayerAllThrownDarts = 0;
+        public static int MyPlayerAllThrownDarts = 0;
 
 
-        private List<int> MyPlayerAllThrownDartsForDouble = new List<int>();
+        public static int MyPlayerAllThrownDartsForDouble = 0;
 
 
-        private List<int> MyPlayerSuccessfulThrownDartsForDouble = new List<int>();
+        private int MyPlayerSuccessfulThrownDartsForDouble = 0;
 
         private int MyNineDarters = 0;
 
@@ -428,8 +429,8 @@ namespace DartsMobilApp.ViewModel
             }
             else
             {
-                Set_description(PointsFirstPlayer);
                 isFirstPlayer = false;
+                RecommendedFirstCheckout = Set_description(PointsFirstPlayer); 
                 if (ImTheFirst)
                 {
                     EnabledButton = false;
@@ -497,7 +498,7 @@ namespace DartsMobilApp.ViewModel
             }
             else
             {
-                Set_description(PointsSecondPlayer);
+                RecommendedSecondCheckout = Set_description(PointsSecondPlayer);
                 isFirstPlayer = true;
                 if (ImTheFirst)
                 {
@@ -554,6 +555,7 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetFirstPlayersPoints(point);
                     TextSpeach(point);
+                    ShowCheckOutPopUpsFirstPlayer();
                     await CheckMatchWinner();
                 }
                 else
@@ -567,6 +569,7 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetSecondPlayersPoints(point);
                     TextSpeach(point);
+                    ShowCheckOutPopUpsSecondPlayer();
                     await CheckMatchWinner();
                 }
             }
@@ -578,8 +581,8 @@ namespace DartsMobilApp.ViewModel
         {
             PointsSecondPlayer = settings.StartingPoint.ToString();
             PointsFirstPlayer = settings.StartingPoint.ToString();
-            //RecommendedFirstCheckout = "";
-            //RecommendedSecondCheckout = "";
+            RecommendedFirstCheckout = "";
+            RecommendedSecondCheckout = "";
         }
 
 
@@ -618,6 +621,7 @@ namespace DartsMobilApp.ViewModel
                 else if (SecondPlayerWonLeg == needToWinLegs)
                 {
                     SecondPlayerSetsWon++;
+
                     TextSpeach($"{SecondPlayerName} nyerte a {allPlayedSet}. szettet!");
                     Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
@@ -748,6 +752,34 @@ namespace DartsMobilApp.ViewModel
                 }
             }
 
+        }
+
+        private void ShowCheckOutPopUpsFirstPlayer()
+        {
+            if(int.Parse(PointsFirstPlayer) <= 50 && int.Parse(PointsFirstPlayer) > 0)
+            {
+                SimpleCheckoutPopUp popUp = new SimpleCheckoutPopUp(new SimpleCheckOutPopUpViewModel());
+                Application.Current.MainPage.ShowPopup(popUp);
+            }
+            if (int.Parse(PointsFirstPlayer) == 0)
+            {
+                EndGameCheckOutPopUp EndPopUp = new EndGameCheckOutPopUp();
+                Application.Current.MainPage.ShowPopup(EndPopUp);
+            }
+        }
+
+        private void ShowCheckOutPopUpsSecondPlayer()
+        {
+            if (int.Parse(PointsSecondPlayer) <= 50 && int.Parse(PointsSecondPlayer) > 0)
+            {
+                SimpleCheckoutPopUp popUp = new SimpleCheckoutPopUp(new SimpleCheckOutPopUpViewModel());
+                Application.Current.MainPage.ShowPopup(popUp);
+            }
+            if (int.Parse(PointsSecondPlayer) == 0)
+            {
+                EndGameCheckOutPopUp EndPopUp = new EndGameCheckOutPopUp();
+                Application.Current.MainPage.ShowPopup(EndPopUp);
+            }
         }
 
 

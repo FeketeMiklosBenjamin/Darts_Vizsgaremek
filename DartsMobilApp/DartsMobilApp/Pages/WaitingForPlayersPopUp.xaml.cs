@@ -23,8 +23,8 @@ public partial class WaitingForPlayersPopUp : Popup
             popup = popupPage;
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                this.Close();
                 await Application.Current.MainPage.ShowPopupAsync(popupPage);
+                this.Close();
             });
         };
         signalR.OnFriendlyMatchStarted += async (startingSetup) =>
