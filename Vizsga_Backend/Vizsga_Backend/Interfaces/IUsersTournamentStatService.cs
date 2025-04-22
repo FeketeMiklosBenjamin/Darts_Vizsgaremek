@@ -14,6 +14,6 @@ namespace VizsgaBackend.Services
         Task<UsersTournamentStatWithUser?> GetTournamentWithUserByUserIdAsync(string userId);
         Task<UsersTournamentStat> GetTournamentByUserIdAsync(string userId);
         Task CreateAsync(UsersTournamentStat stat);
-        Task<UpdateResult> SavePlayerTournamentStatAsync(string playerId, Match match, EndMatchModel stat, bool tournamentWon);
+        Task<UpdateResult> SavePlayerTournamentStatAsync(string playerId, MatchModel match, EndMatchModel stat, bool tournamentWon);
     }
 }

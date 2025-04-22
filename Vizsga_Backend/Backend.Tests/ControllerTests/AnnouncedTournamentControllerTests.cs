@@ -105,12 +105,10 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task GetAllAnnouncedTournament_AdminUser_ReturnsFullDetails()
         {
-            // Arrange
             var userId = "507f1f77bcf86cd799439011";
-            var role = "2"; // Admin role = 2
+            var role = "2";
             var email = "admin@example.com";
 
-            // Set up the HttpContext with a ClaimsPrincipal for the authenticated user
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
@@ -123,7 +121,6 @@ namespace Backend.Tests.ControllerTests
             var httpContext = new DefaultHttpContext { User = principal };
             _controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 
-            // Set up the service to return test data
             var tournaments = new List<TournamentGetAll>
             {
                 new TournamentGetAll
@@ -173,40 +170,33 @@ namespace Backend.Tests.ControllerTests
             _mockAnnouncedTournamentService.Setup(x => x.GetAnnouncedTournamentsWithPlayersAsync())
                 .ReturnsAsync(tournaments);
 
-            // Act
             var result = await _controller.GetAllAnnouncedTournament();
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var response = JsonSerializer.Deserialize<List<dynamic>>(JsonSerializer.Serialize(okResult.Value));
+            var response = JsonSerializer.Deserialize<List<JsonElement>>(JsonSerializer.Serialize(okResult.Value));
 
             Assert.NotNull(response);
             Assert.Single(response);
 
-            // Tournament level checks
             var tournament = response[0];
             Assert.Equal("62b8c1f6f8b2e75a6e8e8e8b", tournament.GetProperty("Id").GetString());
             Assert.Equal("62b8c1f6f8b2e75a6e8e8e8c", tournament.GetProperty("HeaderId").GetString());
             Assert.Equal(16, tournament.GetProperty("MaxPlayerJoin").GetInt32());
 
-            // Match header checks
             var matchHeader = tournament.GetProperty("matchHeader");
             Assert.Equal("Amateur Tournament", matchHeader.GetProperty("Name").GetString());
             Assert.Equal("Amateur", matchHeader.GetProperty("Level").GetString());
             Assert.Equal(3, matchHeader.GetProperty("SetsCount").GetInt32());
             Assert.Equal(5, matchHeader.GetProperty("LegsCount").GetInt32());
 
-            // Registered players checks
             var registeredPlayers = tournament.GetProperty("registeredPlayers");
             Assert.Equal(2, registeredPlayers.GetArrayLength());
 
-            // First player checks
             var firstPlayer = registeredPlayers[0];
             Assert.Equal("661917f1e888ab6df5e2c456", firstPlayer.GetProperty("Id").GetString());
             Assert.Equal("dartsKing91", firstPlayer.GetProperty("Username").GetString());
             Assert.Equal("dartsking91@example.com", firstPlayer.GetProperty("EmailAddress").GetString());
 
-            // Second player checks
             var secondPlayer = registeredPlayers[1];
             Assert.Equal("661918a5e888ab6df5e2c999", secondPlayer.GetProperty("Id").GetString());
             Assert.Equal("dartQueen22", secondPlayer.GetProperty("Username").GetString());
@@ -216,15 +206,12 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task CreateAnnouncedTournament_ValidDataAdminUser_ReturnsSuccess()
         {
-            // Arrange
             var userId = "admin123";
             var email = "admin@darts.com";
-            var role = "2"; // Admin role
+            var role = "2";
 
-            // Setup authenticated admin user
             SetupAuthenticatedUser(userId, email, role);
 
-            // Valid tournament data
             var tournamentData = new TournamentCreate
             {
                 Name = "Summer Dart Championship",
@@ -244,9 +231,8 @@ namespace Backend.Tests.ControllerTests
                 }
             };
 
-            // Mock services
             _mockAnnouncedTournamentService.Setup(x => x.ValidateCreateDatas(tournamentData))
-                .Returns(""); // No validation errors
+                .Returns("");
 
             var createdMatchHeaderId = ObjectId.GenerateNewId().ToString();
             _mockMatchHeaderService.Setup(x => x.CreateAsync(It.IsAny<MatchHeader>()))
@@ -256,23 +242,19 @@ namespace Backend.Tests.ControllerTests
             _mockAnnouncedTournamentService.Setup(x => x.CreateTournamentAsync(It.IsAny<AnnouncedTournament>()))
                 .Returns(Task.CompletedTask);
 
-            // Inject HttpContext
             _controller.ControllerContext = new ControllerContext
             {
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.CreateAnnouncedTournament(tournamentData);
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(okResult.Value));
+            var response = JsonSerializer.Deserialize<JsonElement>(JsonSerializer.Serialize(okResult.Value));
 
             Assert.Equal("Sikeres létrehozás!", response.GetProperty("message").GetString());
             Assert.NotNull(response.GetProperty("headerId").GetString());
 
-            // Verify level conversion
             _mockMatchHeaderService.Verify(x => x.CreateAsync(It.Is<MatchHeader>(mh =>
                 mh.Level == "Champion"
             )), Times.Once);
@@ -281,12 +263,10 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task CreateAnnouncedTournament_InvalidData_ReturnsBadRequest()
         {
-            // Arrange
             var userId = "admin123";
             var email = "admin@darts.com";
-            var role = "2"; // Admin role
+            var role = "2";
 
-            // Setup authenticated admin user
             SetupAuthenticatedUser(userId, email, role);
 
             var invalidData = new TournamentCreate
@@ -295,15 +275,13 @@ namespace Backend.Tests.ControllerTests
                 SetsCount = 3,
                 LegsCount = 5,
                 StartingPoint = 501,
-                // Password missing
                 Level = "Amateur",
                 MaxPlayerJoin = 8,
                 JoinStartDate = DateTime.UtcNow.AddDays(5),
-                JoinEndDate = DateTime.UtcNow.AddDays(1), // End before start
+                JoinEndDate = DateTime.UtcNow.AddDays(1),
                 MatchDates = new List<DateTime>()
             };
 
-            // Mock validation service
             _mockAnnouncedTournamentService.Setup(x => x.ValidateCreateDatas(invalidData))
                 .Returns("A jelszó megadása kötelező és a jelentkezési időszak vége nem lehet korábbi a kezdeténél");
 
@@ -312,17 +290,14 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.CreateAnnouncedTournament(invalidData);
 
-            // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(badRequestResult.Value));
+            var response = JsonSerializer.Deserialize<JsonElement>(JsonSerializer.Serialize(badRequestResult.Value));
 
             Assert.Equal("A jelszó megadása kötelező és a jelentkezési időszak vége nem lehet korábbi a kezdeténél",
                 response.GetProperty("message").GetString());
 
-            // Verify no creation was attempted
             _mockMatchHeaderService.Verify(x => x.CreateAsync(It.IsAny<MatchHeader>()), Times.Never);
         }
     }

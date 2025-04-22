@@ -12,7 +12,7 @@ namespace Vizsga_Backend.Services
 {
     public class MatchService : IMatchService
     {
-        private readonly IMongoCollection<Match> _matchCollection;
+        private readonly IMongoCollection<MatchModel> _matchCollection;
 
         private readonly IMongoCollection<PlayerMatchStat> _playerMatchStatCollection;
 
@@ -24,18 +24,18 @@ namespace Vizsga_Backend.Services
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-            _matchCollection = database.GetCollection<Match>(mongoDBSettings.Value.MatchesCollectionName);
+            _matchCollection = database.GetCollection<MatchModel>(mongoDBSettings.Value.MatchesCollectionName);
             _playerMatchStatCollection = database.GetCollection<PlayerMatchStat>(mongoDBSettings.Value.Players_Match_StatsCollectionName);
             _usersTournamentStatService = usersTournamentStatService;
             _matchHeaderService = matchHeaderService;
         }
 
-        public async Task CreateMatchAsync(Match match)
+        public async Task CreateMatchAsync(MatchModel match)
         {
             await _matchCollection.InsertOneAsync(match);
         }
 
-        public async Task<Match> GetMatchByIdAsync(string matchId)
+        public async Task<MatchModel> GetMatchByIdAsync(string matchId)
         {
             return await _matchCollection.Find(m => m.Id == matchId).FirstOrDefaultAsync();
         }
@@ -85,7 +85,7 @@ namespace Vizsga_Backend.Services
 
                 await _playerMatchStatCollection.UpdateOneAsync(s => s.Id == winnerStatId, Builders<PlayerMatchStat>.Update.Set(s => s.Won, true));
 
-                var update = Builders<Match>.Update
+                var update = Builders<MatchModel>.Update
                     .Set(m => m.PlayerOneStatId, match.PlayerOneId == (playerOneWon ? match.PlayerOneId : match.PlayerTwoId) ? stat1.Id : stat2.Id)
                     .Set(m => m.PlayerTwoStatId, match.PlayerTwoId == (playerOneWon ? match.PlayerTwoId : match.PlayerOneId) ? stat2.Id : stat1.Id)
                     .Set(m => m.Status, "Finished");
@@ -111,7 +111,7 @@ namespace Vizsga_Backend.Services
 
                 await _playerMatchStatCollection.InsertOneAsync(stat);
 
-                var update = Builders<Match>.Update
+                var update = Builders<MatchModel>.Update
                     .Set(m => m.PlayerOneStatId, match.PlayerOneId == notApppearedId ? stat.Id : match.PlayerOneStatId)
                     .Set(m => m.PlayerTwoStatId, match.PlayerTwoId == notApppearedId ? stat.Id : match.PlayerTwoStatId);
 
@@ -147,15 +147,15 @@ namespace Vizsga_Backend.Services
                 await _usersTournamentStatService.SavePlayerTournamentStatAsync(playerId, match, stat, isTournamentWon);
             }
 
-            UpdateDefinition<Match> update;
+            UpdateDefinition<MatchModel> update;
 
             if (playerId == match.PlayerOneId)
             {
-                update = Builders<Match>.Update.Set(m => m.PlayerOneStatId, playerStat.Id).Set(m => m.Status, "Finished");
+                update = Builders<MatchModel>.Update.Set(m => m.PlayerOneStatId, playerStat.Id).Set(m => m.Status, "Finished");
             }
             else if (playerId == match.PlayerTwoId)
             {
-                update = Builders<Match>.Update.Set(m => m.PlayerTwoStatId, playerStat.Id).Set(m => m.Status, "Finished");
+                update = Builders<MatchModel>.Update.Set(m => m.PlayerTwoStatId, playerStat.Id).Set(m => m.Status, "Finished");
             }
             else
             {
@@ -171,7 +171,7 @@ namespace Vizsga_Backend.Services
 
         }
 
-        public async Task CreateNextMatchAsync(Match oldMatch, string winnerPlayerId)
+        public async Task CreateNextMatchAsync(MatchModel oldMatch, string winnerPlayerId)
         {
             int newRemainingPlayer = oldMatch.RemainingPlayer / 2;
             if (newRemainingPlayer == 1)
@@ -189,7 +189,7 @@ namespace Vizsga_Backend.Services
 
             if (isMatchExist == null)
             {
-                Match addMatch = new Match()
+                MatchModel addMatch = new MatchModel()
                 {
                     HeaderId = oldMatch.HeaderId,
                     PlayerOneId = isFirstPlayer ? winnerPlayerId : null,
@@ -205,7 +205,7 @@ namespace Vizsga_Backend.Services
             }
             else
             {
-                var update = Builders<Match>.Update
+                var update = Builders<MatchModel>.Update
                     .Set(m => m.PlayerOneId, isFirstPlayer ? winnerPlayerId : isMatchExist.PlayerOneId)
                     .Set(m => m.PlayerTwoId, isFirstPlayer ? isMatchExist.PlayerTwoId : winnerPlayerId);
 

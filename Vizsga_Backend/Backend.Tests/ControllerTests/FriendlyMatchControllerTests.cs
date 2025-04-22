@@ -94,10 +94,9 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task GetAllFriendlyMatch_RegularUser_ReturnsMatches()
         {
-            // Arrange
             var userId = "user123";
             var email = "user@test.com";
-            var role = "1"; // User role
+            var role = "1";
 
             SetupAuthenticatedUser(userId, email, role);
 
@@ -147,10 +146,8 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.GetAllFriendlyMatch();
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var response = JsonSerializer.Deserialize<List<JsonElement>>(JsonSerializer.Serialize(okResult.Value));
 
@@ -175,10 +172,9 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task GetAllFriendlyMatch_AdminUser_ReturnsUnauthorized()
         {
-            // Arrange
             var userId = "admin123";
             var email = "admin@test.com";
-            var role = "2"; // Admin role
+            var role = "2";
 
             SetupAuthenticatedUser(userId, email, role);
 
@@ -187,10 +183,8 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.GetAllFriendlyMatch();
 
-            // Assert
             var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
             var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(unauthorizedResult.Value));
 
@@ -201,7 +195,6 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task CreateFriendlyMatch_ValidData_ReturnsMatchId()
         {
-            // Arrange
             var userId = "user123";
             var email = "user@test.com";
             var role = "1";
@@ -236,16 +229,13 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.CreateFriendlyMatch(matchData);
 
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(okResult.Value));
 
             Assert.Equal("newMatch123", response.GetProperty("matchId").GetString());
 
-            // Verify match creation
             _mockMatchHeaderService.Verify(x => x.CreateAsync(It.Is<MatchHeader>(mh =>
                 mh.Name == "dartPlayer" &&
                 mh.Level == "Advanced" &&
@@ -268,9 +258,9 @@ namespace Backend.Tests.ControllerTests
             var invalidData = new FriendlyGameCreate
             {
                 LevelLocked = true,
-                SetsCount = 0, // Invalid
-                LegsCount = 0, // Invalid
-                StartingPoint = 0 // Invalid
+                SetsCount = 0,
+                LegsCount = 0,
+                StartingPoint = 0
             };
 
             _mockUsersTournamentStatService.Setup(x => x.GetTournamentWithUserByUserIdAsync(userId))
@@ -283,16 +273,13 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.CreateFriendlyMatch(invalidData);
 
-            // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(badRequestResult.Value));
 
             Assert.Equal("Érvénytelen beállítások", response.GetProperty("message").GetString());
 
-            // Verify no match was created
             _mockMatchHeaderService.Verify(x => x.CreateAsync(It.IsAny<MatchHeader>()), Times.Never);
         }
     }

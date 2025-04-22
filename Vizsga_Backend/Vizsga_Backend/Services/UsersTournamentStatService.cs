@@ -95,7 +95,7 @@ namespace VizsgaBackend.Services
             await _usersTournamentStatCollection.InsertOneAsync(stat);
         }
 
-        public async Task<UpdateResult> SavePlayerTournamentStatAsync(string playerId, Match matchData, EndMatchModel stat, bool tournamentWon)
+        public async Task<UpdateResult> SavePlayerTournamentStatAsync(string playerId, MatchModel matchData, EndMatchModel stat, bool tournamentWon)
         {
             var myStat = await GetTournamentByUserIdAsync(playerId);
             var opponentId = matchData.PlayerOneId == playerId ? matchData.PlayerTwoId : matchData.PlayerOneId;

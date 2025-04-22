@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace Vizsga_Backend.Models.MatchModels
 {
-    public class Match
+    public class MatchModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

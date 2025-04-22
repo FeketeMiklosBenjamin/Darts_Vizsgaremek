@@ -416,13 +416,13 @@ namespace Vizsga_Backend.Controllers
                 int playerTwoIndex;
                 int rowNumber = 1;
 
-                Match newMatch;
+                MatchModel newMatch;
 
                 Message successMessage;
 
                 do
                 {
-                    newMatch = new Match
+                    newMatch = new MatchModel
                     {
                         HeaderId = tournament.HeaderId,
                         Status = "Pedding",

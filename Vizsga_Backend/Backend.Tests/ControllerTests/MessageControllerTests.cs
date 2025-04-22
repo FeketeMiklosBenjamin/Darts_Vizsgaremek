@@ -5,9 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Vizsga_Backend.Controllers;
@@ -15,10 +13,8 @@ using Vizsga_Backend.Interfaces;
 using Vizsga_Backend.Models.MatchModels;
 using Vizsga_Backend.Models.MessageModels;
 using Vizsga_Backend.Models.UserModels;
-using Vizsga_Backend.Models.UserStatsModels;
 using Vizsga_Backend.Services;
 using VizsgaBackend.Models;
-using VizsgaBackend.Services;
 
 namespace Backend.Tests.ControllerTests
 {
@@ -29,7 +25,6 @@ namespace Backend.Tests.ControllerTests
         private readonly Mock<IOptions<MongoDBSettings>> _mockMongoDbSettings;
         private readonly IConfiguration _configuration;
         private readonly Mock<HttpContext> _mockHttpContext;
-
         private readonly MessageController _controller;
 
         public MessageControllerTests()
@@ -89,10 +84,9 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task SendAdminMessage_ValidRequest_ReturnsCreated()
         {
-            // Arrange
             var adminId = "admin123";
             var adminEmail = "admin@test.com";
-            var role = "2"; // Admin role
+            var role = "2";
 
             SetupAuthenticatedUser(adminId, adminEmail, role);
 
@@ -115,13 +109,10 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.SendAdminMessage(messageData);
 
-            // Assert
             Assert.IsType<CreatedResult>(result);
 
-            // Verify message was created correctly
             _mockMessageService.Verify(x => x.CreateAsync(It.Is<Message>(m =>
                 m.Title == "Fontos értesítés" &&
                 m.Text == "Kérjük, frissítsd az adataidat" &&
@@ -133,10 +124,9 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task DeleteMessage_AdminUser_DeletesAnyMessage()
         {
-            // Arrange
             var adminId = "admin123";
             var adminEmail = "admin@test.com";
-            var role = "2"; // Admin role
+            var role = "2";
 
             SetupAuthenticatedUser(adminId, adminEmail, role);
 
@@ -158,23 +148,19 @@ namespace Backend.Tests.ControllerTests
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.DeleteMessage(messageId);
 
-            // Assert
             Assert.IsType<NoContentResult>(result);
 
-            // Verify deletion
             _mockMessageService.Verify(x => x.DeleteAsync(messageId), Times.Once);
         }
 
         [Fact]
         public async Task DeleteMessage_RegularUser_DeletesOwnMessage()
         {
-            // Arrange
             var userId = "user123";
             var email = "user@test.com";
-            var role = "1"; // User role
+            var role = "1";
 
             SetupAuthenticatedUser(userId, email, role);
 
@@ -182,7 +168,7 @@ namespace Backend.Tests.ControllerTests
             var existingMessage = new Message
             {
                 Id = messageId,
-                ToId = userId, // Message belongs to this user
+                ToId = userId,
                 FromId = "otherUser"
             };
 
@@ -196,31 +182,26 @@ namespace Backend.Tests.ControllerTests
             _mockMessageService.Setup(x => x.DeleteAsync(messageId))
                 .Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.DeleteMessage(messageId);
 
-            // Assert
             Assert.IsType<NoContentResult>(result);
 
-            // Verify deletion
             _mockMessageService.Verify(x => x.DeleteAsync(messageId), Times.Once);
         }
 
         [Fact]
         public async Task SendUserMessage_ValidRequest_ReturnsCreated()
         {
-            // Arrange
             var userId = "user123";
             var userEmail = "user@test.com";
-            var role = "1"; // Felhasználó szerepkör
+            var role = "1";
 
             SetupAuthenticatedUser(userId, userEmail, role);
 
             var message = new Message
             {
                 Title = "Segítségkérés",
-                Text = "Nem tudok bejelentkezni",
-                // FromId és ToId a controller állítja be
+                Text = "Nem tudok bejelentkezni"
             };
 
             _controller.ControllerContext = new ControllerContext
@@ -231,13 +212,10 @@ namespace Backend.Tests.ControllerTests
             _mockMessageService.Setup(x => x.CreateAsync(It.IsAny<Message>()))
                 .Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.SendUserMessage(message);
 
-            // Assert
             Assert.IsType<CreatedResult>(result);
 
-            // Verify message was created correctly
             _mockMessageService.Verify(x => x.CreateAsync(It.Is<Message>(m =>
                 m.Title == "Segítségkérés" &&
                 m.Text == "Nem tudok bejelentkezni" &&
@@ -250,10 +228,9 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task SendUserMessage_AdminUser_ReturnsUnauthorized()
         {
-            // Arrange
             var adminId = "admin123";
             var adminEmail = "admin@test.com";
-            var role = "2"; // Admin szerepkör
+            var role = "2";
 
             SetupAuthenticatedUser(adminId, adminEmail, role);
 
@@ -263,23 +240,18 @@ namespace Backend.Tests.ControllerTests
                 Text = "Nem kéne működnie"
             };
 
-
             _controller.ControllerContext = new ControllerContext
             {
                 HttpContext = _mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.SendUserMessage(message);
 
-            // Assert
             var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
             var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(unauthorizedResult.Value));
 
-            Assert.Equal("Csak felhasználó küldhet üzenetet az adminnak!",
-                response.GetProperty("message").GetString());
+            Assert.Equal("Csak felhasználó küldhet üzenetet az adminnak!", response.GetProperty("message").GetString());
 
-            // Verify no message was sent
             _mockMessageService.Verify(x => x.CreateAsync(It.IsAny<Message>()), Times.Never);
         }
     }

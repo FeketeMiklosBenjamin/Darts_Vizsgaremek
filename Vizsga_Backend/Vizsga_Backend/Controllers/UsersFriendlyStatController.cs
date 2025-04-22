@@ -7,8 +7,6 @@ using Vizsga_Backend.Models.SignalRModels;
 using Vizsga_Backend.Models.UserStatsModels;
 using VizsgaBackend.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace VizsgaBackend.Controllers
 {
     [Route("api/users/friendlystat/")]
