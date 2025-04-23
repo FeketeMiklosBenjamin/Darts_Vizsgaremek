@@ -53,7 +53,8 @@ namespace DartsMobilApp.Classes
                 };
                 var JsonContent = JsonSerializer.Serialize(Model);
                 var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
-                var newAccessToken =  DartsAPI.PostRefreshAndGetNewAccess(content, SecStoreItems.UserId).accessToken;
+                var response = await DartsAPI.PostRefreshAndGetNewAccess(content, SecStoreItems.UserId);
+                var newAccessToken = response.accessToken;
                 await SecureStorage.SetAsync("Token", newAccessToken);
 
 

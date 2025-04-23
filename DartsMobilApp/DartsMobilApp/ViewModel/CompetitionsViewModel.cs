@@ -46,20 +46,20 @@ namespace DartsMobilApp.ViewModel
 
         [RelayCommand]
 
-        private void Appearing()
+        private async Task Appearing()
         {
-            LoadUserMatches();
+            await LoadUserMatches();
             SortedTournaments = tournaments.Take(4).ToList();
         }
 
-        private List<MatchModel> LoadUserMatches()
+        private async Task<List<MatchModel>> LoadUserMatches()
         {
             if (string.IsNullOrEmpty(AccessToken))
             {
                 throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
             }
-            Tournaments = DartsAPI.GetUserMatches();
+            Tournaments = await DartsAPI.GetUserMatches();
             if (Tournaments != null)
             {
                 return Tournaments;
@@ -119,24 +119,24 @@ namespace DartsMobilApp.ViewModel
         }
 
 
-        private List<MatchModel> RefreshUserMatchesFunction()
+        private async Task<List<MatchModel>> RefreshUserMatchesFunction()
         {
-            List<MatchModel> newUserMatchesList = LoadUserMatches().ToList();
+            List<MatchModel> newUserMatchesList = await LoadUserMatches();
 
             return newUserMatchesList;
         }
 
-        private List<MatchModel> RefreshSorted()
+        private async Task<List<MatchModel>> RefreshSorted()
         {
-            Tournaments = RefreshUserMatchesFunction();
+            Tournaments = await RefreshUserMatchesFunction();
             List<MatchModel> newsortedMatches = Tournaments.Take(4).ToList();
             return newsortedMatches;
         }
 
         [RelayCommand]
-        private void RefreshTournaments()
+        private async Task RefreshTournaments()
         {
-            SortedTournaments = RefreshSorted();
+            SortedTournaments = await RefreshSorted();
             TakedTournaments = SortedTournaments;
         }
 

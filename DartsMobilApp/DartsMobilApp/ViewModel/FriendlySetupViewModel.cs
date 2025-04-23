@@ -134,7 +134,7 @@ public partial class FriendlySetupViewModel : ObservableObject
         newFriendlyMatch.joinPassword = Visible ? Pwd : null;
 
         var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
-        var responseJson = DartsAPI.PostNewFriendlyMatch(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+        var responseJson = await DartsAPI.PostNewFriendlyMatch(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
         var response = JsonSerializer.Deserialize<NewFriendlyMatchResponse>(responseJson);
 
         if (response != null)
@@ -149,9 +149,6 @@ public partial class FriendlySetupViewModel : ObservableObject
             Application.Current.MainPage.ShowPopup(new WaitingForPlayersPopUp(_signalR, currentMatchId));
             await _signalR.JoinFriendlyMatch(response.matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
         }
-        else
-        {
-            Debug.WriteLine("Nem sikerült létrehozni a barátságos meccset.");
-        }
+        
     }
 }

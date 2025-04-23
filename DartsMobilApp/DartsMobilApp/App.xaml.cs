@@ -31,7 +31,6 @@ namespace DartsMobilApp
 
                 if (response.message == "Sikeres bejelentkezés.")
                 {
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                     SecureStorage.SetAsync("Token", response.accessToken);
                     SecureStorage.SetAsync("Email", response.emailAddress);
                     SecureStorage.SetAsync("UserName", response.username);
@@ -41,6 +40,7 @@ namespace DartsMobilApp
                     SecureStorage.SetAsync("Email", SecStoreItems.Email);
                     
                     await _signalR.ConnectAsync(SecureStorage.GetAsync("Token").Result);
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
             }
             

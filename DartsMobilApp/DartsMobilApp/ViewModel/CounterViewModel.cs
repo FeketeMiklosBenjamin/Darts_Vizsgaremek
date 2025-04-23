@@ -141,7 +141,6 @@ namespace DartsMobilApp.ViewModel
         public CounterViewModel(SignalRService signalR)
         {
             _signalRService = signalR;
-            Debug.WriteLine("Hello");
         }
 
         
@@ -518,10 +517,7 @@ namespace DartsMobilApp.ViewModel
 
         {
             var locales = await TextToSpeech.GetLocalesAsync();
-            foreach (var locale in locales)
-            {
-                Debug.WriteLine($"Nyelv: {locale.Language}, Név: {locale.Name}\n");
-            }
+            
             var hungarianLaungage = locales.FirstOrDefault(l => l.Language.Contains("hu"));
             var settings = new SpeechOptions()
             {
@@ -613,7 +609,6 @@ namespace DartsMobilApp.ViewModel
                 {
                     FirstPlayerSetsWon++;
                     TextSpeach($"{StartingPlayerName} nyerte a  {allPlayedSet}. szettet!");
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     AllPlayedLegsOnTheMatch += allPlayedLegs;
                     FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
@@ -623,7 +618,6 @@ namespace DartsMobilApp.ViewModel
                     SecondPlayerSetsWon++;
 
                     TextSpeach($"{SecondPlayerName} nyerte a {allPlayedSet}. szettet!");
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     AllPlayedLegsOnTheMatch += allPlayedLegs;
                     FirstPlayerWonLeg = SecondPlayerWonLeg = 0;
@@ -653,7 +647,6 @@ namespace DartsMobilApp.ViewModel
                             await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
                         }
                     }
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -682,7 +675,6 @@ namespace DartsMobilApp.ViewModel
                             await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = AllPlayedLegsOnTheMatch, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
                         }
                     }
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -715,7 +707,6 @@ namespace DartsMobilApp.ViewModel
                             await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = false });
                         }
                     }
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -745,7 +736,6 @@ namespace DartsMobilApp.ViewModel
                             await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, new EndMatchModel { Legs = allPlayedLegs, LegsWon = AllWonLegsOnTheMatchSecond, Sets = allPlayedSet, SetsWon = SecondPlayerSetsWon, Averages = MyAverage, CheckoutPercentage = 45.56, HighestCheckout = MyHighestCheckOut, Max180s = MyPlayer180s, NineDarter = MyNineDarters, Won = true });
                         }
                     }
-                    Debug.WriteLine($"\n\n\nÁtlagom: {MyAverage}\n\n\n");
                     SetDefaultValues();
                     Thread.Sleep(15000);
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");

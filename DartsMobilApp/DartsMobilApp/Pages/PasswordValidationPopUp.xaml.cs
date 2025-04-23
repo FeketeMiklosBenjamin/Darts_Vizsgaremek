@@ -33,7 +33,7 @@ public partial class PasswordValidationPopUp : Popup
             password = password
         };
         var jsonContent = JsonSerializer.Serialize(ValidatePassword);
-        var response = DartsAPI.ValidatePassword(new StringContent(jsonContent, Encoding.UTF8, "application/json"), MatchId);
+        var response = await DartsAPI.ValidatePassword(new StringContent(jsonContent, Encoding.UTF8, "application/json"), MatchId);
         if (response.message == "Sikeres belépés!")
         {
             WaitingForPlayersPopUp popUp = new WaitingForPlayersPopUp(_signalRService, MatchId);

@@ -5,9 +5,21 @@ namespace DartsMobilApp.Pages;
 
 public partial class SimpleCheckoutPopUp : Popup
 {
-	public SimpleCheckoutPopUp(SimpleCheckOutPopUpViewModel vm)
+	public SimpleCheckoutPopUp()
 	{
 		InitializeComponent();
-		this.BindingContext = vm;
 	}
+
+    private void Darts_CheckOutClicked(object sender, EventArgs e)
+    {
+        var SelectedDartsCount = 0;
+        Button Btn = sender as Button;
+        if (int.TryParse(Btn.Text, out int count))
+        {
+            SelectedDartsCount = count;
+        }
+        CounterViewModel.MyPlayerAllThrownDarts += 3;
+        CounterViewModel.MyPlayerAllThrownDartsForDouble += SelectedDartsCount;
+        this.Close();
+    }
 }

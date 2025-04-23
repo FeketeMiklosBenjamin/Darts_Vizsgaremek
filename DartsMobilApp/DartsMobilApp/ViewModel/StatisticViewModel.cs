@@ -26,13 +26,13 @@ namespace DartsMobilApp.ViewModel
 
         [RelayCommand]
 
-        private void Appearing()
+        private async Task Appearing()
         {
-            LoadStatistics();
+            await LoadStatistics();
         }
 
 
-        private  StatisticModel LoadStatistics()
+        private async  Task<StatisticModel> LoadStatistics()
         {
             {
                 if (string.IsNullOrEmpty(AccessToken))
@@ -40,7 +40,7 @@ namespace DartsMobilApp.ViewModel
                     throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
                 }
-                PlayerStatistic = DartsAPI.GetStatistic();
+                PlayerStatistic = await DartsAPI.GetStatistic();
                 if (PlayerStatistic != null)
                 {
                     return PlayerStatistic;

@@ -10,10 +10,10 @@
                 <VerticalStackLayout Grid.ColumnSpan="3" >
                     <Label Text="Hány nyílat dobtál el a duplára?" FontSize="25" TextColor="{x:StaticResource Primary}" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="20">
-                        <Button Text="0" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="0"/>
-                        <Button Text="1" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="1"/>
-                        <Button Text="2" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="2"/>
-                        <Button Text="3" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Command="{Binding SelectDartsCommand}" CommandParameter="3"/>
+                        <Button Text="0" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Clicked="Darts_CheckOutClicked"/>
+                        <Button Text="1" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Clicked="Darts_CheckOutClicked"/>
+                        <Button Text="2" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Clicked="Darts_CheckOutClicked"/>
+                        <Button Text="3" BackgroundColor="White" TextColor="Black" FontAttributes="Bold" FontSize="30" Clicked="Darts_CheckOutClicked"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Grid>

@@ -48,10 +48,10 @@ namespace DartsMobilApp.ViewModel
         public string? AccessToken = SecStoreItems.AToken;
 
         [RelayCommand]
-        private void Appearing()
+        private async Task Appearing()
         {
             
-            LoadFriendliesMatch();
+            await LoadFriendliesMatch();
             SortedFriendlies = friendlymatches.Take(4).ToList();
 
         }
@@ -60,7 +60,7 @@ namespace DartsMobilApp.ViewModel
 
 
         [RelayCommand]
-        private void JustPrivateMatches()
+        private async Task JustPrivateMatches()
         {
             if (JustPrivate == true)
             {
@@ -72,7 +72,7 @@ namespace DartsMobilApp.ViewModel
             else
             {
                 TakedFriendlies.Clear();
-                Friendlymatches = LoadFriendliesMatch();
+                Friendlymatches = await LoadFriendliesMatch();
                 SortedFriendlies = Friendlymatches.Take(4).ToList();
                 FillTakedTList();
             }
@@ -80,14 +80,15 @@ namespace DartsMobilApp.ViewModel
            
 
        
-        private List<FriendlyMatchModel> LoadFriendliesMatch()
+        private async Task<List<FriendlyMatchModel>> LoadFriendliesMatch()
         {
             if (string.IsNullOrEmpty(AccessToken))
             {
                 throw new Exception("Hiányzó Access Token! Kérem jelentkezzen be!");
 
             }
-            Friendlymatches = DartsAPI.GetFriendlyMatches().Where(match => match.name != SecStoreItems.UserName &&(match.playerLevel == SecStoreItems.MyLevel || 
+            var response = await DartsAPI.GetFriendlyMatches();
+            Friendlymatches = response.Where(match => match.name != SecStoreItems.UserName &&(match.playerLevel == SecStoreItems.MyLevel || 
             match.levelLocked == false)).ToList();
             if (Friendlymatches != null)
             {
@@ -152,25 +153,25 @@ namespace DartsMobilApp.ViewModel
         }
 
         
-        private  List<FriendlyMatchModel> RefreshFriendliesFunction()
+        private async Task<List<FriendlyMatchModel>> RefreshFriendliesFunction()
         {
-            List<FriendlyMatchModel> newFriendliesList = LoadFriendliesMatch().ToList();
+            List<FriendlyMatchModel> newFriendliesList = await LoadFriendliesMatch();
             
             return newFriendliesList;
         }
 
-        private List<FriendlyMatchModel> RefreshSorted()
+        private async Task<List<FriendlyMatchModel>> RefreshSorted()
         {
-            Friendlymatches = RefreshFriendliesFunction();
+            Friendlymatches = await RefreshFriendliesFunction();
             List<FriendlyMatchModel> newSortedFriendlies = Friendlymatches.Take(4).ToList();
             return newSortedFriendlies;
         }
 
         [RelayCommand]
 
-        private void RefreshFriendlies()
+        private async Task RefreshFriendlies()
         { 
-            SortedFriendlies = RefreshSorted();
+            SortedFriendlies = await RefreshSorted();
             TakedFriendlies = SortedFriendlies;
         }
 

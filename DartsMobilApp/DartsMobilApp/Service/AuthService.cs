@@ -25,7 +25,7 @@ namespace DartsMobilApp.Service
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             try
             {
-                var response = DartsAPI.PostLogin(content);
+                var response = await DartsAPI.PostLogin(content);
 
                 if (response != null && response.role != 2)
                 {

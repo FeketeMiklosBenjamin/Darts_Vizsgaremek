@@ -13,12 +13,12 @@ namespace DartsMobilApp.API
 {
     public static class DartsAPI
     {
-        
-        public static StatisticModel GetStatistic( )
+
+        public static async Task<StatisticModel> GetStatistic()
         {
             try
             {
-                return HTTPCommunication<StatisticModel>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/friendlystat").Result;
+                return await HTTPCommunication<StatisticModel>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/friendlystat");
 
             }
             catch (Exception)
@@ -27,26 +27,12 @@ namespace DartsMobilApp.API
                 throw;
             }
         }
-        public static LoginResponse PostLogin(StringContent loginModel)
+        public static async Task<LoginResponse> PostLogin(StringContent loginModel)
         {
             try
             {
-                return HTTPCommunication<LoginResponse>.Post("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/login", loginModel).Result;
+                return await HTTPCommunication<LoginResponse>.Post("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/login", loginModel);
 
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
-        public static List<MatchModel> GetUserMatches()
-        {
-            try
-            {
-                return HTTPCommunication<List<MatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/tournament_matches")?.Result;
             }
             catch (Exception)
             {
@@ -56,10 +42,11 @@ namespace DartsMobilApp.API
         }
 
 
-        public static List<FriendlyMatchModel> GetFriendlyMatches() {
+        public static async Task<List<MatchModel>> GetUserMatches()
+        {
             try
             {
-                return HTTPCommunication<List<FriendlyMatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches")?.Result;
+                return await HTTPCommunication<List<MatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/tournament_matches");
             }
             catch (Exception)
             {
@@ -69,12 +56,26 @@ namespace DartsMobilApp.API
         }
 
 
-        public static AccessTokenResponse PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
+        public static async Task<List<FriendlyMatchModel>> GetFriendlyMatches()
         {
             try
             {
-                Debug.WriteLine($"RefreshToken:  {refreshToken} \n\n\n\n \t\t User Id:{UserId}");
-                var response = HTTPCommunication<AccessTokenResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken).Result;
+                return await HTTPCommunication<List<FriendlyMatchModel>>.Get("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        public static async Task<AccessTokenResponse> PostRefreshAndGetNewAccess(StringContent refreshToken, string UserId)
+        {
+            try
+            {
+                var response = await HTTPCommunication<AccessTokenResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/token/refresh-token/{UserId}", refreshToken);
+
                 return response;
             }
             catch (Exception)
@@ -84,11 +85,11 @@ namespace DartsMobilApp.API
             }
         }
 
-        public static dynamic PostNewFriendlyMatch(StringContent newfriendlymatch)
+        public static async Task<dynamic> PostNewFriendlyMatch(StringContent newfriendlymatch)
         {
             try
             {
-                var response = HTTPCommunication<dynamic>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch).Result;
+                var response = await HTTPCommunication<dynamic>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/friendly_matches", newfriendlymatch);
                 return response;
             }
             catch (Exception)
@@ -98,11 +99,11 @@ namespace DartsMobilApp.API
             }
         }
 
-        public static LogoutResponse PostLogout(StringContent content)
+        public static async Task<LogoutResponse> PostLogout(StringContent content)
         {
             try
             {
-                return HTTPCommunication<LogoutResponse>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/logout", content).Result;
+                return await HTTPCommunication<LogoutResponse>.PostAToken("https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/users/logout", content);
             }
             catch (Exception)
             {
@@ -111,11 +112,11 @@ namespace DartsMobilApp.API
             }
         }
 
-        public static ValidationResponse ValidatePassword(StringContent content, string matchId)
+        public static async Task<ValidationResponse> ValidatePassword(StringContent content, string matchId)
         {
             try
             {
-                var response = HTTPCommunication<ValidationResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/matches/tournament/join/{matchId}", content).Result;
+                var response = await HTTPCommunication<ValidationResponse>.PostAToken($"https://disciplinary-marj-feketemiklos222-91053eff.koyeb.app/api/matches/tournament/join/{matchId}", content);
                 return response;
             }
             catch (Exception)
