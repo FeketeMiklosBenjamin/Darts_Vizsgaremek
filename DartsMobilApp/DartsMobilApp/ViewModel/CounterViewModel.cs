@@ -7,11 +7,11 @@ using DartsMobilApp.Classes;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
 using DartsMobilApp.Services;
-using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Pages;
 using System.Threading.Tasks;
 using DartsMobilApp.API;
 using CommunityToolkit.Maui.Views;
+using DartsMobilApp.SecureStorageItems;
 
 namespace DartsMobilApp.ViewModel
 {
@@ -22,6 +22,8 @@ namespace DartsMobilApp.ViewModel
         private readonly SignalRService _signalRService;
 
         public static StartFriendlyMatchModel settings;
+
+        private bool _shouldShowPopup = true;
 
 
         [ObservableProperty]
@@ -74,7 +76,7 @@ namespace DartsMobilApp.ViewModel
         public static int MyPlayerAllThrownDartsForDouble = 0;
 
 
-        private int MyPlayerSuccessfulThrownDartsForDouble = 0;
+        public static int MyPlayerSuccessfulThrownDartsForDouble = 0;
 
         private int MyNineDarters = 0;
 
@@ -156,19 +158,17 @@ namespace DartsMobilApp.ViewModel
             SecondPlayerWonLeg = FirstPlayerWonLeg = 0;
             _signalRService.OnGetPoints += async (OpponentPoint) =>
             {
+                _shouldShowPopup = false;
+
                 if (ImTheFirst)
                 {
-                    SetSecondPlayersPoints(OpponentPoint.ToString());
-                    TextSpeach(OpponentPoint.ToString());
-                    CheckMatchWinner();
-
+                    await SetSecondPlayersPoints(OpponentPoint.ToString());
+                    await TextSpeach(OpponentPoint.ToString());
                 }
                 else
                 {
-                    SetFirstPlayersPoints(OpponentPoint.ToString());
-                    TextSpeach(OpponentPoint.ToString());
-                    CheckMatchWinner();
-
+                    await SetFirstPlayersPoints(OpponentPoint.ToString());
+                    await TextSpeach(OpponentPoint.ToString());
                 }
             };
         }
@@ -374,7 +374,7 @@ namespace DartsMobilApp.ViewModel
 
 
 
-        private void SetFirstPlayersPoints(string thrownPoint)
+        private async Task SetFirstPlayersPoints(string thrownPoint)
         {
             if (int.Parse(thrownPoint) > int.Parse(PointsFirstPlayer) || int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint) == 1)
             {
@@ -383,6 +383,11 @@ namespace DartsMobilApp.ViewModel
             PointsFirstPlayer = (int.Parse(PointsFirstPlayer) - int.Parse(thrownPoint)).ToString();
             if (PointsFirstPlayer == "0")
             {
+                if (_shouldShowPopup)
+                {
+                    await ShowCheckOutPopUpFirstPlayer();
+                }
+
                 if (int.Parse(thrownPoint) > MyHighestCheckOut)
                 {
                     MyHighestCheckOut = int.Parse(thrownPoint);
@@ -426,6 +431,10 @@ namespace DartsMobilApp.ViewModel
                     }
                 }
             }
+            else if (int.Parse(PointsFirstPlayer) <= 50 && _shouldShowPopup)
+            {
+                await ShowCheckOutPopUpFirstPlayer();
+            }
             else
             {
                 isFirstPlayer = false;
@@ -442,7 +451,7 @@ namespace DartsMobilApp.ViewModel
         }
 
 
-        private void SetSecondPlayersPoints(string thrownpoint)
+        private async Task SetSecondPlayersPoints(string thrownpoint)
         {
             if (int.Parse(thrownpoint) > int.Parse(PointsSecondPlayer) || int.Parse(PointsSecondPlayer) - int.Parse(thrownpoint) == 1)
             {
@@ -468,6 +477,7 @@ namespace DartsMobilApp.ViewModel
                 AllWonLegsOnTheMatchSecond++;
                 SecondPlayerWonLeg++;
                 MyLegScores.Clear();
+                await ShowCheckOutPopUpSecondPlayer();
                 SetDefaultValues();
                 TextSpeach($"{SecondPlayerName} nyerte a(z) {allPlayedLegs}. leget!");
                 if (allPlayedLegs % 2 == 0)
@@ -537,40 +547,43 @@ namespace DartsMobilApp.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("HIBA!", $"Nem lehetséges {point} pontot dobni!", "OK");
             }
-            else
-            {
-                _signalRService?.PassPoints(MatchId, SecStoreItems.UserId, int.Parse(point));
+            try {
+
+                _shouldShowPopup = true;
+
+                await _signalRService.PassPoints(MatchId, SecStoreItems.UserId, int.Parse(point));
                 if (ImTheFirst)
                 {
                     MyPlayerPoints += int.Parse(point);
                     MyLegScores.Add(int.Parse(point));
-                    MyPlayerAllThrownDarts +=3;
+                    MyPlayerAllThrownDarts += 3;
                     if (point == "180")
                     {
                         MyPlayer180s++;
                     }
-                    SetFirstPlayersPoints(point);
-                    TextSpeach(point);
-                    ShowCheckOutPopUpsFirstPlayer();
+                    await SetFirstPlayersPoints(point);
+                    await TextSpeach(point);
                     await CheckMatchWinner();
                 }
                 else
                 {
                     MyPlayerPoints += int.Parse(point);
                     MyLegScores.Add(int.Parse(point));
-                    MyPlayerAllThrownDarts +=3;
+                    MyPlayerAllThrownDarts += 3;
                     if (point == "180")
                     {
                         MyPlayer180s++;
                     }
-                    SetSecondPlayersPoints(point);
-                    TextSpeach(point);
-                    ShowCheckOutPopUpsSecondPlayer();
+                    await SetSecondPlayersPoints(point);
+                    await TextSpeach(point);
                     await CheckMatchWinner();
                 }
             }
-            Points = "";
-
+            finally
+            {
+                Points = "";
+                _shouldShowPopup = false; 
+            }
         }
 
         private async void SetDefaultValues()
@@ -649,7 +662,10 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    });
                 }
                 else if(SecondPlayerSetsWon == needToWinSets){
                     TextSpeach($"{SecondPlayerName} nyerte a mérkőzést {SecondPlayerSetsWon}-{FirstPlayerSetsWon} arányban!");
@@ -677,7 +693,10 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    });
                 }
             }
             else
@@ -709,7 +728,10 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    });
                 }
                 else if (SecondPlayerWonLeg == needToWinLegs)
                 {
@@ -738,40 +760,68 @@ namespace DartsMobilApp.ViewModel
                     }
                     SetDefaultValues();
                     Thread.Sleep(15000);
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    });
                 }
             }
 
         }
 
-        private void ShowCheckOutPopUpsFirstPlayer()
+        private async Task ShowCheckOutPopUpFirstPlayer()
         {
-            if(int.Parse(PointsFirstPlayer) <= 50 && int.Parse(PointsFirstPlayer) > 0)
+            if (!_shouldShowPopup) return;
+
+            try
             {
-                SimpleCheckoutPopUp popUp = new SimpleCheckoutPopUp(new SimpleCheckOutPopUpViewModel());
-                Application.Current.MainPage.ShowPopup(popUp);
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    if (int.Parse(PointsFirstPlayer) <= 50 && int.Parse(PointsFirstPlayer) > 0)
+                    {
+                        var popup = new SimpleCheckoutPopUp();
+                        await Application.Current.MainPage.ShowPopupAsync(popup);
+                    }
+                    else if (int.Parse(PointsFirstPlayer) == 0)
+                    {
+                        var popup = new EndGameCheckOutPopUp();
+                        await Application.Current.MainPage.ShowPopupAsync(popup);
+                    }
+                });
             }
-            if (int.Parse(PointsFirstPlayer) == 0)
+            catch (Exception ex) 
             {
-                EndGameCheckOutPopUp EndPopUp = new EndGameCheckOutPopUp();
-                Application.Current.MainPage.ShowPopup(EndPopUp);
+                throw;
             }
+
         }
 
-        private void ShowCheckOutPopUpsSecondPlayer()
+        private async Task ShowCheckOutPopUpSecondPlayer()
         {
-            if (int.Parse(PointsSecondPlayer) <= 50 && int.Parse(PointsSecondPlayer) > 0)
-            {
-                SimpleCheckoutPopUp popUp = new SimpleCheckoutPopUp(new SimpleCheckOutPopUpViewModel());
-                Application.Current.MainPage.ShowPopup(popUp);
-            }
-            if (int.Parse(PointsSecondPlayer) == 0)
-            {
-                EndGameCheckOutPopUp EndPopUp = new EndGameCheckOutPopUp();
-                Application.Current.MainPage.ShowPopup(EndPopUp);
-            }
-        }
+            if (!_shouldShowPopup) return;
 
+            try
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    if (int.Parse(PointsSecondPlayer) <= 50 && int.Parse(PointsSecondPlayer) > 0)
+                    {
+                        var popup = new SimpleCheckoutPopUp();
+                        await Application.Current.MainPage.ShowPopupAsync(popup);
+                    }
+                    else if (int.Parse(PointsSecondPlayer) == 0)
+                    {
+                        var popup = new EndGameCheckOutPopUp();
+                        await Application.Current.MainPage.ShowPopupAsync(popup);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
 
         [RelayCommand]
         private void RemoveADigit() 

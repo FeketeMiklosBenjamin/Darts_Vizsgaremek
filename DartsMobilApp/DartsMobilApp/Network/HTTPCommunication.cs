@@ -39,8 +39,8 @@ namespace DartsMobilApp.Network
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             if(response.IsSuccessStatusCode)
             {
-                string resultStr = await response.Content.ReadAsStringAsync();
-                T result = JsonSerializer.Deserialize<T>(resultStr);
+                var resultStr = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<T>(resultStr);
                 if (result != null)
                 {
                     return result;
@@ -63,8 +63,8 @@ namespace DartsMobilApp.Network
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
-                string resultStr = await response.Content.ReadAsStringAsync();
-                T result = JsonSerializer.Deserialize<T>(resultStr);
+                var resultStr = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<T>(resultStr);
                 if (result != null)
                 {
                     return result;

@@ -1,33 +1,36 @@
 using CommunityToolkit.Maui.Views;
 using DartsMobilApp.Classes;
 using DartsMobilApp.Services;
-using DartsMobilApp.ViewModel;
 
 namespace DartsMobilApp.Pages;
 
-public partial class LogOutPopUp : Popup
+public partial class SignOutPopUp : Popup
 {
     private readonly SignalRService _signalRService;
-	public LogOutPopUp(SignalRService service)
-	{
-		InitializeComponent();
+    public SignOutPopUp(SignalRService service)
+    {
+        InitializeComponent();
         _signalRService = service;
     }
+
     private async void LoggingOut(object sender, EventArgs e)
     {
+        await SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
         await LogOut.LogOutFunction();
 
         await _signalRService.DisconnectAsync();
 
-        if (DeviceInfo.Platform == DevicePlatform.Android)
+
+        MainThread.BeginInvokeOnMainThread(async () =>
         {
-            System.Diagnostics.Process.GetCurrentProcess().Kill();
-        }
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+        });
+
+        this.Close();
     }
 
     private void NotLoggedOut(object sender, EventArgs e)
     {
         this.Close();
-
     }
 }

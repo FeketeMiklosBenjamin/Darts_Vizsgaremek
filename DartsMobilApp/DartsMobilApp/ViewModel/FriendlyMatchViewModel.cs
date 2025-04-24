@@ -172,7 +172,7 @@ namespace DartsMobilApp.ViewModel
         private async Task RefreshFriendlies()
         { 
             SortedFriendlies = await RefreshSorted();
-            TakedFriendlies = SortedFriendlies;
+            TakedFriendlies = new List<FriendlyMatchModel>(SortedFriendlies);
         }
 
         [RelayCommand]

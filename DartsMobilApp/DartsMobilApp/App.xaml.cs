@@ -27,24 +27,23 @@ namespace DartsMobilApp
             string? IsChecked = await SecureStorage.Default.GetAsync("SaveCheckedBool");
             if (IsChecked != null && IsChecked == "1")
             {
-                LoginResponse response = await AuthService.LoginAsync(SecStoreItems.Email, SecStoreItems.Password);
+                var email = await SecureStorage.Default.GetAsync("Email");
+                var password = await SecureStorage.Default.GetAsync("Password");
+                LoginResponse response = await AuthService.LoginAsync(email, password);
 
                 if (response.message == "Sikeres bejelentkezés.")
                 {
-                    SecureStorage.SetAsync("Token", response.accessToken);
-                    SecureStorage.SetAsync("Email", response.emailAddress);
-                    SecureStorage.SetAsync("UserName", response.username);
-                    SecureStorage.SetAsync("UserId", response.id);
-                    SecureStorage.SetAsync("RefreshToken", response.refreshToken);
-                    SecureStorage.SetAsync("Password", SecStoreItems.Password);
-                    SecureStorage.SetAsync("Email", SecStoreItems.Email);
-                    
-                    await _signalR.ConnectAsync(SecureStorage.GetAsync("Token").Result);
+                    await _signalR.ConnectAsync(response.accessToken);
+                    await InitStorage();
+
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
                 }
             }
-            
-
         }
+        private async Task InitStorage()
+        {
+            await SecStoreItems.InitAsync();
+        }
+
     }
 }

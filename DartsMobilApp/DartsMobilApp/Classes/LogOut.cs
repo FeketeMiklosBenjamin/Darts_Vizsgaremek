@@ -1,5 +1,4 @@
 ﻿using DartsMobilApp.API;
-using DartsMobilApp.SecureStorageItems;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,16 +11,17 @@ namespace DartsMobilApp.Classes
 {
     public static class LogOut
     {
-        public static void LogOutFunction()
+        public static async Task LogOutFunction()
         {
+            var refreshTokenG = await SecureStorage.Default.GetAsync("RefreshToken");
             var RefreshToken = new RefreshTokenModel()
             {
-                refreshToken = SecStoreItems.RToken
+                refreshToken = await SecureStorage.Default.GetAsync("RefreshToken")
             };
             var JsonContent = JsonSerializer.Serialize(RefreshToken);
             var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
 
-            var response = DartsAPI.PostLogout(content);
+            var response = await DartsAPI.PostLogout(content);
         }
     }
 }

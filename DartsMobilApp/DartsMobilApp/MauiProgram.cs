@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using DartsMobilApp.Classes;
 using DartsMobilApp.Pages;
 using DartsMobilApp.Service;
 using DartsMobilApp.Services;
@@ -22,6 +23,7 @@ namespace DartsMobilApp
                     fonts.AddFont("fa-solid-900.ttf", "FontAwesomeBrands");
                 });
 
+            builder.Services.AddSingleton<TimerCountDown>();
             builder.Services.AddSingleton<SignalRService>();
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginViewModel>();

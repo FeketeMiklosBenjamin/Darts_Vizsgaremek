@@ -6,6 +6,7 @@ using DartsMobilApp.Pages;
 using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Service;
 using DartsMobilApp.Services;
+using DartsMobilApp.ViewModels;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using System;
@@ -39,12 +40,12 @@ namespace DartsMobilApp.ViewModel
 
         AutomaticLogInPopUp autoLogInP = new AutomaticLogInPopUp();
 
-        private string isChecked;
+        private string? isChecked;
 
         [RelayCommand]
-        private void Appearing()
+        private async Task Appearing()
         {
-            isChecked = SecStoreItems.IsChecked;
+            isChecked = await SecureStorage.Default.GetAsync("SaveCheckedBool");
             if (isChecked != null && isChecked == "1")
             {
                 Application.Current.MainPage.ShowPopup(autoLogInP);
@@ -82,9 +83,9 @@ namespace DartsMobilApp.ViewModel
             if (SaveChecked)
                 await SecureStorage.Default.SetAsync("SaveCheckedBool", "1");
             else
-               await SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
-           
-            
+                await SecureStorage.Default.SetAsync("SaveCheckedBool", "0");
+
+
             var loginResponse = await AuthService.LoginAsync(email, password);
 
             if (loginResponse.message == "Sikeres bejelentkezés.")
@@ -98,7 +99,13 @@ namespace DartsMobilApp.ViewModel
                     timer.Start();
                 }
 
-                await _signalR.ConnectAsync(SecureStorage.GetAsync("Token").Result);
+                await _signalR.ConnectAsync(loginResponse.accessToken);
+
+                await InitStorage();
+
+                var shellVM = Shell.Current.BindingContext as ShellViewModel;
+                shellVM?.LoadUserDisplayName();
+
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -108,6 +115,10 @@ namespace DartsMobilApp.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("Hiba!", loginResponse.message, "OK");
             }
+        }
+        private async Task InitStorage()
+        {
+            await SecStoreItems.InitAsync();
         }
 
     }

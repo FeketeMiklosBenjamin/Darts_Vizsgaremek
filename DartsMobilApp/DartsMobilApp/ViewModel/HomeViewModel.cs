@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DartsMobilApp.Pages;
-using DartsMobilApp.SecureStorageItems;
 using DartsMobilApp.Services;
 using System;
 using System.Collections.Generic;
