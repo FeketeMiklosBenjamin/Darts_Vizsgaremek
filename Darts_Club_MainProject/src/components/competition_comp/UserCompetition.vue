@@ -38,9 +38,9 @@ const changePage = () => {
             <div class="d-flex flex-column justify-content-center align-items-center custom-min-vh-md mt-5">
                 <div class="row form-check form-switch justify-content-center d-flex glass-card pe-3" v-if="isRegisterPage">
                     <input class="col-4 form-check-input fs-5" type="checkbox" id="flexSwitchCheckDefault"
-                        v-model="areJoinedCards" />
+                        v-model="areJoinedCards" data-cy="switch"/>
                     <label v-if="user.role == 1" class="col-8 form-check-label fst-italic text-light fs-5"
-                        for="flexSwitchCheckDefault">
+                        for="flexSwitchCheckDefault" data-cy="text_in_switch">
                         {{ areJoinedCards ? "Regisztrált" : "Nevezés" }}
                     </label>
                     <label v-else class="col-8 form-check-label fst-italic text-light fs-5"
@@ -50,14 +50,14 @@ const changePage = () => {
                 </div>
                 <button class="btn btn-darkred text-white mb-3 mt-3" :disabled="isRegisterPage" @click="changePage">{{
                     user.role == 1 ? 'Jelentkezés' : 'Sorsolás' }}</button>
-                <button class="btn btn-warning" :disabled="!isRegisterPage" @click="changePage">Előző versenyek</button>
+                <button class="btn btn-warning" :disabled="!isRegisterPage" @click="changePage" data-cy="previous_btn">Előző versenyek</button>
             </div>
         </div>
 
         <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div"
             :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')" v-if="isRegisterPage">
             <CardCompetition :are-joined-cards="areJoinedCards" />
-            <div v-if="alertCard.show"
+            <div v-if="alertCard.show" data-cy="alert_message"
                 class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
                 style="height: 100px;">
                 <i class="bi bi-exclamation-circle mx-2 d-inline"></i>
@@ -67,7 +67,7 @@ const changePage = () => {
         <div class="col-12 offset-md-0 offset-sm-1 col-md-9 row main-div"
             :class="(alertCard.show ? 'd-flex justify-content-center align-items-center' : '')" v-else>
             <PreviousCompetition :-is-one-card="false"/>
-            <div v-if="alertCard.show"
+            <div v-if="alertCard.show" data-cy="alert_message"
                 class="alert alert-warning text-center fs-5 mx-auto w-50 d-flex justify-content-center align-items-center"
                 style="height: 100px;">
                 <i class="bi bi-exclamation-circle mx-2 d-inline"></i>

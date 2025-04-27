@@ -32,14 +32,14 @@ watchEffect(() => {
             if (filteredCompetition.value.length == 0) {
                 alertMessageHelp = 'Még nem jelentkeztél egyetlen versenyre sem!'
             }
-            
+
         }
         else {
             filteredCompetition.value = Competitions.value.filter(x => x.matchHeader.level == user.value.level && new Date(x.joinEndDate) > new Date(Date.now()) && x.userJoined == props.areJoinedCards && x.maxPlayerJoin != x.registeredPlayers);
             if (filteredCompetition.value.length == 0) {
                 alertMessageHelp = 'Nincs meghírdetett verseny az ön szintjén!'
             }
-            
+
 
         }
     }
@@ -142,12 +142,13 @@ const borderColor = (level: string) => {
 <template>
     <div class="col-12 mx-3 mx-sm-0 col-sm-10 offset-0 offset-sm-1 offset-md-0 col-md-6 col-xl-4 p-2"
         v-for="comp in filteredCompetition" :key="comp.id">
-        <div class="d-flex glass-card width-form-card justify-content-center">
+        <div class="d-flex glass-card width-form-card justify-content-center" data-cy="competition_card">
             <div class="card bg-black text-light" :class="borderColor(comp.matchHeader.level)" style="max-width: 45vh;">
                 <img :src="comp.matchHeader.backroundImageUrl" class="card-img-middle" alt="...">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h5 class="card-title text-center fst-italic">{{ comp.matchHeader.name }}</h5>
+                        <h5 class="card-title text-center fst-italic" data-cy="competition_name">{{
+                            comp.matchHeader.name }}</h5>
                         <p style="width: 4rem;"><i class="bi bi-person-standing"></i>
                             {{ user.role == 1 ? comp.registeredPlayers : (comp.registeredPlayers as
                                 RegisteredPlayerModel[]).length }}/{{ comp.maxPlayerJoin }}</p>
@@ -213,7 +214,7 @@ const borderColor = (level: string) => {
                             </div>
                         </div>
                     </div>
-                    <button type="button" v-if="!comp.userJoined && comp.userJoined != undefined"
+                    <button type="button" v-if="!comp.userJoined && comp.userJoined != undefined" data-cy="check-in-btn"
                         :class="(new Date(comp.joinStartDate) > new Date(Date.now())) ? 'btn-secondary' : 'btn-success'"
                         class="btn justify-content-center d-flex w-100"
                         :disabled="(new Date(comp.joinStartDate) > new Date(Date.now()))"

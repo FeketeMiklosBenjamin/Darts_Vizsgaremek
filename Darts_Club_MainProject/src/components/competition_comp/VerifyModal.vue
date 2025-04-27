@@ -47,8 +47,8 @@ const Applicate = async (compId: string) => {
             </h5>
           </div>
           <div class="modal-body d-flex justify-content-center gap-2">
-            <button class="btn btn-success" @click="Applicate(props.currentComp?.id || '')">Jelentkezés</button>
-            <button class="btn btn-danger" @click="emit('close')">Mégse</button>
+            <button class="btn btn-success" @click="Applicate(props.currentComp?.id || '')" data-cy="applicate_button">Jelentkezés</button>
+            <button class="btn btn-danger" @click="emit('close')" data-cy="decline_button">Mégse</button>
           </div>
         </template>
       </div>
