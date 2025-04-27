@@ -159,7 +159,7 @@ namespace Backend.Tests.ControllerTests
                 _mockUserFriendlyStatService.Object,
                 _mockUserTournamentStatService.Object,
                 _mockMatchService.Object,
-                _mockJwtService.Object,  // Itt injektáljuk a mockolt JwtService-t
+                _mockJwtService.Object,
                 _cloudinary
             );
             _mockHttpContext = new Mock<HttpContext>();
@@ -563,7 +563,6 @@ namespace Backend.Tests.ControllerTests
         [Fact]
         public async Task Login_ValidCredentials_ReturnsOkWithTokens()
         {
-            // Arrange
             var loginRequest = new Login { EmailAddress = "test@test.com", Password = "password" };
             var user = new User
             {
@@ -605,17 +604,11 @@ namespace Backend.Tests.ControllerTests
             {
                 HttpContext = new DefaultHttpContext()
             };
-
-            // Act
             var result = await _controller.Login(loginRequest);
-
-            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
 
-            // Használjunk egy névtelen típust a deszerializáláshoz
             var response = JsonSerializer.Deserialize<dynamic>(JsonSerializer.Serialize(okResult.Value));
 
-            // A dinamikus mezők elérése indexeléssel
             string message = response.GetProperty("message").GetString();
             string accessToken = response.GetProperty("accessToken").GetString();
             string refreshToken = response.GetProperty("refreshToken").GetString();

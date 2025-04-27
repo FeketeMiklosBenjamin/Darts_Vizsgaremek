@@ -13,6 +13,8 @@ namespace Vizsga_Backend.SignalR
 
         private static readonly ConcurrentDictionary<string, string> playerConnections = new(); // playerId, connectionId
 
+        private static readonly ConcurrentDictionary<string, Dictionary<string, EndMatchModel>> endedMatches = new(); // matchId, (playerId -> stat)
+
         private readonly ILogger<MatchHub> _logger;
 
         private readonly IMatchService _matchService;
@@ -59,8 +61,6 @@ namespace Vizsga_Backend.SignalR
                 }
             }
         }
-
-
 
         public async Task StartFriendlyMatch(string matchId, string playerId, string secondPlayerId)
         {
@@ -119,10 +119,10 @@ namespace Vizsga_Backend.SignalR
             {
                 if (playerConnections.TryGetValue(removablePlayerId, out string? connectionId))
                 {
+                    await Clients.Client(connectionId).SendAsync("FriendlyPlayerRemoved");
                     await Groups.RemoveFromGroupAsync(connectionId, matchId);
                     matchPlayers[matchId].Remove(removablePlayerId);
                     playerConnections.TryRemove(removablePlayerId, out _);
-                    await Clients.Client(connectionId).SendAsync("FriendlyPlayerRemoved", playerId);
                 }
             }
         }
@@ -157,7 +157,25 @@ namespace Vizsga_Backend.SignalR
             {
                 if (stats.Legs != null || stats.Sets != null)
                 {
-                    await _userFriendlyStatService.SavePlayerStat(playerId, stats);                
+                    await _userFriendlyStatService.SavePlayerStat(playerId, stats);
+                }
+
+                if (!endedMatches.ContainsKey(matchId))
+                {
+                    endedMatches[matchId] = new Dictionary<string, EndMatchModel>();
+                }
+                endedMatches[matchId][playerId] = stats;
+
+                if (endedMatches[matchId].Count == 2)
+                {
+                    var allStats = endedMatches[matchId];
+                    var first = allStats.ElementAt(0);
+                    var second = allStats.ElementAt(1);
+
+                    await Clients.User(first.Key).SendAsync("EndMatchResult", first.Value, second.Value);
+                    await Clients.User(second.Key).SendAsync("EndMatchResult", second.Value, first.Value);
+
+                    endedMatches.TryRemove(matchId, out _);
                 }
 
                 if (playerConnections.TryRemove(playerId, out string? connectionId))
@@ -173,6 +191,7 @@ namespace Vizsga_Backend.SignalR
                 }
             }
         }
+
 
 
         // Tournament
@@ -218,6 +237,24 @@ namespace Vizsga_Backend.SignalR
             if (matchPlayers.TryGetValue(matchId, out var players) && players.Contains(playerId))
             {
                 await _matchService.SetPlayerStatAsync(matchId, playerId, stats);
+
+                if (!endedMatches.ContainsKey(matchId))
+                {
+                    endedMatches[matchId] = new Dictionary<string, EndMatchModel>();
+                }
+                endedMatches[matchId][playerId] = stats;
+
+                if (endedMatches[matchId].Count == 2)
+                {
+                    var allStats = endedMatches[matchId];
+                    var first = allStats.ElementAt(0);
+                    var second = allStats.ElementAt(1);
+
+                    await Clients.User(first.Key).SendAsync("EndMatchResult", first.Value, second.Value);
+                    await Clients.User(second.Key).SendAsync("EndMatchResult", second.Value, first.Value);
+
+                    endedMatches.TryRemove(matchId, out _);
+                }
 
                 if (playerConnections.TryRemove(playerId, out string? connectionId))
                 {
