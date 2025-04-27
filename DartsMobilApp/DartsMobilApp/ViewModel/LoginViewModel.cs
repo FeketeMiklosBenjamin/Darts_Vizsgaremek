@@ -38,13 +38,14 @@ namespace DartsMobilApp.ViewModel
         [ObservableProperty]
         public bool saveChecked;
 
-        AutomaticLogInPopUp autoLogInP = new AutomaticLogInPopUp();
+        AutomaticLogInPopUp autoLogInP;
 
         private string? isChecked;
 
         [RelayCommand]
         private async Task Appearing()
         {
+            autoLogInP = new AutomaticLogInPopUp();
             isChecked = await SecureStorage.Default.GetAsync("SaveCheckedBool");
             if (isChecked != null && isChecked == "1")
             {
@@ -80,6 +81,8 @@ namespace DartsMobilApp.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Hiba!", "A bejelentkezés nem lehetséges! Az email és a jelszó mező kitöltése kötelező!", "OK");
             }
 
+            Application.Current.MainPage.ShowPopup(autoLogInP);
+
             if (SaveChecked)
                 await SecureStorage.Default.SetAsync("SaveCheckedBool", "1");
             else
@@ -91,7 +94,10 @@ namespace DartsMobilApp.ViewModel
             if (loginResponse.message == "Sikeres bejelentkezés.")
             {
                 LoginPopUp loginPopUp = new LoginPopUp();
-                Application.Current.MainPage.ShowPopupAsync(loginPopUp);
+
+                autoLogInP.Close();
+
+                await Application.Current.MainPage.ShowPopupAsync(loginPopUp);
 
                 if (timer == null)
                 {
@@ -113,6 +119,7 @@ namespace DartsMobilApp.ViewModel
             }
             else
             {
+                autoLogInP.Close();
                 await Application.Current.MainPage.DisplayAlert("Hiba!", loginResponse.message, "OK");
             }
         }

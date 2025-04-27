@@ -34,7 +34,7 @@
                                 <VerticalStackLayout HorizontalOptions="Start">
                                     <Label Text="{Binding playerLevel, StringFormat='Ellenfél szintje: {0}'}" HorizontalTextAlignment="Start"/>
                                     <Label Text="{Binding legsCount, StringFormat='Nyerni szükséges legek: {0}'}"/>
-                                    <Label Text="{Binding name, StringFormat='Ellenfél neve: {0}'}" />
+                                    <Label Text="{Binding name, StringFormat='Ellenfél neve: {0}'}" LineBreakMode="TailTruncation" WidthRequest="200"/>
                                 </VerticalStackLayout>
                                 <Button VerticalOptions="Center" Text="Lejátszás" BackgroundColor="Green" WidthRequest="100" HeightRequest="40" Padding="5" CornerRadius="16"  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FriendlyMatchViewModel}}, Path=StartFriendlyMatchCommand}" CommandParameter="{Binding id}" />
                             </HorizontalStackLayout>

@@ -2,63 +2,85 @@ using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Views;
 using DartsMobilApp.Services;
 using DartsMobilApp.ViewModel;
-using System.Text.RegularExpressions;
+using DartsMobilApp.Pages;
+using System.Threading.Tasks;
+using DartsMobilApp.Classes;
 
-namespace DartsMobilApp.Pages;
-
-public partial class WaitingForPlayersPopUp : Popup
+namespace DartsMobilApp.Pages
 {
-	private readonly SignalRService signalR;
-    private Popup popup= new Popup();
-	public WaitingForPlayersPopUp(SignalRService signalRService, string matchId)
-	{
+    public partial class WaitingForPlayersPopUp : Popup
+    {
+        private readonly SignalRService signalR;
+        private Popup popup;
+        private string _matchId;
 
-		InitializeComponent();
-        signalR = signalRService;
-
-        signalR.OnFriendlyPlayerJoined += async (playerId, username, dartsPoint) =>
+        public WaitingForPlayersPopUp(SignalRService signalRService, string matchId)
         {
-            var popupVm = new JoinRequestPopUpViewModel(signalR, matchId, playerId, username, dartsPoint);
-            var popupPage = new JoinRequestPopUp(popupVm, matchId);
+            InitializeComponent();
+            signalR = signalRService;
+            _matchId = matchId;
+            signalR.OnFriendlyPlayerJoined += OnFriendlyPlayerJoined;
+            signalR.OnFriendlyPlayerRemoved += OnFriendlyPlayerRemoved;
+            signalR.OnFriendlyMatchStarted += OnFriendlyMatchStarted;
+            signalR.OnTournamentMatchStarted += OnTournamentMatchStarted;
+        }
+
+        private async void OnFriendlyPlayerJoined(string playerId, string username, string dartsPoint)
+        {
+            var popupPage = new JoinRequestPopUp(signalR, _matchId, playerId, username, dartsPoint);
             popup = popupPage;
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await Application.Current.MainPage.ShowPopupAsync(popupPage);
-                this.Close();
             });
-        };
-        signalR.OnFriendlyMatchStarted += async (startingSetup) =>
+        }
+
+        private async void OnFriendlyPlayerRemoved()
+        {
+            ClosePopup();
+
+            LoginPopUp lg = new LoginPopUp();
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Application.Current.MainPage.ShowPopupAsync(lg);
+            });
+            this.Close();
+        }
+
+        private void OnFriendlyMatchStarted(StartFriendlyMatchModel startingSetup)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-            if (popup is JoinRequestPopUp || popup is PasswordValidationPopUp)
-            {
-                popup.Close();
-            }
-            else
-            {
+                ClosePopup();
                 this.Close();
-            }
 
-            CounterViewModel.IsFriendlyMatch = true;
-            CounterViewModel.settings = startingSetup;
-            CounterViewModel.MatchId = matchId;
-            await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
-
-            });
-        };
-
-        signalR.OnTournamentMatchStarted += async (startingSetup) =>
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                this.Close();
-                CounterViewModel.IsFriendlyMatch = false;
+                CounterViewModel.IsFriendlyMatch = true;
                 CounterViewModel.settings = startingSetup;
-                CounterViewModel.MatchId = matchId;
+                CounterViewModel.MatchId = _matchId;
                 await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
             });
-        };
+        }
 
+        private async void OnTournamentMatchStarted(StartFriendlyMatchModel startingSetup)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                ClosePopup();
+                this.Close();
+
+                CounterViewModel.IsFriendlyMatch = false;
+                CounterViewModel.settings = startingSetup;
+                CounterViewModel.MatchId = _matchId;
+                await Shell.Current.GoToAsync($"//{nameof(CounterPage)}");
+            });
+        }
+
+        public void ClosePopup()
+        {
+            signalR.OnFriendlyPlayerJoined -= OnFriendlyPlayerJoined;
+            signalR.OnFriendlyPlayerRemoved -= OnFriendlyPlayerRemoved;
+            signalR.OnFriendlyMatchStarted -= OnFriendlyMatchStarted;
+            signalR.OnTournamentMatchStarted -= OnTournamentMatchStarted;
+        }
     }
 }

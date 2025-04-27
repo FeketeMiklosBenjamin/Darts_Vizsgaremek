@@ -20,6 +20,7 @@ public partial class SignOutPopUp : Popup
 
         await _signalRService.DisconnectAsync();
 
+        Shell.Current.FlyoutIsPresented = false;
 
         MainThread.BeginInvokeOnMainThread(async () =>
         {

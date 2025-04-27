@@ -4,58 +4,65 @@
              xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              x:Class="DartsMobilApp.Pages.FriendlySetupPage"
              Title="Mérkőzés létrehozása"
-             BackgroundImageSource="sunset_darts.jpg"
-             >
+             BackgroundImageSource="sunset_darts.jpg">
 
-    <Grid RowDefinitions="*,0.5*,.5*,*,*,*,*,*">
-        <Label Text="Barátságos meccs" TextColor="White" FontSize="36" Margin="10"/>
-        <Label Text="Játékbeállítások" Grid.Row="1" TextColor="White" FontSize="20" HorizontalOptions="Center"/>
-        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" Spacing="7" >
-                <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50"  BackgroundColor="{Binding BtnSetColor}">
-                    <Button Text="Sets" x:Name="SetsBtn" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding BtnSetColor}" TextColor="Black" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference SetsBtn}}"/>
-                </Border>
-                <Border  Stroke="Black" HeightRequest="50" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="{Binding BtnLegColor}">
-                    <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="{Binding BtnLegColor}" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
-                </Border>
-            <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
-                <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric" Text="{Binding NumberOfSetsOrLegs}"/>
-            </Border>
-            <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}">
-                <Button Text="First to" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}" TextColor="Black" x:Name="FirstToBtn" Command="{Binding FirstToOrBestofCommand}"  CommandParameter="{Binding Source={x:Reference FirstToBtn }}"/>
-            </Border>
-            <Border Stroke="Black" StrokeThickness="2" HeightRequest="50" BackgroundColor="{Binding BestOfBtnColor}" StrokeShape="RoundRectangle 0,50,0,50">
-                <Button Text="Best of" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding BestOfBtnColor}" TextColor="Black" x:Name="BestOfBtn" Command="{Binding FirstToOrBestofCommand}"  CommandParameter="{Binding Source={x:Reference BestOfBtn}}" />
-            </Border>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="3" HeightRequest="50" HorizontalOptions="Center" Spacing="10">
-            <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" BackgroundColor="{Binding Btn301Color}">
-                <Button Text="301" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn301Color}" TextColor="Black" FontSize="20" x:Name="threezerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference threezerooneBtn}}"/>
-            </Border>
-            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="{Binding Btn501Color}" HeightRequest="50">
-                <Button Text="501" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn501Color}" TextColor="Black" FontSize="20" x:Name="fivezerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference fivezerooneBtn}}"/>
-            </Border>
-            <Border Stroke="Black" StrokeThickness="2" BackgroundColor="{Binding Btn701Color}" HeightRequest="50" StrokeShape="RoundRectangle 0,50,0,50">
-                <Button Text="701" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn701Color}" TextColor="Black" FontSize="20" x:Name="sevenzerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference sevenzerooneBtn}}"/>
-            </Border>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">
-            <Label Text="Privát meccs?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
-            <Switch IsToggled="{Binding IsCheckedPrivate}"   ThumbColor="White" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" >
-                <Switch.Behaviors>
-                    <tool:EventToCommandBehavior EventName="Toggled" Command="{Binding CheckMatchIsPrivateCommand}"/>
-                </Switch.Behaviors>
-            </Switch>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center">
-            <Label Text="Csak az én szintemen lévők lássák?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
-            <Switch  IsToggled="{Binding IsChecked}" ThumbColor="White" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Row="6" HorizontalOptions="Center" Spacing="10" IsVisible="{Binding Visible}">
-            <Label Text="A meccs jelszava:" FontAttributes="Bold" FontSize="15" TextColor="White" VerticalOptions="Center"/>
-            <Border Stroke="White" StrokeThickness="3" StrokeShape="RoundRectangle 10 10 10 10" HeightRequest="35" WidthRequest="200">
-                <Entry IsPassword="True" WidthRequest="150" HeightRequest="35" BackgroundColor="Transparent" Text="{Binding Pwd}"/>
-            </Border>
-        </HorizontalStackLayout>
-        <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="7" Text="Meccs Létrehozása" Command="{Binding NavigateCommand}"/>
+    <ContentPage.Behaviors>
+        <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="0.8*,5*,*">
+        <Label Text="Barátságos meccs" FontAttributes="Bold" TextColor="White" FontSize="36" Margin="10,20,10,10"/>
+        <Border Grid.Row="1" BackgroundColor="#99000000" Margin="10,0,10,10" StrokeShape="RoundRectangle 20,20,20,20">
+            <Grid RowDefinitions="0.7*,0.6*,*,*,*,*" Margin="10,0" Padding="0,10">
+                <Label Text="Játékbeállítások" Grid.Row="0" TextColor="White" FontSize="22" HorizontalOptions="Center" FontAttributes="Bold" Margin="10"/>
+                <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center" Spacing="7">
+                    <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50"  BackgroundColor="{Binding BtnSetColor}">
+                        <Button Text="Sets" x:Name="SetsBtn" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding BtnSetColor}" TextColor="Black" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference SetsBtn}}"/>
+                    </Border>
+                    <Border  Stroke="Black" HeightRequest="50" StrokeThickness="2" StrokeShape="RoundRectangle 0,50,0,50" BackgroundColor="{Binding BtnLegColor}">
+                        <Button Text="Legs" WidthRequest="60" x:Name="LegsBtn" HeightRequest="50" TextColor="Black" BackgroundColor="{Binding BtnLegColor}" Command="{Binding SetsLegsCheckCommand}" CommandParameter="{Binding Source={x:Reference LegsBtn}}"/>
+                    </Border>
+                    <Border BackgroundColor="OrangeRed" Stroke="OrangeRed" StrokeThickness="2" StrokeShape="RoundRectangle 25,25,25,25">
+                        <Entry TextColor="Black" HeightRequest="50" WidthRequest="35" FontSize="25" HorizontalTextAlignment="Center" Keyboard="Numeric" Text="{Binding NumberOfSetsOrLegs}" MaxLength="2"/>
+                    </Border>
+                    <Border  Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}">
+                        <Button Text="First to" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding FirstToBtnColor}" TextColor="Black" x:Name="FirstToBtn" Command="{Binding FirstToOrBestofCommand}"  CommandParameter="{Binding Source={x:Reference FirstToBtn }}"/>
+                    </Border>
+                    <Border Stroke="Black" StrokeThickness="2" HeightRequest="50" BackgroundColor="{Binding BestOfBtnColor}" StrokeShape="RoundRectangle 0,50,0,50">
+                        <Button Text="Best of" WidthRequest="60" HeightRequest="50" BackgroundColor="{Binding BestOfBtnColor}" TextColor="Black" x:Name="BestOfBtn" Command="{Binding FirstToOrBestofCommand}"  CommandParameter="{Binding Source={x:Reference BestOfBtn}}" />
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Row="2" HeightRequest="50" HorizontalOptions="Center" Spacing="10">
+                    <Border Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 50,0,50,0" BackgroundColor="{Binding Btn301Color}">
+                        <Button Text="301" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn301Color}" TextColor="Black" FontSize="20" x:Name="threezerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference threezerooneBtn}}"/>
+                    </Border>
+                    <Border Stroke="Black" StrokeThickness="2" BackgroundColor="{Binding Btn501Color}" HeightRequest="50">
+                        <Button Text="501" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn501Color}" TextColor="Black" FontSize="20" x:Name="fivezerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference fivezerooneBtn}}"/>
+                    </Border>
+                    <Border Stroke="Black" StrokeThickness="2" BackgroundColor="{Binding Btn701Color}" HeightRequest="50" StrokeShape="RoundRectangle 0,50,0,50">
+                        <Button Text="701" WidthRequest="70" HeightRequest="50" BackgroundColor="{Binding Btn701Color}" TextColor="Black" FontSize="20" x:Name="sevenzerooneBtn" Command="{Binding PointChangingCommand}"  CommandParameter="{Binding Source={x:Reference sevenzerooneBtn}}"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Row="3" HorizontalOptions="Center">
+                    <Label Text="Privát meccs?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
+                    <Switch IsToggled="{Binding IsCheckedPrivate}" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" >
+                        <Switch.Behaviors>
+                            <tool:EventToCommandBehavior EventName="Toggled" Command="{Binding CheckMatchIsPrivateCommand}"/>
+                        </Switch.Behaviors>
+                    </Switch>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center">
+                    <Label Text="Csak az én szintemen lévők lássák?" TextColor="White" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15"/>
+                    <Switch  IsToggled="{Binding IsChecked}" OnColor="Black" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Start" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center" Spacing="10" IsVisible="{Binding Visible}">
+                    <Label Text="A meccs jelszava:" FontAttributes="Bold" FontSize="15" TextColor="White" VerticalOptions="Center"/>
+                    <Border Stroke="White" StrokeThickness="2" StrokeShape="RoundRectangle 10 10 10 10" HeightRequest="35" WidthRequest="200">
+                        <Entry WidthRequest="170" HeightRequest="40" BackgroundColor="Transparent" Text="{Binding Pwd}" VerticalOptions="Center"/>
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+        <Button WidthRequest="200" HeightRequest="50" BackgroundColor="Green" Grid.Row="2" Text="Meccs Létrehozása" Margin="0,0,0,10" Command="{Binding NavigateCommand}"/>
     </Grid>
 </ContentPage>

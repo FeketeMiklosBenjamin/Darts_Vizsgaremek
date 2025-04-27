@@ -35,12 +35,13 @@ Route="FriendlySetupPage" />
     ContentTemplate="{DataTemplate pages:CounterPage}"
     Route="CounterPage"/>
     </TabBar>-->
+    
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid HeightRequest="150" BackgroundColor="Black">
                 <VerticalStackLayout VerticalOptions="Center">
                     <Label Text="Sons of the Fallen's" FontSize="25" Margin="5" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Label Text="{Binding UserDisplayName}" FontSize="25" Margin="5" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Text="{Binding UserDisplayName}" FontSize="20" Margin="0, 5, 0, 0" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </VerticalStackLayout>
             </Grid>
         </DataTemplate>
@@ -57,10 +58,10 @@ Route="FriendlySetupPage" />
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="Meccs beállítás"
+    <FlyoutItem Title="Barátságos meccs létrehozása"
                 FlyoutIcon="{x:StaticResource SettingIcon}">
         <Tab>
-            <ShellContent Title="Meccs beállítás" ContentTemplate="{DataTemplate pages:FriendlySetupPage}" Route="FriendlySetupPage"/>
+            <ShellContent Title="Barátságos meccs létrehozása" ContentTemplate="{DataTemplate pages:FriendlySetupPage}" Route="FriendlySetupPage"/>
         </Tab>
     </FlyoutItem>
 
@@ -88,10 +89,10 @@ Route="FriendlySetupPage" />
             <ShellContent Title="Barátságos meccek" ContentTemplate="{DataTemplate pages:FriendlyMatchPage}" Route="FriendlyMatchPage"/>
         </Tab>
     </FlyoutItem>
-
+    
     <MenuItem Text="Kijelentkezés"
-          Clicked="OnSignOutClicked"
-          IconImageSource="{x:StaticResource LogoutIcon}"/>
+      Clicked="OnSignOutClicked"
+      IconImageSource="{x:StaticResource ExitIcon}"/>
 
     <MenuItem Text="Kilépés"
           Clicked="OnLogoutClicked"

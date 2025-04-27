@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+            x:Class="DartsMobilApp.Pages.MatchStatisticPopUp"
+            Color="Transparent">
+    <VerticalStackLayout>
+        <Border Stroke="{AppThemeBinding Light=White, Dark=White}"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 10"
+                Background="{x:StaticResource Primary}"
+                Padding="20"
+                Margin="5"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+
+            <Grid Margin="5" RowSpacing="20" ColumnSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.5*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.3*"/>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="{Binding PlayerOneStat.Name}" FontAttributes="Bold" HorizontalTextAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,25"/>
+                <HorizontalStackLayout Grid.Column="1" Spacing="40" HorizontalOptions="CenterAndExpand">
+                    <Label Text="{Binding PlayerOneStat.Sets}" FontAttributes="Bold" VerticalTextAlignment="Center" FontSize="20" Margin="0,0,0,25"/>
+                    <Label Text="{Binding PlayerTwoStat.Sets}" FontAttributes="Bold" VerticalTextAlignment="Center" FontSize="20" Margin="0,0,0,25"/>
+                </HorizontalStackLayout>
+                <Label Text="{Binding PlayerTwoStat.Name}" FontAttributes="Bold" HorizontalTextAlignment="Center" Grid.Row="0" Grid.Column="2" FontSize="18" Margin="0,0,0,25"/>
+
+                <Grid x:Name="SetsInfoGrid" Grid.Row="1" Grid.ColumnSpan="3" IsVisible="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="1.2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="{Binding PlayerOneStat.SetsWon}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="0"/>
+                    <Label Text="Nyert Setek száma" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                    <Label Text="{Binding PlayerTwoStat.SetsWon}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="2"/>
+                </Grid>
+
+                <Label Text="{Binding PlayerOneStat.LegsWon}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                <Label Text="Nyert Legek száma" HorizontalTextAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.LegsWon}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="2" Grid.Column="2"/>
+
+                <Label Text="{Binding PlayerOneStat.Averages}" FontAttributes="Italic" HorizontalTextAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <Label Text="Átlagok" HorizontalTextAlignment="Center" Grid.Row="3" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.Averages}" FontAttributes="Italic" HorizontalTextAlignment="Center" Grid.Row="3" Grid.Column="2"/>
+
+                <Label Text="{Binding PlayerOneStat.Max180s}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+                <Label Text="180-asok száma" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.Max180s}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="2"/>
+
+                <Label Text="{Binding PlayerOneStat.CheckoutPercentage}" FontAttributes="Italic" HorizontalTextAlignment="Center" Grid.Row="5" Grid.Column="0"/>
+                <Label Text="Kiszállózási %" HorizontalTextAlignment="Center" Grid.Row="5" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.CheckoutPercentage}" FontAttributes="Italic" HorizontalTextAlignment="Center" Grid.Row="5" Grid.Column="2"/>
+
+                <Label Text="{Binding PlayerOneStat.HighestCheckout}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="6" Grid.Column="0"/>
+                <Label Text="Legnagyobb kiszálló" HorizontalTextAlignment="Center" Grid.Row="6" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.HighestCheckout}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="6" Grid.Column="2"/>
+
+                <Label Text="{Binding PlayerOneStat.NineDarter}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="7" Grid.Column="0"/>
+                <Label Text="Kilenc nyilasok száma" HorizontalTextAlignment="Center" Grid.Row="7" Grid.Column="1"/>
+                <Label Text="{Binding PlayerTwoStat.NineDarter}" FontAttributes="Italic" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Row="7" Grid.Column="2"/>
+
+                <Button WidthRequest="200" HeightRequest="50" BackgroundColor="{x:StaticResource Primary}" Grid.Row="8" Text="Tovább a Főoldalra" Margin="0,0,0,10" Clicked="Button_Clicked"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</tool:Popup>

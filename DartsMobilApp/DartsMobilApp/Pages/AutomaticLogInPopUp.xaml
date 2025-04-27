@@ -6,7 +6,7 @@
              Color="Transparent"
             CanBeDismissedByTappingOutsideOfPopup="False">
     <VerticalStackLayout>
-        <Label Text="Bejelentkezés folyamatban!" FontSize="20" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" FontAttributes="Italic,Bold"/>
-        <ActivityIndicator  IsRunning="True" Color="{x:StaticResource Primary}" WidthRequest="350" HeightRequest="80"/>
+        <Label Text="Bejelentkezés folyamatban!" FontSize="20" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" FontAttributes="Italic,Bold" Margin="10"/>
+        <ActivityIndicator  IsRunning="True" Color="{x:StaticResource Primary}" WidthRequest="350" HeightRequest="80" Margin="10"/>
     </VerticalStackLayout>
 </tool:Popup>

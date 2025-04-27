@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DartsMobilApp.Pages.WaitingForPlayersPopUp"
-            Color="Transparent">
+            Color="Transparent"
+            CanBeDismissedByTappingOutsideOfPopup="False">
     <VerticalStackLayout>
-        <Label Text="Várakozás az ellenfélre!" FontSize="20" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
-        <ActivityIndicator  IsRunning="True" Color="{x:StaticResource Primary}" WidthRequest="350" HeightRequest="80"/>
+        <Label Text="Várakozás az ellenfélre!" FontSize="20" TextColor="{x:StaticResource Primary}" HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="10" HorizontalOptions="Center"/>
+        <ActivityIndicator  IsRunning="True" Color="{x:StaticResource Primary}" WidthRequest="350" HeightRequest="80" Margin="10"/>
     </VerticalStackLayout>
 </tool:Popup>

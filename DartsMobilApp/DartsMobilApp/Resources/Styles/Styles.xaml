@@ -10,6 +10,7 @@
     <FontImage x:Key="FriendlyIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Friendly}"/>
     <FontImage x:Key="SettingIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Setting}"/>
     <FontImage x:Key="StatisticIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Statistic}"/>
+    <FontImage x:Key="ExitIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Exit}"/>
     <FontImage x:Key="LogoutIcon" Color="Black" Size="15" FontFamily="FontAwesomeBrands" Glyph="{x:Static res:Iconfonts.Logout}"/>
 
 
@@ -373,7 +374,7 @@
                     </VisualState>
                     <VisualState x:Name="Off">
                         <VisualState.Setters>
-                            <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}" />
+                            <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray500}}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

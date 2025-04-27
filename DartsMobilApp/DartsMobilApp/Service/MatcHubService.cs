@@ -13,10 +13,12 @@ namespace DartsMobilApp.Services
 
         public event Action<StartFriendlyMatchModel>? OnFriendlyMatchStarted;
         public event Action<string, string, string>? OnFriendlyPlayerJoined;
-        public event Action<string>? OnFriendlyPlayerRemoved;
+        public event Action? OnFriendlyPlayerRemoved;
         public event Action<string>? OnFriendlyPlayerLeft;
         public event Action<StartFriendlyMatchModel>? OnTournamentMatchStarted;
         public event Action<int> OnGetPoints;
+        public event Action OnOpponentDisconnected;
+        public event Action<EndMatchModel, EndMatchModel> OnEndMatchResult;
 
         public SignalRService(TimerCountDown tokenTimer)
         {
@@ -86,9 +88,9 @@ namespace DartsMobilApp.Services
                 OnFriendlyPlayerJoined?.Invoke(playerId, username, dartsPoint);
             });
 
-            _hubConnection.On<string>("FriendlyPlayerRemoved", removerId =>
+            _hubConnection.On("FriendlyPlayerRemoved", () =>
             {
-                OnFriendlyPlayerRemoved?.Invoke(removerId);
+                OnFriendlyPlayerRemoved?.Invoke();
             });
 
             _hubConnection.On<string>("FriendlyPlayerLeft", leaverId =>
@@ -99,6 +101,16 @@ namespace DartsMobilApp.Services
             _hubConnection.On<StartFriendlyMatchModel>("TournamentMatchStarted", startingSetup =>
             {
                 OnTournamentMatchStarted?.Invoke(startingSetup);
+            });
+
+            _hubConnection.On("OpponentDisconnected", () =>
+            {
+                OnOpponentDisconnected?.Invoke();
+            });
+
+            _hubConnection.On<EndMatchModel, EndMatchModel>("EndMatchResult", (playerOneStat, playerTwoStat) =>
+            {
+                OnEndMatchResult?.Invoke(playerOneStat, playerTwoStat);
             });
         }
 

@@ -13,6 +13,7 @@ namespace DartsMobilApp.Resources
         public const string Statistic = "\ue473";
         public const string Competition = "\uf091";
         public const string Friendly = "\uf500";
+        public const string Exit = "\uf52b";
         public const string Logout = "\uf2f5";
     }
 }

@@ -30,58 +30,53 @@ public partial class FriendlySetupViewModel : ObservableObject
     [ObservableProperty] private bool isCheckedPrivate;
     [ObservableProperty] private bool visible;
     [ObservableProperty] private string pwd;
-    [ObservableProperty] public int numberOfSetsOrLegs;
+    [ObservableProperty] public int? numberOfSetsOrLegs;
 
-    public Color BtnSetColor { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color BtnLegColor { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color FirstToBtnColor { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color BestOfBtnColor { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color Btn301Color { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color Btn501Color { get; set; } = Color.FromRgb(211, 211, 211);
-    public Color Btn701Color { get; set; } = Color.FromRgb(211, 211, 211);
+    [ObservableProperty] private Color btnSetColor;
+    [ObservableProperty] private Color btnLegColor;
+    [ObservableProperty] private Color firstToBtnColor;
+    [ObservableProperty] private Color bestOfBtnColor;
+    [ObservableProperty] private Color btn301Color;
+    [ObservableProperty] private Color btn501Color;
+    [ObservableProperty] private Color btn701Color;
 
-    private Color RecolorButton(Button BTN)
+    [RelayCommand]
+    private async Task Appearing()
     {
-        return BTN.BackgroundColor.Equals(defaultColor) ? selectedColor : defaultColor;
+        BtnSetColor = defaultColor;
+        BtnLegColor = selectedColor;
+        FirstToBtnColor = selectedColor;
+        BestOfBtnColor = defaultColor;
+        Btn301Color = defaultColor;
+        Btn501Color = selectedColor;
+        Btn701Color = defaultColor;
+        NumberOfSetsOrLegs = 2;
     }
 
     [RelayCommand]
     private void SetsLegsCheck(Button BTN)
     {
+        BtnSetColor = defaultColor;
+        BtnLegColor = defaultColor;
+
         if (BTN.Text == "Legs")
-        {
-            BtnLegColor = RecolorButton(BTN);
-            OnPropertyChanged(nameof(BtnLegColor));
-            BtnSetColor = defaultColor;
-            OnPropertyChanged(nameof(BtnSetColor));
-        }
+            BtnLegColor = selectedColor;
         else if (BTN.Text == "Sets")
-        {
-            BtnSetColor = RecolorButton(BTN);
-            OnPropertyChanged(nameof(BtnSetColor));
-            BtnLegColor = defaultColor;
-            OnPropertyChanged(nameof(BtnLegColor));
-        }
+            BtnSetColor = selectedColor;
     }
 
     [RelayCommand]
     private void FirstToOrBestof(Button BTN)
     {
+        FirstToBtnColor = defaultColor;
+        BestOfBtnColor = defaultColor;
+
         if (BTN.Text == "First to")
-        {
-            FirstToBtnColor = RecolorButton(BTN);
-            OnPropertyChanged(nameof(FirstToBtnColor));
-            BestOfBtnColor = defaultColor;
-            OnPropertyChanged(nameof(BestOfBtnColor));
-        }
+            FirstToBtnColor = selectedColor;
         else if (BTN.Text == "Best of")
-        {
-            BestOfBtnColor = RecolorButton(BTN);
-            OnPropertyChanged(nameof(BestOfBtnColor));
-            FirstToBtnColor = defaultColor;
-            OnPropertyChanged(nameof(FirstToBtnColor));
-        }
+            BestOfBtnColor = selectedColor;
     }
+
 
     [RelayCommand]
     private void PointChanging(Button BTN)
@@ -90,17 +85,14 @@ public partial class FriendlySetupViewModel : ObservableObject
         Btn501Color = defaultColor;
         Btn701Color = defaultColor;
 
-        switch (BTN.Text)
-        {
-            case "301": Btn301Color = RecolorButton(BTN); break;
-            case "501": Btn501Color = RecolorButton(BTN); break;
-            case "701": Btn701Color = RecolorButton(BTN); break;
-        }
-
-        OnPropertyChanged(nameof(Btn301Color));
-        OnPropertyChanged(nameof(Btn501Color));
-        OnPropertyChanged(nameof(Btn701Color));
+        if (BTN.Text == "301")
+            Btn301Color = selectedColor;
+        else if (BTN.Text == "501")
+            Btn501Color = selectedColor;
+        else if (BTN.Text == "701")
+            Btn701Color = selectedColor;
     }
+
 
     [RelayCommand]
     private void CheckMatchIsPrivate()
@@ -111,18 +103,60 @@ public partial class FriendlySetupViewModel : ObservableObject
     [RelayCommand]
     private async Task Navigate()
     {
+        try
+        {
+            if (await SetMatchParameters() == false)
+            {
+                return;
+            }
+
+            var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
+            var responseJson = await DartsAPI.PostNewFriendlyMatch(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+            var response = JsonSerializer.Deserialize<NewFriendlyMatchResponse>(responseJson);
+
+            if (response == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Hiba", "Nem sikerült létrehozni a meccset.", "Ok");
+                return;
+            }
+
+            currentMatchId = response.matchId;
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
+                Application.Current.MainPage.ShowPopup(new WaitingForPlayersPopUp(_signalR, currentMatchId));
+            });
+
+            await _signalR.JoinFriendlyMatch(currentMatchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Navigate error: {ex.Message}");
+            await Application.Current.MainPage.DisplayAlert("Hiba", "Valami hiba történt.", "Ok");
+        }
+    }
+
+    private async Task<bool> SetMatchParameters()
+    {
+        if (NumberOfSetsOrLegs == null || NumberOfSetsOrLegs <= 0)
+        {
+            await Application.Current.MainPage.DisplayAlert("Hiba", "Adj meg érvényes számot a szettek/legek számához!", "Ok");
+            return false;
+        }
+
         if (BtnSetColor == selectedColor)
         {
             newFriendlyMatch.setsCount = FirstToBtnColor == selectedColor
                 ? NumberOfSetsOrLegs
-                : (int)Math.Floor(NumberOfSetsOrLegs / 2.0) + 1;
+                : (int)Math.Floor((double)NumberOfSetsOrLegs / 2.0) + 1;
             newFriendlyMatch.legsCount = 3;
         }
         else if (BtnLegColor == selectedColor)
         {
             newFriendlyMatch.legsCount = FirstToBtnColor == selectedColor
                 ? NumberOfSetsOrLegs
-                : (int)Math.Floor(NumberOfSetsOrLegs / 2.0) + 1;
+                : (int)Math.Floor((double)NumberOfSetsOrLegs / 2.0) + 1;
             newFriendlyMatch.setsCount = null;
         }
 
@@ -132,23 +166,6 @@ public partial class FriendlySetupViewModel : ObservableObject
 
         newFriendlyMatch.levelLocked = IsChecked;
         newFriendlyMatch.joinPassword = Visible ? Pwd : null;
-
-        var jsonContent = JsonSerializer.Serialize(newFriendlyMatch);
-        var responseJson = await DartsAPI.PostNewFriendlyMatch(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
-        var response = JsonSerializer.Deserialize<NewFriendlyMatchResponse>(responseJson);
-
-        if (response != null)
-        {
-            currentMatchId = response.matchId;
-
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await Shell.Current.GoToAsync($"//{nameof(FriendlyMatchPage)}");
-            });
-
-            Application.Current.MainPage.ShowPopup(new WaitingForPlayersPopUp(_signalR, currentMatchId));
-            await _signalR.JoinFriendlyMatch(response.matchId, SecStoreItems.UserId, SecStoreItems.UserName, SecStoreItems.DartsPoints);
-        }
-        
+        return true;
     }
 }

@@ -133,7 +133,7 @@ namespace DartsMobilApp.ViewModel
 
         public string pointsSecondPlayer;
 
-        private bool ImTheFirst;
+        public bool ImTheFirst;
 
         [ObservableProperty]
         private bool enabledButton;
@@ -555,11 +555,11 @@ namespace DartsMobilApp.ViewModel
             if (String.IsNullOrEmpty(point) || impossibleThrows.Contains(point) || int.Parse(point) > 180)
             {
                 await Application.Current.MainPage.DisplayAlert("HIBA!", $"Nem lehetséges {point} pontot dobni!", "OK");
+                return;
             }
             try
             {
-
-                await _signalRService.PassPoints(MatchId, SecStoreItems.UserId, int.Parse(point));
+                Points = "";
                 if (ImTheFirst)
                 {
                     MyPlayerPoints += int.Parse(point);
@@ -586,6 +586,7 @@ namespace DartsMobilApp.ViewModel
                     await TextSpeach(point);
                     await CheckMatchWinner();
                 }
+                await _signalRService.PassPoints(MatchId, SecStoreItems.UserId, int.Parse(point));
             }
             catch (Exception ex)
             {
@@ -690,12 +691,7 @@ namespace DartsMobilApp.ViewModel
                 await _signalRService.EndTournamentMatch(MatchId, SecStoreItems.UserId, model);
 
             SetDefaultValues();
-            Thread.Sleep(15000);
-
-            await Shell.Current.Dispatcher.DispatchAsync(async () =>
-            {
-                await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
-            });
+            
         }
 
         private EndMatchModel CreateEndMatchModel(bool isFirstPlayer)
