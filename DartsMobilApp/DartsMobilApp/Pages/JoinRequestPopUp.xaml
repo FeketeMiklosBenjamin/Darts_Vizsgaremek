@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tool="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="DartsMobilApp.Pages.JoinRequestPopUp"
+             Color="Transparent">
+    <Frame CornerRadius="25" BackgroundColor="Black">
+        <VerticalStackLayout WidthRequest="280" MinimumHeightRequest="100">
+            <Label x:Name="UserNameLabel" TextColor="{x:StaticResource Primary}" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+            <HorizontalStackLayout Spacing="10" Margin="3" HorizontalOptions="Center">
+                <Label x:Name="DartsPointLabel" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="12" TextColor="{x:StaticResource Primary}"/>
+                <Button WidthRequest="100" HeightRequest="38" BackgroundColor="Green" Text="Elfogadás" Clicked="AcceptJoinRequest"/>
+                <Button WidthRequest="100" HeightRequest="38" BackgroundColor="Red" Text="Elutasít" Clicked="RejectJoinRequest"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Frame>
+</tool:Popup>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tool="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui" 
+             x:Class="DartsMobilApp.Pages.CounterPage"
+             Shell.NavBarIsVisible="False"
+             Title="Meccs levezető">
+    <ContentPage.Behaviors>
+        <tool:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
+        <tool:StatusBarBehavior StatusBarColor="Black"/>
+    </ContentPage.Behaviors>
+    <ScrollView>
+        <Grid RowDefinitions="*, *,2*,*,*,6*">
+            <HorizontalStackLayout Spacing="40" HorizontalOptions="Center" VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="{Binding FirstPlayerSetsWon, StringFormat='Sets: {0}'}"/>
+                    <Label Text="{Binding FirstPlayerWonLeg, StringFormat='Legs: {0}'}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="{Binding SecondPlayerSetsWon, StringFormat='Sets: {0}'}"/>
+                    <Label Text="{Binding SecondPlayerWonLeg, StringFormat='Legs: {0}'}" />
+                </HorizontalStackLayout>       
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="1" Spacing="35" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="{Binding StartingPlayerName}" Margin="5" FontSize="25" LineBreakMode="WordWrap" WidthRequest="150"/>
+                <Label Text="{Binding SecondPlayerName}" Margin="5" FontSize="25" LineBreakMode="WordWrap" WidthRequest="150"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="2"  VerticalOptions="Center" Padding="10" HorizontalOptions="CenterAndExpand">
+                <Label  Text="{Binding PointsFirstPlayer}" FontSize="100" FontAttributes="Bold" Margin="10,5,10,5" WidthRequest="180"/>
+                <Label  Text="{Binding PointsSecondPlayer}" FontSize="100" FontAttributes="Bold"  Margin="5,5,5,5" WidthRequest="180"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="3"  BackgroundColor="LightGray"  HorizontalOptions="Center" VerticalOptions="Center" >
+                <Label Text="{Binding RecommendedFirstCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
+                <Label Text="{Binding RecommendedSecondCheckout}" FontSize="20" FontAttributes="Bold" TextColor="Black" WidthRequest="150" Margin="10"/>
+            </HorizontalStackLayout>
+            <Border Grid.Row="4" Margin="25,10,25,10" BackgroundColor="White" StrokeThickness="3">
+                <HorizontalStackLayout>
+                    <Label Text="{Binding Points}"  TextColor="Black"  WidthRequest="210"  FontSize="Medium"  VerticalOptions="Center"/>
+                    <Button Text="Küldés" WidthRequest="100" BackgroundColor="{x:StaticResource SubmitPointBtn}" Margin="10,5,10,5"  IsEnabled="{Binding EnabledButton}" CommandParameter="{Binding Points}" Command="{Binding SendPointsCommand}"/>
+                </HorizontalStackLayout>
+            </Border>
+            <Grid x:Name="counterGrid" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*"  Grid.Row="5" Padding="5">
+                <Button Text="1" WidthRequest="70" HeightRequest="70" Grid.Row="0"  CommandParameter="1" Command="{Binding AddPointsCommand}"/>
+                <Button Text="2" WidthRequest="70" HeightRequest="70" Grid.Row="0" Grid.Column="1"  CommandParameter="2" Command="{Binding AddPointsCommand}"/>
+                <Button Text="3" WidthRequest="70" HeightRequest="70" Grid.Row="0" Grid.Column="2"  CommandParameter="3" Command="{Binding AddPointsCommand}"/>
+                <Button Text="4" WidthRequest="70" HeightRequest="70" Grid.Row="1"  CommandParameter="4" Command="{Binding AddPointsCommand}"/>
+                <Button Text="5" WidthRequest="70" HeightRequest="70" Grid.Column="1" Grid.Row="1"  CommandParameter="5" Command="{Binding AddPointsCommand}"/>
+                <Button Text="6" WidthRequest="70" HeightRequest="70" Grid.Row="1" Grid.Column="2"  CommandParameter="6" Command="{Binding AddPointsCommand}"/>
+                <Button Text="7" WidthRequest="70" HeightRequest="70" Grid.Row="2"  CommandParameter="7" Command="{Binding AddPointsCommand}"/>
+                <Button Text="8" WidthRequest="70" HeightRequest="70" Grid.Row="2" Grid.Column="1" CommandParameter="8" Command="{Binding AddPointsCommand}"/>
+                <Button Text="9" WidthRequest="70" HeightRequest="70" Grid.Row="2" Grid.Column="2" CommandParameter="9" Command="{Binding AddPointsCommand}"/>
+                <Button WidthRequest="70" HeightRequest="70"  Grid.Row="3" ImageSource="Images/cancel_round_icon.png" Command="{Binding RemoveRoundCommand}"/>
+                <Button Text="0" WidthRequest="70" HeightRequest="70" Grid.Row="3" Grid.Column="1"  CommandParameter="0" Command="{Binding AddPointsCommand}"/>
+                <Button  WidthRequest="70" HeightRequest="70"  Grid.Row="3" Grid.Column="2" ImageSource="Images/backspace_icon.png" Command="{Binding RemoveADigitCommand}"/>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>
