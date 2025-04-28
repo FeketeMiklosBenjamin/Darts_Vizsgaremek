@@ -1,0 +1,40 @@
+name: ASP.NET Backend CI
+
+on:
+  push:
+    branches:
+      - Backend
+  pull_request:
+    branches:
+      - Backend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+      ACTIONS_STEP_DEBUG: true
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      # 2. Set up .NET SDK
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0'
+
+      # 3. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore ./Vizsga_Backend/Vizsga_Backend.sln
+
+      # 4. Build the project
+      - name: Build the project
+        run: dotnet build ./Vizsga_Backend/Vizsga_Backend.sln --configuration Release
+
+      # 5. Run tests using vstest command
+      - name: Run tests
+        run: dotnet test ./Vizsga_Backend/Vizsga_Backend.sln --no-build --configuration Release --verbosity normal
